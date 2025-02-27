@@ -36,7 +36,7 @@ S = src/
 LIB = lib/libft
 
 # Lista de archivos fuente
-SRC = $(wildcard src/*.c) 
+SRC = $(wildcard $(S)*.c) 
 OBJ = $S$(SRC:.c = .o)
 
 # Dependencias
@@ -72,14 +72,13 @@ $(NAME): $(OBJ)
 	@echo
 	@echo "*** Creando ejecutable ***"
 	@echo
-# mv $(LIB) #$(NAME)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(FFLAGS) -L$(LIB) -lft
-# ar rcs $@ $^
 
 # Regla para limpiar archivos objeto
 clean:
 	@make -C $(LIB) clean
 	@make -C $(MLX) clean
+	@rm -f $(OBJ)
 
 # Regla para limpiar archivos objeto y el archivo estático
 fclean: clean

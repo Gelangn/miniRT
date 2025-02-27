@@ -1,6 +1,8 @@
 #ifndef STRUCT_H
 # define STRUCT_H
 
+# include "../inc/struct.h"
+
 /***** PROTOTYPE *****/
 /* MLX y eventos  */
 int		handle_no_event(void);

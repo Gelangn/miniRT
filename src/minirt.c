@@ -25,7 +25,7 @@ static int	initialize(t_global *global)
 {
 	ft_printf("Initializing mlx\n");
 	global->vars.mlx_conn = mlx_init();
-	ft_printf("Mlx initialized OK\n");
+	ft_printf("MLX initialized OK\n");
 	global->vars.mlx_win = new_window(&global->vars);
 	global->map.points = NULL;
 	global->map.arg_path = NULL;

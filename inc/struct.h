@@ -1,10 +1,12 @@
 #ifndef STRUCT_H
 # define STRUCT_H
 
+
+# include "../inc/prototype.h"
+
 /**** STRUCTS ****/
 
 // struct for bitmap
-
 typedef struct s_img
 {
 	void *img; // image to be drawn on the window

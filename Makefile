@@ -17,8 +17,10 @@ else ifeq ($(OS),Darwin)
 	FFLAGS = -Llib/mlx -lmlx -framework OpenGL -framework AppKit
 else ifeq ($(OS),Linux)
 #	@echo "Compilando en Linux"
-	CFLAGS = -Wall -Wextra -Werror -Imlx_linux -O3 -g3 -fsanitize=address
-	FFLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+	CFLAGS = -Wall -Wextra -Werror -Ilib/lib/minilibx_mms_20200219_beta -O3
+	 -g3 -fsanitize=address
+	FFLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib
+	 -Ilib/lib/minilibx_mms_20200219_beta -lXext -lX11 -lm -lz
 else ifeq ($(OS),MacOS)
 #	@echo "Compilando en MacOS"
 	CFLAGS = -Wall -Wextra -Werror -Imlx

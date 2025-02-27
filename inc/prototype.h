@@ -1,0 +1,43 @@
+#ifndef STRUCT_H
+# define STRUCT_H
+
+/***** PROTOTYPE *****/
+/* MLX y eventos  */
+int		handle_no_event(void);
+int		handle_keypress(int keysym, t_global *global);
+int		handle_keyrelease(int keysym);
+int		handle_mouse_move(int x, int y);
+int		mouse_press_hook(int button, int x, int y);
+int		mouse_release_hook(int button, int x, int y);
+void	set_hooks(t_global *global);
+
+/* Window */
+int		close_window(void *mlx);
+void	*new_window(t_var *mlx);
+
+/* Map */
+t_map	read_map(t_map *map, char *arg_path);
+void	free_map(t_map *map);
+
+/* Graphics-Render-Draw */
+void	render(t_global *global);
+void	points_3d_to_2d(t_map *map);
+void	isometric(t_point *point);
+void	scale_map(t_map *map);
+void	draw_line(t_img *img, t_dot *dot, int color);
+void	pixel_put(t_img *data, int x, int y, int color);
+
+/* Utils */
+char	*get_next_line(int fd);
+char	*ft_strdup(const char *s);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strchr(const char *s, int c);
+int		get_char_len(const char *chain, char chr);
+void	finish(char *s);
+void	free_global(t_global *global);
+void	dbl_free(char **ptr);
+void	check_map(t_map *map);
+void	splited(t_map *map, int j, int i, int index);
+int		ft_atoi_base(const char *str, int base);
+
+#endif

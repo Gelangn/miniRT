@@ -1,17 +1,13 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-
-
 # include "../lib/minilibx-linux"
 # include "../lib/minilibx_mms_20200219_beta"
 # include "../lib/minilibx_opengl"
 # include "../lib/libft/ft_printf.h"
 # include "../lib/libft/get_next_line.h"
 # include "../lib/libft/libft.h"
-# include "../lib/mlx/mlx.h"
-# include "../lib/mlx_linux/mlx.h"
-// # include <X11/keysym.h>
+# include <X11/keysym.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <math.h>
@@ -19,3 +15,48 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+
+# define WIN_W 810
+# define WIN_H 540
+# define MARGIN 100
+
+# define PI 3.14159265359
+
+# define MLX_ERROR 1
+# define MLX_SUCCESS 0
+# define MLX_EXIT 17
+# define MLX_KEY_PRESS 2
+# define MLX_KEY_RELEASE 3
+# define MLX_NO_EVENT 0
+
+# define DEFAULT_COLOR MAGENTA
+# define GROUND_COLOR GREY
+
+# define WHITE 0xFFFFFF
+# define RED 0xFF0000
+# define GREEN 0x00FF00
+# define BLUE 0x0000FF
+# define YELLOW 0xFFFF00
+# define CYAN 0x00FFFF
+# define MAGENTA 0xFF00FF
+# define BLACK 0x000000
+# define GREY 0x454545
+# define BROWN 0x8B4513
+# define ORANGE 0xFFA500
+# define PINK 0xFFC0CB
+# define PURPLE 0x800080
+# define MY_COLOR 0x89CE94
+
+# define ERR_ARGS \
+	"\nIncorrect number of arguments, \
+	expected 1, Usage: ./fdf <file.fdf>\n"
+# define ERR_OPEN "\nError opening the file\n"
+# define ERR_READ "\nError reading the file\n"
+# define ERR_SPLIT "\nError splitting the line\n"
+# define ERR_LINE "\nError: nº of elements is different for each line\n"
+# define ERR_EMPTY "\nError: the file is empty or wrongly formatted\n"
+# define ERR_MEM "\nCache error\n"
+# define ERR_MAP "\nMap Error\n"
+# define ERR_MALLOC "\nMalloc error\n"
+
+#endif

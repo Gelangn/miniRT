@@ -17,10 +17,8 @@ else ifeq ($(OS),Darwin)
 	FFLAGS = -Llib/mlx -lmlx -framework OpenGL -framework AppKit
 else ifeq ($(OS),Linux)
 #	@echo "Compilando en Linux"
-	CFLAGS = -Wall -Wextra -Werror -Ilib/lib/minilibx_mms_20200219_beta -O3
-	 -g3 -fsanitize=address
-	FFLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib
-	 -Ilib/lib/minilibx_mms_20200219_beta -lXext -lX11 -lm -lz
+	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O3 -g3 -fsanitize=address
+	FFLAGS = -L./lib/minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 else ifeq ($(OS),MacOS)
 #	@echo "Compilando en MacOS"
 	CFLAGS = -Wall -Wextra -Werror -Imlx
@@ -38,15 +36,15 @@ S = src/
 LIB = lib/libft
 
 # Lista de archivos fuente
-SRC = *.c 
+SRC = $(wildcard src/*.c) 
 OBJ = $S$(SRC:.c = .o)
 
 # Dependencias
 DEPS = $(LIB)/libft.a
 ifeq ($(OS),Darwin)
-	MLX = lib/mlx
+	MLX = lib/minilibx-mac
 else
-	MLX = lib/mlx_linux
+	MLX = lib/minilibx-linux
 endif
 
 # Reglas
@@ -75,7 +73,7 @@ $(NAME): $(OBJ)
 	@echo "*** Creando ejecutable ***"
 	@echo
 # mv $(LIB) #$(NAME)
-	@$(CC) $(OBJ) $(CFLAGS) $(FFLAGS) -L$(LIB) -lft -o $(NAME)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(FFLAGS) -L$(LIB) -lft
 # ar rcs $@ $^
 
 # Regla para limpiar archivos objeto

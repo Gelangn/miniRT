@@ -7,6 +7,8 @@
 # include "../lib/libft/ft_printf.h"
 # include "../lib/libft/get_next_line.h"
 # include "../lib/libft/libft.h"
+# include "../inc/prototype.h"
+# include "../inc/struct.h"
 # include <X11/keysym.h>
 # include <errno.h>
 # include <fcntl.h>

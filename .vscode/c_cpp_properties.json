@@ -4,14 +4,14 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-				"${workspaceFolder}/lib/**",
-				"${workspaceFolder}/inc/**"
+				"${workspaceFolder}/inc/**",
+				"${workspaceFolder}/lib/minilibx-linux"
             ],
             "defines": [],
-            "cStandard": "c17",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
             "cppStandard": "c++98",
-            "intelliSenseMode": "linux-gcc-x64",
-            "compilerPath": "/usr/bin/gcc"
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4

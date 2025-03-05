@@ -37,12 +37,12 @@ LIB = lib/libft
 
 # Lista de archivos fuente
 SRC = $(wildcard $(S)*.c) 
-OBJ = $S$(SRC:.c = .o)
+OBJ = $(SRC:.c = .o)
 
 # Dependencias
 DEPS = $(LIB)/libft.a
 ifeq ($(OS),Darwin)
-	MLX = lib/minilibx-mac
+	MLX = lib/minilibx_mms_20200219
 else
 	MLX = lib/minilibx-linux
 endif

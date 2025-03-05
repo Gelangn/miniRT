@@ -1,7 +1,7 @@
 #ifndef STRUCT_H
 # define STRUCT_H
 
-
+# include "../inc/minirt.h"
 # include "../inc/prototype.h"
 
 /**** STRUCTS ****/

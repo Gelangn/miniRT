@@ -1,9 +1,9 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# include "../lib/minilibx-linux"
-# include "../lib/minilibx_mms_20200219_beta"
-# include "../lib/minilibx_opengl"
+
+
+# include "../lib/minilibx-linux/mlx.h"
 # include "../lib/libft/ft_printf.h"
 # include "../lib/libft/get_next_line.h"
 # include "../lib/libft/libft.h"

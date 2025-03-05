@@ -1,11 +1,22 @@
 # Nombre del proyecto (ejecutable)
 NAME = miniRT
 
+# Otros seudonimos
+LIB = lib/libft
+
+# Seudonimos carpetas, ejemplo uso: $S main.c
+S = srcs/
+
+# Lista de archivos fuente
+SRC = $(wildcard $(S)*.c) 
+OBJ = $(SRC:.c = .o)
+
 # gcc lib/libft/get_next_line.c lib/libft/get_next_line_utils.c src/fdf.c src/main.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address -o fdf
 # gcc lib/libft/*.c lib/libft/*.h lib/mlx/mlx.h inc/fdf.h src/*.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address (Error al iniciar ./a.out ERROR Usage: ./fdf file )
 
 # Compilador y banderas
 CC = gcc
+
 OS := $(shell uname)
 ifeq ($(OS),Windows_NT)
 #	@echo "Compilando en Windows NT"
@@ -29,15 +40,6 @@ else
 	FFLAGS = -Lmlx -lmlx -lX11 -lXext -lm
 endif
 
-# Seudonimos carpetas, ejemplo uso: $S main.c
-S = src/
-
-# Otros seudonimos
-LIB = lib/libft
-
-# Lista de archivos fuente
-SRC = $(wildcard $(S)*.c) 
-OBJ = $(SRC:.c = .o)
 
 # Dependencias
 DEPS = $(LIB)/libft.a
@@ -54,6 +56,7 @@ all: $(NAME)
 	@echo
 	@echo "*** Compilación completada ***"
 	@echo
+
 # Regla de compilación
 %.o: %.c 
 	@$(CC) $(CFLAGS) -o $@ -c $<
@@ -68,22 +71,30 @@ $(NAME): $(OBJ)
 	@echo
 	@echo "*** Compilando mlx ***"
 	@echo
-	@make -C $(MLX) 2>/dev/null
+	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX); fi
 	@echo
 	@echo "*** Creando ejecutable ***"
 	@echo
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(FFLAGS) -L$(LIB) -lft
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(FFLAGS) -L$(LIB) -lft -L$(MLX) -lmlx -lXext -lX11 -lm -lbsd
+
+# Regla para compilar MinilibX
+$(MLX)/libmlx.a:
+	@echo
+	@echo "*** Configurando y compilando MinilibX ***"
+	@echo
+#	@if [ -f $(MLX)/configure ]; then cd $(MLX) && ./configure; fi
+	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX); fi
 
 # Regla para limpiar archivos objeto
 clean:
 	@make -C $(LIB) clean
-	@make -C $(MLX) clean
+	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX) clean; fi
 	@rm -f $(OBJ)
 
 # Regla para limpiar archivos objeto y el archivo estático
 fclean: clean
 	@make -C $(LIB) fclean
-	@make -C $(MLX) clean
+	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX) clean; fi
 	@rm -f $(NAME) 
 
 # Regla para recompilar

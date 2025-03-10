@@ -6,11 +6,12 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:31:43 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/05 20:42:35 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/03/10 21:01:02 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
+#include "../inc/struct.h"
 
 void	free_map(t_map *map)
 {

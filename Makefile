@@ -21,13 +21,14 @@ CC = gcc
 S = src/
 
 # Otros seudonimos
-LIB = lib/libft
+LIBS = lib
+LIB = $(LIBS)/libft
 
 # Dependencias
 ifeq ($(OS),Darwin)
-	LIB_MLX = $(LIB)/minilibx_mms_20200219
+	LIB_MLX = $(LIBS)/minilibx_mms_20200219
 else
-	LIB_MLX = $(LIB)/minilibx-linux
+	LIB_MLX = $(LIBS)/minilibx-linux
 endif
 DEPS = $(LIB)/libft.a $(LIB_MLX)/libmlx.a
 

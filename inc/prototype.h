@@ -1,5 +1,5 @@
-#ifndef STRUCT_H
-# define STRUCT_H
+#ifndef PROTOTYPE_H
+# define PROTOTYPE_H
 
 # include "../inc/minirt.h"
 # include "../inc/struct.h"

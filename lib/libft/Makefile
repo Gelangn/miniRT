@@ -3,6 +3,16 @@
 #########
 # Path: Cursus42/.../libft/Makefile
 
+# Colours
+DEFAULT 	= \033[0m
+GREEN 		= \033[38;5;46m
+WHITE 		= \033[38;5;15m
+GREY 		= \033[38;5;8m
+ORANGE 		= \033[38;5;202m
+RED 		= \033[38;5;160m
+YELLOW 		= \033[38;5;226m
+BLUE 		= \033[38;5;27m
+
 # Nombre del proyecto (ejecutable)
 NAME = libft.a
 
@@ -72,8 +82,9 @@ DEPS = libft.h get_next_line.h ft_printf.h
 # Regla por defecto
 all: $(NAME)
 	@echo
-	@echo "*** Compilación libft completada ***"
+	@echo "$(RED)*** Compilando libft ***$(DEFAULT)"
 	@echo
+	@sleep 5
 
 # Regla de compilación
 %.o: %.c $(DEPS)
@@ -82,7 +93,7 @@ all: $(NAME)
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
 	@echo
-	@echo "*** Compilando libft ***"
+	@echo "$(RED)*** Compilando libft ***$(DEFAULT)"
 	@echo
 	@gcc $(CFLAGS) -c $(SRC)
 	@echo
@@ -92,7 +103,7 @@ $(NAME): $(OBJ)
 # Regla para construir el archivo estático con bonus
 bonus:
 	@echo
-	@echo "*** Compilando BONUS libft ***"
+	@echo "$(RED)*** Compilando BONUS libft ***$(DEFAULT)"
 	@echo
 	@gcc $(CFLAGS) -c $(BONUS_SRC)
 	@echo

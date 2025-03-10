@@ -1,3 +1,13 @@
+# Colours
+DEFAULT 	= \033[0m
+GREEN 		= \033[38;5;46m
+WHITE 		= \033[38;5;15m
+GREY 		= \033[38;5;8m
+ORANGE 		= \033[38;5;202m
+RED 		= \033[38;5;160m
+YELLOW 		= \033[38;5;226m
+BLUE 		= \033[38;5;27m
+
 # Nombre del proyecto (ejecutable)
 NAME = miniRT
 
@@ -5,7 +15,15 @@ NAME = miniRT
 LIB = lib/libft
 
 # Seudonimos carpetas, ejemplo uso: $S main.c
-S = srcs/
+S = src/
+
+# Dependencias
+ifeq ($(OS),Darwin)
+	LIB_MLX = lib/minilibx_mms_20200219
+else
+	LIB_MLX = lib/minilibx-linux
+endif
+DEPS = $(LIB)/libft.a $(LIB_MLX)/libmlx.a
 
 # Lista de archivos fuente
 SRC = $(wildcard $(S)*.c) 
@@ -30,6 +48,7 @@ else ifeq ($(OS),Linux)
 #	@echo "Compilando en Linux"
 	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O3 -g3 -fsanitize=address
 	FFLAGS = -L./lib/minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
+#-L$(LIB) -lft -L$(LIB_MLX) -lmlx -lXext -lX11 -lm -lbsd
 else ifeq ($(OS),MacOS)
 #	@echo "Compilando en MacOS"
 	CFLAGS = -Wall -Wextra -Werror -Imlx
@@ -40,22 +59,10 @@ else
 	FFLAGS = -Lmlx -lmlx -lX11 -lXext -lm
 endif
 
-
-# Dependencias
-DEPS = $(LIB)/libft.a
-ifeq ($(OS),Darwin)
-	MLX = lib/minilibx_mms_20200219
-else
-	MLX = lib/minilibx-linux
-endif
-
 # Reglas
 
 # Regla por defecto
 all: $(NAME)
-	@echo
-	@echo "*** Compilación completada ***"
-	@echo
 
 # Regla de compilación
 %.o: %.c 
@@ -63,38 +70,47 @@ all: $(NAME)
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
-	@echo
-	@echo "*** Compilando libft ***"
-	@echo
+	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
 	@make -C $(LIB) all
+	@echo
+	sleep 3
+	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
 	@make -C $(LIB) bonus
 	@echo
-	@echo "*** Compilando mlx ***"
+	sleep 3
+	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
 	@echo
-	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX); fi
+	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
+	sleep 3
+	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX); fi
 	@echo
-	@echo "*** Creando ejecutable ***"
 	@echo
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(FFLAGS) -L$(LIB) -lft -L$(MLX) -lmlx -lXext -lX11 -lm -lbsd
+	@echo "$(YELLOW)*** Creando ejecutable ***$(DEFAULT)"
+	@echo
+	sleep 5
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	@echo
+	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
+	@echo
 
 # Regla para compilar MinilibX
-$(MLX)/libmlx.a:
+$(LIB_MLX)/libmlx.a:
 	@echo
 	@echo "*** Configurando y compilando MinilibX ***"
 	@echo
-#	@if [ -f $(MLX)/configure ]; then cd $(MLX) && ./configure; fi
-	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX); fi
+#	@if [ -f $(LIB_MLX)/configure ]; then cd $(LIB_MLX) && ./configure; fi
+	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX); fi
 
 # Regla para limpiar archivos objeto
 clean:
 	@make -C $(LIB) clean
-	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX) clean; fi
+#	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX) clean; fi
 	@rm -f $(OBJ)
 
 # Regla para limpiar archivos objeto y el archivo estático
 fclean: clean
 	@make -C $(LIB) fclean
-	@if [ -f $(MLX)/Makefile ]; then make -C $(MLX) clean; fi
+	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX) clean; fi
 	@rm -f $(NAME) 
 
 # Regla para recompilar

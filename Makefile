@@ -1,3 +1,6 @@
+# gcc lib/libft/get_next_line.c lib/libft/get_next_line_utils.c src/fdf.c src/main.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address -o fdf
+# gcc lib/libft/*.c lib/libft/*.h lib/mlx/mlx.h inc/fdf.h src/*.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address (Error al iniciar ./a.out ERROR Usage: ./fdf file )
+
 # Colours
 DEFAULT 	= \033[0m
 GREEN 		= \033[38;5;46m
@@ -11,29 +14,28 @@ BLUE 		= \033[38;5;27m
 # Nombre del proyecto (ejecutable)
 NAME = miniRT
 
-# Otros seudonimos
-LIB = lib/libft
+# Compilador y banderas
+CC = gcc
 
 # Seudonimos carpetas, ejemplo uso: $S main.c
 S = src/
 
+# Otros seudonimos
+LIB = lib/libft
+
 # Dependencias
 ifeq ($(OS),Darwin)
-	LIB_MLX = lib/minilibx_mms_20200219
+	LIB_MLX = $(LIB)/minilibx_mms_20200219
 else
-	LIB_MLX = lib/minilibx-linux
+	LIB_MLX = $(LIB)/minilibx-linux
 endif
 DEPS = $(LIB)/libft.a $(LIB_MLX)/libmlx.a
 
-# Lista de archivos fuente
+# Archivos fuente
 SRC = $(wildcard $(S)*.c) 
+
+# Archivos objeto
 OBJ = $(SRC:.c = .o)
-
-# gcc lib/libft/get_next_line.c lib/libft/get_next_line_utils.c src/fdf.c src/main.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address -o fdf
-# gcc lib/libft/*.c lib/libft/*.h lib/mlx/mlx.h inc/fdf.h src/*.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address (Error al iniciar ./a.out ERROR Usage: ./fdf file )
-
-# Compilador y banderas
-CC = gcc
 
 OS := $(shell uname)
 ifeq ($(OS),Windows_NT)
@@ -59,7 +61,7 @@ else
 	FFLAGS = -Lmlx -lmlx -lX11 -lXext -lm
 endif
 
-# Reglas
+# *** Reglas ***
 
 # Regla por defecto
 all: $(NAME)
@@ -81,37 +83,28 @@ $(NAME): $(OBJ)
 	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
 	@echo
 	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
+	@make -C $(LIB_MLX)
 	sleep 3
-	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX); fi
 	@echo
 	@echo
 	@echo "$(YELLOW)*** Creando ejecutable ***$(DEFAULT)"
 	@echo
 	sleep 5
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
 	@echo
 	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
 	@echo
 
-# Regla para compilar MinilibX
-$(LIB_MLX)/libmlx.a:
-	@echo
-	@echo "*** Configurando y compilando MinilibX ***"
-	@echo
-#	@if [ -f $(LIB_MLX)/configure ]; then cd $(LIB_MLX) && ./configure; fi
-	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX); fi
-
 # Regla para limpiar archivos objeto
 clean:
 	@make -C $(LIB) clean
-#	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX) clean; fi
-	@rm -f $(OBJ)
+	@make -C $(LIB_MLX) clean
 
 # Regla para limpiar archivos objeto y el archivo estático
 fclean: clean
 	@make -C $(LIB) fclean
-	@if [ -f $(LIB_MLX)/Makefile ]; then make -C $(LIB_MLX) clean; fi
-	@rm -f $(NAME) 
+	@make -C $(LIB_MLX) clean
+	@rm -f $(NAME)
 
 # Regla para recompilar
 re: fclean all

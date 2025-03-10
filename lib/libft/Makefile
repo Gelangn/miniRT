@@ -20,7 +20,7 @@ NAME = libft.a
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 
-# Lista de archivos fuente incluido get_next_line
+# Archivos fuente incluido get_next_line
 SRC = 	ft_isalpha.c \
 		ft_isdigit.c \
 		ft_isalnum.c \
@@ -61,7 +61,6 @@ SRC = 	ft_isalpha.c \
 		ft_str_nbr.c \
 		ft_hex.c \
 		ft_trim_str.c
-OBJ = $(SRC:.c=.o)
 
 BONUS_SRC = 	ft_lstnew_bonus.c \
 				ft_lstadd_front_bonus.c \
@@ -72,6 +71,9 @@ BONUS_SRC = 	ft_lstnew_bonus.c \
 				ft_lstclear_bonus.c \
 				ft_lstiter_bonus.c \
 				ft_lstmap_bonus.c
+
+# Archivos objeto
+OBJ = $(SRC:.c=.o)
 BONUS_OBJ = $(BONUS_SRC:.c=.o)
 
 # Dependencias
@@ -81,10 +83,6 @@ DEPS = libft.h get_next_line.h ft_printf.h
 
 # Regla por defecto
 all: $(NAME)
-	@echo
-	@echo "$(RED)*** Compilando libft ***$(DEFAULT)"
-	@echo
-	@sleep 5
 
 # Regla de compilación
 %.o: %.c $(DEPS)
@@ -92,8 +90,8 @@ all: $(NAME)
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
-	@echo
 	@echo "$(RED)*** Compilando libft ***$(DEFAULT)"
+	@echo
 	@echo
 	@gcc $(CFLAGS) -c $(SRC)
 	@echo
@@ -102,8 +100,8 @@ $(NAME): $(OBJ)
 
 # Regla para construir el archivo estático con bonus
 bonus:
-	@echo
 	@echo "$(RED)*** Compilando BONUS libft ***$(DEFAULT)"
+	@echo
 	@echo
 	@gcc $(CFLAGS) -c $(BONUS_SRC)
 	@echo

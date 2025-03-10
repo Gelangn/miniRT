@@ -1,17 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   freeing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/16 13:31:43 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/10 21:01:02 by anavas-g         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+// incluir cabecera 42
 
 #include "../inc/minirt.h"
-#include "../inc/struct.h"
 
 void	free_map(t_map *map)
 {
@@ -46,5 +35,5 @@ void	dbl_free(char **ptr)
 		free(ptr[i]);
 		i++;
 	}
-	free (ptr);
+	free(ptr);
 }

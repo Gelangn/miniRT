@@ -1,3 +1,5 @@
+// incluir cabecera 42
+
 #include "../inc/minirt.h"
 
 static int	counter_words(char **str)

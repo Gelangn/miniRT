@@ -58,7 +58,7 @@
 # define ERR_LINE "\nError: nº of elements is different for each line\n"
 # define ERR_EMPTY "\nError: the file is empty or wrongly formatted\n"
 # define ERR_MEM "\nCache error\n"
-# define ERR_MAP "\nMap Error\n"
+# define ERR_SCENE "\nScene Error\n"
 # define ERR_MALLOC "\nMalloc error\n"
 
 #endif

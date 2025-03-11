@@ -33,7 +33,7 @@ static void	get_map(t_map *map)
 		i++;
 	}
 	sleep(10);
-	ft_printf("\nmap readed!!\n");
+	ft_printf("\nscene readed!!\n");
 	close(map->fd);
 }
 static void	get_map_size(t_map *map)

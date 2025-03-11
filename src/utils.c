@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:24:11 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/11 18:36:25 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/03/11 19:51:03 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	splited(t_map *map, int j, int i, int index)
 	else
 	{
 		if (valid_point(split[i]) == 0)
-			finish(ERR_MAP);
+			finish(ERR_SCENE);
 		map->points[index].point_z = ft_atoi(split[i]);
 		map->points[index].color = DEFAULT_COLOR;
 	}

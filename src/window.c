@@ -24,7 +24,7 @@ void	*new_window(t_var *mlx)
 {
 	ft_printf("Creating window\n");
 	mlx->mlx_win = mlx_new_window(mlx->mlx_conn, WIN_W, WIN_H, \
-			"Welcome to FdF - anavas-g");
+			"Welcome to miniRT - anavas-g");
 	if (!mlx->mlx_win)
 	{
 		free(mlx->mlx_win);

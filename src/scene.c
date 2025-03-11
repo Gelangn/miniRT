@@ -32,6 +32,7 @@ static void	get_map(t_map *map)
 		ft_printf("%s", map->lines[i]);
 		i++;
 	}
+	sleep(10);
 	ft_printf("\nmap readed!!\n");
 	close(map->fd);
 }
@@ -80,7 +81,7 @@ static void	fill_points(t_map *map)
 		{
 			map->points[index].point_x = i;
 			map->points[index].point_y = j;
-			//splited(map, j, i, index);
+			splited(map, j, i, index);
 			index++;
 			i++;
 		}

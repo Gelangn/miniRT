@@ -51,7 +51,7 @@
 
 # define ERR_ARGS \
 	"\nIncorrect number of arguments, \
-	expected 1, Usage: ./fdf <file.fdf>\n"
+	expected 1, Usage: ./miniRT <file.rt>\n"
 # define ERR_OPEN "\nError opening the file\n"
 # define ERR_READ "\nError reading the file\n"
 # define ERR_SPLIT "\nError splitting the line\n"

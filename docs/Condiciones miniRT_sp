@@ -1,0 +1,19 @@
+El objetivo de su programa es generar imágenes utilizando el protocolo Raytracing. Esas imágenes generadas por computadora representarán cada una una escena, vista desde un ángulo y una posición específicos, definidos por objetos geométricos simples, y cada uno con su propio sistema de iluminación.
+
+Las restricciones son las siguientes:
+• Debe utilizar miniLibX. Ya sea la versión que esté disponible en el sistema operativo o desde sus fuentes. Si elige trabajar con las fuentes, deberá aplicar las mismas reglas para su libft que las escritas anteriormente en la parte de Instrucciones comunes.
+• La gestión de su ventana debe permanecer fluida: cambiar a otra ventana, minimizar, etc.
+• Necesita al menos estos 3 objetos geométricos simples: plano, esfera y cilindro.
+• Si corresponde, todas las intersecciones posibles y el interior del objeto deben manejarse correctamente.
+• Su programa debe poder cambiar el tamaño de las propiedades únicas del objeto: diámetro para una esfera y ancho y alto para un cilindro.
+• Su programa debe poder aplicar transformaciones de traslación y rotación a objetos, luces y cámaras (excepto esferas y luces que no se pueden rotar).
+• Gestión de la luz: brillo puntual, sombras duras, iluminación de ambiente (los objetos nunca están completamente a oscuras). Debe implementar iluminación ambiental y difusa.
+• El programa muestra la imagen en una ventana y respeta las siguientes reglas:
+◦ Al presionar ESC, se debe cerrar la ventana y salir del programa sin problemas.
+◦ Al hacer clic en la cruz roja en el marco de la ventana, se debe cerrar la ventana y salir del programa sin problemas.
+◦ Se recomienda encarecidamente el uso de imágenes de minilibX.
+• Su programa debe tomar como primer argumento un archivo de descripción de escena con la extensión .rt.
+◦ Cada tipo de elemento puede estar separado por uno o más saltos de línea.
+◦ Cada tipo de información de un elemento puede estar separado por uno o más espacios.
+◦ Cada tipo de elemento puede colocarse en cualquier orden en el archivo.
+◦ Los elementos definidos con una letra mayúscula solo se pueden declarar una vez en la escena.

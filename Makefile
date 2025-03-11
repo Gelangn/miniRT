@@ -1,5 +1,3 @@
-# gcc lib/libft/get_next_line.c lib/libft/get_next_line_utils.c src/fdf.c src/main.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address -o fdf
-# gcc lib/libft/*.c lib/libft/*.h lib/mlx/mlx.h inc/fdf.h src/*.c -Wall -Wextra -Werror -Imlx -O3 -Llib/mlx -lmlx -framework OpenGL -framework AppKit -g3 -fsanitize=address (Error al iniciar ./a.out ERROR Usage: ./fdf file )
 
 # Colours
 DEFAULT 	= \033[0m

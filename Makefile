@@ -76,21 +76,21 @@ $(NAME): $(OBJ)
 	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
 	@make -C $(LIB) all
 	@echo
-	sleep 3
+#	sleep 3
 	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
 	@make -C $(LIB) bonus
 	@echo
-	sleep 3
+#	sleep 3
 	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
 	@echo
 	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
 	@make -C $(LIB_MLX)
-	sleep 3
+#	sleep 3
 	@echo
 	@echo
 	@echo "$(YELLOW)*** Creando ejecutable ***$(DEFAULT)"
 	@echo
-	sleep 5
+#	sleep 5
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
 	@echo
 	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"

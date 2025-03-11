@@ -80,7 +80,7 @@ static void	fill_points(t_map *map)
 		{
 			map->points[index].point_x = i;
 			map->points[index].point_y = j;
-			splited(map, j, i, index);
+			//splited(map, j, i, index);
 			index++;
 			i++;
 		}

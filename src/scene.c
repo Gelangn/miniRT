@@ -2,7 +2,7 @@
 
 #include "../inc/minirt.h"
 
-static int	counter_words(char **str)
+/* static int	counter_words(char **str)
 {
 	int	len;
 
@@ -10,14 +10,14 @@ static int	counter_words(char **str)
 	while (str[len] != NULL)
 		len++;
 	return (len);
-}
+} */
 
-static void	get_scene(t_scene *scene)
+/* static void	get_scene(t_scene *scene)
 {
 	int	i;
 
 	i = 0;
-	scene->fd = open(scene->arg_path, O_RDONLY);
+	scene->fd = open(scene->file_path, O_RDONLY);
 	if (scene->fd == (-1))
 		finish(ERR_OPEN);
 	scene->lines = (char **)malloc((scene->height + 1) * sizeof(char *));
@@ -35,8 +35,8 @@ static void	get_scene(t_scene *scene)
 	sleep(10);
 	ft_printf("\nscene readed!!\n");
 	close(scene->fd);
-}
-static void	get_scene_size(t_scene *scene)
+} */
+/* static void	get_scene_size(t_scene *scene)
 {
 	char	*line;
 	char	**split;
@@ -45,7 +45,7 @@ static void	get_scene_size(t_scene *scene)
 	scene->width = 0;
 	line = NULL;
 	split = NULL;
-	scene->fd = open(scene->arg_path, O_RDONLY);
+	scene->fd = open(scene->file_path, O_RDONLY);
 	if (scene->fd == (-1))
 		finish(ERR_OPEN);
 	line = get_next_line(scene->fd);
@@ -63,9 +63,9 @@ static void	get_scene_size(t_scene *scene)
 	if (split != NULL)
 		dbl_free(split);
 	close(scene->fd);
-}
+} */
 
-static void	fill_points(t_scene *scene)
+/* static void	fill_points(t_scene *scene)
 {
 	int	i;
 	int	j;
@@ -90,14 +90,5 @@ static void	fill_points(t_scene *scene)
 		j++;
 	}
 	free(scene->lines);
-}
+} */
 
-t_scene	read_scene(t_scene *scene, char *arg_path)
-{
-	scene->arg_path = arg_path;
-	get_scene_size(scene);
-	get_scene(scene);
-	scene->nr_elems = scene->width * scene->height;
-	fill_points(scene);
-	return (*scene);
-}

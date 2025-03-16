@@ -2,7 +2,7 @@
 
 #include "../inc/minirt.h"
 
-float	max_range_w(t_scene *scene)
+/* float	max_range_w(t_scene *scene)
 {
 	int		index;
 	float	max_x;
@@ -90,4 +90,4 @@ void	scale_scene(t_scene *scene)
 		+ fabsf(min_range_w(scene) * scene->scale);
 	scene->origin_y = (((WIN_H - MARGIN) - (range_y * scene->scale)) / 2)
 		+ fabsf(min_range_h(scene) * scene->scale);
-}
+} */

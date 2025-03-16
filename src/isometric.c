@@ -12,7 +12,7 @@
 
 #include "../inc/minirt.h"
 
-void	isometric(t_point *point)
+/* void	isometric(t_point *point)
 {
 	double	angle;
 
@@ -32,4 +32,4 @@ void	points_3d_to_2d(t_scene *scene)
 		isometric(&scene->points[i]);
 		i++;
 	}
-}
+} */

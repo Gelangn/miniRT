@@ -40,7 +40,7 @@ int	valid_point(char *value)
 		return (1);
 }
 
-void	splited(t_scene *scene, int j, int i, int index)
+/* void	splited(t_scene *scene, int j, int i, int index)
 {
 	char	**split;
 
@@ -59,7 +59,7 @@ void	splited(t_scene *scene, int j, int i, int index)
 		scene->points[index].color = DEFAULT_COLOR;
 	}
 	dbl_free(split);
-}
+} */
 
 int	ft_atoi_base(const char *str, int base)
 {

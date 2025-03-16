@@ -27,8 +27,8 @@ static int	initialize(t_global *global)
 	global->vars.mlx_conn = mlx_init();
 	ft_printf("MLX initialized OK\n");
 	global->vars.mlx_win = new_window(&global->vars);
-	global->scene.points = NULL;
-	global->scene.arg_path = NULL;
+	//global->scene.points = NULL;
+	global->scene.file_path = NULL;
 	global->scene.fd = 0;
 	global->img.img = NULL;
 	global->img.addr = NULL;
@@ -62,12 +62,12 @@ int	main(int argc, char **argv)
 		ft_printf(ERR_ARGS);
 		return (0);
 	}
-	scene.arg_path = argv[1];
-	check_file_extension(scene.arg_path);
+	scene.file_path = argv[1];
+	check_file_extension(scene.file_path);
 	global = (t_global *)malloc(sizeof(t_global));
 	initialize(global);
-	read_scene(&global->scene, argv[1]);
-	render(global);
+	read_scene(&global->scene, scene.file_path);
+	//render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);

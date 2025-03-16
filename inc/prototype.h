@@ -3,6 +3,7 @@
 
 # include "../inc/minirt.h"
 # include "../inc/struct.h"
+# include <stddef.h>
 
 /***** PROTOTYPE *****/
 /* MLX y eventos  */

@@ -2,28 +2,28 @@
 
 #include "../inc/minirt.h"
 
-// for each point in the map we draw the horizontal and vertical lines
-static void	draw_map(t_global *global)
+// for each point in the scene we draw the horizontal and vertical lines
+static void	draw_scene(t_global *global)
 {
 	int	index;
 
 	index = 0;
-	while (index < global->map.nr_elems)
+	while (index < global->scene.nr_elems)
 	{
-		if (index % global->map.width != global->map.width - 1)
+		if (index % global->scene.width != global->scene.width - 1)
 			//right_line(global, index);
-		if (index < global->map.nr_elems - global->map.width)
+		if (index < global->scene.nr_elems - global->scene.width)
 			//down_line(global, index);
 		index++;
 	}
-	free(global->map.points);
+	free(global->scene.points);
 }
 
 void	render(t_global *global)
 {
-	points_3d_to_2d(&global->map);
-	scale_map(&global->map);
-	draw_map(global);
+	points_3d_to_2d(&global->scene);
+	scale_scene(&global->scene);
+	draw_scene(global);
 }
 
 void	pixel_put(t_img *data, int x, int y, int color)

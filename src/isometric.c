@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 14:03:17 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/11 18:34:44 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/03/16 17:45:43 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ void	isometric(t_point *point)
 		- point->point_z;
 }
 
-void	points_3d_to_2d(t_map *map)
+void	points_3d_to_2d(t_scene *scene)
 {
 	int	i;
 
 	i = 0;
-	while (i < map->nr_elems)
+	while (i < scene->nr_elems)
 	{
-		isometric(&map->points[i]);
+		isometric(&scene->points[i]);
 		i++;
 	}
 }

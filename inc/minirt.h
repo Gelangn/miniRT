@@ -1,14 +1,12 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-
-
-# include "../lib/minilibx-linux/mlx.h"
+# include "../inc/prototype.h"
+# include "../inc/struct.h"
 # include "../lib/libft/ft_printf.h"
 # include "../lib/libft/get_next_line.h"
 # include "../lib/libft/libft.h"
-# include "../inc/prototype.h"
-# include "../inc/struct.h"
+# include "../lib/minilibx-linux/mlx.h"
 # include <X11/keysym.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -60,5 +58,6 @@
 # define ERR_MEM "\nCache error\n"
 # define ERR_SCENE "\nScene Error\n"
 # define ERR_MALLOC "\nMalloc error\n"
+# define ERR_INVALID_EXTENSION "\nError extension .rt\n"
 
 #endif

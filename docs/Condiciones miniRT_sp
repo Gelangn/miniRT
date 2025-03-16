@@ -1,19 +1,101 @@
-El objetivo de su programa es generar imágenes utilizando el protocolo Raytracing. Esas imágenes generadas por computadora representarán cada una una escena, vista desde un ángulo y una posición específicos, definidos por objetos geométricos simples, y cada uno con su propio sistema de iluminación.
+El objetivo de su programa es generar imágenes utilizando el protocolo Raytracing.
+Esas imágenes generadas por computadora representarán cada una una escena, vista
+desde un ángulo y una posición específicos, definidos por objetos geométricos
+simples, y cada uno con su propio sistema de iluminación.
 
 Las restricciones son las siguientes:
-• Debe utilizar miniLibX. Ya sea la versión que esté disponible en el sistema operativo o desde sus fuentes. Si elige trabajar con las fuentes, deberá aplicar las mismas reglas para su libft que las escritas anteriormente en la parte de Instrucciones comunes.
-• La gestión de su ventana debe permanecer fluida: cambiar a otra ventana, minimizar, etc.
+• Debe utilizar miniLibX. Ya sea la versión que esté disponible en el sistema
+operativo o desde sus fuentes. Si elige trabajar con las fuentes, deberá aplicar
+las mismas reglas para su libft que las escritas anteriormente en la parte de
+Instrucciones comunes.
+• La gestión de su ventana debe permanecer fluida: cambiar a otra ventana,
+minimizar, etc.
 • Necesita al menos estos 3 objetos geométricos simples: plano, esfera y cilindro.
-• Si corresponde, todas las intersecciones posibles y el interior del objeto deben manejarse correctamente.
-• Su programa debe poder cambiar el tamaño de las propiedades únicas del objeto: diámetro para una esfera y ancho y alto para un cilindro.
-• Su programa debe poder aplicar transformaciones de traslación y rotación a objetos, luces y cámaras (excepto esferas y luces que no se pueden rotar).
-• Gestión de la luz: brillo puntual, sombras duras, iluminación de ambiente (los objetos nunca están completamente a oscuras). Debe implementar iluminación ambiental y difusa.
+• Si corresponde, todas las intersecciones posibles y el interior del objeto
+deben manejarse correctamente.
+• Su programa debe poder cambiar el tamaño de las propiedades únicas del objeto:
+diámetro para una esfera y ancho y alto para un cilindro.
+• Su programa debe poder aplicar transformaciones de traslación y rotación a
+objetos, luces y cámaras (excepto esferas y luces que no se pueden rotar).
+• Gestión de la luz: brillo puntual, sombras duras, iluminación de ambiente
+(los objetos nunca están completamente a oscuras). Debe implementar iluminación
+ambiental y difusa.
 • El programa muestra la imagen en una ventana y respeta las siguientes reglas:
 ◦ Al presionar ESC, se debe cerrar la ventana y salir del programa sin problemas.
-◦ Al hacer clic en la cruz roja en el marco de la ventana, se debe cerrar la ventana y salir del programa sin problemas.
+◦ Al hacer clic en la cruz roja en el marco de la ventana, se debe cerrar la
+ventana y salir del programa sin problemas.
 ◦ Se recomienda encarecidamente el uso de imágenes de minilibX.
-• Su programa debe tomar como primer argumento un archivo de descripción de escena con la extensión .rt.
+• Su programa debe tomar como primer argumento un archivo de descripción de
+escena con la extensión .rt.
 ◦ Cada tipo de elemento puede estar separado por uno o más saltos de línea.
-◦ Cada tipo de información de un elemento puede estar separado por uno o más espacios.
+◦ Cada tipo de información de un elemento puede estar separado por uno o más
+espacios.
 ◦ Cada tipo de elemento puede colocarse en cualquier orden en el archivo.
-◦ Los elementos definidos con una letra mayúscula solo se pueden declarar una vez en la escena.
+◦ Los elementos definidos con una letra mayúscula solo se pueden declarar una
+vez en la escena.
+
+
+
+La parte obligatoria debe cumplir con las siguientes reglas:
+Su programa debe tomar como primer argumento un archivo de descripción de escena
+con la extensión .rt.
+◦ Cada tipo de elemento puede separarse con uno o más saltos de línea.
+◦ Cada tipo de información de un elemento puede separarse con uno o más espacios.
+◦ Cada tipo de elemento puede configurarse en cualquier orden dentro del archivo.
+◦ Los elementos definidos con mayúscula solo pueden declararse una vez en la escena.
+◦ La información de cada elemento es primero el identificador de tipo
+(compuesto por uno o dos caracteres), seguido de la información específica de
+cada objeto en un orden estricto, como:
+◦ Iluminación ambiental:
+A 0.2 255,255,255
+∗ Identificador: A
+∗ Relación de iluminación ambiental en el rango [0.0,1.0]: 0.2
+∗ Colores R,G,B en el rango [0-255]: 255, 255, 255
+◦ Cámara:
+C -50.0,0,20 0,0,1 70
+∗ Identificador: C
+∗ Coordenadas x,y,z del punto de vista: -50.0,0,20
+∗ Vector de orientación normalizado 3D. En el rango [-1,1] para cada eje x, y,
+z: 0.0, 0.0, 1.0
+∗ FOV: Campo de visión horizontal en grados en el rango [0, 180]: 70
+◦ Luz:
+L -40.0, 50.0, 0.0 0.6 10, 0, 255
+∗ Identificador: L
+∗ Coordenadas x, y, z del punto de luz: -40.0, 50.0, 0.0
+∗ Relación de brillo de la luz en el rango [0.0, 1.0]: 0.6
+∗ (no usado en la parte obligatoria) Colores R, G, B en el rango [0-255]: 10, 0,
+255
+◦ Esfera:
+sp 0.0, 0.0, 20.6 12.6 10, 0, 255
+∗ Identificador: sp
+∗Coordenadas x, y, z del centro de la esfera: 0.0, 0.0, 20.6
+∗Diámetro de la esfera: 12.6
+∗Colores R, G, B en el rango [0-255]: 10, 0, 255
+◦Plano:
+pl 0.0, 0.0, -10.0 0.0, 1.0, 0.0 0, 0, 225
+∗Identificador: pl
+∗Coordenadas x, y, z de un punto en el plano: 0.0, 0.0, -10.0
+∗Vector normal normalizado tridimensional. En el rango [-1,1] para cada eje x,
+y, z: 0.0, 1.0, 0.0
+∗Colores R, G, B en el rango [0-255]: 0, 0, 225
+◦Cilindro:
+cy 50.0, 0.0, 20.6 0.0, 0.0, 1.0 14.2 21.42 10, 0, 255
+∗Identificador: cy
+∗Coordenadas x, y, z del centro del cilindro: 50.0, 0.0, 20.6
+∗Vector normalizado tridimensional del eje del cilindro. En el rango [-1,1] para
+cada eje x, y, z: 0.0, 0.0, 1.0
+∗Diámetro del cilindro: 14.2
+∗Altura del cilindro: 21.42
+∗Colores R, G, B en el rango [0, 255]: 10, 0, 255
+•Ejemplo de la parte obligatoria con una escena .rt minimalista:
+A 0.2 255, 255, 255
+C -50, 0, 20 0, 0, 1 70
+L -40, 0, 30 0.7 255, 255, 255
+pl 0, 0, 0, 1.0, 0 255, 0, 225
+sp 0, 0, 20 255, 0, 0
+cy 50.0, 0, 0, 20.6 0, 0, 1.0, 14.2 21.42 10,0,255
+•Si se detecta cualquier error de configuración en el archivo, el programa debe
+cerrarse correctamente y devolver "Error\n" seguido de un mensaje de error
+explícito de su elección.
+•Para la defensa, sería ideal contar con un conjunto completo de escenas
+centradas en lo funcional, para facilitar el control de los elementos a crear.

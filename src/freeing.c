@@ -2,22 +2,22 @@
 
 #include "../inc/minirt.h"
 
-void	free_map(t_map *map)
+void	free_scene(t_scene *scene)
 {
 	int	i;
 
 	i = 0;
-	while (map->lines[i])
+	while (scene->lines[i])
 	{
-		free(map->lines[i]);
+		free(scene->lines[i]);
 		i++;
 	}
-	free(map->lines);
+	free(scene->lines);
 }
 
 void	free_global(t_global *global)
 {
-	free_map(&global->map);
+	free_scene(&global->scene);
 	free(global->img.img);
 	free(global->vars.mlx_win);
 	free(global->vars.mlx_conn);

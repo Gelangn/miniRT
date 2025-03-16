@@ -12,60 +12,60 @@ static int	counter_words(char **str)
 	return (len);
 }
 
-static void	get_map(t_map *map)
+static void	get_scene(t_scene *scene)
 {
 	int	i;
 
 	i = 0;
-	map->fd = open(map->arg_path, O_RDONLY);
-	if (map->fd == (-1))
+	scene->fd = open(scene->arg_path, O_RDONLY);
+	if (scene->fd == (-1))
 		finish(ERR_OPEN);
-	map->lines = (char **)malloc((map->height + 1) * sizeof(char *));
-	if (map->lines == NULL)
+	scene->lines = (char **)malloc((scene->height + 1) * sizeof(char *));
+	if (scene->lines == NULL)
 	{
-		close(map->fd);
+		close(scene->fd);
 		finish(ERR_MALLOC);
 	}
-	while (i <= map->height)
+	while (i <= scene->height)
 	{
-		map->lines[i] = get_next_line(map->fd);
-		ft_printf("%s", map->lines[i]);
+		scene->lines[i] = get_next_line(scene->fd);
+		ft_printf("%s", scene->lines[i]);
 		i++;
 	}
 	sleep(10);
 	ft_printf("\nscene readed!!\n");
-	close(map->fd);
+	close(scene->fd);
 }
-static void	get_map_size(t_map *map)
+static void	get_scene_size(t_scene *scene)
 {
 	char	*line;
 	char	**split;
 
-	map->height = 0;
-	map->width = 0;
+	scene->height = 0;
+	scene->width = 0;
 	line = NULL;
 	split = NULL;
-	map->fd = open(map->arg_path, O_RDONLY);
-	if (map->fd == (-1))
+	scene->fd = open(scene->arg_path, O_RDONLY);
+	if (scene->fd == (-1))
 		finish(ERR_OPEN);
-	line = get_next_line(map->fd);
+	line = get_next_line(scene->fd);
 	if (line == NULL)
 		finish(ERR_OPEN);
 	split = ft_split(line, ' ');
-	map->width = counter_words(split);
+	scene->width = counter_words(split);
 	free(line);
 	while (line != NULL)
 	{
-		line = get_next_line(map->fd);
+		line = get_next_line(scene->fd);
 		free(line);
-		map->height++;
+		scene->height++;
 	}
 	if (split != NULL)
 		dbl_free(split);
-	close(map->fd);
+	close(scene->fd);
 }
 
-static void	fill_points(t_map *map)
+static void	fill_points(t_scene *scene)
 {
 	int	i;
 	int	j;
@@ -74,30 +74,30 @@ static void	fill_points(t_map *map)
 	i = 0;
 	j = 0;
 	index = 0;
-	map->points = malloc(((map->width * map->height) + 1) * sizeof(t_point));
-	while (j < map->height && map->lines[j] != NULL)
+	scene->points = malloc(((scene->width * scene->height) + 1) * sizeof(t_point));
+	while (j < scene->height && scene->lines[j] != NULL)
 	{
-		while (i < map->width)
+		while (i < scene->width)
 		{
-			map->points[index].point_x = i;
-			map->points[index].point_y = j;
-			splited(map, j, i, index);
+			scene->points[index].point_x = i;
+			scene->points[index].point_y = j;
+			splited(scene, j, i, index);
 			index++;
 			i++;
 		}
-		free(map->lines[j]);
+		free(scene->lines[j]);
 		i = 0;
 		j++;
 	}
-	free(map->lines);
+	free(scene->lines);
 }
 
-t_map	read_map(t_map *map, char *arg_path)
+t_scene	read_scene(t_scene *scene, char *arg_path)
 {
-	map->arg_path = arg_path;
-	get_map_size(map);
-	get_map(map);
-	map->nr_elems = map->width * map->height;
-	fill_points(map);
-	return (*map);
+	scene->arg_path = arg_path;
+	get_scene_size(scene);
+	get_scene(scene);
+	scene->nr_elems = scene->width * scene->height;
+	fill_points(scene);
+	return (*scene);
 }

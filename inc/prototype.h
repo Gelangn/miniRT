@@ -18,15 +18,15 @@ void	set_hooks(t_global *global);
 int		close_window(void *mlx);
 void	*new_window(t_var *mlx);
 
-/* Map */
-t_map	read_map(t_map *map, char *arg_path);
-void	free_map(t_map *map);
+/* scene */
+t_scene	read_scene(t_scene *scene, char *arg_path);
+void	free_scene(t_scene *scene);
 
 /* Graphics-Render-Draw */
 void	render(t_global *global);
-void	points_3d_to_2d(t_map *map);
+void	points_3d_to_2d(t_scene *scene);
 void	isometric(t_point *point);
-void	scale_map(t_map *map);
+void	scale_scene(t_scene *scene);
 void	draw_line(t_img *img, t_dot *dot, int color);
 void	pixel_put(t_img *data, int x, int y, int color);
 
@@ -39,8 +39,8 @@ int		get_char_len(const char *chain, char chr);
 void	finish(char *s);
 void	free_global(t_global *global);
 void	dbl_free(char **ptr);
-void	check_map(t_map *map);
-void	splited(t_map *map, int j, int i, int index);
+void	check_scene(t_scene *scene);
+void	splited(t_scene *scene, int j, int i, int index);
 int		ft_atoi_base(const char *str, int base);
 
 #endif

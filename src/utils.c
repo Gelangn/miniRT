@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:24:11 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/11 19:51:03 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/03/16 17:45:52 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,23 @@ int	valid_point(char *value)
 		return (1);
 }
 
-void	splited(t_map *map, int j, int i, int index)
+void	splited(t_scene *scene, int j, int i, int index)
 {
 	char	**split;
 
-	split = ft_split(map->lines[j], ' ');
+	split = ft_split(scene->lines[j], ' ');
 	if (ft_strchr(split[i], ',') != NULL)
 	{
-		map->points[index].point_z = ft_atoi(ft_trim_str(split[i], ','));
-		map->points[index].color = \
+		scene->points[index].point_z = ft_atoi(ft_trim_str(split[i], ','));
+		scene->points[index].color = \
 			ft_atoi_base(ft_strchr(split[i], 'x') + 1, 16);
 	}
 	else
 	{
 		if (valid_point(split[i]) == 0)
 			finish(ERR_SCENE);
-		map->points[index].point_z = ft_atoi(split[i]);
-		map->points[index].color = DEFAULT_COLOR;
+		scene->points[index].point_z = ft_atoi(split[i]);
+		scene->points[index].color = DEFAULT_COLOR;
 	}
 	dbl_free(split);
 }

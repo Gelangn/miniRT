@@ -20,18 +20,23 @@ int	close_window(void *mlx)
 	return (MLX_SUCCESS);
 }
 
-void	*new_window(t_var *mlx)
+void	*new_window(t_global *global)
 {
 	ft_printf("Creating window\n");
-	mlx->mlx_win = mlx_new_window(mlx->mlx_conn, WIN_W, WIN_H, \
+	global->vars.mlx_win = mlx_new_window(global->vars.mlx_conn, WIN_W, WIN_H, \
 			"Welcome to miniRT - anavas-g");
-	if (!mlx->mlx_win)
+	global->img.img = mlx_new_image(global->vars.mlx_conn, WIN_W - MARGIN, WIN_H
+			- MARGIN);
+	global->img.addr = mlx_get_data_addr(global->img.img,
+			&global->img.bits_per_pixel, &global->img.line_length,
+			&global->img.endian);
+	if (!global->vars.mlx_win)
 	{
-		free(mlx->mlx_win);
+		free(global->vars.mlx_win);
 		return (NULL);
 	}
 	ft_printf("Window created\n");
-	mlx_string_put(mlx->mlx_conn, mlx->mlx_win, \
+	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, \
 		WIN_W * .89, WIN_H * .96, 0x00FF0000, "By anavas-g");
-	return (mlx->mlx_win);
+	return (global->vars.mlx_win);
 }

@@ -6,7 +6,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/miniRT",  // Ajusta el nombre del ejecutable según tu Makefile
-			"args": ["./scene/correct_tests/2_planes.rt"],  // Reemplaza con el argumento que necesites
+			"args": ["../scene/correct_tests/2_planes.rt"],  // Reemplaza con el argumento que necesites
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

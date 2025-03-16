@@ -51,9 +51,9 @@ void parse_cylinder(t_scene *scene, char *line)
 }
 
 // Function to read and parse the scene file
-void read_scene(t_scene *scene, const char *file_path)
+void read_scene(t_scene *scene, const char *filename)
 {
-	FILE *file = fopen(file_path, "r");
+	FILE *file = fopen(filename, "r");
 	if (!file)
 	{
 		perror("Error opening file");

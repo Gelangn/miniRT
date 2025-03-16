@@ -17,7 +17,7 @@ void	set_hooks(t_global *global);
 
 /* Window */
 int		close_window(void *mlx);
-void	*new_window(t_var *mlx);
+void	*new_window(t_global *global);
 
 /* scene */
 // void	read_scene(t_scene *scene, char *file_path);

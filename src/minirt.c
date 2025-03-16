@@ -23,24 +23,27 @@ static void	background(t_img *data)
 
 static int	initialize(t_global *global)
 {
-	ft_printf("Initializing mlx\n");
-	global->vars.mlx_conn = mlx_init();
-	ft_printf("MLX initialized OK\n");
-	global->vars.mlx_win = new_window(&global->vars);
 	//global->scene.points = NULL;
 	global->scene.file_path = NULL;
 	global->scene.fd = 0;
 	global->img.img = NULL;
 	global->img.addr = NULL;
 	global->scene = (t_scene){0};
-	global->img.img = mlx_new_image(global->vars.mlx_conn, WIN_W - MARGIN, WIN_H
-			- MARGIN);
-	global->img.addr = mlx_get_data_addr(global->img.img,
-			&global->img.bits_per_pixel, &global->img.line_length,
-			&global->img.endian);
-	background(&global->img);
+	ft_printf("Initializing mlx\n");
+	global->vars.mlx_conn = mlx_init();
+	ft_printf("MLX initialized OK\n");
+	
 	return (MLX_SUCCESS);
 }
+void initialize_scene(t_scene *scene)
+{
+	scene->num_spheres = 0;
+	scene->num_planes = 0;
+	scene->num_cylinders = 0;
+	// Inicializa otros campos según sea necesario
+}
+
+
 // Function to check the file extension
 void	check_file_extension(const char *filename)
 {
@@ -55,18 +58,22 @@ void	check_file_extension(const char *filename)
 int	main(int argc, char **argv)
 {
 	t_global	*global;
-	t_scene		scene;
+	//t_scene		scene;
 
 	if (argc != 2)
 	{
 		ft_printf(ERR_ARGS);
 		return (0);
 	}
-	scene.file_path = argv[1];
-	check_file_extension(scene.file_path);
 	global = (t_global *)malloc(sizeof(t_global));
+	global->scene.file_path = argv[1];
+	check_file_extension(global->scene.file_path);
 	initialize(global);
-	read_scene(&global->scene, scene.file_path);
+	initialize_scene(&global->scene);
+	read_scene(&global->scene, global->scene.file_path);
+	global->vars.mlx_win = new_window(global);
+	
+	background(&global->img);
 	//render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);

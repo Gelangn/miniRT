@@ -20,7 +20,7 @@ int		close_window(void *mlx);
 void	*new_window(t_global *global);
 
 /* scene */
-// void	read_scene(t_scene *scene, char *file_path);
+void	read_scene(t_global *global);
 void	free_scene(t_scene *scene);
 
 /* Graphics-Render-Draw */

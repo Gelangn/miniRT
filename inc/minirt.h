@@ -3,7 +3,6 @@
 
 # include "../inc/prototype.h"
 # include "../inc/struct.h"
-# include "../inc/parsing.h"
 # include "../lib/libft/ft_printf.h"
 # include "../lib/libft/get_next_line.h"
 # include "../lib/libft/libft.h"

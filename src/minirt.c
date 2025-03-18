@@ -49,9 +49,13 @@ void	check_file_extension(const char *filename)
 {
 	const char	*ext = ft_strrchr(filename, '.');
 
-	if (!ext || ft_strcmp(ext, ".rt") != 0)
+	if (ft_strcmp(ext, ".rt") != 0)
 	{
 		finish(ERR_INVALID_EXTENSION);
+	}
+	else if(!ext)
+	{
+		finish(ERR_ARGS);
 	}
 }
 
@@ -70,7 +74,7 @@ int	main(int argc, char **argv)
 	check_file_extension(global->scene.file_path);
 	initialize(global);
 	initialize_scene(&global->scene);
-	read_scene(&global->scene, global->scene.file_path);
+	read_scene(global);
 	global->vars.mlx_win = new_window(global);
 	
 	background(&global->img);

@@ -51,40 +51,33 @@ void parse_cylinder(t_scene *scene, char *line)
 }
 
 // Function to read and parse the scene file
-void read_scene(t_scene *scene, const char *filename)
+void read_scene(t_global *global)
 {
+	const char *filename;
+
+	filename = global->scene.file_path;
 	FILE *file = fopen(filename, "r");
 	if (!file)
 	{
-		perror("Error opening file");
-		exit(EXIT_FAILURE);
+		free_global(global);
+		finish(ERR_OPEN);
 	}
-
-	char line[256];
-	while (fgets(line, sizeof(line), file))
+	char *line_ptr;
+	while ((line_ptr = get_next_line(fileno(file))) != NULL)
 	{
-		if (line[0] == 'A')
-			parse_ambient(scene, line);
-		else if (line[0] == 'C')
-			parse_camera(scene, line);
-		else if (line[0] == 'L')
-			parse_light(scene, line);
-		else if (strncmp(line, "sp", 2) == 0)
-			parse_sphere(scene, line);
-		else if (strncmp(line, "pl", 2) == 0)
-			parse_plane(scene, line);
-		else if (strncmp(line, "cy", 2) == 0)
-			parse_cylinder(scene, line);
+		if (line_ptr[0] == 'A')
+			parse_ambient(&global->scene, line_ptr);
+		else if (line_ptr[0] == 'C')
+			parse_camera(&global->scene, line_ptr);
+		else if (line_ptr[0] == 'L')
+			parse_light(&global->scene, line_ptr);
+		else if (strncmp(line_ptr, "sp", 2) == 0)
+			parse_sphere(&global->scene, line_ptr);
+		else if (strncmp(line_ptr, "pl", 2) == 0)
+			parse_plane(&global->scene, line_ptr);
+		else if (strncmp(line_ptr, "cy", 2) == 0)
+			parse_cylinder(&global->scene, line_ptr);
+		free(line_ptr);
 	}
-
 	fclose(file);
 }
-/* t_scene	read_scene(t_scene *scene, char *file_path)
-{
-	scene->file_path = file_path;
-	get_scene_size(scene);
-	get_scene(scene);
-	//scene->nr_elems = scene->width * scene->height;
-	fill_points(scene);
-	return (*scene);
-} */

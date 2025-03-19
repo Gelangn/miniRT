@@ -1,6 +1,7 @@
 // incluir cabecera 42
 
 #include "../inc/minirt.h"
+#include <linux/limits.h>
 
 static void	background(t_img *data)
 {
@@ -65,6 +66,13 @@ int	main(int argc, char **argv)
 {
 	t_global	*global;
 
+	char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("Directorio de trabajo actual: %s\n", cwd);
+    } else {
+        perror("getcwd() error");
+    }
+    return 0;
 	if (argc != 2)
 	{
 		//ft_printf(ERR_ARGS);
@@ -83,6 +91,7 @@ int	main(int argc, char **argv)
 	if (initialize_scene(&global->scene)!= 0)
 		finish(ERR_MEM);
 	global->scene.file_path = argv[1];
+	printf("Opening file: %s\n", global->scene.file_path); 
 	read_scene(&global->scene, global->scene.file_path);
 	global->vars.mlx_win = new_window(global);
 	

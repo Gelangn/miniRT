@@ -1,12 +1,6 @@
 // incluir cabecera 42
 
 #include "../inc/minirt.h"
-#include "../inc/parsing.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
 
 // Function to parse ambient light
 void parse_ambient(t_scene *scene, char *line)
@@ -51,33 +45,38 @@ void parse_cylinder(t_scene *scene, char *line)
 }
 
 // Function to read and parse the scene file
-void read_scene(t_global *global)
+void read_scene(t_scene *scene, const char *filename)
 {
-	const char *filename;
-
-	filename = global->scene.file_path;
-	FILE *file = fopen(filename, "r");
-	if (!file)
+	int fd = open(filename, O_RDONLY);
+	if (fd == -1)
 	{
-		free_global(global);
+		//free_scene(scene);
 		finish(ERR_OPEN);
 	}
+
+	FILE *file = fdopen(fd, "r");
+	if (!file)
+	{
+		close(fd);
+		//free_scene(scene);
+		finish(ERR_OPEN);
+	}
+
 	char *line_ptr;
 	while ((line_ptr = get_next_line(fileno(file))) != NULL)
 	{
 		if (line_ptr[0] == 'A')
-			parse_ambient(&global->scene, line_ptr);
+			parse_ambient(scene, line_ptr);
 		else if (line_ptr[0] == 'C')
-			parse_camera(&global->scene, line_ptr);
+			parse_camera(scene, line_ptr);
 		else if (line_ptr[0] == 'L')
-			parse_light(&global->scene, line_ptr);
+			parse_light(scene, line_ptr);
 		else if (strncmp(line_ptr, "sp", 2) == 0)
-			parse_sphere(&global->scene, line_ptr);
+			parse_sphere(scene, line_ptr);
 		else if (strncmp(line_ptr, "pl", 2) == 0)
-			parse_plane(&global->scene, line_ptr);
+			parse_plane(scene, line_ptr);
 		else if (strncmp(line_ptr, "cy", 2) == 0)
-			parse_cylinder(&global->scene, line_ptr);
-		free(line_ptr);
+			parse_cylinder(scene, line_ptr);
 	}
 	fclose(file);
 }

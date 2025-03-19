@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:24:11 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/18 23:41:06 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/03/19 00:07:32 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	finish(const char *message)
 {
 	if (errno == 0)
-		ft_putendl_fd(message, 2);
+		ft_putendl_fd((char *)message, 2);
 	else
 		perror(message);
 	exit(1);

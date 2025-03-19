@@ -67,24 +67,23 @@ all: $(NAME)
 
 # Regla de compilación
 %.o: %.c 
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
 	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
-	@make -C $(LIB) all
+	make -C $(LIB) all
 	@echo
 #	sleep 3
 	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
-	@make -C $(LIB) bonus
+	make -C $(LIB) bonus
 	@echo
 #	sleep 3
 	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
 	@echo
 	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
-	@make -C $(LIB_MLX)
+	make -C $(LIB_MLX)
 #	sleep 3
-	@echo
 	@echo
 	@echo "$(YELLOW)*** Creando ejecutable ***$(DEFAULT)"
 	@echo

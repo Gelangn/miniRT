@@ -91,23 +91,19 @@ all: $(NAME)
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
+	@echo
 	@echo "$(RED)*** Compilando libft ***$(DEFAULT)"
 	@echo
-	@echo
 	@gcc $(CFLAGS) -c $(SRC)
-	@echo
 	@ar rcs $@ $^
-	@echo
 
 # Regla para construir el archivo estático con bonus
 bonus:
+	@echo
 	@echo "$(RED)*** Compilando BONUS libft ***$(DEFAULT)"
 	@echo
-	@echo
 	@gcc $(CFLAGS) -c $(BONUS_SRC)
-	@echo
 	@ar rcs $(NAME) $(BONUS_OBJ)
-	@echo
 
 # Regla para limpiar archivos objeto
 clean:

@@ -20,8 +20,8 @@ int		close_window(void *mlx);
 void	*new_window(t_global *global);
 
 /* scene */
-void	read_scene(t_global *global);
-void	free_scene(t_scene *scene);
+void	read_scene(t_scene *scene, const char *filename);
+//void	free_scene(t_scene *scene);
 
 /* Graphics-Render-Draw */
 void	render(t_global *global);
@@ -37,11 +37,11 @@ char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strchr(const char *s, int c);
 int		get_char_len(const char *chain, char chr);
-void	finish(char *s);
+void	finish(const char *message);
 void	free_global(t_global *global);
 void	dbl_free(char **ptr);
 // void	check_scene(t_scene *scene);
-void	splited(t_scene *scene, int j, int i, int index);
+//void	splited(t_scene *scene, int j, int i, int index);
 int		ft_atoi_base(const char *str, int base);
 
 #endif

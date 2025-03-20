@@ -91,4 +91,3 @@
 	}
 	free(scene->lines);
 } */
-

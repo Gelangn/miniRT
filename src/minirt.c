@@ -66,12 +66,6 @@ int	main(int argc, char **argv)
 {
 	t_global	*global;
 
-	char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        printf("Directorio de trabajo actual: %s\n", cwd);
-    } else {
-        perror("getcwd() error");
-    }
 	if (argc != 2)
 	{
 		//ft_printf(ERR_ARGS);
@@ -87,9 +81,7 @@ int	main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 	check_file_extension(argv[1]);
-	if (initialize(global) != 0)
-		finish(ERR_MEM);
-	if (initialize_scene(&global->scene)!= 0)
+	if ((initialize(global) != 0) || (initialize_scene(&global->scene) != 0))
 		finish(ERR_MEM);
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path); 

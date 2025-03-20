@@ -2,38 +2,41 @@
 
 #include "../inc/minirt.h"
 
-void	free_scene(t_scene *scene)
+void free_scene(t_scene *scene)
 {
-	int	i;
-
-	i = 0;
-	while (scene->lines[i])
+	if (scene->lines)
 	{
-		free(scene->lines[i]);
-		i++;
+		while (scene->lines)
+		{
+			free(scene->lines);
+			scene->lines++;
+		}
 	}
-	free(scene->lines);
+	if (scene->spheres)
+		free(scene->spheres);
+	if (scene->planes)
+		free(scene->planes);
+	if (scene->cylinders)
+		free(scene->cylinders);
+	free(scene);
 }
 
-void	free_global(t_global *global)
+void free_global(t_global *global)
 {
-	//free_scene(&global->scene);
+	free_scene(&global->scene);
 	free(global->img.img);
 	free(global->vars.mlx_win);
 	free(global->vars.mlx_conn);
 }
-
-void	dbl_free(char **ptr)
+// si no se usa se puede borrar
+void dbl_free(char **ptr)
 {
-	int	i;
-
 	if (!ptr)
-		return ;
-	i = 0;
-	while (ptr[i])
+		return;
+	while (ptr)
 	{
-		free(ptr[i]);
-		i++;
+		free(*ptr);
+		ptr++;
 	}
 	free(ptr);
 }

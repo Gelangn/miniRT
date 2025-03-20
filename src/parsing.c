@@ -2,29 +2,67 @@
 
 #include "../inc/minirt.h"
 
+// Función para dividir una cadena en tokens y convertir a float
+float parse_float(char **str)
+{
+	char *token = strtok(*str, " ,");
+	*str = NULL;
+	return strtof(token, NULL);
+}
+// Función para dividir una cadena en tokens y convertir a int
+int parse_int(char **str)
+{
+	char *token = ft_split(*str, ",");
+	*str = NULL;
+	return strtol(token, NULL, 10);
+}
+
 // Function to parse ambient light
 void parse_ambient(t_scene *scene, char *line)
 {
-	sscanf(line, "A %f %d,%d,%d", &scene->ambient.intensity, &scene->ambient.color.r, &scene->ambient.color.g, &scene->ambient.color.b);
+	char *str = line + 2;
+	// cheeck if parse_float is between 0,0 and 1,0 *pending*
+	scene->ambient.intensity = parse_float(&str);
+	scene->ambient.color.r = parse_int(&str);
+	scene->ambient.color.g = parse_int(&str);
+	scene->ambient.color.b = parse_int(&str);
 }
 
 // Function to parse camera
 void parse_camera(t_scene *scene, char *line)
 {
-	sscanf(line, "C %f,%f,%f %f,%f,%f %d", &scene->camera.position.x, &scene->camera.position.y, &scene->camera.position.z, &scene->camera.orientation.x, &scene->camera.orientation.y, &scene->camera.orientation.z, &scene->camera.fov);
+	char *str = line + 2;
+	scene->camera.position.x = parse_float(&str);
+	scene->camera.position.y = parse_float(&str);
+	scene->camera.position.z = parse_float(&str);
+	scene->camera.orientation.x = parse_float(&str);
+	scene->camera.orientation.y = parse_float(&str);
+	scene->camera.orientation.z = parse_float(&str);
+	scene->camera.fov = parse_int(&str);
 }
 
 // Function to parse light
 void parse_light(t_scene *scene, char *line)
 {
-	sscanf(line, "L %f,%f,%f %f", &scene->light.position.x, &scene->light.position.y, &scene->light.position.z, &scene->light.intensity);
+	char *str = line + 2;
+	scene->light.position.x = parse_float(&str);
+	scene->light.position.y = parse_float(&str);
+	scene->light.position.z = parse_float(&str);
+	scene->light.intensity = parse_float(&str);
 }
 
 // Function to parse sphere
 void parse_sphere(t_scene *scene, char *line)
 {
 	t_sphere sphere;
-	sscanf(line, "sp %f,%f,%f %f %d,%d,%d", &sphere.center.x, &sphere.center.y, &sphere.center.z, &sphere.radius, &sphere.color.r, &sphere.color.g, &sphere.color.b);
+	char *str = line + 3;
+	sphere.center.x = parse_float(&str);
+	sphere.center.y = parse_float(&str);
+	sphere.center.z = parse_float(&str);
+	sphere.radius = parse_float(&str);
+	sphere.color.r = parse_int(&str);
+	sphere.color.g = parse_int(&str);
+	sphere.color.b = parse_int(&str);
 	scene->spheres[scene->num_spheres++] = sphere;
 }
 
@@ -32,7 +70,16 @@ void parse_sphere(t_scene *scene, char *line)
 void parse_plane(t_scene *scene, char *line)
 {
 	t_plane plane;
-	sscanf(line, "pl %f,%f,%f %f,%f,%f %d,%d,%d", &plane.point.x, &plane.point.y, &plane.point.z, &plane.normal.x, &plane.normal.y, &plane.normal.z, &plane.color.r, &plane.color.g, &plane.color.b);
+	char *str = line + 3;
+	plane.point.x = parse_float(&str);
+	plane.point.y = parse_float(&str);
+	plane.point.z = parse_float(&str);
+	plane.normal.x = parse_float(&str);
+	plane.normal.y = parse_float(&str);
+	plane.normal.z = parse_float(&str);
+	plane.color.r = parse_int(&str);
+	plane.color.g = parse_int(&str);
+	plane.color.b = parse_int(&str);
 	scene->planes[scene->num_planes++] = plane;
 }
 
@@ -40,7 +87,18 @@ void parse_plane(t_scene *scene, char *line)
 void parse_cylinder(t_scene *scene, char *line)
 {
 	t_cylinder cylinder;
-	sscanf(line, "cy %f,%f,%f %f,%f,%f %f %f %d,%d,%d", &cylinder.base.x, &cylinder.base.y, &cylinder.base.z, &cylinder.orientation.x, &cylinder.orientation.y, &cylinder.orientation.z, &cylinder.radius, &cylinder.height, &cylinder.color.r, &cylinder.color.g, &cylinder.color.b);
+	char *str = line + 3;
+	cylinder.base.x = parse_float(&str);
+	cylinder.base.y = parse_float(&str);
+	cylinder.base.z = parse_float(&str);
+	cylinder.orientation.x = parse_float(&str);
+	cylinder.orientation.y = parse_float(&str);
+	cylinder.orientation.z = parse_float(&str);
+	cylinder.radius = parse_float(&str);
+	cylinder.height = parse_float(&str);
+	cylinder.color.r = parse_int(&str);
+	cylinder.color.g = parse_int(&str);
+	cylinder.color.b = parse_int(&str);
 	scene->cylinders[scene->num_cylinders++] = cylinder;
 }
 
@@ -55,17 +113,8 @@ void read_scene(t_scene *scene, char *filename)
 		finish(ERR_OPEN);
 	}
 
-	FILE *file = fdopen(fd, "r");
-	if (!file)
-	{
-		close(fd);
-		if (scene->lines)
-			free_scene(scene);
-		finish(ERR_OPEN);
-	}
-
 	char *line_ptr;
-	while ((line_ptr = get_next_line(fileno(file))) != NULL)
+	while ((line_ptr = get_next_line(fd)) != NULL)
 	{
 		if (line_ptr[0] == 'A')
 			parse_ambient(scene, line_ptr);
@@ -79,6 +128,7 @@ void read_scene(t_scene *scene, char *filename)
 			parse_plane(scene, line_ptr);
 		else if (strncmp(line_ptr, "cy", 2) == 0)
 			parse_cylinder(scene, line_ptr);
+		free(line_ptr);
 	}
-	fclose(file);
+	close(fd);
 }

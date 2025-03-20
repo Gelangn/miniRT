@@ -12,4 +12,10 @@
 		"**/bower_components": true
 	},
 	"terminal.integrated.cwd": "${workspaceFolder}"
+	
+}
+{
+    "[c]": {
+        "editor.defaultFormatter": "keyhr.42-c-format"
+    },
 }

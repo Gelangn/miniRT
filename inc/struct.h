@@ -1,29 +1,28 @@
 #ifndef STRUCT_H
-# define STRUCT_H
+#define STRUCT_H
 
-# include "../inc/minirt.h"
-# include "../inc/prototype.h"
+#include "../inc/minirt.h"
+#include "../inc/prototype.h"
 
 /**** STRUCTS ****/
 
 // struct for bitscene
 typedef struct s_img
 {
-	void 	*img; // image to be drawn on the window
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}			t_img;
+	void *img; // image to be drawn on the window
+	char *addr;
+	int bits_per_pixel;
+	int line_length;
+	int endian;
+} t_img;
 
 // struct for mlx
 
 typedef struct s_var
 {
 	void *mlx_conn; // connection to the window
-	void *mlx_win;  // window to be drawn
-}			t_var;
-
+	void *mlx_win;	// window to be drawn
+} t_var;
 
 typedef struct s_color
 {
@@ -47,21 +46,21 @@ typedef struct s_ambient
 
 typedef struct s_camera
 {
+	int fov;
 	t_vector position;
 	t_vector orientation;
-	int fov;
 } t_camera;
 
 typedef struct s_light
 {
-	t_vector position;
 	float intensity;
+	t_vector position;
 } t_light;
 
 typedef struct s_sphere
 {
-	t_vector center;
 	float radius;
+	t_vector center;
 	t_color color;
 } t_sphere;
 
@@ -86,25 +85,26 @@ typedef struct s_scene
 	t_ambient ambient;
 	t_camera camera;
 	t_light light;
-	t_sphere spheres[100]; // Adjust size as needed
+
 	int num_spheres;
-	t_plane planes[100]; // Adjust size as needed
 	int num_planes;
-	t_cylinder cylinders[100]; // Adjust size as needed
 	int num_cylinders;
-	float scale; // scale of the scene
-	int fd; // file descriptor
+	t_sphere *spheres;
+	t_plane *planes;
+	t_cylinder *cylinders;
+
+	float scale;	 // scale of the scene
+	int fd;			 // file descriptor
 	char *file_path; // path of the file
 	char **lines;
 } t_scene;
 
-
 // global struct to store all the structs
 typedef struct s_global
 {
-	t_var	vars;
-	t_img	img;
-	t_scene	scene;
-}			t_global;
+	t_var vars;
+	t_img img;
+	t_scene scene;
+} t_global;
 
 #endif

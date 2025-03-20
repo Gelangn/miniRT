@@ -12,7 +12,7 @@
 
 #include "../inc/minirt.h"
 
-void	finish(const char *message)
+void finish(const char *message)
 {
 	if (errno == 0)
 		ft_putendl_fd((char *)message, 2);
@@ -20,8 +20,8 @@ void	finish(const char *message)
 		perror(message);
 	exit(1);
 }
-
-int	valid_point(char *value)
+// si no se usa se puede borrar
+/* int	valid_point(char *value)
 {
 	int	valid;
 
@@ -38,8 +38,8 @@ int	valid_point(char *value)
 		return (0);
 	else
 		return (1);
-}
-
+} */
+// si no se usa se puede borrar
 /* void	splited(t_scene *scene, int j, int i, int index)
 {
 	char	**split;
@@ -61,11 +61,11 @@ int	valid_point(char *value)
 	dbl_free(split);
 } */
 
-int	ft_atoi_base(const char *str, int base)
+int ft_atoi_base(const char *str, int base)
 {
-	int		neg;
-	int		res;
-	int		i;
+	int neg;
+	int res;
+	int i;
 
 	neg = 1;
 	res = 0;
@@ -76,8 +76,8 @@ int	ft_atoi_base(const char *str, int base)
 		neg = -1;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	while (str[i] && (ft_isdigit(str[i]) || (str[i] >= 'a' && str[i] <= 'f')
-			|| (str[i] >= 'A' && str[i] <= 'F')))
+	while (str[i] && (ft_isdigit(str[i]) || (str[i] >= 'a' && str[i] <= 'f') ||
+		(str[i] >= 'A' && str[i] <= 'F')))
 	{
 		if (ft_isdigit(str[i]))
 			res = res * base + str[i] - '0';

@@ -21,7 +21,7 @@ void	*new_window(t_global *global);
 
 /* scene */
 void	read_scene(t_scene *scene, char *filename);
-//void	free_scene(t_scene *scene);
+void	free_scene(t_scene *scene);
 
 /* Graphics-Render-Draw */
 void	render(t_global *global);

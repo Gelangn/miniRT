@@ -72,7 +72,6 @@ int	main(int argc, char **argv)
     } else {
         perror("getcwd() error");
     }
-    return 0;
 	if (argc != 2)
 	{
 		//ft_printf(ERR_ARGS);
@@ -83,6 +82,8 @@ int	main(int argc, char **argv)
 	if (!global)
 	{
 		perror("Error allocating memory for global");
+		if (global)
+			free(global);
 		return EXIT_FAILURE;
 	}
 	check_file_extension(argv[1]);

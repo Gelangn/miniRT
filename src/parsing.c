@@ -50,7 +50,8 @@ void read_scene(t_scene *scene, char *filename)
 	int fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
-		//free_scene(scene);
+		if (scene->lines)
+			free_scene(scene);
 		finish(ERR_OPEN);
 	}
 
@@ -58,7 +59,8 @@ void read_scene(t_scene *scene, char *filename)
 	if (!file)
 	{
 		close(fd);
-		//free_scene(scene);
+		if (scene->lines)
+			free_scene(scene);
 		finish(ERR_OPEN);
 	}
 

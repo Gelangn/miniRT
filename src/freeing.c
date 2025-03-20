@@ -2,7 +2,7 @@
 
 #include "../inc/minirt.h"
 
-/* void	free_scene(t_scene *scene)
+void	free_scene(t_scene *scene)
 {
 	int	i;
 
@@ -13,7 +13,7 @@
 		i++;
 	}
 	free(scene->lines);
-} */
+}
 
 void	free_global(t_global *global)
 {

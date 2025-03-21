@@ -20,47 +20,6 @@ void finish(const char *message)
 		perror(message);
 	exit(1);
 }
-// si no se usa se puede borrar
-/* int	valid_point(char *value)
-{
-	int	valid;
-
-	valid = 0;
-	if (*value == '-' || *value == '+' || ft_isdigit(*value))
-		valid++;
-	value++;
-	while (ft_isdigit(*value))
-	{
-		value++;
-		valid++;
-	}
-	if (valid == 0)
-		return (0);
-	else
-		return (1);
-} */
-// si no se usa se puede borrar
-/* void	splited(t_scene *scene, int j, int i, int index)
-{
-	char	**split;
-
-	split = ft_split(scene->lines[j], ' ');
-	if (ft_strchr(split[i], ',') != NULL)
-	{
-		scene->points[index].point_z = ft_atoi(ft_trim_str(split[i], ','));
-		scene->points[index].color = \
-			ft_atoi_base(ft_strchr(split[i], 'x') + 1, 16);
-	}
-	else
-	{
-		if (valid_point(split[i]) == 0)
-			finish(ERR_SCENE);
-		scene->points[index].point_z = ft_atoi(split[i]);
-		scene->points[index].color = DEFAULT_COLOR;
-	}
-	dbl_free(split);
-} */
-
 int ft_atoi_base(const char *str, int base)
 {
 	int neg;

@@ -21,7 +21,6 @@ static void	background(t_img *data)
 		x++;
 	}
 }
-
 static int	initialize(t_global *global)
 {
 	//global->scene.points = NULL;
@@ -39,17 +38,21 @@ static int initialize_scene(t_scene *scene)
 	scene->file_path = NULL;
 	scene->lines = NULL;
 	scene->scale = 0;
+	scene->spheres = malloc(sizeof(t_plane) * MAX_PLANES);
+	if (!scene->spheres)
+		finish(ERR_MEM);
 	scene->num_spheres = 0;
 	scene->planes = malloc(sizeof(t_plane) * MAX_PLANES);
 	if (!scene->planes)
 		finish(ERR_MEM);
 	scene->num_planes = 0;
+	scene->cylinders = malloc(sizeof(t_plane) * MAX_PLANES);
+	if (!scene->cylinders)
+		finish(ERR_MEM);
 	scene->num_cylinders = 0;
 	// Inicializa otros campos según sea necesario
 	return (MLX_SUCCESS);
 }
-
-
 // Function to check the file extension
 void	check_file_extension(const char *filename)
 {
@@ -64,7 +67,6 @@ void	check_file_extension(const char *filename)
 		finish(ERR_ARGS);
 	}
 }
-
 int	main(int argc, char **argv)
 {
 	t_global	*global;

@@ -59,5 +59,6 @@
 # define ERR_SCENE "\nScene Error\n"
 # define ERR_MALLOC "\nMalloc error\n"
 # define ERR_INVALID_EXTENSION "\nError extension .rt\n"
+# define ERR_AMBIENT "\nError ambient light\n"
 
 #endif

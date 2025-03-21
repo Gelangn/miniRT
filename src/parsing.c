@@ -2,32 +2,60 @@
 
 #include "../inc/minirt.h"
 
-// Función para dividir una cadena en tokens y convertir a float
+/* char *tokenize(char *str, char delim)
+{
+	char *token = ft_split(str, delim);
+	while (token)
+	{
+		printf("%s\n", token);
+		token = (NULL, delim);
+	}
+	return token;
+}
+ */
+// Function to split a string into tokens and convert to float
 float parse_float(char **str)
 {
-	char *token = strtok(*str, " ,");
-	*str = NULL;
-	return strtof(token, NULL);
+	char **token = ft_split(*str, ',');
+	return ft_atof(*token);
 }
-// Función para dividir una cadena en tokens y convertir a int
+// Function to split a string into tokens and convert to int
 int parse_int(char **str)
 {
-	char *token = ft_split(*str, ",");
-	*str = NULL;
-	return strtol(token, NULL, 10);
+	char **token = ft_split(*str, ',');
+	return (ft_atoi(*token));
 }
-
 // Function to parse ambient light
 void parse_ambient(t_scene *scene, char *line)
 {
-	char *str = line + 2;
-	// cheeck if parse_float is between 0,0 and 1,0 *pending*
-	scene->ambient.intensity = parse_float(&str);
-	scene->ambient.color.r = parse_int(&str);
-	scene->ambient.color.g = parse_int(&str);
-	scene->ambient.color.b = parse_int(&str);
-}
+	char **token;
+	token = ft_split(line, ' ');
+	token++; // skip the first token
+	printf("%s\n", *token);
+	scene->ambient.intensity = ft_atof(*token);
+	if (scene->ambient.intensity < 0.0 || scene->ambient.intensity > 1.0)
+		finish(ERR_AMBIENT);
+	token++;
+	char **str = ft_split(*token, ',');
+	while (str && *str)
+	{
+		scene->ambient.color.r = ft_atoi(*str);
+		str++;
+		scene->ambient.color.g = ft_atoi(*str);
+		str++;
+		scene->ambient.color.b = ft_atoi(*str);
+		str++;
+	}
 
+	/* int value = ft_atoi();
+	while (value <= 255)
+	{
+		scene->ambient.color.r = value;
+		scene->ambient.color.g = value;
+		scene->ambient.color.b = value;
+		value++;
+	} */
+}
 // Function to parse camera
 void parse_camera(t_scene *scene, char *line)
 {

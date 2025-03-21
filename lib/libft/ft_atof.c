@@ -17,14 +17,20 @@ float ft_atof(const char *str)
 	float result = 0.0;
 	float factor = 1.0;
 	int decimal_point_seen = 0;
+	int sign = 1;
+
+	// Saltar espacios en blanco iniciales
+	while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' || *str == '\v' || *str == '\f')
+		str++;
 
 	if (*str == '-')
 	{
-		factor = -1.0;
+		sign = -1;
 		str++;
 	}
 	else if (*str == '+')
 		str++;
+
 	while (*str)
 	{
 		if (ft_isdigit(*str))
@@ -40,12 +46,19 @@ float ft_atof(const char *str)
 		else if (*str == '.')
 		{
 			if (decimal_point_seen)
-				return result * factor;
+				break; // Si ya hemos visto un punto decimal, salimos del bucle
 			decimal_point_seen = 1;
 		}
 		else
 			break;
 		str++;
 	}
-	return result * factor;
+	return result * sign;
 }
+/* #include <stdio.h> // printf
+int main(void)
+{
+	char *str = "\t\t0.5";
+	printf("%f\n", ft_atof(str));
+	return 0;
+} */

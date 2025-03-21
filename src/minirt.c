@@ -40,6 +40,9 @@ static int initialize_scene(t_scene *scene)
 	scene->lines = NULL;
 	scene->scale = 0;
 	scene->num_spheres = 0;
+	scene->planes = malloc(sizeof(t_plane) * MAX_PLANES);
+	if (!scene->planes)
+		finish(ERR_MEM);
 	scene->num_planes = 0;
 	scene->num_cylinders = 0;
 	// Inicializa otros campos según sea necesario

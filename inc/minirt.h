@@ -21,6 +21,7 @@
 # define MARGIN 100
 
 # define PI 3.14159265359
+# define MAX_PLANES 100
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0
@@ -60,5 +61,19 @@
 # define ERR_MALLOC "\nMalloc error\n"
 # define ERR_INVALID_EXTENSION "\nError extension .rt\n"
 # define ERR_AMBIENT "\nError ambient light\n"
+# define ERR_CAMERA "\nError camera\n"
+# define ERR_LIGHT "\nError light\n"
+# define ERR_SPHERE "\nError sphere\n"
+# define ERR_PLANE "\nError plane\n"
+# define ERR_CYLINDER "\nError cylinder\n"
+# define ERR_RESOLUTION "\nError resolution\n"
+# define ERR_COLOR "\nError color\n"
+# define ERR_FLOAT "\nError float\n"
+# define ERR_VECTOR "\nError vector\n"
+# define ERR_NORMAL "\nError normal\n"
+# define ERR_ORIENTATION "\nError orientation\n"
+# define ERR_FOV "\nError FOV\n"
+# define ERR_POSITION "\nError position\n"
+
 
 #endif

@@ -4,9 +4,9 @@
 
 void free_scene(t_scene *scene)
 {
-	if (scene->lines)
+	while (scene->lines)
 	{
-		while (scene->lines)
+		if (scene->lines)
 		{
 			free(scene->lines);
 			scene->lines++;

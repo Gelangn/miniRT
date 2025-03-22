@@ -6,7 +6,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/miniRT", // Ajusta el nombre del ejecutable según tu Makefile
-			"args": ["./scenes/tests_w_errors/empty.rt"], // Reemplaza con el argumento que necesites
+			"args": ["./scenes/tests_w_errors/wrong_colors.rtl"], // Reemplaza con el argumento que necesites
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

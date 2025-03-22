@@ -3,10 +3,10 @@
 #include "../inc/minirt.h"
 #include <linux/limits.h>
 
-static void	background(t_img *data)
+static void background(t_img *data)
 {
-	int	x;
-	int	y;
+	int x;
+	int y;
 
 	x = 0;
 	y = 0;
@@ -21,9 +21,9 @@ static void	background(t_img *data)
 		x++;
 	}
 }
-static int	initialize(t_global *global)
+static int initialize(t_global *global)
 {
-	//global->scene.points = NULL;
+	// global->scene.points = NULL;
 	global->img.img = NULL;
 	global->img.addr = NULL;
 	global->scene = (t_scene){0};
@@ -32,48 +32,49 @@ static int	initialize(t_global *global)
 	ft_printf("Initialized MLX OK\n");
 	return (MLX_SUCCESS);
 }
-static int initialize_scene(t_scene *scene)
+static int initialize_scene(t_global *global, t_scene *scene)
 {
-	scene->fd = 0;
 	scene->file_path = NULL;
+	scene->fd = 0;
 	scene->lines = NULL;
 	scene->scale = 0;
-	scene->spheres = malloc(sizeof(t_plane) * MAX_PLANES);
+	scene->ambient = (t_ambient){0};
+	scene->camera = (t_camera){0};
+	scene->light = (t_light){0};
+	scene->ambient.initialized = 0;
+	scene->camera.initialized = 0;
+	scene->light.initialized = 0;
+	scene->spheres = malloc(sizeof(t_plane) * MAX_SPHERES);
 	if (!scene->spheres)
-		finish(ERR_MEM);
+		finish(global, ERR_MEM);
 	scene->num_spheres = 0;
 	scene->planes = malloc(sizeof(t_plane) * MAX_PLANES);
 	if (!scene->planes)
-		finish(ERR_MEM);
+		finish(global, ERR_MEM);
 	scene->num_planes = 0;
-	scene->cylinders = malloc(sizeof(t_plane) * MAX_PLANES);
+	scene->cylinders = malloc(sizeof(t_plane) * MAX_CYLINDERS);
 	if (!scene->cylinders)
-		finish(ERR_MEM);
+		finish(global, ERR_MEM);
 	scene->num_cylinders = 0;
-	// Inicializa otros campos según sea necesario
 	return (MLX_SUCCESS);
 }
 // Function to check the file extension
-void	check_file_extension(const char *filename)
+void check_file_extension(t_global *global, const char *filename)
 {
-	const char	*ext = ft_strrchr(filename, '.');
+	const char *ext = ft_strrchr(filename, '.');
 
 	if (ft_strcmp(ext, ".rt") != 0)
-	{
-		finish(ERR_INVALID_EXTENSION);
-	}
-	else if(!ext)
-	{
-		finish(ERR_ARGS);
-	}
+		finish(global, ERR_INVALID_EXTENSION);
+	else if (!ext)
+		finish(global, ERR_ARGS);
 }
-int	main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	t_global	*global;
+	t_global *global;
 
 	if (argc != 2)
 	{
-		//ft_printf(ERR_ARGS);
+		// ft_printf(ERR_ARGS);
 		fprintf(stderr, "Usage: %s <scene_file>\n", argv[0]);
 		return (EXIT_FAILURE);
 	}
@@ -85,18 +86,18 @@ int	main(int argc, char **argv)
 			free(global);
 		return EXIT_FAILURE;
 	}
-	check_file_extension(argv[1]);
-	if ((initialize(global) != 0) || (initialize_scene(&global->scene) != 0))
-		finish(ERR_MEM);
+	check_file_extension(global, argv[1]);
+	if ((initialize(global) != 0) || (initialize_scene(global, &global->scene) != 0))
+		finish(global, ERR_MEM);
 	global->scene.file_path = argv[1];
-	printf("Opening file: %s\n", global->scene.file_path); 
-	read_scene(&global->scene, global->scene.file_path);
+	printf("Opening file: %s\n", global->scene.file_path);
+	read_scene(global);
 	global->vars.mlx_win = new_window(global);
-	
+
 	background(&global->img);
-	//render(global);
+	// render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-		global->img.img, MARGIN / 2, MARGIN / 2);
+							global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);
 	mlx_loop(global->vars.mlx_conn);
 	return (0);

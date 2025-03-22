@@ -12,15 +12,15 @@
 
 #include "libft.h"
 
-float ft_atof(const char *str)
+float	ft_atof(const char *str)
 {
 	float result = 0.0;
 	float factor = 1.0;
 	int decimal_point_seen = 0;
 	int sign = 1;
 
-	// Saltar espacios en blanco iniciales
-	while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' || *str == '\v' || *str == '\f')
+	while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' ||
+		*str == '\v' || *str == '\f')
 		str++;
 
 	if (*str == '-')
@@ -46,7 +46,7 @@ float ft_atof(const char *str)
 		else if (*str == '.')
 		{
 			if (decimal_point_seen)
-				break; // Si ya hemos visto un punto decimal, salimos del bucle
+				break;
 			decimal_point_seen = 1;
 		}
 		else

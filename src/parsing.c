@@ -17,7 +17,7 @@
 float parse_float(char **str)
 {
 	char **token = ft_split(*str, ',');
-	return ft_atof(*token);
+	return roundingf(ft_atof(*token), 2);
 }
 // Function to split a string into tokens and convert to int
 int parse_int(char **str)
@@ -25,8 +25,8 @@ int parse_int(char **str)
 	char **token = ft_split(*str, ',');
 	return (ft_atoi(*token));
 } */
-// Función para reemplazar tabuladores por espacios
-void replace_tabs_with_spaces(char *str)
+// Function to replace tabs with spaces
+static void replace_tabs_with_spaces(char *str)
 {
 	while (*str)
 	{
@@ -35,126 +35,144 @@ void replace_tabs_with_spaces(char *str)
 		str++;
 	}
 }
-// Function to parse ambient light
-void parse_ambient(t_scene *scene, char *line)
+// Function to round a float number to a given number of decimals
+float roundingf(float value, int decimals)
 {
-	char **token;
+	float factor = powf(10.0, decimals);
+	return roundf(value * factor) / factor;
+}
+// Function to parse ambient light
+void parse_ambient(t_global *global, t_scene *scene, char *line)
+{
+	char **tokens;
 	char **color_tokens;
 
 	replace_tabs_with_spaces(line); // Reemplazar tabuladores por espacios
-	token = ft_split(line, ' ');
-	token++; // skip the first token
-
+	tokens = ft_split(line, ' ');
+	if (!tokens || scene->ambient.initialized)
+		finish(global, ERR_AMBIENT); // Comprobar si token es nulo
+	tokens++;
+	if (!*tokens)
+		finish(global, ERR_AMBIENT); // Comprobar si token es nulo
 	// Parse intensity
-	scene->ambient.intensity = ft_atof(*token);
+	scene->ambient.intensity = roundingf(ft_atof(*tokens), 2);
 	if (scene->ambient.intensity < 0.0 || scene->ambient.intensity > 1.0)
-		finish(ERR_AMBIENT);
-
+		finish(global, ERR_AMBIENT);
 	// Parse color
-	token++;
-	color_tokens = ft_split(*token, ',');
+	tokens++;
+	if (!*tokens)
+		finish(global, ERR_AMBIENT); // Comprobar si tokens es nulo
+	color_tokens = ft_split(*tokens, ',');
+	if (!color_tokens)
+		finish(global, ERR_AMBIENT); // Comprobar si color_tokens es nulo
 	scene->ambient.color.r = ft_atoi(color_tokens[0]);
 	scene->ambient.color.g = ft_atoi(color_tokens[1]);
 	scene->ambient.color.b = ft_atoi(color_tokens[2]);
-
-	// Free allocated memory for tokens
 	free(color_tokens);
+	scene->ambient.initialized = 1;
 }
 // Function to parse camera
-void parse_camera(t_scene *scene, char *line)
+void parse_camera(t_global *global, t_scene *scene, char *line)
 {
 	replace_tabs_with_spaces(line); // Reemplazar tabuladores por espacios
 	char **tokens = ft_split(line, ' ');
-	if (!tokens)
-		finish(ERR_CAMERA); // Comprobar si tokens es nulo
-	tokens++;				// saltar el primer token
+	if (!tokens || scene->camera.initialized == 1)
+		finish(global, ERR_CAMERA); // Comprobar si tokens es nulo o si ya se ha leído la cámara
+	tokens++;
+	if (!*tokens)
+		finish(global, ERR_CAMERA); // Comprobar si tokens es nulo
 
 	// Parsear posición
 	char **position_tokens = ft_split(*tokens, ',');
 	if (!position_tokens)
-		finish(ERR_CAMERA); // Comprobar si position_tokens es nulo
-	scene->camera.position.x = ft_atof(position_tokens[0]);
-	scene->camera.position.y = ft_atof(position_tokens[1]);
-	scene->camera.position.z = ft_atof(position_tokens[2]);
+		finish(global, ERR_CAMERA); // Comprobar si position_tokens es nulo
+	scene->camera.position.x = roundingf(ft_atof(position_tokens[0]), 2);
+	scene->camera.position.y = roundingf(ft_atof(position_tokens[1]), 2);
+	scene->camera.position.z = roundingf(ft_atof(position_tokens[2]), 2);
 	free(position_tokens);
 
 	// Parsear orientación
 	tokens++;
+	if (!*tokens)
+		finish(global, ERR_CAMERA); // Comprobar si tokens es nulo
 	char **orientation_tokens = ft_split(*tokens, ',');
 	if (!orientation_tokens)
-		finish(ERR_CAMERA); // Comprobar si orientation_tokens es nulo
-	scene->camera.orientation.x = ft_atof(orientation_tokens[0]);
-	scene->camera.orientation.y = ft_atof(orientation_tokens[1]);
-	scene->camera.orientation.z = ft_atof(orientation_tokens[2]);
+		finish(global, ERR_CAMERA); // Comprobar si orientation_tokens es nulo
+	scene->camera.orientation.x = roundingf(ft_atof(orientation_tokens[0]), 2);
+	scene->camera.orientation.y = roundingf(ft_atof(orientation_tokens[1]), 2);
+	scene->camera.orientation.z = roundingf(ft_atof(orientation_tokens[2]), 2);
 	free(orientation_tokens);
 
 	// Parsear FOV
 	tokens++;
 	if (!*tokens)
-		finish(ERR_CAMERA); // Comprobar si tokens es nulo
+		finish(global, ERR_CAMERA); // Comprobar si tokens es nulo
 	scene->camera.fov = ft_atoi(*tokens);
+	if (scene->camera.fov < 0 || scene->camera.fov > 180)
+		finish(global, ERR_CAMERA);
+	scene->camera.initialized = 1;
 }
-/* void parse_camera(t_scene *scene, char *line)
-{
-	char *str = line + 2;
-	scene->camera.position.x = parse_float(&str);
-	scene->camera.position.y = parse_float(&str);
-	scene->camera.position.z = parse_float(&str);
-	scene->camera.orientation.x = parse_float(&str);
-	scene->camera.orientation.y = parse_float(&str);
-	scene->camera.orientation.z = parse_float(&str);
-	scene->camera.fov = parse_int(&str);
-} */
-
 // Function to parse light
-void parse_light(t_scene *scene, char *line)
+void parse_light(t_global *global, t_scene *scene, char *line)
 {
-	replace_tabs_with_spaces(line); // Reemplazar tabuladores por espacios
+	replace_tabs_with_spaces(line);
 	char **tokens = ft_split(line, ' ');
-	tokens++; // saltar el primer token
-
-	// Parsear posición
-	char **position_tokens = ft_split(*tokens, ',');
-	scene->light.position.x = ft_atof(position_tokens[0]);
-	scene->light.position.y = ft_atof(position_tokens[1]);
-	scene->light.position.z = ft_atof(position_tokens[2]);
-	free(position_tokens);
-
-	// Parsear intensidad
+	if (!tokens || scene->light.initialized == 1)
+		finish(global, ERR_LIGHT); // Comprobar si tokens es nulo o si ya se ha leído la luz
 	tokens++;
-	scene->light.intensity = ft_atof(*tokens);
+	if (!*tokens)
+		finish(global, ERR_LIGHT); // Comprobar si tokens es nulo
+	// Parse position
+	char **position_tokens = ft_split(*tokens, ',');
+	if (!position_tokens)
+		finish(global, ERR_LIGHT); // Comprobar si position_tokens es nulo
+	scene->light.position.x = roundingf(ft_atof(position_tokens[0]), 2);
+	scene->light.position.y = roundingf(ft_atof(position_tokens[1]), 2);
+	scene->light.position.z = roundingf(ft_atof(position_tokens[2]), 2);
+	free(position_tokens);
+	// Parse intensity
+	tokens++;
+	if (!*tokens)
+		finish(global, ERR_LIGHT); // Comprobar si tokens es nulo
+	scene->light.intensity = roundingf(ft_atof(*tokens), 2);
+	if (scene->light.intensity < 0.0 || scene->light.intensity > 1.0)
+		finish(global, ERR_LIGHT);
+	scene->light.initialized = 1;
 }
-/* void parse_light(t_scene *scene, char *line)
-{
-	char *str = line + 2;
-	scene->light.position.x = parse_float(&str);
-	scene->light.position.y = parse_float(&str);
-	scene->light.position.z = parse_float(&str);
-	scene->light.intensity = parse_float(&str);
-} */
-
 // Function to parse sphere
-void parse_sphere(t_scene *scene, char *line)
+void parse_sphere(t_global *global, t_scene *scene, char *line)
 {
 	t_sphere sphere;
-	replace_tabs_with_spaces(line); // Reemplazar tabuladores por espacios
+	replace_tabs_with_spaces(line);
 	char **tokens = ft_split(line, ' ');
-	tokens++; // saltar el primer token
+	if (!tokens)
+		finish(global, ERR_SPHERE); // Comprobar si tokens es nulo
+	tokens++;
+	if (!*tokens)
+		finish(global, ERR_SPHERE); // Comprobar si tokens es nulo
 
 	// Parsear centro
 	char **center_tokens = ft_split(*tokens, ',');
-	sphere.center.x = ft_atof(center_tokens[0]);
-	sphere.center.y = ft_atof(center_tokens[1]);
-	sphere.center.z = ft_atof(center_tokens[2]);
+	if (!center_tokens)
+		finish(global, ERR_SPHERE); // Comprobar si center_tokens es nulo
+	sphere.center.x = roundingf(ft_atof(center_tokens[0]), 2);
+	sphere.center.y = roundingf(ft_atof(center_tokens[1]), 2);
+	sphere.center.z = roundingf(ft_atof(center_tokens[2]), 2);
 	free(center_tokens);
 
 	// Parsear radio
 	tokens++;
-	sphere.radius = ft_atof(*tokens);
+	if (!*tokens)
+		finish(global, ERR_SPHERE); // Comprobar si tokens es nulo
+	sphere.radius = roundingf(ft_atof(*tokens), 2);
 
 	// Parsear color
 	tokens++;
+	if (!*tokens)
+		finish(global, ERR_SPHERE); // Comprobar si tokens es nulo
 	char **color_tokens = ft_split(*tokens, ',');
+	if (!color_tokens)
+		finish(global, ERR_SPHERE); // Comprobar si color_tokens es nulo
 	sphere.color.r = ft_atoi(color_tokens[0]);
 	sphere.color.g = ft_atoi(color_tokens[1]);
 	sphere.color.b = ft_atoi(color_tokens[2]);
@@ -162,58 +180,44 @@ void parse_sphere(t_scene *scene, char *line)
 
 	scene->spheres[scene->num_spheres++] = sphere;
 }
-/* void parse_sphere(t_scene *scene, char *line)
-{
-	t_sphere sphere;
-	char *str = line + 3;
-	sphere.center.x = parse_float(&str);
-	sphere.center.y = parse_float(&str);
-	sphere.center.z = parse_float(&str);
-	sphere.radius = parse_float(&str);
-	sphere.color.r = parse_int(&str);
-	sphere.color.g = parse_int(&str);
-	sphere.color.b = parse_int(&str);
-	scene->spheres[scene->num_spheres++] = sphere;
-} */
-
 // Function to parse plane
-void parse_plane(t_scene *scene, char *line)
+void parse_plane(t_global *global, t_scene *scene, char *line)
 {
 	t_plane plane;
-	replace_tabs_with_spaces(line); // Reemplazar tabuladores por espacios
+	replace_tabs_with_spaces(line);
 	char **tokens = ft_split(line, ' ');
 	if (!tokens)
-		finish(ERR_PLANE); // Comprobar si tokens es nulo
+		finish(global, ERR_PLANE); // Comprobar si tokens es nulo
 	tokens++;			   // saltar el primer token
 
 	// Parsear punto
 	char **point_tokens = ft_split(*tokens, ',');
 	if (!point_tokens)
-		finish(ERR_PLANE); // Comprobar si point_tokens es nulo
-	plane.point.x = ft_atof(point_tokens[0]);
-	plane.point.y = ft_atof(point_tokens[1]);
-	plane.point.z = ft_atof(point_tokens[2]);
+		finish(global, ERR_PLANE); // Comprobar si point_tokens es nulo
+	plane.point.x = roundingf(ft_atof(point_tokens[0]), 2);
+	plane.point.y = roundingf(ft_atof(point_tokens[1]), 2);
+	plane.point.z = roundingf(ft_atof(point_tokens[2]), 2);
 	free(point_tokens);
 
 	// Parsear normal
 	tokens++;
 	if (!*tokens)
-		finish(ERR_PLANE); // Comprobar si tokens es nulo
+		finish(global, ERR_PLANE); // Comprobar si tokens es nulo
 	char **normal_tokens = ft_split(*tokens, ',');
 	if (!normal_tokens)
-		finish(ERR_PLANE); // Comprobar si normal_tokens es nulo
-	plane.normal.x = ft_atof(normal_tokens[0]);
-	plane.normal.y = ft_atof(normal_tokens[1]);
-	plane.normal.z = ft_atof(normal_tokens[2]);
+		finish(global, ERR_PLANE); // Comprobar si normal_tokens es nulo
+	plane.normal.x = roundingf(ft_atof(normal_tokens[0]), 2);
+	plane.normal.y = roundingf(ft_atof(normal_tokens[1]), 2);
+	plane.normal.z = roundingf(ft_atof(normal_tokens[2]), 2);
 	free(normal_tokens);
 
 	// Parsear color
 	tokens++;
 	if (!*tokens)
-		finish(ERR_PLANE); // Comprobar si tokens es nulo
+		finish(global, ERR_PLANE); // Comprobar si tokens es nulo
 	char **color_tokens = ft_split(*tokens, ',');
 	if (!color_tokens)
-		finish(ERR_PLANE); // Comprobar si color_tokens es nulo
+		finish(global, ERR_PLANE); // Comprobar si color_tokens es nulo
 	plane.color.r = ft_atoi(color_tokens[0]);
 	plane.color.g = ft_atoi(color_tokens[1]);
 	plane.color.b = ft_atoi(color_tokens[2]);
@@ -222,70 +226,73 @@ void parse_plane(t_scene *scene, char *line)
 	if (!scene)
 	{
 		printf("Error: scene es nulo\n");
-		finish(ERR_PLANE);
+		finish(global, ERR_PLANE);
 	}
 	if (!scene->planes)
 	{
 		printf("Error: scene->planes es nulo\n");
-		finish(ERR_PLANE);
+		finish(global, ERR_PLANE);
 	}
 	if (scene->num_planes >= MAX_PLANES)
 	{ // Suponiendo que hay un límite MAX_PLANES
 		printf("Error: num_planes excede el límite\n");
-		finish(ERR_PLANE);
+		finish(global, ERR_PLANE);
 	}
 
 	scene->planes[scene->num_planes++] = plane;
 }
-/* void parse_plane(t_scene *scene, char *line)
-{
-	t_plane plane;
-	char *str = line + 3;
-	plane.point.x = parse_float(&str);
-	plane.point.y = parse_float(&str);
-	plane.point.z = parse_float(&str);
-	plane.normal.x = parse_float(&str);
-	plane.normal.y = parse_float(&str);
-	plane.normal.z = parse_float(&str);
-	plane.color.r = parse_int(&str);
-	plane.color.g = parse_int(&str);
-	plane.color.b = parse_int(&str);
-	scene->planes[scene->num_planes++] = plane;
-}*/
 // Function to parse cylinder
-void parse_cylinder(t_scene *scene, char *line)
+void parse_cylinder(t_global *global, t_scene *scene, char *line)
 {
 	t_cylinder cylinder;
 	replace_tabs_with_spaces(line); // Reemplazar tabuladores por espacios
 	char **tokens = ft_split(line, ' ');
-	tokens++; // saltar el primer token
+	if (!tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si tokens es nulo
+	tokens++;
+	if (!*tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si tokens es nulo
 
 	// Parsear base
 	char **base_tokens = ft_split(*tokens, ',');
-	cylinder.base.x = ft_atof(base_tokens[0]);
-	cylinder.base.y = ft_atof(base_tokens[1]);
-	cylinder.base.z = ft_atof(base_tokens[2]);
+	if (!base_tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si base_tokens es nulo
+	cylinder.base.x = roundingf(ft_atof(base_tokens[0]), 2);
+	cylinder.base.y = roundingf(ft_atof(base_tokens[1]), 2);
+	cylinder.base.z = roundingf(ft_atof(base_tokens[2]), 2);
 	free(base_tokens);
 
 	// Parsear orientación
 	tokens++;
+	if (!*tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si tokens es nulo
 	char **orientation_tokens = ft_split(*tokens, ',');
-	cylinder.orientation.x = ft_atof(orientation_tokens[0]);
-	cylinder.orientation.y = ft_atof(orientation_tokens[1]);
-	cylinder.orientation.z = ft_atof(orientation_tokens[2]);
+	if (!orientation_tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si orientation_tokens es nulo
+	cylinder.orientation.x = roundingf(ft_atof(orientation_tokens[0]), 2);
+	cylinder.orientation.y = roundingf(ft_atof(orientation_tokens[1]), 2);
+	cylinder.orientation.z = roundingf(ft_atof(orientation_tokens[2]), 2);
 	free(orientation_tokens);
 
 	// Parsear radio
 	tokens++;
-	cylinder.radius = ft_atof(*tokens);
+	if (!*tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si tokens es nulo
+	cylinder.radius = roundingf(ft_atof(*tokens), 2);
 
 	// Parsear altura
 	tokens++;
-	cylinder.height = ft_atof(*tokens);
+	if (!*tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si tokens es nulo
+	cylinder.height = roundingf(ft_atof(*tokens), 2);
 
 	// Parsear color
 	tokens++;
+	if (!*tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si tokens es nulo
 	char **color_tokens = ft_split(*tokens, ',');
+	if (!color_tokens)
+		finish(global, ERR_CYLINDER); // Comprobar si color_tokens es nulo
 	cylinder.color.r = ft_atoi(color_tokens[0]);
 	cylinder.color.g = ft_atoi(color_tokens[1]);
 	cylinder.color.b = ft_atoi(color_tokens[2]);
@@ -293,51 +300,53 @@ void parse_cylinder(t_scene *scene, char *line)
 
 	scene->cylinders[scene->num_cylinders++] = cylinder;
 }
-/* void parse_cylinder(t_scene *scene, char *line)
+void check_scene(t_global *global, t_scene *scene)
 {
-	t_cylinder cylinder;
-	char *str = line + 3;
-	cylinder.base.x = parse_float(&str);
-	cylinder.base.y = parse_float(&str);
-	cylinder.base.z = parse_float(&str);
-	cylinder.orientation.x = parse_float(&str);
-	cylinder.orientation.y = parse_float(&str);
-	cylinder.orientation.z = parse_float(&str);
-	cylinder.radius = parse_float(&str);
-	cylinder.height = parse_float(&str);
-	cylinder.color.r = parse_int(&str);
-	cylinder.color.g = parse_int(&str);
-	cylinder.color.b = parse_int(&str);
-	scene->cylinders[scene->num_cylinders++] = cylinder;
-} */
-
+	if (scene->ambient.initialized == 0 || scene->camera.initialized == 0 ||
+		scene->light.initialized == 0)
+		finish(global, ERR_SCENE);
+	if (scene->num_spheres < 0 || scene->num_spheres > MAX_SPHERES)
+		finish(global, ERR_SPHERE);
+	if (scene->num_planes < 0 || scene->num_planes > MAX_PLANES)
+		finish(global, ERR_PLANE);
+	if (scene->num_cylinders < 0 || scene->num_cylinders > MAX_CYLINDERS)
+		finish(global, ERR_CYLINDER);
+}
 // Function to read and parse the scene file
-void read_scene(t_scene *scene, char *filename)
+void read_scene(t_global *global)
 {
-	int fd = open(filename, O_RDONLY);
-	if (fd == -1)
-	{
-		if (scene->lines)
-			free_scene(scene);
-		finish(ERR_OPEN);
-	}
-
 	char *line_ptr;
-	while ((line_ptr = get_next_line(fd)) != NULL)
+	int fd;
+	t_scene *scene;
+	char *filename;
+
+	filename = global->scene.file_path;
+	scene = &global->scene;
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		finish(global, ERR_OPEN);
+	if ((line_ptr = get_next_line(fd)) == NULL)
+		finish(global, ERR_READ);
+	else
 	{
-		if (line_ptr[0] == 'A')
-			parse_ambient(scene, line_ptr);
-		else if (line_ptr[0] == 'C')
-			parse_camera(scene, line_ptr);
-		else if (line_ptr[0] == 'L')
-			parse_light(scene, line_ptr);
-		else if (strncmp(line_ptr, "sp", 2) == 0)
-			parse_sphere(scene, line_ptr);
-		else if (strncmp(line_ptr, "pl", 2) == 0)
-			parse_plane(scene, line_ptr);
-		else if (strncmp(line_ptr, "cy", 2) == 0)
-			parse_cylinder(scene, line_ptr);
-		free(line_ptr);
+		while (line_ptr)
+		{
+			if (line_ptr[0] == 'A')
+				parse_ambient(global, scene, line_ptr);
+			else if (line_ptr[0] == 'C')
+				parse_camera(global, scene, line_ptr);
+			else if (line_ptr[0] == 'L')
+				parse_light(global, scene, line_ptr);
+			else if (strncmp(line_ptr, "sp", 2) == 0)
+				parse_sphere(global, scene, line_ptr);
+			else if (strncmp(line_ptr, "pl", 2) == 0)
+				parse_plane(global, scene, line_ptr);
+			else if (strncmp(line_ptr, "cy", 2) == 0)
+				parse_cylinder(global, scene, line_ptr);
+			free(line_ptr);
+			line_ptr = get_next_line(fd);
+		}
 	}
+	check_scene(global, scene);
 	close(fd);
 }

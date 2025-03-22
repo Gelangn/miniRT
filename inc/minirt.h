@@ -20,8 +20,11 @@
 # define WIN_H 540
 # define MARGIN 100
 
-# define PI 3.14159265359
-# define MAX_PLANES 100
+# define PI 3.14159265359f
+# define MAX_PLANES 5
+# define MAX_SPHERES 10
+# define MAX_CYLINDERS 10
+# define EPSILON 0.0001
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0

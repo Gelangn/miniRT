@@ -42,6 +42,7 @@ typedef struct s_ambient
 {
 	float intensity;
 	t_color color;
+	int initialized;
 } t_ambient;
 
 typedef struct s_camera
@@ -49,12 +50,14 @@ typedef struct s_camera
 	int fov;
 	t_vector position;
 	t_vector orientation;
+	int initialized;
 } t_camera;
 
 typedef struct s_light
 {
 	float intensity;
 	t_vector position;
+	int initialized;
 } t_light;
 
 typedef struct s_sphere
@@ -93,10 +96,10 @@ typedef struct s_scene
 	t_plane *planes;
 	t_cylinder *cylinders;
 
-	float scale;	 // scale of the scene
-	int fd;			 // file descriptor
 	char *file_path; // path of the file
+	int fd;			 // file descriptor
 	char **lines;
+	float scale;	 // scale of the scene
 } t_scene;
 
 // global struct to store all the structs

@@ -12,14 +12,22 @@
 
 #include "../inc/minirt.h"
 
-void finish(const char *message)
+
+void finish(t_global *global, const char *message)
 {
+	free_global(global);
 	if (errno == 0)
 		ft_putendl_fd((char *)message, 2);
 	else
 		perror(message);
 	exit(1);
 }
+// Function to compare two floats using EPSILON
+int comp_floats(float a, float b)
+{
+	return fabs(a - b) < EPSILON;
+}
+
 int ft_atoi_base(const char *str, int base)
 {
 	int neg;

@@ -19,12 +19,12 @@
 	i = 0;
 	scene->fd = open(scene->file_path, O_RDONLY);
 	if (scene->fd == (-1))
-		finish(ERR_OPEN);
+		finish(&global, ERR_OPEN);
 	scene->lines = (char **)malloc((scene->height + 1) * sizeof(char *));
 	if (scene->lines == NULL)
 	{
 		close(scene->fd);
-		finish(ERR_MALLOC);
+		finish(&global, ERR_MALLOC);
 	}
 	while (i <= scene->height)
 	{
@@ -47,10 +47,10 @@
 	split = NULL;
 	scene->fd = open(scene->file_path, O_RDONLY);
 	if (scene->fd == (-1))
-		finish(ERR_OPEN);
+		finish(&global, ERR_OPEN);
 	line = get_next_line(scene->fd);
 	if (line == NULL)
-		finish(ERR_OPEN);
+		finish(&global, ERR_OPEN);
 	split = ft_split(line, ' ');
 	scene->width = counter_words(split);
 	free(line);
@@ -91,3 +91,4 @@
 	}
 	free(scene->lines);
 } */
+

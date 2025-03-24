@@ -45,7 +45,7 @@ void	check_scene(t_global *global, t_scene *scene);
 int		ft_atoi_base(const char *str, int base);
 int		comp_floats(float a, float b);
 
-	/* Parsing */
+/* Parsing */
 void	parse_ambient(t_global *global, t_scene *scene, char *line);
 void	parse_camera(t_global *global, t_scene *scene, char *line);
 void	parse_light(t_global *global, t_scene *scene, char *line);

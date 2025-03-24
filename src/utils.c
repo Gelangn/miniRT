@@ -6,14 +6,13 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:24:11 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/19 00:07:32 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/03/24 08:48:14 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-
-void finish(t_global *global, const char *message)
+void	finish(t_global *global, const char *message)
 {
 	if (errno == 0)
 		ft_putendl_fd((char *)message, 2);
@@ -23,16 +22,16 @@ void finish(t_global *global, const char *message)
 	exit(errno);
 }
 // Function to compare two floats using EPSILON
-int comp_floats(float a, float b)
+int	comp_floats(float a, float b)
 {
-	return fabs(a - b) < EPSILON;
+	return (fabs(a - b) < EPSILON);
 }
 
-int ft_atoi_base(const char *str, int base)
+int	ft_atoi_base(const char *str, int base)
 {
-	int neg;
-	int res;
-	int i;
+	int	neg;
+	int	res;
+	int	i;
 
 	neg = 1;
 	res = 0;
@@ -43,8 +42,8 @@ int ft_atoi_base(const char *str, int base)
 		neg = -1;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	while (str[i] && (ft_isdigit(str[i]) || (str[i] >= 'a' && str[i] <= 'f') ||
-		(str[i] >= 'A' && str[i] <= 'F')))
+	while (str[i] && (ft_isdigit(str[i]) || (str[i] >= 'a' && str[i] <= 'f')
+			|| (str[i] >= 'A' && str[i] <= 'F')))
 	{
 		if (ft_isdigit(str[i]))
 			res = res * base + str[i] - '0';

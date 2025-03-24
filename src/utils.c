@@ -16,7 +16,6 @@ int	comp_floats(float a, float b)
 {
 	return (fabs(a - b) < EPSILON);
 }
-
 int	ft_atoi_base(const char *str, int base)
 {
 	int	neg;

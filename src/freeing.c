@@ -6,11 +6,15 @@ void	free_scene(t_scene *scene)
 {
 	char	**lines;
 
-	lines = scene->lines;
-	while (*lines)
+	if (scene->lines)
 	{
-		free(*lines);
-		lines++;
+		lines = scene->lines;
+		while (*lines)
+		{
+			free(*lines);
+			lines++;
+		}
+		free(scene->lines); // Liberar el array de punteros
 	}
 	if (scene->spheres)
 		free(scene->spheres);
@@ -20,15 +24,14 @@ void	free_scene(t_scene *scene)
 		free(scene->cylinders);
 	// No liberar scene ya que no fue asignado dinámicamente aquí
 }
-
 void	free_global(t_global *global)
 {
 	free_scene(&global->scene);
-	free(global->img.img);
-	free(global->vars.mlx_win);
+	if (global->vars.mlx_conn)
+		mlx_destroy_display(global->vars.mlx_conn);
 	free(global->vars.mlx_conn);
+	free(global);
 }
-
 void	dbl_free(char **ptr)
 {
 	char	**temp;

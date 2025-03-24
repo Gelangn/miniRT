@@ -29,6 +29,11 @@ static int	initialize(t_global *global)
 	global->scene = (t_scene){0};
 	ft_printf("Initializing MLX\n");
 	global->vars.mlx_conn = mlx_init();
+	if (!global->vars.mlx_conn)
+	{
+		perror("Error initializing MLX");
+		return (MLX_ERROR);
+	}
 	ft_printf("Initialized MLX OK\n");
 	return (MLX_SUCCESS);
 }
@@ -95,6 +100,8 @@ int	main(int argc, char **argv)
 	printf("Opening file: %s\n", global->scene.file_path);
 	read_scene(global);
 	global->vars.mlx_win = new_window(global);
+	if (!global->vars.mlx_win)
+		finish(global, "Error creating window");
 	background(&global->img);
 	// render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,

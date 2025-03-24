@@ -16,7 +16,7 @@ int		mouse_release_hook(int button, int x, int y);
 void	set_hooks(t_global *global);
 
 /* Window */
-int		close_window(void *mlx);
+int		close_window(t_global *global);
 void	*new_window(t_global *global);
 
 /* scene */
@@ -51,8 +51,7 @@ void	parse_camera(t_global *global, t_scene *scene, char *line);
 void	parse_light(t_global *global, t_scene *scene, char *line);
 void	parse_sphere(t_global *global, t_scene *scene, char *line);
 void	parse_plane(t_global *global, t_scene *scene, char *line);
-void	parse_square(t_scene *scene, char *line);
 void	parse_cylinder(t_global *global, t_scene *scene, char *line);
-float	roundingf(float value, int decimals);
+//float	roundingf(float value, int decimals);
 
 #endif

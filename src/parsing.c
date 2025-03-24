@@ -32,7 +32,7 @@ static void	parse_vector(t_global *global, char *str, t_vector *vector)
 	vector->x = ft_atof(tokens[0]);
 	vector->y = ft_atof(tokens[1]);
 	vector->z = ft_atof(tokens[2]);
-	free(tokens);
+	dbl_free(tokens);
 }
 
 // Función para parsear un color
@@ -46,7 +46,7 @@ static void	parse_color(t_global *global, char *str, t_color *color)
 	color->r = ft_atoi(tokens[0]);
 	color->g = ft_atoi(tokens[1]);
 	color->b = ft_atoi(tokens[2]);
-	free(tokens);
+	dbl_free(tokens);
 }
 
 // Función para parsear un token flotante
@@ -79,6 +79,8 @@ void	parse_ambient(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	parse_color(global, *tokens, &scene->ambient.color);
 	scene->ambient.initialized = 1;
+	tokens -= 2;
+	dbl_free(tokens);
 }
 
 // Función para parsear la cámara
@@ -97,6 +99,8 @@ void	parse_camera(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	scene->camera.fov = parse_int_token(global, tokens);
 	scene->camera.initialized = 1;
+	tokens -= 3;
+	dbl_free(tokens);
 }
 
 // Función para parsear la luz
@@ -113,6 +117,8 @@ void	parse_light(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	scene->light.intensity = parse_float_token(global, tokens);
 	scene->light.initialized = 1;
+	tokens -= 2;
+	dbl_free(tokens);
 }
 
 // Función para parsear una esfera
@@ -132,6 +138,8 @@ void	parse_sphere(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	parse_color(global, *tokens, &sphere.color);
 	scene->spheres[scene->num_spheres++] = sphere;
+	tokens -= 3;
+	dbl_free(tokens);
 }
 
 // Función para parsear un plano
@@ -151,6 +159,8 @@ void	parse_plane(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	parse_color(global, *tokens, &plane.color);
 	scene->planes[scene->num_planes++] = plane;
+	tokens -= 3;
+	dbl_free(tokens);
 }
 
 // Función para parsear un cilindro
@@ -174,5 +184,7 @@ void	parse_cylinder(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	parse_color(global, *tokens, &cylinder.color);
 	scene->cylinders[scene->num_cylinders++] = cylinder;
+	tokens -= 5;
+	dbl_free(tokens);
 }
 

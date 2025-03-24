@@ -2,7 +2,6 @@
 
 #include "../inc/minirt.h"
 
-
 void	check_scene(t_global *global, t_scene *scene)
 {
 	if (scene->ambient.initialized == 0 || scene->camera.initialized == 0

@@ -13,13 +13,13 @@ static void	replace_tabs_with_spaces(char *str)
 	}
 }
 // Function to round a float number to a given number of decimals
-float	roundingf(float value, int decimals)
+/* float	roundingf(float value, int decimals)
 {
 	float	factor;
 
 	factor = powf(10.0, decimals);
 	return (roundf(value * factor) / factor);
-}
+} */
 
 // Función para parsear un vector
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
@@ -29,9 +29,9 @@ static void	parse_vector(t_global *global, char *str, t_vector *vector)
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
-	vector->x = roundingf(ft_atof(tokens[0]), 2);
-	vector->y = roundingf(ft_atof(tokens[1]), 2);
-	vector->z = roundingf(ft_atof(tokens[2]), 2);
+	vector->x = ft_atof(tokens[0]);
+	vector->y = ft_atof(tokens[1]);
+	vector->z = ft_atof(tokens[2]);
 	free(tokens);
 }
 
@@ -54,7 +54,7 @@ static float	parse_float_token(t_global *global, char **tokens)
 {
 	if (!*tokens)
 		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
-	return (roundingf(ft_atof(*tokens), 2));
+	return (ft_atof(*tokens));
 }
 
 // Función para parsear un token entero

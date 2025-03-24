@@ -41,7 +41,7 @@ void	finish(t_global *global, const char *message);
 void	free_global(t_global *global);
 void	dbl_free(char **ptr);
 void	check_scene(t_global *global, t_scene *scene);
-//void	splited(t_scene *scene, int j, int i, int index);
+// void	splited(t_scene *scene, int j, int i, int index);
 int		ft_atoi_base(const char *str, int base);
 int		comp_floats(float a, float b);
 
@@ -52,6 +52,6 @@ void	parse_light(t_global *global, t_scene *scene, char *line);
 void	parse_sphere(t_global *global, t_scene *scene, char *line);
 void	parse_plane(t_global *global, t_scene *scene, char *line);
 void	parse_cylinder(t_global *global, t_scene *scene, char *line);
-//float	roundingf(float value, int decimals);
+// float	roundingf(float value, int decimals);
 
 #endif

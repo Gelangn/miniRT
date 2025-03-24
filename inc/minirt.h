@@ -52,7 +52,7 @@
 # define MY_COLOR 0x89CE94
 
 # define ERR_ARGS \
-    "\nIncorrect number of arguments, \
+	"\nIncorrect number of arguments, \
     expected 1, Usage: ./miniRT <file.rt>\n"
 # define ERR_OPEN "\nError opening the file\n"
 # define ERR_READ "\nError reading the file\n"
@@ -78,5 +78,6 @@
 # define ERR_FOV "\nError FOV\n"
 # define ERR_POSITION "\nError position\n"
 # define ERR_PARSE "\nError parsing\n"
+# define ERR_WIN "\nError creating window\n"
 
 #endif

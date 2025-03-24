@@ -101,12 +101,13 @@ int	main(int argc, char **argv)
 	read_scene(global);
 	global->vars.mlx_win = new_window(global);
 	if (!global->vars.mlx_win)
-		finish(global, "Error creating window");
+		finish(global, ERR_WIN);
 	background(&global->img);
 	// render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 			global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);
 	mlx_loop(global->vars.mlx_conn);
+	finish(global, NULL);
 	return (0);
 }

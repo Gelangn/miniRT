@@ -14,14 +14,9 @@
 
 int	handle_keypress(int key, t_global *global)
 {
-	ft_printf("Key %d is pressed!\n", key); // 53 is ESC key in macOS
-	if (key == 53 || key == 65307) // 65307 is ESC key in Linux (X11) 0 is for close button
-	{
-		ft_printf("Closing window ESC\n");
+	ft_printf("Key %d (ESC) is pressed!\n", key); // 53 is ESC key in macOS
+	if (key == 53 || key == 65307) // 65307 is ESC key in Linux (X11)
 		close_window(global);
-		//ft_printf("Closed window\n");
-		//exit(0);
-	}
 	return (0);
 }
 

@@ -5,25 +5,27 @@
 int	close_window(t_global *global)
 {
 	ft_printf("Closing window\n");
-	if (global->img.img != NULL && global->vars.mlx_conn != NULL)
+	if (global->img.img != NULL)
 	{
 		ft_printf("Destroying image\n");
 		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
 		global->img.img = NULL;
 		// Asegurarse de que no se use después de ser destruido
 	}
-	if (global->vars.mlx_win != NULL && global->vars.mlx_conn != NULL)
+	if (global->vars.mlx_win != NULL)
 	{
 		ft_printf("Destroying window\n");
 		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
 		global->vars.mlx_win = NULL;
 		// Asegurarse de que no se use después de ser destruido
 	}
-	free_global(global);
+	if (global->vars.mlx_conn)
+		mlx_destroy_display(global->vars.mlx_conn);
+	global->vars.mlx_conn = NULL;
 	ft_printf("Window closed\n");
-	exit(0);
 	return (MLX_SUCCESS);
 }
+
 void	*new_window(t_global *global)
 {
 	ft_printf("Creating window\n");

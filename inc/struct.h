@@ -95,11 +95,12 @@ typedef struct s_scene
 	t_sphere *spheres;
 	t_plane *planes;
 	t_cylinder *cylinders;
-
-	char *file_path; // path of the file
-	int fd;			 // file descriptor
-	char **lines;
+	
 	float scale;	 // scale of the scene
+
+	int fd;			 // file descriptor
+	char *file_path; // path of the file
+	char **lines;
 } t_scene;
 
 // global struct to store all the structs

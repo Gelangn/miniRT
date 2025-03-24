@@ -8,8 +8,13 @@ void	finish(t_global *global, const char *message)
 		ft_putendl_fd((char *)message, 2);
 	else
 		perror(message);
-	free_global(global);
-	exit(errno);
+	if (global)
+	{
+		close_window(global);
+		free_global(global);
+	}
+	ft_printf("Exiting program\n");
+	exit(1);
 }
 // Function to compare two floats using EPSILON
 int	comp_floats(float a, float b)

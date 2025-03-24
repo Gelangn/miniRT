@@ -2,15 +2,15 @@
 
 #include "../inc/minirt.h"
 
-void free_scene(t_scene *scene)
+void	free_scene(t_scene *scene)
 {
-	while (scene->lines)
+	char	**lines;
+
+	lines = scene->lines;
+	while (*lines)
 	{
-		if (scene->lines)
-		{
-			free(scene->lines);
-			scene->lines++;
-		}
+		free(*lines);
+		lines++;
 	}
 	if (scene->spheres)
 		free(scene->spheres);
@@ -18,25 +18,28 @@ void free_scene(t_scene *scene)
 		free(scene->planes);
 	if (scene->cylinders)
 		free(scene->cylinders);
-	free(scene);
+	// No liberar scene ya que no fue asignado dinámicamente aquí
 }
 
-void free_global(t_global *global)
+void	free_global(t_global *global)
 {
 	free_scene(&global->scene);
 	free(global->img.img);
 	free(global->vars.mlx_win);
 	free(global->vars.mlx_conn);
 }
-// si no se usa se puede borrar
-void dbl_free(char **ptr)
+
+void	dbl_free(char **ptr)
 {
+	char	**temp;
+
 	if (!ptr)
-		return;
-	while (ptr)
+		return ;
+	temp = ptr;
+	while (*temp)
 	{
-		free(*ptr);
-		ptr++;
+		free(*temp);
+		temp++;
 	}
 	free(ptr);
 }

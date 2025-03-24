@@ -2,93 +2,54 @@
 
 #include "../inc/minirt.h"
 
-/* static int	counter_words(char **str)
+
+void	check_scene(t_global *global, t_scene *scene)
 {
-	int	len;
-
-	len = 0;
-	while (str[len] != NULL)
-		len++;
-	return (len);
-} */
-
-/* static void	get_scene(t_scene *scene)
+	if (scene->ambient.initialized == 0 || scene->camera.initialized == 0
+		|| scene->light.initialized == 0)
+		finish(global, ERR_SCENE);
+	if (scene->num_spheres < 0 || scene->num_spheres > MAX_SPHERES)
+		finish(global, ERR_SPHERE);
+	if (scene->num_planes < 0 || scene->num_planes > MAX_PLANES)
+		finish(global, ERR_PLANE);
+	if (scene->num_cylinders < 0 || scene->num_cylinders > MAX_CYLINDERS)
+		finish(global, ERR_CYLINDER);
+}
+// Function to read and parse the scene file
+void	read_scene(t_global *global)
 {
-	int	i;
+	char	*line_ptr;
+	int		fd;
+	t_scene	*scene;
+	char	*filename;
 
-	i = 0;
-	scene->fd = open(scene->file_path, O_RDONLY);
-	if (scene->fd == (-1))
-		finish(&global, ERR_OPEN);
-	scene->lines = (char **)malloc((scene->height + 1) * sizeof(char *));
-	if (scene->lines == NULL)
+	filename = global->scene.file_path;
+	scene = &global->scene;
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		finish(global, ERR_OPEN);
+	if ((line_ptr = get_next_line(fd)) == NULL)
+		finish(global, ERR_READ);
+	else
 	{
-		close(scene->fd);
-		finish(&global, ERR_MALLOC);
-	}
-	while (i <= scene->height)
-	{
-		scene->lines[i] = get_next_line(scene->fd);
-		ft_printf("%s", scene->lines[i]);
-		i++;
-	}
-	sleep(10);
-	ft_printf("\nscene readed!!\n");
-	close(scene->fd);
-} */
-/* static void	get_scene_size(t_scene *scene)
-{
-	char	*line;
-	char	**split;
-
-	scene->height = 0;
-	scene->width = 0;
-	line = NULL;
-	split = NULL;
-	scene->fd = open(scene->file_path, O_RDONLY);
-	if (scene->fd == (-1))
-		finish(&global, ERR_OPEN);
-	line = get_next_line(scene->fd);
-	if (line == NULL)
-		finish(&global, ERR_OPEN);
-	split = ft_split(line, ' ');
-	scene->width = counter_words(split);
-	free(line);
-	while (line != NULL)
-	{
-		line = get_next_line(scene->fd);
-		free(line);
-		scene->height++;
-	}
-	if (split != NULL)
-		dbl_free(split);
-	close(scene->fd);
-} */
-
-/* static void	fill_points(t_scene *scene)
-{
-	int	i;
-	int	j;
-	int	index;
-
-	i = 0;
-	j = 0;
-	index = 0;
-	scene->points = malloc(((scene->width * scene->height) + 1) * sizeof(t_point));
-	while (j < scene->height && scene->lines[j] != NULL)
-	{
-		while (i < scene->width)
+		while (line_ptr)
 		{
-			scene->points[index].point_x = i;
-			scene->points[index].point_y = j;
-			splited(scene, j, i, index);
-			index++;
-			i++;
+			if (line_ptr[0] == 'A')
+				parse_ambient(global, scene, line_ptr);
+			else if (line_ptr[0] == 'C')
+				parse_camera(global, scene, line_ptr);
+			else if (line_ptr[0] == 'L')
+				parse_light(global, scene, line_ptr);
+			else if (strncmp(line_ptr, "sp", 2) == 0)
+				parse_sphere(global, scene, line_ptr);
+			else if (strncmp(line_ptr, "pl", 2) == 0)
+				parse_plane(global, scene, line_ptr);
+			else if (strncmp(line_ptr, "cy", 2) == 0)
+				parse_cylinder(global, scene, line_ptr);
+			free(line_ptr);
+			line_ptr = get_next_line(fd);
 		}
-		free(scene->lines[j]);
-		i = 0;
-		j++;
 	}
-	free(scene->lines);
-} */
-
+	check_scene(global, scene);
+	close(fd);
+}

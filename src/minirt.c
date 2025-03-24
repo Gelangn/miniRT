@@ -3,10 +3,10 @@
 #include "../inc/minirt.h"
 #include <linux/limits.h>
 
-static void background(t_img *data)
+static void	background(t_img *data)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	x = 0;
 	y = 0;
@@ -21,7 +21,7 @@ static void background(t_img *data)
 		x++;
 	}
 }
-static int initialize(t_global *global)
+static int	initialize(t_global *global)
 {
 	// global->scene.points = NULL;
 	global->img.img = NULL;
@@ -32,7 +32,7 @@ static int initialize(t_global *global)
 	ft_printf("Initialized MLX OK\n");
 	return (MLX_SUCCESS);
 }
-static int initialize_scene(t_global *global, t_scene *scene)
+static int	initialize_scene(t_global *global, t_scene *scene)
 {
 	scene->file_path = NULL;
 	scene->fd = 0;
@@ -59,18 +59,19 @@ static int initialize_scene(t_global *global, t_scene *scene)
 	return (MLX_SUCCESS);
 }
 // Function to check the file extension
-void check_file_extension(t_global *global, const char *filename)
+void	check_file_extension(t_global *global, const char *filename)
 {
-	const char *ext = ft_strrchr(filename, '.');
+	const char	*ext;
 
+	ext = ft_strrchr(filename, '.');
 	if (ft_strcmp(ext, ".rt") != 0)
 		finish(global, ERR_INVALID_EXTENSION);
 	else if (!ext)
 		finish(global, ERR_ARGS);
 }
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_global *global;
+	t_global	*global;
 
 	if (argc != 2)
 	{
@@ -84,20 +85,20 @@ int main(int argc, char **argv)
 		perror("Error allocating memory for global");
 		if (global)
 			free(global);
-		return EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 	check_file_extension(global, argv[1]);
-	if ((initialize(global) != 0) || (initialize_scene(global, &global->scene) != 0))
+	if ((initialize(global) != 0) || (initialize_scene(global,
+				&global->scene) != 0))
 		finish(global, ERR_MEM);
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path);
 	read_scene(global);
 	global->vars.mlx_win = new_window(global);
-
 	background(&global->img);
 	// render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-							global->img.img, MARGIN / 2, MARGIN / 2);
+			global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);
 	mlx_loop(global->vars.mlx_conn);
 	return (0);

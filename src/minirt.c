@@ -78,6 +78,7 @@ int	main(int argc, char **argv)
 {
 	t_global	*global;
 
+	// Inicializa global a cero para evitar punteros no válidos
 	if (argc != 2)
 	{
 		// ft_printf(ERR_ARGS);
@@ -92,6 +93,7 @@ int	main(int argc, char **argv)
 			free(global);
 		return (EXIT_FAILURE);
 	}
+	memset(global, 0, sizeof(t_global));
 	check_file_extension(global, argv[1]);
 	if ((initialize(global) != 0) || (initialize_scene(global,
 				&global->scene) != 0))
@@ -105,9 +107,10 @@ int	main(int argc, char **argv)
 	background(&global->img);
 	// render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-			global->img.img, MARGIN / 2, MARGIN / 2);
+		global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);
-	
+	mlx_hook(global->vars.mlx_win, 17, 0, close_window, &global);
+		// Hook for window close event
 	mlx_loop(global->vars.mlx_conn);
 	return (0);
 }

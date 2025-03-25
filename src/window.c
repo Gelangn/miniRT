@@ -4,15 +4,20 @@
 
 int	close_window(t_global *global)
 {
+	if (!global)
+	{
+		ft_printf("Error: global is NULL\n");
+		return (MLX_ERROR);
+	}
 	ft_printf("Closing window\n");
-	if (global->img.img != NULL)
+	if (global->img.img)
 	{
 		ft_printf("Destroying image\n");
 		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
 		global->img.img = NULL;
 		// Asegurarse de que no se use después de ser destruido
 	}
-	if (global->vars.mlx_win != NULL)
+	if (global->vars.mlx_win)
 	{
 		ft_printf("Destroying window\n");
 		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
@@ -26,6 +31,7 @@ int	close_window(t_global *global)
 	}
 	finish(global, NULL);
 	ft_printf("Window closed\n");
+	exit(0);
 	return (MLX_SUCCESS);
 }
 

@@ -12,19 +12,6 @@
 
 #include "../inc/minirt.h"
 
-void	set_hooks(t_global *global)
-{
-	mlx_do_key_autorepeatoff(global->vars.mlx_conn);
-	mlx_loop_hook(global->vars.mlx_conn, &handle_no_event, &global->vars); // No event
-	mlx_hook(global->vars.mlx_win, 2, 1L << 0, &handle_keypress, global); // Key press
-	// mlx_hook(global->vars.mlx_win, 17, 1L << 0, &handle_keypress, NULL); // Close button
-	mlx_hook(global->vars.mlx_win, 3, 1L << 0, &handle_keyrelease, NULL); // Key release
-	mlx_hook(global->vars.mlx_win, 1, 1L << 6, &mouse_press_hook, NULL); // Mouse press
-	mlx_hook(global->vars.mlx_win, 5, 1L << 6, &mouse_release_hook, NULL); // Mouse release
-	mlx_hook(global->vars.mlx_win, 6, 1L << 6, &handle_mouse_move, NULL); // Mouse move
-	mlx_hook(global->vars.mlx_win, 17, 1L << 0, &close_window, global); // Close window
-}
-
 /* This function needs to exist, but is useless by the moment */
 int	handle_no_event(void)
 {

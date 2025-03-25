@@ -14,10 +14,11 @@ int		handle_mouse_move(int x, int y);
 int		mouse_press_hook(int button, int x, int y);
 int		mouse_release_hook(int button, int x, int y);
 void	set_hooks(t_global *global);
+int		handle_mouse_scroll(int button, int x, int y, t_global *global);
 
 /* Window */
 int		close_window(t_global *global);
-void	*new_window(t_global *global);
+void 	*new_window(t_global *global);
 
 /* scene */
 void	read_scene(t_global *global);

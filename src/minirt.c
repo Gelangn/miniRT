@@ -109,8 +109,6 @@ int	main(int argc, char **argv)
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);
-	mlx_hook(global->vars.mlx_win, 17, 0, close_window, &global);
-		// Hook for window close event
 	mlx_loop(global->vars.mlx_conn);
 	return (0);
 }

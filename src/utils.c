@@ -10,17 +10,20 @@ void	finish(t_global *global, const char *message)
 		perror(message);
 	if (global)
 	{
-		close_window(global);
+		if (global->vars.mlx_conn || global->vars.mlx_win)
+			close_window(global);
 		free_global(global);
 	}
 	ft_printf("Exiting program\n");
 	exit(1);
 }
+
 // Function to compare two floats using EPSILON
 int	comp_floats(float a, float b)
 {
 	return (fabs(a - b) < EPSILON);
 }
+
 int	ft_atoi_base(const char *str, int base)
 {
 	int	neg;

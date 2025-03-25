@@ -4,7 +4,8 @@
 
 void	free_spheres(t_sphere *spheres)
 {
-	free(spheres);
+	if (spheres)
+		free(spheres);
 }
 
 void	free_planes(t_plane *planes)
@@ -37,19 +38,27 @@ void	free_scene(t_scene *scene)
 		}
 		free(scene->lines); // Liberar el array de punteros
 	}
-	if (scene->file_path)
-		free(scene->file_path);
+	/* if (scene->file_path)
+		free(scene->file_path); */
 	// No liberar scene ya que no fue asignado dinámicamente aquí
 }
+
 void	free_global(t_global *global)
 {
-	free_scene(&global->scene);
 	if (global->vars.mlx_win)
-		free(global->vars.mlx_win);
+	{
+		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
+		// Destruir la ventana
+	}
 	if (global->vars.mlx_conn)
-		free(global->vars.mlx_conn);
+	{
+		mlx_destroy_display(global->vars.mlx_conn);
+		// Destruir la conexión de display
+	}
+	free_scene(&global->scene);
 	free(global);
 }
+
 void	dbl_free(char **ptr)
 {
 	char	**temp;

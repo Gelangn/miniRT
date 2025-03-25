@@ -20,8 +20,11 @@ int	close_window(t_global *global)
 		// Asegurarse de que no se use después de ser destruido
 	}
 	if (global->vars.mlx_conn)
+	{
 		mlx_destroy_display(global->vars.mlx_conn);
-	global->vars.mlx_conn = NULL;
+		global->vars.mlx_conn = NULL;
+	}
+	finish(global, NULL);
 	ft_printf("Window closed\n");
 	return (MLX_SUCCESS);
 }
@@ -45,10 +48,11 @@ void	*new_window(t_global *global)
 		return (NULL);
 	}
 	global->img.addr = mlx_get_data_addr(global->img.img,
-			&global->img.bits_per_pixel, &global->img.line_length,
-			&global->img.endian);
+											&global->img.bits_per_pixel,
+											&global->img.line_length,
+											&global->img.endian);
 	ft_printf("Window created\n");
 	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .89,
-		WIN_H * .96, 0x00FF0000, "By anavas-g");
+			WIN_H * .96, 0x00FF0000, "By anavas-g");
 	return (global->vars.mlx_win);
 }

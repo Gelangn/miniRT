@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/03/11 18:30:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/03/25 07:46:19 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	set_hooks(t_global *global)
 {
 	mlx_do_key_autorepeatoff(global->vars.mlx_conn);
 	mlx_loop_hook(global->vars.mlx_conn, &handle_no_event, &global->vars); // No event
-	mlx_hook(global->vars.mlx_win, 2, 1L << 0, &handle_keypress, NULL); // Key press
+	mlx_hook(global->vars.mlx_win, 2, 1L << 0, &handle_keypress, global); // Key press
 	// mlx_hook(global->vars.mlx_win, 17, 1L << 0, &handle_keypress, NULL); // Close button
 	mlx_hook(global->vars.mlx_win, 3, 1L << 0, &handle_keyrelease, NULL); // Key release
 	mlx_hook(global->vars.mlx_win, 1, 1L << 6, &mouse_press_hook, NULL); // Mouse press

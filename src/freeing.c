@@ -38,9 +38,6 @@ void	free_scene(t_scene *scene)
 		}
 		free(scene->lines); // Liberar el array de punteros
 	}
-	/* if (scene->file_path)
-		free(scene->file_path); */
-	// No liberar scene ya que no fue asignado dinámicamente aquí
 }
 
 void	free_global(t_global *global)

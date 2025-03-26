@@ -18,7 +18,7 @@ int		handle_mouse_scroll(int button, int x, int y, t_global *global);
 
 /* Window */
 int		close_window(t_global *global);
-void 	*new_window(t_global *global);
+void	*new_window(t_global *global);
 
 /* scene */
 void	read_scene(t_global *global);
@@ -31,9 +31,10 @@ void	points_3d_to_2d(t_scene *scene);
 // void	scale_scene(t_scene *scene);
 // void	draw_line(t_img *img, t_dot *dot, int color);
 void	pixel_put(t_img *data, int x, int y, int color);
+int		rgb_to_int(t_color color);
 
 /* Utils */
-char	*get_next_line(int fd);
+char *get_next_line(int fd);
 char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strchr(const char *s, int c);

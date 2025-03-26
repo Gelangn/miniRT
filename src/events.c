@@ -35,6 +35,7 @@ int	handle_mouse_move(int x, int y)
 	printf("Mouse is at position (%d, %d)\n", x, y);
 	return (0);
 }
+
 int	handle_mouse_scroll(int button, int x, int y, t_global *global)
 {
 	(void)global; // Marca el parámetro como no utilizado
@@ -51,6 +52,7 @@ int	handle_mouse_scroll(int button, int x, int y, t_global *global)
 	}
 	return (0);
 }
+
 void	set_hooks(t_global *global)
 {
 	mlx_do_key_autorepeatoff(global->vars.mlx_conn);

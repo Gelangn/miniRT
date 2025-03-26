@@ -21,6 +21,7 @@ static void	background(t_img *data)
 		x++;
 	}
 }
+
 static int	initialize(t_global *global)
 {
 	// global->scene.points = NULL;
@@ -37,6 +38,7 @@ static int	initialize(t_global *global)
 	ft_printf("Initialized MLX OK\n");
 	return (MLX_SUCCESS);
 }
+
 static int	initialize_scene(t_global *global, t_scene *scene)
 {
 	scene->file_path = NULL;
@@ -63,6 +65,7 @@ static int	initialize_scene(t_global *global, t_scene *scene)
 	scene->num_cylinders = 0;
 	return (MLX_SUCCESS);
 }
+
 // Function to check the file extension
 void	check_file_extension(t_global *global, const char *filename)
 {
@@ -74,6 +77,7 @@ void	check_file_extension(t_global *global, const char *filename)
 	else if (!ext)
 		finish(global, ERR_ARGS);
 }
+
 int	main(int argc, char **argv)
 {
 	t_global	*global;

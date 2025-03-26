@@ -99,3 +99,12 @@ cerrarse correctamente y devolver "Error\n" seguido de un mensaje de error
 explícito de su elección.
 •Para la defensa, sería ideal contar con un conjunto completo de escenas
 centradas en lo funcional, para facilitar el control de los elementos a crear.
+
+consideraciónes:
+
+- La iluminación ambiental es la luz que se refleja en todas partes de la escena.
+- La iluminación difusa es la luz que se refleja en una dirección específica.
+- La iluminación especular es la luz que se refleja en una dirección específica
+y se refleja en una dirección específica.
+- El eje X es el ancho de la ventana.
+- El eje Y es la altura de la ventana.

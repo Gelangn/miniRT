@@ -15,14 +15,12 @@ int	close_window(t_global *global)
 		ft_printf("Destroying image\n");
 		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
 		global->img.img = NULL;
-		// Asegurarse de que no se use después de ser destruido
 	}
 	if (global->vars.mlx_win)
 	{
 		ft_printf("Destroying window\n");
 		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
 		global->vars.mlx_win = NULL;
-		// Asegurarse de que no se use después de ser destruido
 	}
 	if (global->vars.mlx_conn)
 	{

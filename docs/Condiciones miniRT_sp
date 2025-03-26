@@ -88,14 +88,115 @@ cada eje x, y, z: 0.0, 0.0, 1.0
 ∗Altura del cilindro: 21.42
 ∗Colores R, G, B en el rango [0, 255]: 10, 0, 255
 •Ejemplo de la parte obligatoria con una escena .rt minimalista:
+
 A 0.2 255, 255, 255
 C -50, 0, 20 0, 0, 1 70
 L -40, 0, 30 0.7 255, 255, 255
 pl 0, 0, 0, 1.0, 0 255, 0, 225
 sp 0, 0, 20 255, 0, 0
 cy 50.0, 0, 0, 20.6 0, 0, 1.0, 14.2 21.42 10,0,255
+
 •Si se detecta cualquier error de configuración en el archivo, el programa debe
 cerrarse correctamente y devolver "Error\n" seguido de un mensaje de error
 explícito de su elección.
 •Para la defensa, sería ideal contar con un conjunto completo de escenas
 centradas en lo funcional, para facilitar el control de los elementos a crear.
+
+Para la realización de este proyecto necesitaremos:
+- Crear un parser que lea el archivo .rt y cree una estructura de datos
+ con la información de la escena.
+- Crear una función que genere la imagen de la escena.
+- Crear una función que muestre la imagen en una ventana.
+- Crear una función que maneje los eventos de la ventana.
+- Crear una función que libere la memoria utilizada.
+- Crear una función que maneje los errores.
+- Generador de rayos.
+- Crear una función que maneje las intersecciones de los rayos con los objetos.
+- Crear una función que maneje los objetos geométricos.
+- Crear una función que maneje las cámaras.
+- Crear una función que maneje las luces.
+- Crear una función que maneje los colores.
+- Crear una función que maneje los vectores.
+- Crear una función que maneje las matrices.
+- Crear una función que maneje las transformaciones de las cámaras.
+- Crear una función que maneje las transformaciones de las luces.
+- Crear una función que maneje las transformaciones de los objetos.
+	Función de traslación.
+	Función de rotación.
+	Función de escalado.
+	Función de reflexión.???
+	Función de proyección.???
+- Crear una función que maneje las intersecciones de los objetos.
+- Crear una función que maneje la iluminación de la escena.
+- Crear una función que maneje las sombras.
+- Crear una función que maneje la iluminación ambiental.
+- Crear una función que maneje la iluminación difusa.
+- Crear una función que maneje la iluminación especular.
+- Crear una función que maneje la reflexión de la luz.
+- Crear una función que maneje la refracción de la luz.
+- Crear una función que maneje la textura de los objetos.
+
+El algoritmo de Raytracing en pseudocodigo es el siguiente:
+
+for each pixel do
+		compute viewing ray
+		if (ray hits an object with t ∈[0,∞)) then
+			Compute n
+			Evaluate shading model and set pixel to
+			that color
+		else
+			set pixel color to background color
+
+En resumen, para cada pixel de la imagen (canva), generamos un rayo que va
+desde la cámara hasta el pixel, calculamos si el rayo intersecta con algún
+objeto de la escena, si intersecta calculamos la normal (vector) del objeto en
+el punto de intersección y aplicamos el modelo de iluminación para obtener el
+color del pixel, si no intersecta con ningún objeto, el color del pixel es el
+color de fondo.
+
+PASOS A SEGUIR:
+1. Crear la estructura de datos de la escena. OK
+2. Crear el parser que lea el archivo .rt y llene la estructura de datos. OK
+3. Crear la función que genere la imagen de la escena. OK
+4. Crear la función que muestre la imagen en una ventana. OK
+5. Crear la función que maneje los eventos de la ventana. OK
+6. Crear la función que libere la memoria utilizada. OK
+7. Crear la función que maneje los errores. OK
+8. Crear la función que maneje los rayos.
+8. Crear la función que maneje las intersecciones de los rayos con los objetos.
+9. Crear la función que maneje los objetos geométricos.
+	Esfera
+	Plano
+	Cilindro
+10. Crear la función que maneje las cámaras.
+11. Crear la función que maneje las luces.
+	Ambiental
+	Puntual
+12. Crear la función que maneje los colores (rgb).
+13. Crear la función que maneje los vectores.
+14. Crear la función que maneje las matrices.
+15. Crear una función que maneje las transformaciones de las cámaras.
+16. Crear una función que maneje las transformaciones de las luces.
+17. Crear una función que maneje las transformaciones de los objetos.
+18. Crear una función que maneje las intersecciones de los objetos.
+19. Crear una función que maneje la iluminación de la escena.
+20. Crear una función que maneje las sombras.
+21. Crear una función que maneje la iluminación ambiental.
+22. Crear una función que maneje la iluminación difusa.
+23. Crear una función que maneje la iluminación especular.
+24. Crear una función que maneje la reflexión de la luz.
+25. Crear una función que maneje la refracción de la luz.
+26. Crear una función que maneje la textura de los objetos.
+
+Transformación de corte
+
+Una transformación de corte (o sesgo) tiene el efecto de inclinar las líneas
+rectas. Probablemente sea la transformación más compleja (visualmente) que
+implementaremos, aunque su implementación no es más complicada que la de las
+demás. Al aplicarse a una tupla, una transformación de corte cambia cada
+componente de la tupla proporcionalmente a los otros dos. Por lo tanto, el
+componente X cambia proporcionalmente a YZ, y el componente Y cambia
+proporcionalmente a XZ, y el componente Z cambia proporcionalmente a XY.
+La siguiente ilustración muestra cómo funciona esto en dos dimensiones.
+Observe específicamente cómo la misma transformación afecta de forma diferente
+a cada punto en X a medida que cambia el componente Y. ...

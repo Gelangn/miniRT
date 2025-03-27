@@ -16,18 +16,19 @@
 # include <string.h>
 # include <unistd.h>
 
-# define WIN_W 810
-# define WIN_H 540
-# define MARGIN 100
+# define WIN_W 810 // Screen width
+# define WIN_H 540 // Screen height
+# define MARGIN 75 // Margin for the screen
 
 # define PI 3.14159265359f
 # define MAX_PLANES 5
 # define MAX_SPHERES 10
 # define MAX_CYLINDERS 10
-# define VECTOR 0
+# define VECTOR 0 // 0 for vector, 1 for point
 # define POINT 1
 # define SCALAR 1
-# define EPSILON 0.0001
+# define DSCR 1.0f // Distance from the camera to the screen
+# define EPSILON 0.0001 // Epsilon for floating point comparison
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0

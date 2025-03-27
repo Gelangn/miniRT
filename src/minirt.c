@@ -109,6 +109,7 @@ int	main(int argc, char **argv)
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);
 	background(&global->img);
+	calc_ray(&global->scene.camera);
 	// render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);

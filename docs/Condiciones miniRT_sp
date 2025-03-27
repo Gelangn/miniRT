@@ -162,7 +162,7 @@ PASOS A SEGUIR:
 5. Crear la función que maneje los eventos de la ventana. OK
 6. Crear la función que libere la memoria utilizada. OK
 7. Crear la función que maneje los errores. OK
-8. Crear la función que maneje los rayos.
+8. Crear la función que maneje los rayos. OK
 8. Crear la función que maneje las intersecciones de los rayos con los objetos.
 9. Crear la función que maneje los objetos geométricos.
 	Esfera

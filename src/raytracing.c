@@ -2,28 +2,26 @@
 
 #include "../inc/minirt.h"
 
+
+// Function to calculate the direction of a ray from the camera to a pixel on the virtual screen.
 static t_vector	ray(t_vector camera, int pixel_x, int pixel_y)
 {
 	float		x;
-	t_vector	scrn_pnt;
-	t_vector	ray_dir;
-	float		magnitud;
-	t_vector	n_ray_dir;
+	float		y;
+	float		z;
+	t_vector	scrn_pnt; 
+	t_vector	ray_dir; // Ray direction
+	t_vector	n_ray_dir; // Normalized ray direction
 
-	/* Calcula la dirección de un rayo desde la cámara hasta un píxel en la pantalla virtual. */
-	// Coordenadas del píxel en el espacio 3D de la pantalla virtual
-	x = (pixel_x - WIN_W / 2.0f);
-	float y = -(pixel_y - WIN_H / 2.0f); // Invertir el eje Y
-	float z = -DSCR;                     // La pantalla está frente a la cámara
+	x = (pixel_x - WIN_W / 2.0f);	// Centrar el eje X
+	y = -(pixel_y - WIN_H / 2.0f);	// Centra el eje Y y lo invierte
+	z = -DSCR;						// La pantalla está frente a la cámara
 	scrn_pnt = (t_vector){x, y, z};
 	// Dirección del rayo: vector desde la cámara al píxel
 	ray_dir = (t_vector){scrn_pnt.x - camera.x, scrn_pnt.y - camera.y,
 		scrn_pnt.z - camera.z};
 	// Normalizar la dirección del rayo
-	magnitud = sqrt(ray_dir.x * ray_dir.x + ray_dir.y * ray_dir.y + ray_dir.z
-			* ray_dir.z);
-	n_ray_dir = (t_vector){ray_dir.x / magnitud, ray_dir.y / magnitud, ray_dir.z
-		/ magnitud};
+	n_ray_dir = normalize(ray_dir);
 	return (n_ray_dir);
 }
 
@@ -42,6 +40,7 @@ t_vector	calc_ray(t_camera *camera)
 		{
 			i++;
 			result = ray(camera->orientation, x, y);
+			//colision(result);
 			printf("Ray %d: %f %f %f\n", i, result.x, result.y, result.z);
 		}
 	}

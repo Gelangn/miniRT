@@ -69,7 +69,7 @@ t_vector transpose(t_vector a)
 // Function to calculate the magnitude of a vector
 float	magnitude(t_vector a)
 {
-	return (sqrt(a.x * a.x + a.y * a.y + a.z * a.z));
+	return (sqrt(a.x * a.x + a.y * a.y + a.z * a.z)); // sqrt(x^2 + y^2 + z^2)
 }
 // Function to normalize a vector
 t_vector	normalize(t_vector a)

@@ -134,7 +134,7 @@ void	parse_sphere(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	parse_vector(global, *tokens, &sphere.center);
 	tokens++;
-	sphere.radius = parse_float_token(global, tokens);
+	sphere.radius = parse_float_token(global, tokens) / 2; // Recibimos el diámetro
 	tokens++;
 	parse_color(global, *tokens, &sphere.color);
 	scene->spheres[scene->num_spheres++] = sphere;

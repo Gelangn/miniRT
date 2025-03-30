@@ -3,7 +3,7 @@
 #include "../inc/minirt.h"
 #include <linux/limits.h>
 
-static void	background(t_img *data)
+/* static void	background(t_img *data)
 {
 	int	x;
 	int	y;
@@ -20,7 +20,7 @@ static void	background(t_img *data)
 		}
 		x++;
 	}
-}
+} */
 
 static int	initialize(t_global *global)
 {
@@ -108,9 +108,8 @@ int	main(int argc, char **argv)
 	global->vars.mlx_win = new_window(global);
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);
-	background(&global->img);
-	calc_ray(&global->scene.camera);
-	// render(global);
+	//background(&global->img);
+	render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);

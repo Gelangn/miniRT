@@ -22,17 +22,7 @@ t_vector	subtract(t_vector a, t_vector b)
 	result.z = a.z - b.z;
 	return (result);
 }
-// Function to multiply tuples
-t_vector dott(t_vector a, t_vector b)
-{
-	t_vector	result;
-
-	result.x = a.x * b.x;
-	result.y = a.y * b.y;
-	result.z = a.z * b.z;
-	return (result);
-}
-// Function to calculate the dot product of two vectors
+// Function to calculate the dot product (producto escalar) of two vectors
 float	dot(t_vector a, t_vector b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
@@ -57,15 +47,6 @@ t_vector	divide(t_vector a, float scalar)
 	result.z = a.z / scalar;
 	return (result);
 }
-t_vector transpose(t_vector a)
-{
-	t_vector	result;
-
-	result.x = a.x;
-	result.y = a.z;
-	result.z = a.y;
-	return (result);
-}
 // Function to calculate the magnitude of a vector
 float	magnitude(t_vector a)
 {
@@ -74,7 +55,7 @@ float	magnitude(t_vector a)
 // Function to normalize a vector
 t_vector	normalize(t_vector a)
 {
-	float	mag;
+	float		mag;
 	t_vector	result;
 
 	mag = magnitude(a);
@@ -103,6 +84,19 @@ t_vector	reflect(t_vector a, t_vector b)
 	result = subtract(a, multiply(b, 2 * dot_product));
 	return (result);
 }
+
+/* A partir de aqui creo que no son necesarias */
+
+// Function to transpose a vector
+t_vector	transpose(t_vector a)
+{
+	t_vector	result;
+
+	result.x = a.x;
+	result.y = a.z;
+	result.z = a.y;
+	return (result);
+}
 // Function to rotate a vector
 t_vector	rotate(t_vector a, t_vector b, float angle)
 {
@@ -112,15 +106,15 @@ t_vector	rotate(t_vector a, t_vector b, float angle)
 
 	cosine = cos(angle);
 	sine = sin(angle);
-	result.x = (cosine + (1 - cosine) * b.x * b.x) * a.x +
-		((1 - cosine) * b.x * b.y - b.z * sine) * a.y +
-		((1 - cosine) * b.x * b.z + b.y * sine) * a.z;
-	result.y = ((1 - cosine) * b.x * b.y + b.z * sine) * a.x +
-		(cosine + (1 - cosine) * b.y * b.y) * a.y +
-		((1 - cosine) * b.y * b.z - b.x * sine) * a.z;
-	result.z = ((1 - cosine) * b.x * b.z - b.y * sine) * a.x +
-		((1 - cosine) * b.y * b.z + b.x * sine) * a.y +
-		(cosine + (1 - cosine) * b.z * b.z) * a.z;
+	result.x = (cosine + (1 - cosine) * b.x * b.x) * a.x + ((1 - cosine) * b.x
+			* b.y - b.z * sine) * a.y + ((1 - cosine) * b.x * b.z + b.y * sine)
+		* a.z;
+	result.y = ((1 - cosine) * b.x * b.y + b.z * sine) * a.x + (cosine + (1
+				- cosine) * b.y * b.y) * a.y + ((1 - cosine) * b.y * b.z - b.x
+			* sine) * a.z;
+	result.z = ((1 - cosine) * b.x * b.z - b.y * sine) * a.x + ((1 - cosine)
+			* b.y * b.z + b.x * sine) * a.y + (cosine + (1 - cosine) * b.z
+			* b.z) * a.z;
 	return (result);
 }
 // Function to rotate a vector around the x axis

@@ -25,11 +25,11 @@ void		read_scene(t_global *global);
 void		free_scene(t_scene *scene);
 
 /* Graphics-Render-Draw */
-// void	render(t_global *global);
-void		points_3d_to_2d(t_scene *scene);
-// void	isometric(t_point *point);
-// void	scale_scene(t_scene *scene);
-// void	draw_line(t_img *img, t_dot *dot, int color);
+void		render(t_global *global);
+// void		points_3d_to_2d(t_scene *scene);
+// void		isometric(t_point *point);
+// void		scale_scene(t_scene *scene);
+// void		draw_line(t_img *img, t_dot *dot, int color);
 void		pixel_put(t_img *data, int x, int y, int color);
 int			rgb_to_int(t_color color);
 
@@ -56,21 +56,24 @@ void		parse_plane(t_global *global, t_scene *scene, char *line);
 void		parse_cylinder(t_global *global, t_scene *scene, char *line);
 // float	roundingf(float value, int decimals);
 
+/* Raytracing */
+t_vector	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir);
+t_vector	ray(t_global global, int pixel_x, int pixel_y);
+t_vector	calc_ray(t_global *global);
+
 /* Matrix */
 t_vector 	add(t_vector a, t_vector b);
 t_vector 	subtract(t_vector a, t_vector b);
-t_vector 	dott(t_vector a, t_vector b);
 float		dot(t_vector a, t_vector b);
 t_vector 	multiply(t_vector a, float scalar);
 t_vector 	divide(t_vector a, float scalar);
-t_vector	transpose(t_vector a);
-
-/* Vector */
-t_vector	calc_ray(t_camera *camera);
 float		magnitude(t_vector a);
 t_vector	normalize(t_vector a);
 t_vector	cross(t_vector a, t_vector b);
 t_vector	reflect(t_vector a, t_vector b);
+
+/* Innecesary */
+t_vector	transpose(t_vector a);
 t_vector	rotate(t_vector a, t_vector b, float angle);
 t_vector	rotate_x(t_vector a, float angle);
 t_vector	rotate_y(t_vector a, float angle);

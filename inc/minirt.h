@@ -27,7 +27,7 @@
 # define VECTOR 0 // 0 for vector, 1 for point
 # define POINT 1
 # define SCALAR 1
-# define DSCR 1.0f // Distance from the camera to the screen
+# define DSCR 100.0f // Distance from the camera to the screen
 # define EPSILON 0.0001 // Epsilon for floating point comparison
 
 # define MLX_ERROR 1

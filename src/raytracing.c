@@ -46,7 +46,7 @@ t_vector	ray(t_global global, int pixel_x, int pixel_y)
 	t_vector n_ray_dir;            // Normalized ray direction
 	x = (pixel_x - WIN_W / 2.0f);  // Centrar el eje X
 	y = -(pixel_y - WIN_H / 2.0f); // Centra el eje Y y lo invierte
-	z = -DSCR;                     // La pantalla está frente a la cámara
+	z = DSCR;                      // La pantalla está frente a la cámara
 	scrn_pnt = (t_vector){x, y, z};
 	// Dirección del rayo: vector desde la cámara al píxel
 	ray_dir = (t_vector){scrn_pnt.x - camera.x, scrn_pnt.y - camera.y,

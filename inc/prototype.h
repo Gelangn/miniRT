@@ -58,15 +58,15 @@ void		parse_cylinder(t_global *global, t_scene *scene, char *line);
 
 /* Raytracing */
 t_vector	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir);
-t_vector	ray(t_global global, int pixel_x, int pixel_y);
-t_vector	calc_ray(t_global *global);
+// t_vector	ray(t_global global, int pixel_x, int pixel_y);
+void		render(t_global *global);
 
 /* Matrix */
-t_vector 	add(t_vector a, t_vector b);
-t_vector 	subtract(t_vector a, t_vector b);
+t_vector	add(t_vector a, t_vector b);
+t_vector	subtract(t_vector a, t_vector b);
 float		dot(t_vector a, t_vector b);
-t_vector 	multiply(t_vector a, float scalar);
-t_vector 	divide(t_vector a, float scalar);
+t_vector	multiply(t_vector a, float scalar);
+t_vector	divide(t_vector a, float scalar);
 float		magnitude(t_vector a);
 t_vector	normalize(t_vector a);
 t_vector	cross(t_vector a, t_vector b);
@@ -78,6 +78,5 @@ t_vector	rotate(t_vector a, t_vector b, float angle);
 t_vector	rotate_x(t_vector a, float angle);
 t_vector	rotate_y(t_vector a, float angle);
 t_vector	rotate_z(t_vector a, float angle);
-
 
 #endif

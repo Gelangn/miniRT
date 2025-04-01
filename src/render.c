@@ -4,5 +4,5 @@
 
 void	render(t_global *global)
 {
-	calc_ray(global);
+	render(global);
 }

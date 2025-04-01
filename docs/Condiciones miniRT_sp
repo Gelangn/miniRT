@@ -163,10 +163,10 @@ PASOS A SEGUIR:
 6. Crear la función que libere la memoria utilizada. OK
 7. Crear la función que maneje los errores. OK
 8. Crear la función que maneje los rayos. OK
-8. Crear la función que maneje las intersecciones de los rayos con los objetos.
+8. Crear la función que maneje las intersecciones de los rayos con los objetos.OK
 9. Crear la función que maneje los objetos geométricos.
-	Esfera
-	Plano
+	Esfera OK
+	Plano 
 	Cilindro
 10. Crear la función que maneje las cámaras.
 11. Crear la función que maneje las luces.

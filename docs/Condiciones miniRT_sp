@@ -104,15 +104,15 @@ centradas en lo funcional, para facilitar el control de los elementos a crear.
 
 Para la realización de este proyecto necesitaremos:
 - Crear un parser que lea el archivo .rt y cree una estructura de datos
- con la información de la escena.
-- Crear una función que genere la imagen de la escena.
-- Crear una función que muestre la imagen en una ventana.
-- Crear una función que maneje los eventos de la ventana.
-- Crear una función que libere la memoria utilizada.
-- Crear una función que maneje los errores.
-- Generador de rayos.
-- Crear una función que maneje las intersecciones de los rayos con los objetos.
-- Crear una función que maneje los objetos geométricos.
+ con la información de la escena. OK
+- Crear una función que genere la imagen de la escena.OK
+- Crear una función que muestre la imagen en una ventana. OK
+- Crear una función que maneje los eventos de la ventana. OK
+- Crear una función que libere la memoria utilizada. OK
+- Crear una función que maneje los errores. OK
+- Generador de rayos. OK
+- Crear una función que maneje las intersecciones de los rayos con los objetos. OK
+- Crear una función que maneje los objetos geométricos. OK PARCIAL (ESFERA)
 - Crear una función que maneje las cámaras.
 - Crear una función que maneje las luces.
 - Crear una función que maneje los colores.

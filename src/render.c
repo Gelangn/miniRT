@@ -2,7 +2,7 @@
 
 #include "../inc/minirt.h"
 
-void	render(t_global *global)
+void	total_render(t_global *global)
 {
 	render(global);
 }

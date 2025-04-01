@@ -57,9 +57,10 @@ void		parse_cylinder(t_global *global, t_scene *scene, char *line);
 // float	roundingf(float value, int decimals);
 
 /* Raytracing */
-t_vector	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir);
+t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir);
 // t_vector	ray(t_global global, int pixel_x, int pixel_y);
-void		render(t_global *global);
+void 		total_render(t_global *global);
+void 		render(t_global *global);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

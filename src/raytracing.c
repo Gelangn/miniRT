@@ -16,28 +16,32 @@ float	calculate_discriminant(t_vector oc, t_vector ray_dir, float radius)
 	return (discriminant);
 }
 
-t_vector	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir)
+t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir)
 {
+	t_intersec	intersec;
 	float		t1;
 	float		t2;
 	float		discriminant;
 	t_vector	oc;
 
+	intersec.distance = INFINITY;
+	intersec.point = (t_vector){0, 0, 0};
 	oc = subtract(ray_origin, sphere->center);
 	discriminant = calculate_discriminant(oc, ray_dir, sphere->radius);
 	if (discriminant < 0)
-		return ((t_vector){0, 0, 0});
+		return (intersec);
 	t1 = (-dot(ray_dir, oc) - sqrt(discriminant)) / dot(ray_dir, ray_dir);
 	t2 = (-dot(ray_dir, oc) + sqrt(discriminant)) / dot(ray_dir, ray_dir);
 	if (t1 > 0 && t2 > 0)
-		return (add(ray_origin, multiply(ray_dir, fmin(t1, t2))));
+		intersec.distance = fmin(t1, t2);
 	else if (t1 > 0)
-		return (add(ray_origin, multiply(ray_dir, t1)));
+		intersec.distance = t1;
 	else if (t2 > 0)
-		return (add(ray_origin, multiply(ray_dir, t2)));
+		intersec.distance = t2;
 	else
-		return ((t_vector){0, 0, 0});
-	return ((t_vector){0, 0, 0});
+		return (intersec);
+	intersec.point = add(ray_origin, multiply(ray_dir, intersec.distance));
+	return (intersec);
 }
 
 t_vector	get_ray_direction(t_camera camera, int pixel_x, int pixel_y)
@@ -64,17 +68,63 @@ t_vector	get_ray_direction(t_camera camera, int pixel_x, int pixel_y)
 	return (ray_dir);
 }
 
+t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
+		t_vector ray_dir)
+{
+	t_sphere	*sphere;
+	//t_plane		*plane;
+	//t_cylinder	*cylinder;
+	t_intersec	temp_intersec;
+	t_intersec	closest_intersec;
+	int			i;
+
+	closest_intersec.distance = INFINITY;
+	closest_intersec.point = (t_vector){0, 0, 0};
+	sphere = global->scene.spheres;
+	//plane = global->scene.planes;
+	//cylinder = global->scene.cylinders;
+	i = 0;
+	while (i < global->scene.num_spheres)
+	{
+		temp_intersec = col_sp(&sphere[i], ray_origin, ray_dir);
+		if (temp_intersec.distance < closest_intersec.distance)
+			closest_intersec = temp_intersec;
+		i++;
+	}
+	/* // Verificamos los planos con while
+	i = 0; // Reiniciamos el contador para los planos
+	while (i < global->scene.num_planes)
+	{
+		temp_intersec = intersect_plane(&plane[i], ray_origin, ray_dir);
+		if (temp_intersec.distance < closest_intersec.distance)
+			closest_intersec = temp_intersec;
+		i++; // Aumentamos el contador
+	}
+	// Verificamos los cilindros con while
+	i = 0; // Reiniciamos el contador para los cilindros
+	while (i < global->scene.num_cylinders)
+	{
+		temp_intersec = intersect_cylinder(&cylinder[i], ray_origin, ray_dir);
+		if (temp_intersec.distance < closest_intersec.distance)
+			closest_intersec = temp_intersec;
+		i++; // Aumentamos el contador
+	} */
+	return (closest_intersec);
+}
+
 t_vector	render_pixel(t_global *global, int pixel_x, int pixel_y)
 {
 	t_vector	ray_dir;
 	t_vector	hit_point;
 	t_camera	camera;
 	t_sphere	*sphere;
+	t_intersec	intersec;
 
 	camera = global->scene.camera;
 	sphere = global->scene.spheres;
 	ray_dir = get_ray_direction(camera, pixel_x, pixel_y);
-	hit_point = col_sp(sphere, camera.position, ray_dir);
+	intersec = col_sp(sphere, camera.position, ray_dir);
+	hit_point = intersec.point;
 	if (magnitude(hit_point) > 0)
 		pixel_put(&global->img, pixel_x, pixel_y, rgb_to_int(sphere->color));
 	printf("Ray Dir: %f %f %f | Hit: %f %f %f\n", ray_dir.x, ray_dir.y,

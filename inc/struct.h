@@ -23,8 +23,8 @@ typedef struct s_point
 	float point_y; // y coordinate of the point in object space
 	float point_z; // z coordinate of the point in object space
 	int color;     // color of the point in the map
-	double scrn_x;  // coordinate x in the screen
-	double scrn_y;  // coordinate y in the screen
+	double scrn_x; // coordinate x in the screen
+	double scrn_y; // coordinate y in the screen
 }				t_point;
 
 // struct for mlx
@@ -50,26 +50,32 @@ typedef struct s_vector
 
 typedef struct s_ambient
 {
-	float		intensity;		// intensity of the ambient light
-	t_color		color;			// color of the ambient light
+	float intensity; // intensity of the ambient light
+	t_color color;   // color of the ambient light
 	int			initialized;
 }				t_ambient;
 
 typedef struct s_camera
 {
-	int 		fov;			// field of view (grados o radianes)
-	double 		dist_scrn;		// distance from the camera to the screen
-	t_vector 	position;		// position of the camera
-	t_vector 	orientation;	// orientation of the camera (vector)
+	int fov;              // field of view (grados o radianes)
+	double dist_scrn;     // distance from the camera to the screen
+	t_vector position;    // position of the camera
+	t_vector orientation; // orientation of the camera (vector)
 	int			initialized;
 }				t_camera;
 
 typedef struct s_light
 {
-	float		intensity;		// intensity of the light
-	t_vector	position;		// position of the light
+	float intensity;   // intensity of the light
+	t_vector position; // position of the light
 	int			initialized;
 }				t_light;
+
+typedef struct s_intersec
+{
+	float		distance;
+	t_vector	point;
+}				t_intersec;
 
 typedef struct s_sphere
 {
@@ -109,8 +115,8 @@ typedef struct s_scene
 
 	float scale; // scale of the scene
 
-	int 		fd;         // file descriptor
-	char 		*file_path; // path of the file
+	int fd;          // file descriptor
+	char *file_path; // path of the file
 	char		**lines;
 }				t_scene;
 
@@ -121,6 +127,7 @@ typedef struct s_global
 	t_img		img;
 	t_scene		scene;
 	t_point		*points;
+	t_intersec	intersec;
 }				t_global;
 
 #endif

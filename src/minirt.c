@@ -98,8 +98,7 @@ int	main(int argc, char **argv)
 	}
 	memset(global, 0, sizeof(t_global));
 	check_file_extension(global, argv[1]);
-	if ((initialize(global) != 0) || (initialize_scene(global,
-				&global->scene) != 0))
+	if ((initialize(global) != 0) || (initialize_scene(global, &global->scene) != 0))
 		finish(global, ERR_MEM);
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path);
@@ -109,6 +108,7 @@ int	main(int argc, char **argv)
 		finish(global, ERR_WIN);
 	// background(&global->img);
 	total_render(global);
+	save_bmp(&global->img, 640, 480, "ray_tracing.bmp");
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);

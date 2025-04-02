@@ -46,6 +46,7 @@ void		check_scene(t_global *global, t_scene *scene);
 // void	splited(t_scene *scene, int j, int i, int index);
 int			ft_atoi_base(const char *str, int base);
 int			comp_floats(float a, float b);
+int 		save_bmp(t_img *img, int width, int height, const char *filename);
 
 /* Parsing */
 void		parse_ambient(t_global *global, t_scene *scene, char *line);

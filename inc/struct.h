@@ -9,7 +9,7 @@
 // struct for bitscene
 typedef struct s_img
 {
-	void *img; // image to be drawn on the window
+	void 		*img; // image to be drawn on the window
 	char		*addr;
 	int			bits_per_pixel;
 	int			line_length;

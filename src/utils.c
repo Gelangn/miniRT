@@ -52,3 +52,82 @@ int	ft_atoi_base(const char *str, int base)
 	}
 	return (res * neg);
 }
+
+int	save_bmp(t_img *img, int width, int height, const char *filename)
+{
+	int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (fd == -1)
+	{
+		perror("Error al abrir el archivo");
+		return (-1);
+	}
+
+	int padding = (4 - (width * 3) % 4) % 4;
+	int filesize = 14 + 40 + (width * 3 + padding) * height;
+
+	unsigned char bmp_header[14] = {
+		'B',
+		'M',
+		filesize,
+		filesize >> 8,
+		filesize >> 16,
+		filesize >> 24,
+		0,
+		0,
+		0,
+		0,
+		54,
+		0,
+		0,
+		0,
+	};
+
+	unsigned char dib_header[40] = {
+		40, 0, 0, 0, width, width >> 8, width >> 16, width >> 24, height,
+			height >> 8, height >> 16, height >> 24, 1, 0, 24, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0,
+	};
+
+	if (write(fd, bmp_header, 14) != 14)
+	{
+		perror("Error al escribir la cabecera BMP");
+		close(fd);
+		return (-1);
+	}
+	if (write(fd, dib_header, 40) != 40)
+	{
+		perror("Error al escribir la cabecera DIB");
+		close(fd);
+		return (-1);
+	}
+
+	for (int y = height - 1; y >= 0; y--)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			int color = img->addr[y * width + x];
+			unsigned char b = color & 0xFF;
+			unsigned char g = (color >> 8) & 0xFF;
+			unsigned char r = (color >> 16) & 0xFF;
+			if (write(fd, &b, 1) != 1 || write(fd, &g, 1) != 1 || write(fd, &r,
+					1) != 1)
+			{
+				perror("Error al escribir datos de píxeles");
+				close(fd);
+				return (-1);
+			}
+		}
+		for (int i = 0; i < padding; i++)
+		{
+			if (write(fd, "\0", 1) != 1)
+			{
+				perror("Error al escribir relleno");
+				close(fd);
+				return (-1);
+			}
+		}
+	}
+
+	close(fd);
+	return (0);
+}

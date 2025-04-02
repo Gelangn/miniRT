@@ -106,9 +106,9 @@ typedef struct s_scene
 	t_camera	camera;
 	t_light		light;
 
-	int			num_spheres;
-	int			num_planes;
-	int			num_cylinders;
+	int			num_sp;
+	int			num_pl;
+	int			num_cy;
 	t_sphere	*spheres;
 	t_plane		*planes;
 	t_cylinder	*cylinders;

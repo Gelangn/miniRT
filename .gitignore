@@ -2,3 +2,4 @@ miniRT
 .a
 .o
 make
+.json

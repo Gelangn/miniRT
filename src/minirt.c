@@ -21,7 +21,6 @@
 		x++;
 	}
 } */
-
 static int	initialize(t_global *global)
 {
 	// global->scene.points = NULL;
@@ -54,15 +53,15 @@ static int	initialize_scene(t_global *global, t_scene *scene)
 	scene->spheres = malloc(sizeof(t_plane) * MAX_SPHERES);
 	if (!scene->spheres)
 		finish(global, ERR_MEM);
-	scene->num_spheres = 0;
+	scene->num_sp = 0;
 	scene->planes = malloc(sizeof(t_plane) * MAX_PLANES);
 	if (!scene->planes)
 		finish(global, ERR_MEM);
-	scene->num_planes = 0;
+	scene->num_pl = 0;
 	scene->cylinders = malloc(sizeof(t_plane) * MAX_CYLINDERS);
 	if (!scene->cylinders)
 		finish(global, ERR_MEM);
-	scene->num_cylinders = 0;
+	scene->num_cy = 0;
 	return (MLX_SUCCESS);
 }
 
@@ -108,7 +107,7 @@ int	main(int argc, char **argv)
 	global->vars.mlx_win = new_window(global);
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);
-	//background(&global->img);
+	// background(&global->img);
 	total_render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);

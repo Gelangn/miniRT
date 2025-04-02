@@ -7,12 +7,14 @@ void	check_scene(t_global *global, t_scene *scene)
 	if (scene->ambient.initialized == 0 || scene->camera.initialized == 0
 		|| scene->light.initialized == 0)
 		finish(global, ERR_SCENE);
-	if (scene->num_spheres < 0 || scene->num_spheres > MAX_SPHERES)
+	if (scene->num_sp > MAX_SPHERES)
 		finish(global, ERR_SPHERE);
-	if (scene->num_planes < 0 || scene->num_planes > MAX_PLANES)
+	if (scene->num_pl > MAX_PLANES)
 		finish(global, ERR_PLANE);
-	if (scene->num_cylinders < 0 || scene->num_cylinders > MAX_CYLINDERS)
+	if (scene->num_cy > MAX_CYLINDERS)
 		finish(global, ERR_CYLINDER);
+	if (scene->num_sp == 0 && scene->num_pl == 0 && scene->num_cy == 0)
+		finish(global, ERR_SCENE);
 }
 // Function to read and parse the scene file
 void	read_scene(t_global *global)

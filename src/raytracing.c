@@ -72,19 +72,19 @@ t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 		t_vector ray_dir)
 {
 	t_sphere	*sphere;
-	//t_plane		*plane;
-	//t_cylinder	*cylinder;
 	t_intersec	temp_intersec;
 	t_intersec	closest_intersec;
 	int			i;
 
+	// t_plane		*plane;
+	// t_cylinder	*cylinder;
 	closest_intersec.distance = INFINITY;
 	closest_intersec.point = (t_vector){0, 0, 0};
 	sphere = global->scene.spheres;
-	//plane = global->scene.planes;
-	//cylinder = global->scene.cylinders;
+	// plane = global->scene.planes;
+	// cylinder = global->scene.cylinders;
 	i = 0;
-	while (i < global->scene.num_spheres)
+	while (i < global->scene.num_sp)
 	{
 		temp_intersec = col_sp(&sphere[i], ray_origin, ray_dir);
 		if (temp_intersec.distance < closest_intersec.distance)
@@ -93,7 +93,7 @@ t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 	}
 	/* // Verificamos los planos con while
 	i = 0; // Reiniciamos el contador para los planos
-	while (i < global->scene.num_planes)
+	while (i < global->scene.num_pl)
 	{
 		temp_intersec = intersect_plane(&plane[i], ray_origin, ray_dir);
 		if (temp_intersec.distance < closest_intersec.distance)
@@ -102,7 +102,7 @@ t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 	}
 	// Verificamos los cilindros con while
 	i = 0; // Reiniciamos el contador para los cilindros
-	while (i < global->scene.num_cylinders)
+	while (i < global->scene.num_cy)
 	{
 		temp_intersec = intersect_cylinder(&cylinder[i], ray_origin, ray_dir);
 		if (temp_intersec.distance < closest_intersec.distance)

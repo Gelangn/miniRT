@@ -15,17 +15,15 @@ static void	replace_tabs_with_spaces(char *str)
 // Function to round a float number to a given number of decimals
 /* float	roundingf(float value, int decimals)
 {
-	float	factor;
+		float	factor;
+  char **tokens;
 
-	factor = powf(10.0, decimals);
-	return (roundf(value * factor) / factor);
+		factor = powf(10.0, decimals);
+		return (roundf(value * factor) / factor);
 } */
-
 // Función para parsear un vector
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
 {
-	char	**tokens;
-
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
@@ -134,10 +132,11 @@ void	parse_sphere(t_global *global, t_scene *scene, char *line)
 	tokens++;
 	parse_vector(global, *tokens, &sphere.center);
 	tokens++;
-	sphere.radius = parse_float_token(global, tokens) / 2; // Recibimos el diámetro
+	sphere.radius = parse_float_token(global, tokens) / 2;
+		// Recibimos el diámetro
 	tokens++;
 	parse_color(global, *tokens, &sphere.color);
-	scene->spheres[scene->num_spheres++] = sphere;
+	scene->spheres[scene->num_sp++] = sphere;
 	tokens -= 3;
 	dbl_free(tokens);
 }
@@ -158,7 +157,7 @@ void	parse_plane(t_global *global, t_scene *scene, char *line)
 	parse_vector(global, *tokens, &plane.normal);
 	tokens++;
 	parse_color(global, *tokens, &plane.color);
-	scene->planes[scene->num_planes++] = plane;
+	scene->planes[scene->num_pl++] = plane;
 	tokens -= 3;
 	dbl_free(tokens);
 }
@@ -183,8 +182,7 @@ void	parse_cylinder(t_global *global, t_scene *scene, char *line)
 	cylinder.height = parse_float_token(global, tokens);
 	tokens++;
 	parse_color(global, *tokens, &cylinder.color);
-	scene->cylinders[scene->num_cylinders++] = cylinder;
+	scene->cylinders[scene->num_cy++] = cylinder;
 	tokens -= 5;
 	dbl_free(tokens);
 }
-

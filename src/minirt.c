@@ -47,9 +47,9 @@ static int	initialize_scene(t_global *global, t_scene *scene)
 	scene->ambient = (t_ambient){0};
 	scene->camera = (t_camera){0};
 	scene->light = (t_light){0};
-	scene->ambient.initialized = 0;
-	scene->camera.initialized = 0;
-	scene->light.initialized = 0;
+	scene->ambient.init = 0;
+	scene->camera.init = 0;
+	scene->light.init = 0;
 	scene->spheres = malloc(sizeof(t_plane) * MAX_SPHERES);
 	if (!scene->spheres)
 		finish(global, ERR_MEM);

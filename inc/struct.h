@@ -50,25 +50,25 @@ typedef struct s_vector
 
 typedef struct s_ambient
 {
-	float intensity; // intensity of the ambient light
-	t_color color;   // color of the ambient light
-	int			initialized;
+	float 		intensity; // intensity of the ambient light
+	t_color 	color;   // color of the ambient light
+	int			init;
 }				t_ambient;
 
 typedef struct s_camera
 {
-	int fov;              // field of view (grados o radianes)
-	double dist_scrn;     // distance from the camera to the screen
-	t_vector position;    // position of the camera
-	t_vector orientation; // orientation of the camera (vector)
-	int			initialized;
+	int 		fov;              // field of view (grados o radianes)
+	double 		dist_scrn;     // distance from the camera to the screen
+	t_vector 	position;    // position of the camera
+	t_vector 	orientation; // orientation of the camera (vector)
+	int			init;
 }				t_camera;
 
 typedef struct s_light
 {
-	float intensity;   // intensity of the light
-	t_vector position; // position of the light
-	int			initialized;
+	float 		intensity;   // intensity of the light
+	t_vector 	position; // position of the light
+	int			init;
 }				t_light;
 
 typedef struct s_intersec

@@ -24,6 +24,8 @@ static void	replace_tabs_with_spaces(char *str)
 // Función para parsear un vector
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
 {
+	char **tokens;
+	
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
@@ -70,13 +72,13 @@ void	parse_ambient(t_global *global, t_scene *scene, char *line)
 
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
-	if (!tokens || scene->ambient.initialized)
+	if (!tokens || scene->ambient.init)
 		finish(global, ERR_AMBIENT);
 	tokens++;
 	scene->ambient.intensity = parse_float_token(global, tokens);
 	tokens++;
 	parse_color(global, *tokens, &scene->ambient.color);
-	scene->ambient.initialized = 1;
+	scene->ambient.init = 1;
 	tokens -= 2;
 	dbl_free(tokens);
 }
@@ -88,7 +90,7 @@ void	parse_camera(t_global *global, t_scene *scene, char *line)
 
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
-	if (!tokens || scene->camera.initialized)
+	if (!tokens || scene->camera.init)
 		finish(global, ERR_CAMERA);
 	tokens++;
 	parse_vector(global, *tokens, &scene->camera.position);
@@ -96,7 +98,7 @@ void	parse_camera(t_global *global, t_scene *scene, char *line)
 	parse_vector(global, *tokens, &scene->camera.orientation);
 	tokens++;
 	scene->camera.fov = parse_int_token(global, tokens);
-	scene->camera.initialized = 1;
+	scene->camera.init = 1;
 	tokens -= 3;
 	dbl_free(tokens);
 }
@@ -108,13 +110,13 @@ void	parse_light(t_global *global, t_scene *scene, char *line)
 
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
-	if (!tokens || scene->light.initialized)
+	if (!tokens || scene->light.init)
 		finish(global, ERR_LIGHT);
 	tokens++;
 	parse_vector(global, *tokens, &scene->light.position);
 	tokens++;
 	scene->light.intensity = parse_float_token(global, tokens);
-	scene->light.initialized = 1;
+	scene->light.init = 1;
 	tokens -= 2;
 	dbl_free(tokens);
 }
@@ -133,7 +135,7 @@ void	parse_sphere(t_global *global, t_scene *scene, char *line)
 	parse_vector(global, *tokens, &sphere.center);
 	tokens++;
 	sphere.radius = parse_float_token(global, tokens) / 2;
-		// Recibimos el diámetro
+	// Recibimos el diámetro
 	tokens++;
 	parse_color(global, *tokens, &sphere.color);
 	scene->spheres[scene->num_sp++] = sphere;

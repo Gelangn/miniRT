@@ -12,6 +12,7 @@ t_vector	add(t_vector a, t_vector b)
 	result.z = a.z + b.z;
 	return (result);
 }
+
 // Function to subtract tuples
 t_vector	subtract(t_vector a, t_vector b)
 {
@@ -22,11 +23,13 @@ t_vector	subtract(t_vector a, t_vector b)
 	result.z = a.z - b.z;
 	return (result);
 }
+
 // Function to calculate the dot product (producto escalar) of two vectors
 float	dot(t_vector a, t_vector b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
+
 // Function to multiply a tuple by a scalar
 t_vector	multiply(t_vector a, float scalar)
 {
@@ -37,6 +40,7 @@ t_vector	multiply(t_vector a, float scalar)
 	result.z = a.z * scalar;
 	return (result);
 }
+
 // Function to divide a tuple by a scalar
 t_vector	divide(t_vector a, float scalar)
 {
@@ -47,11 +51,13 @@ t_vector	divide(t_vector a, float scalar)
 	result.z = a.z / scalar;
 	return (result);
 }
+
 // Function to calculate the magnitude of a vector
 float	magnitude(t_vector a)
 {
 	return (sqrt(a.x * a.x + a.y * a.y + a.z * a.z)); // sqrt(x^2 + y^2 + z^2)
 }
+
 // Function to normalize a vector
 t_vector	normalize(t_vector a)
 {
@@ -64,6 +70,7 @@ t_vector	normalize(t_vector a)
 	result.z = a.z / mag;
 	return (result);
 }
+
 // Function to calculate the cross product of two vectors
 t_vector	cross(t_vector a, t_vector b)
 {
@@ -74,6 +81,7 @@ t_vector	cross(t_vector a, t_vector b)
 	result.z = a.x * b.y - a.y * b.x;
 	return (result);
 }
+
 // Function to reflect a vector
 t_vector	reflect(t_vector a, t_vector b)
 {

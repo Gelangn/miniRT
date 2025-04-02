@@ -4,8 +4,8 @@
 
 void	check_scene(t_global *global, t_scene *scene)
 {
-	if (scene->ambient.initialized == 0 || scene->camera.initialized == 0
-		|| scene->light.initialized == 0)
+	if (scene->ambient.init == 0 || scene->camera.init == 0
+		|| scene->light.init == 0)
 		finish(global, ERR_SCENE);
 	if (scene->num_sp > MAX_SPHERES)
 		finish(global, ERR_SPHERE);

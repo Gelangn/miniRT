@@ -18,6 +18,7 @@ static void	replace_tabs_with_spaces(char *str)
 		float	factor;
   char **tokens;
 	char	**tokens;
+	char	**tokens;
 
 		factor = powf(10.0, decimals);
 		return (roundf(value * factor) / factor);

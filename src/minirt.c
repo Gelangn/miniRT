@@ -109,7 +109,7 @@ int	main(int argc, char **argv)
 		finish(global, ERR_WIN);
 	// background(&global->img);
 	total_render(global);
-	save_bmp(&global->img, 640, 480, "ray_tracing.bmp");
+	save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN, "ray_tracing.bmp");
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);

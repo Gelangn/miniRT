@@ -7,6 +7,7 @@
 {
 	int		index;
 	char	*dst;
+	char	*dst;
 
 	index = 0;
 	while (index < global->scene.nr_elems)

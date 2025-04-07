@@ -53,21 +53,27 @@ int	ft_atoi_base(const char *str, int base)
 	return (res * neg);
 }
 
+int	is_valid_pixel(int x, int y, int width, int height)
+{
+	return (x >= 0 && x < width && y >= 0 && y < height);
+}
+
 void	write_bmp_header(int fd, int width, int height)
 {
 	unsigned char	header[54] = {0};
 
 	header[0] = 'B';
 	header[1] = 'M';
-	*(int *)&header[2] = 54 + (width * height * 4); // Tamaño total del archivo
-	header[10] = 54;
-	// Offset donde empiezan los datos de la imagen
-	header[14] = 40; // Tamaño del encabezado DIB
+	*(int *)&header[2] = 54 + (width * height * 3 + height * ((4 - (width * 3)
+					% 4) % 4)); // Tamaño total del archivo con padding
+	header[10] = 54;                                                                      
+		// Offset donde empiezan los datos de la imagen
+	header[14] = 40;                                                                      
+		// Tamaño del encabezado DIB
 	*(int *)&header[18] = width;
 	*(int *)&header[22] = -height; // Altura negativa para que no se invierta
 	header[26] = 1;                // Planos
-	header[28] = 32;               // Bits por píxel (RGBA)
-	// Verifica el valor de retorno de write
+	header[28] = 24;               // Bits por píxel (RGB - 24 bits)
 	if (write(fd, header, 54) != 54)
 	{
 		perror("Error al escribir el encabezado BMP");
@@ -78,6 +84,11 @@ void	write_bmp_header(int fd, int width, int height)
 
 void	save_bmp(t_img *img, int width, int height, const char *filename)
 {
+	// Información de diagnóstico
+	ft_printf("Guardando imagen: width=%d, height=%d\n", width, height);
+	ft_printf("img->bits_per_pixel=%d, img->line_length=%d\n",
+		img->bits_per_pixel, img->line_length);
+
 	int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd < 0)
 	{
@@ -92,6 +103,9 @@ void	save_bmp(t_img *img, int width, int height, const char *filename)
 	{
 		for (int x = 0; x < width; x++)
 		{
+			if (!is_valid_pixel(x, y, width, height))
+				continue ;
+
 			// Calcula la posición del píxel en el buffer de la imagen
 			char *pixel = img->addr + (y * img->line_length + x
 					* (img->bits_per_pixel / 8));

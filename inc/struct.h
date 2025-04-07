@@ -113,10 +113,10 @@ typedef struct s_scene
 	t_plane		*planes;
 	t_cylinder	*cylinders;
 
-	float		scale; 		// scale of the scene
+	float scale; // scale of the scene
 
-	int			fd;			// file descriptor
-	char		*file_path; // path of the file
+	int fd;          // file descriptor
+	char *file_path; // path of the file
 	char		**lines;
 }				t_scene;
 

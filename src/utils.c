@@ -53,81 +53,78 @@ int	ft_atoi_base(const char *str, int base)
 	return (res * neg);
 }
 
-int	save_bmp(t_img *img, int width, int height, const char *filename)
+void	write_bmp_header(int fd, int width, int height)
+{
+	unsigned char	header[54] = {0};
+
+	header[0] = 'B';
+	header[1] = 'M';
+	*(int *)&header[2] = 54 + (width * height * 4); // Tamaño total del archivo
+	header[10] = 54;
+	// Offset donde empiezan los datos de la imagen
+	header[14] = 40; // Tamaño del encabezado DIB
+	*(int *)&header[18] = width;
+	*(int *)&header[22] = -height; // Altura negativa para que no se invierta
+	header[26] = 1;                // Planos
+	header[28] = 32;               // Bits por píxel (RGBA)
+	// Verifica el valor de retorno de write
+	if (write(fd, header, 54) != 54)
+	{
+		perror("Error al escribir el encabezado BMP");
+		close(fd);
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	save_bmp(t_img *img, int width, int height, const char *filename)
 {
 	int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (fd == -1)
+	if (fd < 0)
 	{
 		perror("Error al abrir el archivo");
-		return (-1);
+		return ;
 	}
 
-	int padding = (4 - (width * 3) % 4) % 4;
-	int filesize = 14 + 40 + (width * 3 + padding) * height;
+	write_bmp_header(fd, width, height); // Escribir la cabecera BMP
 
-	unsigned char bmp_header[14] = {
-		'B',
-		'M',
-		filesize,
-		filesize >> 8,
-		filesize >> 16,
-		filesize >> 24,
-		0,
-		0,
-		0,
-		0,
-		54,
-		0,
-		0,
-		0,
-	};
-
-	unsigned char dib_header[40] = {
-		40, 0, 0, 0, width, width >> 8, width >> 16, width >> 24, height,
-			height >> 8, height >> 16, height >> 24, 1, 0, 24, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0,
-	};
-
-	if (write(fd, bmp_header, 14) != 14)
-	{
-		perror("Error al escribir la cabecera BMP");
-		close(fd);
-		return (-1);
-	}
-	if (write(fd, dib_header, 40) != 40)
-	{
-		perror("Error al escribir la cabecera DIB");
-		close(fd);
-		return (-1);
-	}
-
+	// Recorre los píxeles desde la parte inferior hacia arriba (formato BMP)
 	for (int y = height - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < width; x++)
 		{
-			int color = img->addr[y * width + x];
-			unsigned char b = color & 0xFF;
-			unsigned char g = (color >> 8) & 0xFF;
-			unsigned char r = (color >> 16) & 0xFF;
+			// Calcula la posición del píxel en el buffer de la imagen
+			char *pixel = img->addr + (y * img->line_length + x
+					* (img->bits_per_pixel / 8));
+
+			// Extrae los componentes de color (asumiendo formato BGRA)
+			unsigned char b = pixel[0];
+			unsigned char g = pixel[1];
+			unsigned char r = pixel[2];
+
+			// Escribe los componentes de color en el archivo BMP
 			if (write(fd, &b, 1) != 1 || write(fd, &g, 1) != 1 || write(fd, &r,
 					1) != 1)
 			{
 				perror("Error al escribir datos de píxeles");
 				close(fd);
-				return (-1);
+				return ;
 			}
 		}
-		for (int i = 0; i < padding; i++)
+
+		// Escribe el relleno (padding) para alinear las filas a múltiplos de 4 bytes
+		int padding = (4 - (width * 3) % 4) % 4;
+		int i = -1;
+		while (++i < padding)
 		{
 			if (write(fd, "\0", 1) != 1)
 			{
 				perror("Error al escribir relleno");
 				close(fd);
-				return (-1);
+				return ;
 			}
 		}
 	}
 
 	close(fd);
-	return (0);
+	ft_printf("Imagen guardada como %s\n", filename);
 }

@@ -17,6 +17,7 @@ static void	replace_tabs_with_spaces(char *str)
 {
 		float	factor;
   char **tokens;
+	char	**tokens;
 
 		factor = powf(10.0, decimals);
 		return (roundf(value * factor) / factor);
@@ -24,8 +25,6 @@ static void	replace_tabs_with_spaces(char *str)
 // Función para parsear un vector
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
 {
-	char **tokens;
-	
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		finish(global, ERR_PARSE); // Comprobar si tokens es nulo

@@ -46,7 +46,8 @@ void		check_scene(t_global *global, t_scene *scene);
 // void	splited(t_scene *scene, int j, int i, int index);
 int			ft_atoi_base(const char *str, int base);
 int			comp_floats(float a, float b);
-int 		save_bmp(t_img *img, int width, int height, const char *filename);
+void		save_bmp(t_img *img, int width, int height, const char *filename);
+void		write_bmp_header(int fd, int width, int height);
 
 /* Parsing */
 void		parse_ambient(t_global *global, t_scene *scene, char *line);
@@ -60,8 +61,8 @@ void		parse_cylinder(t_global *global, t_scene *scene, char *line);
 /* Raytracing */
 t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir);
 // t_vector	ray(t_global global, int pixel_x, int pixel_y);
-void 		total_render(t_global *global);
-void 		render(t_global *global);
+void		total_render(t_global *global);
+void		render(t_global *global);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

@@ -38,8 +38,7 @@ int	handle_mouse_move(int x, int y)
 
 int	handle_mouse_scroll(int button, int x, int y, t_global *global)
 {
-	(void)global; // Marca el parámetro como no utilizado
-
+	(void)global;    // Marca el parámetro como no utilizado
 	if (button == 4) // Scroll up
 	{
 		ft_printf("Mouse scroll up at position (%d, %d)\n", x, y);

@@ -9,7 +9,7 @@
 // struct for bitscene
 typedef struct s_img
 {
-	void 		*img; // image to be drawn on the window
+	void *img; // image to be drawn on the window
 	char		*addr;
 	int			bits_per_pixel;
 	int			line_length;
@@ -50,24 +50,24 @@ typedef struct s_vector
 
 typedef struct s_ambient
 {
-	float 		intensity; // intensity of the ambient light
-	t_color 	color;   // color of the ambient light
+	float intensity; // intensity of the ambient light
+	t_color color;   // color of the ambient light
 	int			init;
 }				t_ambient;
 
 typedef struct s_camera
 {
-	int 		fov;              // field of view (grados o radianes)
-	double 		dist_scrn;     // distance from the camera to the screen
-	t_vector 	position;    // position of the camera
-	t_vector 	orientation; // orientation of the camera (vector)
+	int fov;              // field of view (grados o radianes)
+	double dist_scrn;     // distance from the camera to the screen
+	t_vector position;    // position of the camera
+	t_vector orientation; // orientation of the camera (vector)
 	int			init;
 }				t_camera;
 
 typedef struct s_light
 {
-	float 		intensity;   // intensity of the light
-	t_vector 	position; // position of the light
+	float intensity;   // intensity of the light
+	t_vector position; // position of the light
 	int			init;
 }				t_light;
 
@@ -113,10 +113,10 @@ typedef struct s_scene
 	t_plane		*planes;
 	t_cylinder	*cylinders;
 
-	float scale; // scale of the scene
+	float		scale; 		// scale of the scene
 
-	int fd;          // file descriptor
-	char *file_path; // path of the file
+	int			fd;			// file descriptor
+	char		*file_path; // path of the file
 	char		**lines;
 }				t_scene;
 

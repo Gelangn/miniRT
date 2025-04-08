@@ -163,7 +163,7 @@ t_vector	get_ray_direction(t_camera camera, int pixel_x, int pixel_y)
 	t_vector	ray_dir;
 
 	aspect_ratio = (float)WIN_W / (float)WIN_H;
-	scrn_w = 2.0 * tan((camera.fov * PI / 180.0) / 2.0);
+	scrn_w = 2.0 * DSCR * tan((camera.fov * PI / 180.0) / 2.0);
 	scrn_h = scrn_w / aspect_ratio;
 	forward = normalize(camera.orientation);
 	right = normalize(cross((t_vector){0, 1, 0}, forward));

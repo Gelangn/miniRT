@@ -14,7 +14,7 @@ void	finish(t_global *global, const char *message)
 			close_window(global);
 		free_global(global);
 	}
-	ft_printf("Exiting program\n");
+	printf("Exiting program\n");
 	exit(1);
 }
 
@@ -66,10 +66,10 @@ void	write_bmp_header(int fd, int width, int height)
 	header[1] = 'M';
 	*(int *)&header[2] = 54 + (width * height * 3 + height * ((4 - (width * 3)
 					% 4) % 4)); // Tamaño total del archivo con padding
-	header[10] = 54;                                                                      
-		// Offset donde empiezan los datos de la imagen
-	header[14] = 40;                                                                      
-		// Tamaño del encabezado DIB
+	header[10] = 54;
+	// Offset donde empiezan los datos de la imagen
+	header[14] = 40;
+	// Tamaño del encabezado DIB
 	*(int *)&header[18] = width;
 	*(int *)&header[22] = -height; // Altura negativa para que no se invierta
 	header[26] = 1;                // Planos
@@ -82,63 +82,108 @@ void	write_bmp_header(int fd, int width, int height)
 	}
 }
 
-void	save_bmp(t_img *img, int width, int height, const char *filename)
+// Abre el archivo para guardar la imagen BMP
+int	open_bmp_file(const char *filename)
 {
-	// Información de diagnóstico
-	ft_printf("Guardando imagen: width=%d, height=%d\n", width, height);
-	ft_printf("img->bits_per_pixel=%d, img->line_length=%d\n",
-		img->bits_per_pixel, img->line_length);
+	int	fd;
 
-	int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd < 0)
 	{
 		perror("Error al abrir el archivo");
-		return ;
 	}
+	return (fd);
+}
 
-	write_bmp_header(fd, width, height); // Escribir la cabecera BMP
+// Escribe un píxel en el archivo
+int	write_pixel(int fd, char *pixel)
+{
+	unsigned char	b;
+	unsigned char	g;
+	unsigned char	r;
 
-	// Recorre los píxeles desde la parte inferior hacia arriba (formato BMP)
-	for (int y = height - 1; y >= 0; y--)
+	b = pixel[0];
+	g = pixel[1];
+	r = pixel[2];
+	if (write(fd, &b, 1) != 1 || write(fd, &g, 1) != 1 || write(fd, &r, 1) != 1)
 	{
-		for (int x = 0; x < width; x++)
+		perror("Error al escribir datos de píxeles");
+		return (0);
+	}
+	return (1);
+}
+
+// Escribe el padding al final de cada fila
+int	write_padding(int fd, int width)
+{
+	int	padding;
+	int	i;
+
+	padding = (4 - (width * 3) % 4) % 4;
+	i = 0;
+	while (i < padding)
+	{
+		if (write(fd, "\0", 1) != 1)
 		{
-			if (!is_valid_pixel(x, y, width, height))
-				continue ;
-
-			// Calcula la posición del píxel en el buffer de la imagen
-			char *pixel = img->addr + (y * img->line_length + x
-					* (img->bits_per_pixel / 8));
-
-			// Extrae los componentes de color (asumiendo formato BGRA)
-			unsigned char b = pixel[0];
-			unsigned char g = pixel[1];
-			unsigned char r = pixel[2];
-
-			// Escribe los componentes de color en el archivo BMP
-			if (write(fd, &b, 1) != 1 || write(fd, &g, 1) != 1 || write(fd, &r,
-					1) != 1)
-			{
-				perror("Error al escribir datos de píxeles");
-				close(fd);
-				return ;
-			}
+			perror("Error al escribir relleno");
+			return (0);
 		}
+		i++;
+	}
+	return (1);
+}
 
-		// Escribe el relleno (padding) para alinear las filas a múltiplos de 4 bytes
-		int padding = (4 - (width * 3) % 4) % 4;
-		int i = -1;
-		while (++i < padding)
+// Escribe una fila de píxeles
+int	write_row(int fd, t_img *img, int y, int width)
+{
+	int		x;
+	char	*pixel;
+
+	x = 0;
+	while (x < width)
+	{
+		if (!is_valid_pixel(x, y, width, -1))
 		{
-			if (write(fd, "\0", 1) != 1)
-			{
-				perror("Error al escribir relleno");
-				close(fd);
-				return ;
-			}
+			x++;
+			continue ;
 		}
+		pixel = img->addr + (y * img->line_length + x * (img->bits_per_pixel
+					/ 8));
+		if (!write_pixel(fd, pixel))
+			return (0);
+		x++;
+	}
+	return (write_padding(fd, width));
+}
+
+// Función principal que coordina el guardado de la imagen
+void	save_bmp(t_img *img, int width, int height, const char *filename)
+{
+	int fd;
+	int y;
+
+	// Información de diagnóstico
+	printf("Saving image: width=%d, height=%d\n", width, height);
+	printf("img->bits_per_pixel=%d, img->line_length=%d\n", img->bits_per_pixel,
+		img->line_length);
+
+	fd = open_bmp_file(filename);
+	if (fd < 0)
+		return ;
+
+	write_bmp_header(fd, width, height);
+
+	y = height - 1;
+	while (y >= 0)
+	{
+		if (!write_row(fd, img, y, width))
+		{
+			close(fd);
+			return ;
+		}
+		y--;
 	}
 
 	close(fd);
-	ft_printf("Imagen guardada como %s\n", filename);
+	printf("Image saved as %s\n", filename);
 }

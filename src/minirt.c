@@ -21,24 +21,24 @@
 		x++;
 	}
 } */
-static int	initialize(t_global *global)
+int	init(t_global *global)
 {
 	// global->scene.points = NULL;
 	global->img.img = NULL;
 	global->img.addr = NULL;
 	global->scene = (t_scene){0};
-	ft_printf("Initializing MLX\n");
+	printf("Initializing MLX\n");
 	global->vars.mlx_conn = mlx_init();
 	if (!global->vars.mlx_conn)
 	{
 		perror("Error initializing MLX");
 		return (MLX_ERROR);
 	}
-	ft_printf("Initialized MLX OK\n");
+	printf("Initialized MLX OK\n");
 	return (MLX_SUCCESS);
 }
 
-static int	initialize_scene(t_global *global, t_scene *scene)
+static int	init_scene(t_global *global, t_scene *scene)
 {
 	scene->file_path = NULL;
 	scene->fd = 0;
@@ -83,23 +83,13 @@ int	main(int argc, char **argv)
 
 	// Inicializa global a cero para evitar punteros no válidos
 	if (argc != 2)
-	{
-		// ft_printf(ERR_ARGS);
-		fprintf(stderr, "Usage: %s <scene_file>\n", argv[0]);
-		return (EXIT_FAILURE);
-	}
+		finish(NULL, ERR_ARGS);
 	global = (t_global *)malloc(sizeof(t_global));
 	if (!global)
-	{
-		perror("Error allocating memory for global");
-		if (global)
-			free(global);
-		return (EXIT_FAILURE);
-	}
+		finish(NULL, ERR_MALLOC);
 	memset(global, 0, sizeof(t_global));
 	check_file_extension(global, argv[1]);
-	if ((initialize(global) != 0) || (initialize_scene(global,
-				&global->scene) != 0))
+	if ((init(global) != 0) || (init_scene(global, &global->scene) != 0))
 		finish(global, ERR_MEM);
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path);

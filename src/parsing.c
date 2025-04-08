@@ -26,9 +26,11 @@ static void	replace_tabs_with_spaces(char *str)
 // Función para parsear un vector
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
 {
+	char	**tokens;
+	
 	tokens = ft_split(str, ',');
 	if (!tokens)
-		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
+		finish(global, ERR_PARSE);
 	vector->x = ft_atof(tokens[0]);
 	vector->y = ft_atof(tokens[1]);
 	vector->z = ft_atof(tokens[2]);
@@ -42,7 +44,7 @@ static void	parse_color(t_global *global, char *str, t_color *color)
 
 	tokens = ft_split(str, ',');
 	if (!tokens)
-		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
+		finish(global, ERR_PARSE);
 	color->r = ft_atoi(tokens[0]);
 	color->g = ft_atoi(tokens[1]);
 	color->b = ft_atoi(tokens[2]);
@@ -53,7 +55,7 @@ static void	parse_color(t_global *global, char *str, t_color *color)
 static float	parse_float_token(t_global *global, char **tokens)
 {
 	if (!*tokens)
-		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
+		finish(global, ERR_PARSE);
 	return (ft_atof(*tokens));
 }
 
@@ -61,7 +63,7 @@ static float	parse_float_token(t_global *global, char **tokens)
 static int	parse_int_token(t_global *global, char **tokens)
 {
 	if (!*tokens)
-		finish(global, ERR_PARSE); // Comprobar si tokens es nulo
+		finish(global, ERR_PARSE);
 	return (ft_atoi(*tokens));
 }
 

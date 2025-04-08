@@ -6,38 +6,38 @@ int	close_window(t_global *global)
 {
 	if (!global)
 	{
-		ft_printf("Error: global is NULL\n");
+		printf("Error: global is NULL\n");
 		return (MLX_ERROR);
 	}
-	ft_printf("Closing window\n");
+	printf("Closing window\n");
 	if (global->img.img)
 	{
-		ft_printf("Destroying image\n");
+		printf("Destroying image\n");
 		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
 		global->img.img = NULL;
 	}
 	if (global->vars.mlx_win)
 	{
-		ft_printf("Destroying window\n");
+		printf("Destroying window\n");
 		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
 		global->vars.mlx_win = NULL;
 	}
 	if (global->vars.mlx_conn)
 	{
-		ft_printf("Destroying display\n");
+		printf("Destroying display\n");
 		mlx_destroy_display(global->vars.mlx_conn);
 		free(global->vars.mlx_conn);
 		global->vars.mlx_conn = NULL;
 	}
 	finish(global, NULL);
-	ft_printf("Window closed\n");
+	printf("Window closed\n");
 	exit(0);
 	return (MLX_SUCCESS);
 }
 
 void	*new_window(t_global *global)
 {
-	ft_printf("Creating window\n");
+	printf("Creating window\n");
 	global->vars.mlx_win = mlx_new_window(global->vars.mlx_conn, WIN_W, WIN_H,
 			"Welcome to miniRT - anavas-g");
 	if (!global->vars.mlx_win)
@@ -56,7 +56,7 @@ void	*new_window(t_global *global)
 	global->img.addr = mlx_get_data_addr(global->img.img,
 			&global->img.bits_per_pixel, &global->img.line_length,
 			&global->img.endian);
-	ft_printf("Window created\n");
+	printf("Window created\n");
 	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .89,
 		WIN_H * .96, 0x00FF0000, "By anavas-g");
 	return (global->vars.mlx_win);

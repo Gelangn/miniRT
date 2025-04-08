@@ -20,12 +20,12 @@ int	handle_no_event(void)
 
 int	mouse_press_hook(int button, int x, int y)
 {
-	ft_printf("Mouse button %d pressed at position (%d, %d)\n", button, x, y);
+	printf("Mouse button %d pressed at position (%d, %d)\n", button, x, y);
 	return (0);
 }
 
 int	mouse_release_hook(int button, int x, int y)
 {
-	ft_printf("Mouse button %d released at position (%d, %d)\n", button, x, y);
+	printf("Mouse button %d released at position (%d, %d)\n", button, x, y);
 	return (0);
 }

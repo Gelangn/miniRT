@@ -6,6 +6,9 @@
 # include <stddef.h>
 
 /***** PROTOTYPE *****/
+/* Main */
+int			init(t_global *global);
+
 /* MLX y eventos  */
 int			handle_no_event(void);
 int			handle_keypress(int keysym, t_global *global);
@@ -48,6 +51,10 @@ int			ft_atoi_base(const char *str, int base);
 int			comp_floats(float a, float b);
 void		save_bmp(t_img *img, int width, int height, const char *filename);
 void		write_bmp_header(int fd, int width, int height);
+int			open_bmp_file(const char *filename);
+int			write_pixel(int fd, char *pixel);
+int			write_padding(int fd, int width);
+int			write_row(int fd, t_img *img, int y, int width);
 
 /* Parsing */
 void		parse_ambient(t_global *global, t_scene *scene, char *line);
@@ -63,6 +70,10 @@ t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir);
 // t_vector	ray(t_global global, int pixel_x, int pixel_y);
 void		total_render(t_global *global);
 void		render(t_global *global);
+float		calculate_discriminant(t_vector oc, t_vector ray_dir, float radius);
+t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
+				t_vector ray_dir);
+t_vector	get_ray_direction(t_camera camera, int pixel_x, int pixel_y);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

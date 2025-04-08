@@ -9,12 +9,17 @@
 // struct for bitscene
 typedef struct s_img
 {
-	void 		*img; // image to be drawn on the window
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
+	void *img;  // image pointer
+	char *addr; // address of the image
+	int bpp;    // bits per pixel
+	int bpl;    // bytes per line
+	int endian; // endian
 }				t_img;
+typedef struct s_var
+{
+	void *mlx_conn; // connection to the window
+	void *mlx_win;  // window to be drawn
+}				t_var;
 
 // struct for points
 typedef struct s_point
@@ -28,24 +33,19 @@ typedef struct s_point
 }				t_point;
 
 // struct for mlx
-typedef struct s_var
-{
-	void *mlx_conn; // connection to the window
-	void *mlx_win;  // window to be drawn
-}				t_var;
 
 typedef struct s_color
 {
-	int			r;
-	int			g;
-	int			b;
+	int r; // red component of the color
+	int g; // green component of the color
+	int b; // blue component of the color
 }				t_color;
 
 typedef struct s_vector
 {
-	float		x;
-	float		y;
-	float		z;
+	float x; // x coordinate of the vector
+	float y; // y coordinate of the vector
+	float z; // z coordinate of the vector
 }				t_vector;
 
 typedef struct s_ambient
@@ -73,8 +73,10 @@ typedef struct s_light
 
 typedef struct s_intersec
 {
-	float		distance;
-	t_vector	point;
+	float		distance; // distance from the camera to the intersection point
+	t_vector	point; // intersection point
+	int obj_index; // Índice del objeto intersectado
+	int obj_type;  // Tipo de objeto: 0-esfera, 1-plano, 2-cilindro
 }				t_intersec;
 
 typedef struct s_sphere

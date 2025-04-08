@@ -147,8 +147,7 @@ int	write_row(int fd, t_img *img, int y, int width)
 			x++;
 			continue ;
 		}
-		pixel = img->addr + (y * img->line_length + x * (img->bits_per_pixel
-					/ 8));
+		pixel = img->addr + (y * img->bpl + x * (img->bpp / 8));
 		if (!write_pixel(fd, pixel))
 			return (0);
 		x++;
@@ -164,8 +163,7 @@ void	save_bmp(t_img *img, int width, int height, const char *filename)
 
 	// Información de diagnóstico
 	printf("Saving image: width=%d, height=%d\n", width, height);
-	printf("img->bits_per_pixel=%d, img->line_length=%d\n", img->bits_per_pixel,
-		img->line_length);
+	printf("img->bpp=%d, img->bpl=%d\n", img->bpp, img->bpl);
 
 	fd = open_bmp_file(filename);
 	if (fd < 0)

@@ -28,7 +28,7 @@ void		read_scene(t_global *global);
 void		free_scene(t_scene *scene);
 
 /* Graphics-Render-Draw */
-void		render(t_global *global);
+// void		render(t_global *global);
 // void		points_3d_to_2d(t_scene *scene);
 // void		isometric(t_point *point);
 // void		scale_scene(t_scene *scene);
@@ -46,7 +46,6 @@ void		finish(t_global *global, const char *message);
 void		free_global(t_global *global);
 void		dbl_free(char **ptr);
 void		check_scene(t_global *global, t_scene *scene);
-// void	splited(t_scene *scene, int j, int i, int index);
 int			ft_atoi_base(const char *str, int base);
 int			comp_floats(float a, float b);
 void		save_bmp(t_img *img, int width, int height, const char *filename);
@@ -63,14 +62,11 @@ void		parse_light(t_global *global, t_scene *scene, char *line);
 void		parse_sphere(t_global *global, t_scene *scene, char *line);
 void		parse_plane(t_global *global, t_scene *scene, char *line);
 void		parse_cylinder(t_global *global, t_scene *scene, char *line);
-// float	roundingf(float value, int decimals);
 
 /* Raytracing */
 t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir);
-// t_vector	ray(t_global global, int pixel_x, int pixel_y);
-void		total_render(t_global *global);
 void		render(t_global *global);
-float		calculate_discriminant(t_vector oc, t_vector ray_dir, float radius);
+float		cal_discriminant(t_vector oc, t_vector ray_dir, float radius);
 t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 				t_vector ray_dir);
 t_vector	get_ray_direction(t_camera camera, int pixel_x, int pixel_y);

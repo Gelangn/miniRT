@@ -72,7 +72,7 @@ void	check_file_extension(t_global *global, const char *filename)
 
 	ext = ft_strrchr(filename, '.');
 	if (ft_strcmp(ext, ".rt") != 0)
-		finish(global, ERR_INVALID_EXTENSION);
+		finish(global, ERR_INVALID_EXT);
 	else if (!ext)
 		finish(global, ERR_ARGS);
 }
@@ -98,7 +98,7 @@ int	main(int argc, char **argv)
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);
 	// background(&global->img);
-	total_render(global);
+	render(global);
 	save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN, "ray_tracing.bmp");
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);

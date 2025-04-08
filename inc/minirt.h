@@ -55,9 +55,8 @@
 # define PURPLE 0x800080
 # define MY_COLOR 0x89CE94
 
-# define ERR_ARGS \
-	"\nIncorrect number of arguments, \
-    expected 1, Usage: ./miniRT <file.rt>\n"
+# define ARGS "Usage: ./miniRT <file.rt>\n"
+# define ERR_ARGS "\nIncorrect number of arguments, expected 1 " ARGS
 # define ERR_OPEN "\nError opening the file\n"
 # define ERR_READ "\nError reading the file\n"
 # define ERR_SPLIT "\nError splitting the line\n"
@@ -66,7 +65,7 @@
 # define ERR_MEM "\nCache error\n"
 # define ERR_SCENE "\nScene Error\n"
 # define ERR_MALLOC "\nMalloc error\n"
-# define ERR_INVALID_EXTENSION "\nError extension .rt\n"
+# define ERR_INVALID_EXT "\nError extension .rt\n"
 # define ERR_AMBIENT "\nError ambient light\n"
 # define ERR_CAMERA "\nError camera\n"
 # define ERR_LIGHT "\nError light\n"

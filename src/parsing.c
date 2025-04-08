@@ -12,17 +12,7 @@ static void	replace_tabs_with_spaces(char *str)
 		str++;
 	}
 }
-// Function to round a float number to a given number of decimals
-/* float	roundingf(float value, int decimals)
-{
-		float	factor;
-  char **tokens;
-	char	**tokens;
-	char	**tokens;
 
-		factor = powf(10.0, decimals);
-		return (roundf(value * factor) / factor);
-} */
 // Función para parsear un vector
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
 {

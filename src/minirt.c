@@ -21,6 +21,7 @@
 		x++;
 	}
 } */
+
 int	init(t_global *global)
 {
 	// global->scene.points = NULL;
@@ -99,7 +100,7 @@ int	main(int argc, char **argv)
 		finish(global, ERR_WIN);
 	// background(&global->img);
 	render(global);
-	save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN, "ray_tracing.bmp");
+	save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN, "./imgs/ray_tracing.bmp");
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);

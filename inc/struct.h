@@ -73,10 +73,10 @@ typedef struct s_light
 
 typedef struct s_intersec
 {
-	float		distance; // distance from the camera to the intersection point
-	t_vector	point; // intersection point
-	int obj_index; // Índice del objeto intersectado
-	int obj_type;  // Tipo de objeto: 0-esfera, 1-plano, 2-cilindro
+	float distance; // distance from the camera to the intersection point
+	t_vector point; // intersection point
+	int obj_index;  // Índice del objeto intersectado
+	int obj_type;   // Tipo de objeto: 0-esfera, 1-plano, 2-cilindro
 }				t_intersec;
 
 typedef struct s_sphere

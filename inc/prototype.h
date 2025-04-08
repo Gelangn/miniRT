@@ -9,6 +9,10 @@
 /* Main */
 int			init(t_global *global);
 
+/* Init */
+
+/* Save BMP */
+
 /* MLX y eventos  */
 int			handle_no_event(void);
 int			handle_keypress(int keysym, t_global *global);

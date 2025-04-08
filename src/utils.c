@@ -133,26 +133,41 @@ int	write_padding(int fd, int width)
 	return (1);
 }
 
-// Escribe una fila de píxeles
-int	write_row(int fd, t_img *img, int y, int width)
+// Escribe una fila de píxeles optimizada
+int write_row(int fd, t_img *img, int y, int width)
 {
-	int		x;
-	char	*pixel;
-
-	x = 0;
-	while (x < width)
-	{
-		if (!is_valid_pixel(x, y, width, -1))
-		{
-			x++;
-			continue ;
-		}
-		pixel = img->addr + (y * img->bpl + x * (img->bpp / 8));
-		if (!write_pixel(fd, pixel))
-			return (0);
-		x++;
-	}
-	return (write_padding(fd, width));
+    int x;
+    char *pixel;
+    unsigned char *row_buffer;
+    int padding = (4 - (width * 3) % 4) % 4;
+    int row_size = width * 3 + padding;
+    
+    // Crear un buffer para toda la fila, incluyendo padding
+    row_buffer = malloc(row_size);
+    if (!row_buffer)
+        return (0);
+    
+    // Llenar el buffer con datos de píxeles
+    for (x = 0; x < width; x++)
+    {
+        pixel = img->addr + (y * img->bpl + x * (img->bpp / 8));
+        row_buffer[x * 3] = pixel[0];     // B
+        row_buffer[x * 3 + 1] = pixel[1]; // G
+        row_buffer[x * 3 + 2] = pixel[2]; // R
+    }
+    
+    // Añadir padding al final (ceros)
+    memset(row_buffer + width * 3, 0, padding);
+    
+    // Escribir toda la fila de una vez
+    if (write(fd, row_buffer, row_size) != row_size)
+    {
+        free(row_buffer);
+        return (0);
+    }
+    
+    free(row_buffer);
+    return (1);
 }
 
 // Función principal que coordina el guardado de la imagen

@@ -14,7 +14,7 @@
 
 int	handle_keypress(int key, t_global *global)
 {
-	if (key == 53 || key == 65307) // 65307 is ESC key in Linux (X11)
+	if (key == ESC || key == ESC_KEY) // 65307 is ESC key in Linux (X11)
 	{
 		printf("Key %d (ESC) is pressed!\n", key);
 		close_window(global);

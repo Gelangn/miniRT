@@ -22,20 +22,20 @@
 
 # define PI 3.14159265359f
 # define MAX_PLANES 5
-# define MAX_SPHERES 10
-# define MAX_CYLINDERS 10
+# define MAX_SPHERES 15
+# define MAX_CYLINDERS 15
 # define VECTOR 0 // 0 for vector, 1 for point
 # define POINT 1
+
 # define SCALAR 1
 # define DSCR 1.0f      // Distance from the camera to the screen
 # define EPSILON 0.0001 // Epsilon for floating point comparison
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0
-# define MLX_EXIT 17
-# define MLX_KEY_PRESS 2
-# define MLX_KEY_RELEASE 3
-# define MLX_NO_EVENT 0
+
+# define ESC 53
+# define ESC_KEY 65307
 
 # define DEFAULT_COLOR MAGENTA
 # define GROUND_COLOR GREY

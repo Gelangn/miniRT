@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path);
 	read_scene(global);
-	global->vars.mlx_win = new_window(global);
+	global->vars.mlx_win = new_window(global); // Create a new window
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);
 	// background(&global->img);

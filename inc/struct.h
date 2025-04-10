@@ -59,21 +59,21 @@ typedef struct s_camera
 {
 	int fov;              // field of view (grados o radianes)
 	double dist_scrn;     // distance from the camera to the screen
-	t_vector position;    // position of the camera
+	t_vector pos;         // position of the camera
 	t_vector orientation; // orientation of the camera (vector)
 	int			init;
 }				t_camera;
 
 typedef struct s_light
 {
-	float intensity;   // intensity of the light
-	t_vector position; // position of the light
+	float intensity; // intensity of the light
+	t_vector pos;    // position of the light
 	int			init;
 }				t_light;
 
 typedef struct s_intersec
 {
-	float distance; // distance from the camera to the intersection point
+	float dist;     // distance from the camera to the intersection point
 	t_vector point; // intersection point
 	int obj_index;  // Índice del objeto intersectado
 	int obj_type;   // Tipo de objeto: 0-esfera, 1-plano, 2-cilindro
@@ -105,7 +105,7 @@ typedef struct s_cylinder
 typedef struct s_scene
 {
 	t_ambient	ambient;
-	t_camera	camera;
+	t_camera	cam;
 	t_light		light;
 
 	int			num_sp;

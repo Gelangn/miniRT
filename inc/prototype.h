@@ -61,7 +61,7 @@ int			write_row(int fd, t_img *img, int y, int width);
 
 /* Parsing */
 void		parse_ambient(t_global *global, t_scene *scene, char *line);
-void		parse_camera(t_global *global, t_scene *scene, char *line);
+void		parse_cam(t_global *global, t_scene *scene, char *line);
 void		parse_light(t_global *global, t_scene *scene, char *line);
 void		parse_sphere(t_global *global, t_scene *scene, char *line);
 void		parse_plane(t_global *global, t_scene *scene, char *line);
@@ -73,7 +73,7 @@ void		render(t_global *global);
 float		cal_discriminant(t_vector oc, t_vector ray_dir, float radius);
 t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 				t_vector ray_dir);
-t_vector	get_ray_direction(t_camera camera, int pixel_x, int pixel_y);
+t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 
 /* Matrix */

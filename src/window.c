@@ -57,6 +57,6 @@ void	*new_window(t_global *global)
 			&global->img.bpl, &global->img.endian);
 	printf("Window created\n");
 	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .89,
-		WIN_H * .96, 0x00FF0000, "By anavas-g");
+		WIN_H * .96, MAGENTA, "By anavas-g");
 	return (global->vars.mlx_win);
 }

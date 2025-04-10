@@ -4,7 +4,7 @@
 
 void	check_scene(t_global *global, t_scene *scene)
 {
-	if (scene->ambient.init == 0 || scene->camera.init == 0
+	if (scene->ambient.init == 0 || scene->cam.init == 0
 		|| scene->light.init == 0)
 		finish(global, ERR_SCENE);
 	if (scene->num_sp > MAX_SPHERES)
@@ -38,7 +38,7 @@ void	read_scene(t_global *global)
 			if (line_ptr[0] == 'A')
 				parse_ambient(global, scene, line_ptr);
 			else if (line_ptr[0] == 'C')
-				parse_camera(global, scene, line_ptr);
+				parse_cam(global, scene, line_ptr);
 			else if (line_ptr[0] == 'L')
 				parse_light(global, scene, line_ptr);
 			else if (strncmp(line_ptr, "sp", 2) == 0)

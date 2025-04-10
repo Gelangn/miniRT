@@ -76,21 +76,21 @@ void	parse_ambient(t_global *global, t_scene *scene, char *line)
 }
 
 // Función para parsear la cámara
-void	parse_camera(t_global *global, t_scene *scene, char *line)
+void	parse_cam(t_global *global, t_scene *scene, char *line)
 {
 	char	**tokens;
 
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
-	if (!tokens || scene->camera.init)
+	if (!tokens || scene->cam.init)
 		finish(global, ERR_CAMERA);
 	tokens++;
-	parse_vector(global, *tokens, &scene->camera.position);
+	parse_vector(global, *tokens, &scene->cam.pos);
 	tokens++;
-	parse_vector(global, *tokens, &scene->camera.orientation);
+	parse_vector(global, *tokens, &scene->cam.orientation);
 	tokens++;
-	scene->camera.fov = parse_int_token(global, tokens);
-	scene->camera.init = 1;
+	scene->cam.fov = parse_int_token(global, tokens);
+	scene->cam.init = 1;
 	tokens -= 3;
 	dbl_free(tokens);
 }
@@ -105,7 +105,7 @@ void	parse_light(t_global *global, t_scene *scene, char *line)
 	if (!tokens || scene->light.init)
 		finish(global, ERR_LIGHT);
 	tokens++;
-	parse_vector(global, *tokens, &scene->light.position);
+	parse_vector(global, *tokens, &scene->light.pos);
 	tokens++;
 	scene->light.intensity = parse_float_token(global, tokens);
 	scene->light.init = 1;
@@ -182,7 +182,8 @@ void	parse_cylinder(t_global *global, t_scene *scene, char *line)
 	parse_color(global, *tokens, &cylinder.color);
 	// Calcular la base desde el centro
 	// La base es el punto inferior del cilindro en la dirección del eje
-	cylinder.base = subtract(center, multiply(cylinder.orientation, cylinder.height / 2));
+	cylinder.base = subtract(center, multiply(cylinder.orientation,
+				cylinder.height / 2));
 	scene->cylinders[scene->num_cy++] = cylinder;
 	tokens -= 5;
 	dbl_free(tokens);

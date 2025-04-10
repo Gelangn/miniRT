@@ -26,10 +26,7 @@ void	points_3d_to_2d(t_scene *scene)
 {
 	int	i;
 
-	i = 0;
-	while (i < scene->nr_elems)
-	{
+	i = -1;
+	while (++i < scene->nr_elems)
 		isometric(&scene->points[i]);
-		i++;
-	}
 } */

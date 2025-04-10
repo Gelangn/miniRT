@@ -214,3 +214,46 @@ flecha derecha es 65363
 flecha izquierda es 65361
 espacio es 32
 enter es 65293
+
+# Esquema de flujo MiniRT por fases
+
+## 1. Inicialización
+- **main** → Punto de entrada, verifica argumentos
+  - **check_file_extension** → Valida que sea archivo .rt
+  - **init** → Inicializa conexión MLX
+  - **init_scene** → Prepara estructuras para la escena (spheres, planes, cylinders)
+
+## 2. Parsing
+- **read_scene** → Carga y procesa el archivo .rt
+  - **parse_ambient** → Configura luz ambiental
+  - **parse_camera** → Configura posición y orientación de cámara
+  - **parse_light** → Configura fuentes de luz
+  - **parse_objects** → Procesa esferas, planos y cilindros
+
+## 3. Preparación gráfica
+- **new_window** → Crea ventana e imagen MLX
+
+## 4. Ray Tracing
+- **render** → Coordina el proceso de renderizado
+  - **cal_all_intersecs** → Calcula todas las intersecciones
+    - **cal_ray** → Para cada píxel calcula el rayo y su intersección
+      - **get_ray_direction** → Calcula dirección del rayo según píxel
+      - **find_closest_intersec** → Encuentra la intersección más cercana
+        - **check_sphere_intersecs** → Prueba intersecciones con esferas
+        - **check_plane_intersecs** → Prueba intersecciones con planos
+        - **check_cylinder_intersecs** → Prueba intersecciones con cilindros
+  - **render_all_pixels** → Colorea los píxeles según las intersecciones
+
+## 5. Salida
+- **save_bmp** → Guarda imagen en archivo BMP
+  - **write_bmp_header** → Escribe cabecera del archivo
+  - **write_bmp_row** → Escribe píxeles fila por fila
+- **mlx_put_image_to_window** → Muestra imagen en ventana
+
+## 6. Interacción y cierre
+- **set_hooks** → Configura manejadores de eventos (teclas, ratón)
+- **mlx_loop** → Inicia bucle principal de eventos
+- **close_window** → Limpia recursos al cerrar
+  - **free_global** → Libera memoria asignada
+
+Este esquema muestra el flujo completo desde la lectura del archivo de configuración hasta la renderización y gestión de eventos en el programa MiniRT.

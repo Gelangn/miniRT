@@ -57,7 +57,7 @@ void		write_bmp_header(int fd, int width, int height);
 int			open_bmp_file(const char *filename);
 int			write_pixel(int fd, char *pixel);
 int			write_padding(int fd, int width);
-int			write_row(int fd, t_img *img, int y, int width);
+int			write_bmp_row(int fd, t_img *img, int y, int width);
 
 /* Parsing */
 void		parse_ambient(t_global *global, t_scene *scene, char *line);

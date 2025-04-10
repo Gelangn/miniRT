@@ -102,6 +102,18 @@ typedef struct s_cylinder
 	t_color		color;
 }				t_cylinder;
 
+typedef struct s_cyl_lat
+{
+	t_vector axis;      // Eje normalizado del cilindro
+	t_vector oc;        // Vector desde origen del rayo a la base del cilindro
+	float dir_dot_axis; // Producto escalar de dirección-eje
+	float oc_dot_axis;  // Producto escalar de oc-eje
+	t_vector dir_perp;  // Componente perpendicular de dirección
+	t_vector oc_perp;   // Componente perpendicular de oc
+	float t1;           // Primera intersección potencial
+	float t2;           // Segunda intersección potencial
+}				t_cyl_lat;
+
 typedef struct s_scene
 {
 	t_ambient	ambient;

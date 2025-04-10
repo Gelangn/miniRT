@@ -100,9 +100,9 @@ int	main(int argc, char **argv)
 	// background(&global->img);
 	render(global);
 	save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN,
-		"./imgs/ray_tracing.bmp");
+			"./imgs/ray_tracing.bmp");
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-		global->img.img, MARGIN / 2, MARGIN / 2);
+			global->img.img, MARGIN / 2, MARGIN / 2);
 	set_hooks(global);
 	mlx_do_sync(global->vars.mlx_conn);
 	printf("Rendering complete. Entering main loop...\n");

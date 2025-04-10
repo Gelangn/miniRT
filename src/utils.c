@@ -134,40 +134,38 @@ int	write_padding(int fd, int width)
 }
 
 // Escribe una fila de píxeles optimizada
-int write_row(int fd, t_img *img, int y, int width)
+int	write_row(int fd, t_img *img, int y, int width)
 {
-    int x;
-    char *pixel;
-    unsigned char *row_buffer;
-    int padding = (4 - (width * 3) % 4) % 4;
-    int row_size = width * 3 + padding;
-    
-    // Crear un buffer para toda la fila, incluyendo padding
-    row_buffer = malloc(row_size);
-    if (!row_buffer)
-        return (0);
-    
-    // Llenar el buffer con datos de píxeles
-    for (x = 0; x < width; x++)
-    {
-        pixel = img->addr + (y * img->bpl + x * (img->bpp / 8));
-        row_buffer[x * 3] = pixel[0];     // B
-        row_buffer[x * 3 + 1] = pixel[1]; // G
-        row_buffer[x * 3 + 2] = pixel[2]; // R
-    }
-    
-    // Añadir padding al final (ceros)
-    memset(row_buffer + width * 3, 0, padding);
-    
-    // Escribir toda la fila de una vez
-    if (write(fd, row_buffer, row_size) != row_size)
-    {
-        free(row_buffer);
-        return (0);
-    }
-    
-    free(row_buffer);
-    return (1);
+	int				x;
+	char			*pixel;
+	unsigned char	*row_buffer;
+	int				padding;
+	int				row_size;
+
+	padding = (4 - (width * 3) % 4) % 4;
+	row_size = width * 3 + padding;
+	// Crear un buffer para toda la fila, incluyendo padding
+	row_buffer = malloc(row_size);
+	if (!row_buffer)
+		return (0);
+	// Llenar el buffer con datos de píxeles
+	for (x = 0; x < width; x++)
+	{
+		pixel = img->addr + (y * img->bpl + x * (img->bpp / 8));
+		row_buffer[x * 3] = pixel[0];     // B
+		row_buffer[x * 3 + 1] = pixel[1]; // G
+		row_buffer[x * 3 + 2] = pixel[2]; // R
+	}
+	// Añadir padding al final (ceros)
+	memset(row_buffer + width * 3, 0, padding);
+	// Escribir toda la fila de una vez
+	if (write(fd, row_buffer, row_size) != row_size)
+	{
+		free(row_buffer);
+		return (0);
+	}
+	free(row_buffer);
+	return (1);
 }
 
 // Función principal que coordina el guardado de la imagen
@@ -186,15 +184,16 @@ void	save_bmp(t_img *img, int width, int height, const char *filename)
 
 	write_bmp_header(fd, width, height);
 
-	y = height - 1;
-	while (y >= 0)
+	// Escribir filas de arriba hacia abajo para coincidir con la altura negativa
+	y = 0;
+	while (y < height)
 	{
 		if (!write_row(fd, img, y, width))
 		{
 			close(fd);
 			return ;
 		}
-		y--;
+		y++;
 	}
 
 	close(fd);

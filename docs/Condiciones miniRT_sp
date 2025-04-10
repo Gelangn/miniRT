@@ -46,11 +46,13 @@ con la extensión .rt.
 ◦ La información de cada elemento es primero el identificador de tipo
 (compuesto por uno o dos caracteres), seguido de la información específica de
 cada objeto en un orden estricto, como:
+
 ◦ Iluminación ambiental:
 A 0.2 255,255,255
 ∗ Identificador: A
 ∗ Relación de iluminación ambiental en el rango [0.0,1.0]: 0.2
 ∗ Colores R,G,B en el rango [0-255]: 255, 255, 255
+
 ◦ Cámara:
 C -50.0,0,20 0,0,1 70
 ∗ Identificador: C
@@ -58,6 +60,7 @@ C -50.0,0,20 0,0,1 70
 ∗ Vector de orientación normalizado 3D. En el rango [-1,1] para cada eje x, y,
 z: 0.0, 0.0, 1.0
 ∗ FOV: Campo de visión horizontal en grados en el rango [0, 180]: 70
+
 ◦ Luz:
 L -40.0, 50.0, 0.0 0.6 10, 0, 255
 ∗ Identificador: L
@@ -65,12 +68,14 @@ L -40.0, 50.0, 0.0 0.6 10, 0, 255
 ∗ Relación de brillo de la luz en el rango [0.0, 1.0]: 0.6
 ∗ (no usado en la parte obligatoria) Colores R, G, B en el rango [0-255]: 10, 0,
 255
+
 ◦ Esfera:
 sp 0.0, 0.0, 20.6 12.6 10, 0, 255
 ∗ Identificador: sp
 ∗Coordenadas x, y, z del centro de la esfera: 0.0, 0.0, 20.6
 ∗Diámetro de la esfera: 12.6
 ∗Colores R, G, B en el rango [0-255]: 10, 0, 255
+
 ◦Plano:
 pl 0.0, 0.0, -10.0 0.0, 1.0, 0.0 0, 0, 225
 ∗Identificador: pl
@@ -78,6 +83,7 @@ pl 0.0, 0.0, -10.0 0.0, 1.0, 0.0 0, 0, 225
 ∗Vector normal normalizado tridimensional. En el rango [-1,1] para cada eje x,
 y, z: 0.0, 1.0, 0.0
 ∗Colores R, G, B en el rango [0-255]: 0, 0, 225
+
 ◦Cilindro:
 cy 50.0, 0.0, 20.6 0.0, 0.0, 1.0 14.2 21.42 10, 0, 255
 ∗Identificador: cy

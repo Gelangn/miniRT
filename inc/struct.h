@@ -95,10 +95,10 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
-	t_vector	base;
-	t_vector	orientation;
-	float		radius;
-	float		height;
+	t_vector base;        // Centro de la base inferior
+	t_vector orientation; // Dirección normalizada del eje
+	float radius;         // Radio del cilindro
+	float height;         // Altura del cilindro
 	t_color		color;
 }				t_cylinder;
 

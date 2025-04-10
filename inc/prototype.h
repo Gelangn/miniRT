@@ -74,6 +74,7 @@ float		cal_discriminant(t_vector oc, t_vector ray_dir, float radius);
 t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 				t_vector ray_dir);
 t_vector	get_ray_direction(t_camera camera, int pixel_x, int pixel_y);
+t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

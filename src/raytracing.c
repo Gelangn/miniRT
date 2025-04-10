@@ -73,68 +73,184 @@ t_intersec	col_pl(t_plane *plane, t_vector ray_origin, t_vector ray_dir)
 	return (intersec);
 }
 
-t_intersec	col_cy(t_cylinder *cylinder, t_vector ray_origin, t_vector ray_dir)
+t_intersec	calculate_cap_intersection(t_cylinder *cylinder,
+		t_vector ray_origin, t_vector ray_dir, int cap_sign)
+{
+	t_intersec	intersec;
+	t_vector	cap_center;
+	t_vector	axis;
+	float		t;
+	t_vector	hit_point;
+	float		distance_from_center;
+	float		denom;
+
+	// Inicializar intersección
+	intersec.distance = INFINITY;
+	intersec.point = (t_vector){0, 0, 0};
+	intersec.obj_index = -1;
+	intersec.obj_type = -1;
+	
+	// Normalizar el eje del cilindro
+	axis = normalize(cylinder->orientation);
+	
+	// Calcular posición de la tapa directamente desde la base
+	if (cap_sign == 1)
+		cap_center = add(cylinder->base, multiply(axis, cylinder->height));
+	else
+		cap_center = cylinder->base;
+	
+	// Calcular t (distancia) para la intersección rayo-plano
+	// El vector normal del plano es el eje del cilindro (para la tapa superior)
+	// o su inverso (para la tapa inferior)
+	t_vector normal = cap_sign == 1 ? axis : multiply(axis, -1);
+	denom = dot(normal, ray_dir);
+	
+	// Si el rayo es paralelo al plano o viene desde atrás, no hay intersección
+	if (fabs(denom) < EPSILON || denom > 0) // denom > 0 significa que golpea desde atrás
+		return (intersec);
+	
+	// Calcular t
+	t = dot(subtract(cap_center, ray_origin), normal) / denom;
+	
+	// Si t es negativo, la intersección está detrás del origen del rayo
+	if (t < 0)
+		return (intersec);
+	
+	// Calcular el punto de intersección
+	hit_point = add(ray_origin, multiply(ray_dir, t));
+	
+	// Verificar si el punto está dentro del círculo de la tapa
+	distance_from_center = magnitude(subtract(hit_point, cap_center));
+	
+	// Si la distancia es mayor que el radio, está fuera del círculo
+	if (distance_from_center > cylinder->radius)
+		return (intersec);
+	
+	// La intersección es válida
+	intersec.distance = t;
+	intersec.point = hit_point;
+	intersec.obj_type = 2; // Tipo cilindro
+	return (intersec);
+}
+
+t_intersec	calculate_lateral_intersection(t_cylinder *cylinder,
+		t_vector ray_origin, t_vector ray_dir)
 {
 	t_intersec	intersec;
 	t_vector	axis;
-	float		oc_dot_axis;
-	float		d_dot_axis;
-	t_vector	perp_oc;
-	t_vector	perp_dir;
-	float		t;
+	t_vector	oc;
 	t_vector	hit_point;
-	t_vector	hit_to_center;
-	float		height_proj;
+	float		hit_height;
+	float		dir_dot_axis;
+	float		oc_dot_axis;
+	t_vector	dir_perp;
+	t_vector	oc_perp;
+	float		temp;
+	float		t;
 
-	t_vector oc, axis_proj_oc, d_proj_axis;
-	float a, b, c, discriminant, t1, t2;
+	float a, b, c, discriminant;
+	float t1, t2;
+	// Inicializar intersección
 	intersec.distance = INFINITY;
 	intersec.point = (t_vector){0, 0, 0};
 	intersec.obj_index = -1;
 	intersec.obj_type = -1;
 	// Normalizar el eje del cilindro
 	axis = normalize(cylinder->orientation);
-	// Vector desde el origen del cilindro al origen del rayo
+	// Vector desde el origen del rayo hasta la base del cilindro
 	oc = subtract(ray_origin, cylinder->base);
-	// Proyectar oc en el eje del cilindro
+	// Proyección de la dirección del rayo sobre el eje del cilindro
+	dir_dot_axis = dot(ray_dir, axis);
+	// Proyección del vector oc sobre el eje del cilindro
 	oc_dot_axis = dot(oc, axis);
-	axis_proj_oc = multiply(axis, oc_dot_axis);
-	// Proyectar ray_dir en el eje del cilindro
-	d_dot_axis = dot(ray_dir, axis);
-	d_proj_axis = multiply(axis, d_dot_axis);
-	// Componente de oc perpendicular al eje
-	perp_oc = subtract(oc, axis_proj_oc);
-	// Componente de ray_dir perpendicular al eje
-	perp_dir = subtract(ray_dir, d_proj_axis);
-	// Calcular coeficientes de la ecuación cuadrática
-	a = dot(perp_dir, perp_dir);
-	b = 2.0 * dot(perp_dir, perp_oc);
-	c = dot(perp_oc, perp_oc) - cylinder->radius * cylinder->radius;
+	// Vector perpendicular a la dirección del rayo con respecto al eje
+	dir_perp = subtract(ray_dir, multiply(axis, dir_dot_axis));
+	// Vector perpendicular a oc con respecto al eje
+	oc_perp = subtract(oc, multiply(axis, oc_dot_axis));
+	// Coeficientes de la ecuación cuadrática
+	a = dot(dir_perp, dir_perp);
+	b = 2 * dot(dir_perp, oc_perp);
+	c = dot(oc_perp, oc_perp) - (cylinder->radius * cylinder->radius);
+	// Si a es casi cero, el rayo es paralelo a la superficie del cilindro
+	if (fabs(a) < EPSILON)
+		return (intersec);
+	// Calcular el discriminante
 	discriminant = b * b - 4 * a * c;
+	// Si el discriminante es negativo, no hay intersección
 	if (discriminant < 0)
 		return (intersec);
+	// Calcular los puntos de intersección
 	t1 = (-b - sqrt(discriminant)) / (2 * a);
 	t2 = (-b + sqrt(discriminant)) / (2 * a);
-	// Encontrar la intersección válida más cercana
-	t = INFINITY;
-	if (t1 > 0 && t2 > 0)
-		t = fmin(t1, t2);
-	else if (t1 > 0)
-		t = t1;
-	else if (t2 > 0)
-		t = t2;
-	else
-		return (intersec);
-	// Calcular punto de intersección
-	hit_point = add(ray_origin, multiply(ray_dir, t));
-	// Verificar si el punto está dentro de la altura del cilindro
-	hit_to_center = subtract(hit_point, cylinder->base);
-	height_proj = dot(hit_to_center, axis);
-	if (fabs(height_proj) > cylinder->height / 2)
-		return (intersec);
-	intersec.distance = t;
-	intersec.point = hit_point;
-	intersec.obj_type = 2; // Tipo cilindro
+	// Ordenar t1 y t2 para que t1 <= t2
+	if (t1 > t2)
+	{
+		temp = t1;
+		t1 = t2;
+		t2 = temp;
+	}
+	// Comprobar las intersecciones dentro de la altura del cilindro
+	t = t1;
+	for (int i = 0; i < 2; i++)
+	{
+		if (t < 0) // Pasar a la siguiente intersección si está detrás del rayo
+		{
+			t = t2;
+			continue ;
+		}
+		// Calcular el punto de intersección
+		hit_point = add(ray_origin, multiply(ray_dir, t));
+		// Calcular la altura del punto de intersección relativa a la base del cilindro
+		hit_height = dot(subtract(hit_point, cylinder->base), axis);
+		// Verificar si la intersección está dentro de la altura del cilindro
+		if (hit_height >= -EPSILON && hit_height <= cylinder->height + EPSILON)
+		{
+			// Calcular la normal en el punto de intersección (apuntando hacia afuera)
+			t_vector hit_to_axis = multiply(axis, hit_height);
+			t_vector center_at_height = add(cylinder->base, hit_to_axis);
+			t_vector normal = normalize(subtract(hit_point, center_at_height));
+			// Verificar si la normal apunta en dirección contraria al rayo (golpe frontal)
+			if (dot(normal, ray_dir) < 0)
+			{
+				intersec.distance = t;
+				intersec.point = hit_point;
+				intersec.obj_type = 2; // Tipo cilindro
+				return (intersec);
+			}
+		}
+		t = t2; // Probar con la segunda intersección
+	}
+	return (intersec);
+}
+
+t_intersec	col_cy(t_cylinder *cylinder, t_vector ray_origin, t_vector ray_dir)
+{
+	t_intersec	intersec;
+	t_intersec	lateral_intersec;
+	t_intersec	top_cap_intersec;
+	t_intersec	bottom_cap_intersec;
+
+	// Inicializar intersección con valores por defecto
+	intersec.distance = INFINITY;
+	intersec.point = (t_vector){0, 0, 0};
+	intersec.obj_index = -1;
+	intersec.obj_type = -1;
+	// 1. Calcular intersección con la superficie lateral (código existente)
+	lateral_intersec = calculate_lateral_intersection(cylinder, ray_origin,
+			ray_dir);
+	// 2. Calcular intersección con la tapa superior
+	top_cap_intersec = calculate_cap_intersection(cylinder, ray_origin, ray_dir,
+			1);
+	// 3. Calcular intersección con la tapa inferior
+	bottom_cap_intersec = calculate_cap_intersection(cylinder, ray_origin,
+			ray_dir, -1);
+	// 4. Determinar cuál es la intersección más cercana
+	if (lateral_intersec.distance < intersec.distance)
+		intersec = lateral_intersec;
+	if (top_cap_intersec.distance < intersec.distance)
+		intersec = top_cap_intersec;
+	if (bottom_cap_intersec.distance < intersec.distance)
+		intersec = bottom_cap_intersec;
 	return (intersec);
 }
 
@@ -218,54 +334,125 @@ t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 	return (closest_intersec);
 }
 
-t_vector	render_pixel(t_global *global, int pixel_x, int pixel_y)
+t_intersec	calculate_pixel(t_global *global, int pixel_x, int pixel_y)
 {
 	t_vector	ray_dir;
-	t_vector	hit_point;
 	t_camera	camera;
 	t_intersec	intersec;
-	int			color;
 
 	camera = global->scene.camera;
 	ray_dir = get_ray_direction(camera, pixel_x, pixel_y);
 	intersec = find_closest_intersec(global, camera.position, ray_dir);
-	hit_point = intersec.point;
-	// Asignar color según el tipo de objeto intersectado
+	return (intersec);
+}
+
+void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
+		int y)
+{
+	int	color;
+
 	if (intersec.obj_type == 0 && intersec.obj_index >= 0) // Esfera
-	{
 		color = rgb_to_int(global->scene.spheres[intersec.obj_index].color);
-		pixel_put(&global->img, pixel_x, pixel_y, color);
-	}
 	else if (intersec.obj_type == 1 && intersec.obj_index >= 0) // Plano
-	{
 		color = rgb_to_int(global->scene.planes[intersec.obj_index].color);
-		pixel_put(&global->img, pixel_x, pixel_y, color);
-	}
 	else if (intersec.obj_type == 2 && intersec.obj_index >= 0) // Cilindro
 	{
-		color = rgb_to_int(global->scene.cylinders[intersec.obj_index].color);
-		pixel_put(&global->img, pixel_x, pixel_y, color);
+		// Determinar si es tapa o superficie lateral comparando normales
+		t_vector normal = get_surface_normal(global, intersec);
+		float dot_normal_axis = fabs(dot(normal, global->scene.cylinders[intersec.obj_index].orientation));
+		
+		if (dot_normal_axis > 0.99) // Es una tapa
+			color = 0xFF0000; // Rojo para tapas
+		else
+			color = 0x00aaFF; // Azul para superficie lateral
 	}
-	return (hit_point);
+	else
+		color = 0; // Color negro para fondo
+	pixel_put(img, x, y, color);
 }
 
 void	render(t_global *global)
 {
-	int	x;
-	int	y;
-	int	i;
+	int			x;
+	int			y;
+	int			i;
+	t_intersec	*intersections;
 
-	x = -1;
-	y = -1;
+	// Asignar memoria para almacenar todas las intersecciones
+	intersections = malloc(WIN_W * WIN_H * sizeof(t_intersec));
+	if (!intersections)
+		return ;
+	// Primer paso: calcular todas las intersecciones
 	i = 0;
+	x = -1;
 	while (++x < WIN_W)
 	{
 		y = -1;
 		while (++y < WIN_H)
 		{
-			i++;
-			render_pixel(global, x, y);
+			intersections[i++] = calculate_pixel(global, x, y);
 		}
 	}
-	printf("Total rays: %d\n", i); // Verificar conteo final
+	printf("Total calculate rays: %d\n", i);
+	// Segundo paso: pintar los píxeles según las intersecciones calculadas
+	i = 0;
+	x = -1;
+	while (++x < WIN_W)
+	{
+		y = -1;
+		while (++y < WIN_H)
+		{
+			render_pixel(global, intersections[i++], &global->img, x, y);
+		}
+	}
+	free(intersections);
+}
+
+// Añade esta función
+
+t_vector get_surface_normal(t_global *global, t_intersec intersec)
+{
+    t_vector normal = {0, 0, 0};
+
+    if (intersec.obj_type == 0) // Esfera
+    {
+        // La normal en cualquier punto de una esfera apunta desde el centro hacia el punto
+        t_sphere sphere = global->scene.spheres[intersec.obj_index];
+        normal = normalize(subtract(intersec.point, sphere.center));
+    }
+    else if (intersec.obj_type == 1) // Plano
+    {
+        // La normal de un plano es constante en todos sus puntos
+        t_plane plane = global->scene.planes[intersec.obj_index];
+        normal = normalize(plane.normal);
+    }
+    else if (intersec.obj_type == 2) // Cilindro
+    {
+        t_cylinder cylinder = global->scene.cylinders[intersec.obj_index];
+        t_vector axis = normalize(cylinder.orientation);
+        
+        // Calcular altura del punto relativa a la base
+        float hit_height = dot(subtract(intersec.point, cylinder.base), axis);
+        
+        // Si estamos muy cerca de la base o la tapa, es un punto en la tapa
+        if (hit_height < EPSILON)
+        {
+            // Tapa inferior - normal hacia abajo
+            normal = multiply(axis, -1);
+        }
+        else if (fabs(hit_height - cylinder.height) < EPSILON)
+        {
+            // Tapa superior - normal hacia arriba
+            normal = axis;
+        }
+        else
+        {
+            // Punto en la superficie lateral
+            // Proyectar el punto en el eje y calcular la normal
+            t_vector center_at_height = add(cylinder.base, multiply(axis, hit_height));
+            normal = normalize(subtract(intersec.point, center_at_height));
+        }
+    }
+    
+    return normal;
 }

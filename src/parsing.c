@@ -17,7 +17,7 @@ static void	replace_tabs_with_spaces(char *str)
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
 {
 	char	**tokens;
-	
+
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		finish(global, ERR_PARSE);
@@ -162,20 +162,27 @@ void	parse_cylinder(t_global *global, t_scene *scene, char *line)
 	t_cylinder	cylinder;
 	char		**tokens;
 
+	t_vector center; // Centro de masa temporal
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
 		finish(global, ERR_CYLINDER);
 	tokens++;
-	parse_vector(global, *tokens, &cylinder.base);
+	// Parsear la posición como el centro del cilindro
+	parse_vector(global, *tokens, &center);
 	tokens++;
 	parse_vector(global, *tokens, &cylinder.orientation);
+	// Normalizar inmediatamente la orientación
+	cylinder.orientation = normalize(cylinder.orientation);
 	tokens++;
-	cylinder.radius = parse_float_token(global, tokens);
+	cylinder.radius = parse_float_token(global, tokens) / 2;
 	tokens++;
 	cylinder.height = parse_float_token(global, tokens);
 	tokens++;
 	parse_color(global, *tokens, &cylinder.color);
+	// Calcular la base desde el centro
+	// La base es el punto inferior del cilindro en la dirección del eje
+	cylinder.base = subtract(center, multiply(cylinder.orientation, cylinder.height / 2));
 	scene->cylinders[scene->num_cy++] = cylinder;
 	tokens -= 5;
 	dbl_free(tokens);

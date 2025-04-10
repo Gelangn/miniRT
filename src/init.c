@@ -1,28 +1,5 @@
 #include "minirt.h"
 
-t_intersec	init_intersec(void)
-{
-	t_intersec	intersec;
-
-	intersec.dist = INFINITY;
-	intersec.point = (t_vector){0, 0, 0};
-	intersec.obj_index = -1;
-	intersec.obj_type = -1;
-	return (intersec);
-}
-
-void	init_lateral_intersec_vars(t_cylinder *cylinder, t_vector ray_origin,
-		t_vector ray_dir, t_cyl_lat *vars)
-{
-	vars->axis = normalize(cylinder->orientation);
-	vars->oc = subtract(ray_origin, cylinder->base);
-	vars->dir_dot_axis = dot(ray_dir, vars->axis);
-	vars->oc_dot_axis = dot(vars->oc, vars->axis);
-	vars->dir_perp = subtract(ray_dir, multiply(vars->axis,
-				vars->dir_dot_axis));
-	vars->oc_perp = subtract(vars->oc, multiply(vars->axis, vars->oc_dot_axis));
-}
-
 int	init(t_global *global)
 {
 	// global->scene.points = NULL;
@@ -66,3 +43,27 @@ int	init_scene(t_global *global, t_scene *scene)
 	scene->num_cy = 0;
 	return (MLX_SUCCESS);
 }
+
+t_intersec	init_intersec(void)
+{
+	t_intersec	intersec;
+
+	intersec.dist = INFINITY;
+	intersec.point = (t_vector){0, 0, 0};
+	intersec.obj_index = -1;
+	intersec.obj_type = -1;
+	return (intersec);
+}
+
+void	init_lateral_intersec_vars(t_cylinder *cylinder, t_vector ray_origin,
+		t_vector ray_dir, t_cyl_lat *vars)
+{
+	vars->axis = normalize(cylinder->orientation);
+	vars->oc = subtract(ray_origin, cylinder->base);
+	vars->dir_dot_axis = dot(ray_dir, vars->axis);
+	vars->oc_dot_axis = dot(vars->oc, vars->axis);
+	vars->dir_perp = subtract(ray_dir, multiply(vars->axis,
+				vars->dir_dot_axis));
+	vars->oc_perp = subtract(vars->oc, multiply(vars->axis, vars->oc_dot_axis));
+}
+

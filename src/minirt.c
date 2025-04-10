@@ -21,49 +21,6 @@
 		x++;
 	}
 } */
-int	init(t_global *global)
-{
-	// global->scene.points = NULL;
-	global->img.img = NULL;
-	global->img.addr = NULL;
-	global->scene = (t_scene){0};
-	printf("Initializing MLX\n");
-	global->vars.mlx_conn = mlx_init();
-	if (!global->vars.mlx_conn)
-	{
-		perror("Error initializing MLX");
-		return (MLX_ERROR);
-	}
-	printf("Initialized MLX OK\n");
-	return (MLX_SUCCESS);
-}
-
-static int	init_scene(t_global *global, t_scene *scene)
-{
-	scene->file_path = NULL;
-	scene->fd = 0;
-	scene->lines = NULL;
-	scene->scale = 0;
-	scene->ambient = (t_ambient){0};
-	scene->cam = (t_camera){0};
-	scene->light = (t_light){0};
-	scene->ambient.init = 0;
-	scene->cam.init = 0;
-	scene->light.init = 0;
-	scene->spheres = malloc(sizeof(t_plane) * MAX_SPHERES);
-	if (!scene->spheres)
-		finish(global, ERR_MEM);
-	scene->num_sp = 0;
-	scene->planes = malloc(sizeof(t_plane) * MAX_PLANES);
-	if (!scene->planes)
-		finish(global, ERR_MEM);
-	scene->num_pl = 0;
-	scene->cylinders = malloc(sizeof(t_plane) * MAX_CYLINDERS);
-	if (!scene->cylinders)
-		finish(global, ERR_MEM);
-	scene->num_cy = 0;
-	return (MLX_SUCCESS);
-}
 
 // Function to check the file extension
 void	check_file_extension(t_global *global, const char *filename)

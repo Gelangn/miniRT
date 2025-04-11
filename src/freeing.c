@@ -42,17 +42,19 @@ void	free_scene(t_scene *scene)
 
 void	free_global(t_global *global)
 {
+	// Primero liberar los recursos de la escena
+	free_scene(&global->scene);
+	// Luego liberar MLX en el orden correcto
+	if (global->img.img)
+		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
 	if (global->vars.mlx_win)
-	{
 		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
-		// Destruir la ventana
-	}
 	if (global->vars.mlx_conn)
 	{
 		mlx_destroy_display(global->vars.mlx_conn);
-		// Destruir la conexión de display
+		free(global->vars.mlx_conn);
 	}
-	free_scene(&global->scene);
+	// Finalmente liberar la estructura global
 	free(global);
 }
 

@@ -6,6 +6,7 @@ int	rgb_to_int(t_color color)
 {
 	return ((color.r << 16) | (color.g << 8) | color.b);
 }
+
 // Añade esta función a raytracing.c o en color.c
 t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 {
@@ -59,9 +60,7 @@ t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 	// Componente ambiental (siempre presente)
 	result_color.r = object_color.r * global->scene.ambient.intensity;
 	result_color.g = object_color.g * global->scene.ambient.intensity;
-		// Usa el canal G
 	result_color.b = object_color.b * global->scene.ambient.intensity;
-		// Usa el canal B
 
 	// Añadir componentes difusa y especular solo si no está en sombra
 	if (light_intensity > 0)
@@ -70,9 +69,7 @@ t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 		float diff = fmax(0.0f, dot(normal, light_dir));
 		result_color.r += object_color.r * light_intensity * diff;
 		result_color.g += object_color.g * light_intensity * diff;
-			// Usa el canal G
 		result_color.b += object_color.b * light_intensity * diff;
-			// Usa el canal B
 
 		// Componente especular
 		t_vector reflect_dir = subtract(multiply(normal, 2.0f * dot(normal,

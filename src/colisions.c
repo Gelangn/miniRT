@@ -148,7 +148,6 @@ t_intersec	cal_lateral_intersec(t_cylinder *cylinder, t_vector ray_origin,
 	return (check_lateral_hits(cylinder, ray_origin, ray_dir, vars));
 }
 
-
 float	cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars)
 {
 	float a, b, c, discriminant;

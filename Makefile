@@ -1,4 +1,3 @@
-
 # Colours
 DEFAULT 	= \033[0m
 GREEN 		= \033[38;5;46m
@@ -48,9 +47,10 @@ else ifeq ($(OS),Darwin)
 else ifeq ($(OS),Linux)
 #	@echo "Compilando en Linux"
 	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O3 -g3
-		-fsanitize=address
+	# Flags normales (sin sanitize)
 	FFLAGS = -L./lib/minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
-#-L$(LIB) -lft -L$(LIB_MLX) -lmlx -lXext -lX11 -lm -lbsd
+	# Flags con sanitize
+	SANITIZE_FLAGS = -fsanitize=address
 else ifeq ($(OS),MacOS)
 #	@echo "Compilando en MacOS"
 	CFLAGS = -Wall -Wextra -Werror -Imlx
@@ -105,11 +105,23 @@ sanitize:
 	@echo
 	@echo "$(GREY)*** Compilación en modo SANITIZE ***$(DEFAULT)"
 	@echo
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
+	make -C $(LIB) all
 	@echo
-	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
+	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
+	make -C $(LIB) bonus
 	@echo
-
+	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
+	@echo
+	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
+	make -C $(LIB_MLX)
+	@echo
+	@echo "$(YELLOW)*** Creando ejecutable con AddressSanitizer ***$(DEFAULT)"
+	@echo
+	$(CC) $(CFLAGS) $(SANITIZE_FLAGS) -o $(NAME) $(SRC) $(DEPS) $(FFLAGS)
+	@echo
+	@echo "$(GREEN)*** Compilación con sanitize completada ***$(DEFAULT)"
+	@echo
 
 # Regla para limpiar archivos objeto
 clean:

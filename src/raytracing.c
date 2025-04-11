@@ -115,9 +115,17 @@ t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 	t_intersec	closest_intersec;
 
 	closest_intersec = init_intersec();
-	check_sp_intersecs(global, ray_origin, ray_dir, &closest_intersec);
-	check_pl_intersecs(global, ray_origin, ray_dir, &closest_intersec);
-	check_cy_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+	
+	// Solo buscar intersecciones con tipos de objetos que realmente existen en la escena
+	if (global->scene.num_sp > 0)
+		check_sp_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+	
+	if (global->scene.num_pl > 0)
+		check_pl_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+	
+	if (global->scene.num_cy > 0)
+		check_cy_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+	
 	return (closest_intersec);
 }
 

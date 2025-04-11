@@ -75,24 +75,41 @@ $(NAME): $(OBJ)
 	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
 	make -C $(LIB) all
 	@echo
-#	sleep 3
 	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
 	make -C $(LIB) bonus
 	@echo
-#	sleep 3
 	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
 	@echo
 	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
 	make -C $(LIB_MLX)
-#	sleep 3
+
 	@echo
 	@echo "$(YELLOW)*** Creando ejecutable ***$(DEFAULT)"
 	@echo
-#	sleep 5
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
 	@echo
 	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
 	@echo
+
+# Regla para compilar en modo DEBUG
+debug:
+	@echo
+	@echo "$(GREY)*** Compilación en modo DEBUG ***$(DEFAULT)"
+	@echo
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	@echo
+	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
+	@echo
+
+sanitize:
+	@echo
+	@echo "$(GREY)*** Compilación en modo SANITIZE ***$(DEFAULT)"
+	@echo
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	@echo
+	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
+	@echo
+
 
 # Regla para limpiar archivos objeto
 clean:
@@ -108,4 +125,4 @@ fclean: clean
 # Regla para recompilar
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all debug sanitize clean fclean re

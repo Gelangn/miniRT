@@ -46,7 +46,7 @@ t_intersec	check_lateral_hits(t_cylinder *cylinder, t_vector ray_origin,
 	return (hit2);
 }
 
-void	check_sphere_intersecs(t_global *global, t_vector ray_origin,
+void	check_sp_intersecs(t_global *global, t_vector ray_origin,
 		t_vector ray_dir, t_intersec *closest_intersec)
 {
 	t_sphere	*sphere;
@@ -67,7 +67,7 @@ void	check_sphere_intersecs(t_global *global, t_vector ray_origin,
 	}
 }
 
-void	check_plane_intersecs(t_global *global, t_vector ray_origin,
+void	check_pl_intersecs(t_global *global, t_vector ray_origin,
 		t_vector ray_dir, t_intersec *closest_intersec)
 {
 	t_plane		*plane;
@@ -88,7 +88,7 @@ void	check_plane_intersecs(t_global *global, t_vector ray_origin,
 	}
 }
 
-void	check_cylinder_intersecs(t_global *global, t_vector ray_origin,
+void	check_cy_intersecs(t_global *global, t_vector ray_origin,
 		t_vector ray_dir, t_intersec *closest_intersec)
 {
 	t_cylinder	*cylinder;
@@ -115,13 +115,13 @@ t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 	t_intersec	closest_intersec;
 
 	closest_intersec = init_intersec();
-	check_sphere_intersecs(global, ray_origin, ray_dir, &closest_intersec);
-	check_plane_intersecs(global, ray_origin, ray_dir, &closest_intersec);
-	check_cylinder_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+	check_sp_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+	check_pl_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+	check_cy_intersecs(global, ray_origin, ray_dir, &closest_intersec);
 	return (closest_intersec);
 }
 
-void	cal_all_intersecs(t_global *global, t_intersec *intersecs)
+void	trace_all_rays(t_global *global, t_intersec *intersecs)
 {
 	int	x;
 	int	y;
@@ -176,7 +176,7 @@ t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y)
 	return (ray_dir);
 }
 
-t_vector	get_sphere_normal(t_global *global, t_intersec intersec)
+t_vector	get_sp_normal(t_global *global, t_intersec intersec)
 {
 	t_sphere	sphere;
 
@@ -184,15 +184,17 @@ t_vector	get_sphere_normal(t_global *global, t_intersec intersec)
 	return (normalize(subtract(intersec.point, sphere.center)));
 }
 
-t_vector	get_plane_normal(t_global *global, t_intersec intersec)
+t_vector	get_pl_normal(t_global *global, t_intersec intersec)
 {
 	t_plane	plane;
 
+	if (intersec.obj_index < 0 || intersec.obj_index >= global->scene.num_pl)
+		return ((t_vector){0, 1, 0}); // Valor predeterminado seguro
 	plane = global->scene.planes[intersec.obj_index];
 	return (normalize(plane.normal));
 }
 
-t_vector	get_cylinder_normal(t_global *global, t_intersec intersec)
+t_vector	get_cy_normal(t_global *global, t_intersec intersec)
 {
 	t_cylinder	cylinder;
 	t_vector	axis;
@@ -218,11 +220,14 @@ t_vector	get_surface_normal(t_global *global, t_intersec intersec)
 	t_vector	normal;
 
 	normal = (t_vector){0, 0, 0};
-	if (intersec.obj_type == 0)
-		normal = get_sphere_normal(global, intersec);
-	else if (intersec.obj_type == 1)
-		normal = get_plane_normal(global, intersec);
-	else if (intersec.obj_type == 2)
-		normal = get_cylinder_normal(global, intersec);
+	if (intersec.obj_type == 0 && intersec.obj_index >= 0 &&
+		intersec.obj_index < global->scene.num_sp)
+		normal = get_sp_normal(global, intersec);
+	else if (intersec.obj_type == 1 && intersec.obj_index >= 0 &&
+				intersec.obj_index < global->scene.num_pl)
+		normal = get_pl_normal(global, intersec);
+	else if (intersec.obj_type == 2 && intersec.obj_index >= 0 &&
+				intersec.obj_index < global->scene.num_cy)
+		normal = get_cy_normal(global, intersec);
 	return (normal);
 }

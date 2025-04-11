@@ -6,25 +6,22 @@ void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
 		int y)
 {
 	int			color;
-	t_vector	normal;
-	float		dot_normal_axis;
+	t_vector	ray_dir;
+	t_color		lit_color;
 
-	if (intersec.obj_type == 0 && intersec.obj_index >= 0)
-		color = rgb_to_int(global->scene.spheres[intersec.obj_index].color);
-	else if (intersec.obj_type == 1 && intersec.obj_index >= 0)
-		color = rgb_to_int(global->scene.planes[intersec.obj_index].color);
-	else if (intersec.obj_type == 2 && intersec.obj_index >= 0)
+	if (intersec.obj_type >= 0 && intersec.obj_index >= 0)
 	{
-		normal = get_surface_normal(global, intersec);
-		dot_normal_axis = fabs(dot(normal,
-									global->scene.cylinders[intersec.obj_index].orientation));
-		if (dot_normal_axis > 0.99)
-			color = RED;
-		else
-			color = CYAN;
+		// Recalcular dirección del rayo para usarla en la iluminación
+		ray_dir = get_ray_direction(global->scene.cam, x, y);
+		// Calcular color con iluminación completa
+		lit_color = cal_lighting(global, intersec, ray_dir);
+		color = rgb_to_int(lit_color);
 	}
 	else
-		color = DARK_GREY;
+	{
+		// Fondo
+		color = BLACK;
+	}
 	pixel_put(img, x, y, color);
 }
 
@@ -53,7 +50,7 @@ void	render(t_global *global)
 	intersecs = malloc(WIN_W * WIN_H * sizeof(t_intersec));
 	if (!intersecs)
 		return ;
-	cal_all_intersecs(global, intersecs);
+	trace_all_rays(global, intersecs);
 	render_all_pixels(global, intersecs);
 	free(intersecs);
 }

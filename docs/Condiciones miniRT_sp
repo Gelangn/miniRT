@@ -235,13 +235,13 @@ enter es 65293
 
 ## 4. Ray Tracing
 - **render** → Coordina el proceso de renderizado
-  - **cal_all_intersecs** → Calcula todas las intersecciones
+  - **trace_all_rays** → Calcula todas las intersecciones
     - **cal_ray** → Para cada píxel calcula el rayo y su intersección
       - **get_ray_direction** → Calcula dirección del rayo según píxel
       - **find_closest_intersec** → Encuentra la intersección más cercana
-        - **check_sphere_intersecs** → Prueba intersecciones con esferas
-        - **check_plane_intersecs** → Prueba intersecciones con planos
-        - **check_cylinder_intersecs** → Prueba intersecciones con cilindros
+        - **check_sp_intersecs** → Prueba intersecciones con esferas
+        - **check_pl_intersecs** → Prueba intersecciones con planos
+        - **check_cy_intersecs** → Prueba intersecciones con cilindros
   - **render_all_pixels** → Colorea los píxeles según las intersecciones
 
 ## 5. Salida

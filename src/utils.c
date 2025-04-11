@@ -165,7 +165,7 @@ int	write_bmp_row(int fd, t_img *img, int y, int width)
 		return (0);
 	}
 	free(row_buffer);
-	return (EXIT_FAILURE);
+	return (1); // Éxito (en lugar de EXIT_FAILURE)
 }
 
 // Función principal que coordina el guardado de la imagen

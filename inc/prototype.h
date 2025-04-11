@@ -79,14 +79,14 @@ void		render(t_global *global);
 float		cal_discriminant(t_vector oc, t_vector ray_dir, float radius);
 t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 				t_vector ray_dir);
-void		cal_all_intersecs(t_global *global, t_intersec *intersecs);
+void		trace_all_rays(t_global *global, t_intersec *intersecs);
 t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec intersec);
-void		check_sphere_intersecs(t_global *global, t_vector ray_origin,
+void		check_sp_intersecs(t_global *global, t_vector ray_origin,
 				t_vector ray_dir, t_intersec *closest_intersec);
-void		check_plane_intersecs(t_global *global, t_vector ray_origin,
+void		check_pl_intersecs(t_global *global, t_vector ray_origin,
 				t_vector ray_dir, t_intersec *closest_intersec);
-void		check_cylinder_intersecs(t_global *global, t_vector ray_origin,
+void		check_cy_intersecs(t_global *global, t_vector ray_origin,
 				t_vector ray_dir, t_intersec *closest_intersec);
 t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y);
 
@@ -105,12 +105,15 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_vector ray_origin,
 				t_vector ray_dir, t_cyl_lat vars, float t);
 t_vector	get_cap_center(t_cylinder *cylinder, t_vector axis, int cap_sign);
 t_vector	get_cap_normal(t_vector axis, int cap_sign);
-t_vector	get_cylinder_normal(t_global *global, t_intersec intersec);
-t_vector	get_plane_normal(t_global *global, t_intersec intersec);
-t_vector	get_sphere_normal(t_global *global, t_intersec intersec);
+t_vector	get_cy_normal(t_global *global, t_intersec intersec);
+t_vector	get_pl_normal(t_global *global, t_intersec intersec);
+t_vector	get_sp_normal(t_global *global, t_intersec intersec);
 t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 void		get_intersec_points(float a, float b, float discriminant,
 				t_cyl_lat *vars);
+/* Colors*/
+t_color		cal_lighting(t_global *global, t_intersec intersec,
+				t_vector ray_dir);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

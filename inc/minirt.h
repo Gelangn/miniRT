@@ -18,7 +18,7 @@
 
 # define WIN_W 600 // Screen width
 # define WIN_H 400 // Screen height
-# define MARGIN 0  // Margin for the screen
+# define MARGIN 50  // Margin for the screen
 
 # define PI 3.14159265359f
 # define MAX_PLANES 5
@@ -28,7 +28,7 @@
 # define POINT 1
 
 # define SCALAR 1
-# define DSCR 2.0f      // Distance from the camera to the screen
+# define DSCR 1.0f      // Distance from the camera to the screen
 # define EPSILON 0.0001 // Epsilon for floating point comparison
 
 # define MLX_ERROR 1

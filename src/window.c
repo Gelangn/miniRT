@@ -30,7 +30,8 @@ void	*new_window(t_global *global)
 	if (!win)
 		return (NULL);
 	// Crear una imagen más pequeña que la ventana
-	global->img.img = mlx_new_image(global->vars.mlx_conn, WIN_W - MARGIN, WIN_H - MARGIN);
+	global->img.img = mlx_new_image(global->vars.mlx_conn, WIN_W - MARGIN, WIN_H
+			- MARGIN);
 	if (!global->img.img)
 	{
 		mlx_destroy_window(global->vars.mlx_conn, win);
@@ -45,5 +46,7 @@ void	*new_window(t_global *global)
 		return (NULL);
 	}
 	printf("Window created\n");
+	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .89,
+			WIN_H * .96, MAGENTA, "By anavas-g");
 	return (win);
 }

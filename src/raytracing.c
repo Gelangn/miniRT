@@ -115,17 +115,13 @@ t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
 	t_intersec	closest_intersec;
 
 	closest_intersec = init_intersec();
-	
 	// Solo buscar intersecciones con tipos de objetos que realmente existen en la escena
 	if (global->scene.num_sp > 0)
 		check_sp_intersecs(global, ray_origin, ray_dir, &closest_intersec);
-	
 	if (global->scene.num_pl > 0)
 		check_pl_intersecs(global, ray_origin, ray_dir, &closest_intersec);
-	
 	if (global->scene.num_cy > 0)
 		check_cy_intersecs(global, ray_origin, ray_dir, &closest_intersec);
-	
 	return (closest_intersec);
 }
 
@@ -137,10 +133,11 @@ void	trace_all_rays(t_global *global, t_intersec *intersecs)
 
 	i = 0;
 	x = -1;
-	while (++x < WIN_W)
+	// Solo calcular para el tamaño de la imagen
+	while (++x < (WIN_W - MARGIN))
 	{
 		y = -1;
-		while (++y < WIN_H)
+		while (++y < (WIN_H - MARGIN))
 		{
 			intersecs[i++] = cal_ray(global, x, y);
 		}

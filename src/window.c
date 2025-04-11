@@ -29,15 +29,8 @@ void	*new_window(t_global *global)
 	win = mlx_new_window(global->vars.mlx_conn, WIN_W, WIN_H, "miniRT");
 	if (!win)
 		return (NULL);
-	// Liberar imagen anterior si existe
-	if (global->img.img)
-	{
-		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
-		global->img.img = NULL;
-		global->img.addr = NULL;
-	}
-	// Crear nueva imagen
-	global->img.img = mlx_new_image(global->vars.mlx_conn, WIN_W, WIN_H);
+	// Crear una imagen más pequeña que la ventana
+	global->img.img = mlx_new_image(global->vars.mlx_conn, WIN_W - MARGIN, WIN_H - MARGIN);
 	if (!global->img.img)
 	{
 		mlx_destroy_window(global->vars.mlx_conn, win);

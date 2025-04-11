@@ -20,7 +20,7 @@ t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 		(intersec.obj_type == 2 && intersec.obj_index >= global->scene.num_cy))
 	{
 		// Devolver un color por defecto (negro o gris oscuro)
-		t_color default_color = {20, 20, 20}; // Gris muy oscuro
+		t_color default_color = {5, 5, 5}; // Gris muy oscuro
 		return (default_color);
 	}
 

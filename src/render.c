@@ -25,30 +25,31 @@ void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
 	pixel_put(img, x, y, color);
 }
 
-void	render_all_pixels(t_global *global, t_intersec *intersecs)
+void render_all_pixels(t_global *global, t_intersec *intersecs)
 {
-	int	x;
-	int	y;
-	int	i;
+    int x;
+    int y;
+    int i;
 
-	i = 0;
-	x = -1;
-	while (++x < WIN_W)
-	{
-		y = -1;
-		while (++y < WIN_H)
-		{
-			render_pixel(global, intersecs[i++], &global->img, x, y);
-		}
-	}
+    i = 0;
+    x = -1;
+    // Solo renderizar para el tamaño de la imagen
+    while (++x < (WIN_W - MARGIN))
+    {
+        y = -1;
+        while (++y < (WIN_H - MARGIN))
+        {
+            render_pixel(global, intersecs[i++], &global->img, x, y);
+        }
+    }
 }
 
 void	render(t_global *global)
 {
 	t_intersec	*intersecs;
 
-	// Asignar memoria para las intersecciones
-	intersecs = malloc(WIN_W * WIN_H * sizeof(t_intersec));
+	// Asignar memoria solo para los píxeles de la imagen
+	intersecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN) * sizeof(t_intersec));
 	if (!intersecs)
 		finish(global, "Error: No se pudo asignar memoria para intersecciones");
 	// Verificar que la imagen existe y tiene una dirección válida

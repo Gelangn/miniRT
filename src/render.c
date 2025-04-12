@@ -51,12 +51,12 @@ void	render(t_global *global)
 	// Asignar memoria solo para los píxeles de la imagen
 	intersecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN) * sizeof(t_intersec));
 	if (!intersecs)
-		finish(global, "Error: No se pudo asignar memoria para intersecciones");
+		finish(global, ERR_MEM);
 	// Verificar que la imagen existe y tiene una dirección válida
 	if (!global->img.img || !global->img.addr)
 	{
 		free(intersecs);
-		finish(global, "Error: Imagen no inicializada correctamente");
+		finish(global, ERR_IMG);
 	}
 	trace_all_rays(global, intersecs);
 	render_all_pixels(global, intersecs);

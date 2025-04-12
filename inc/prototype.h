@@ -59,12 +59,14 @@ void		dbl_free(char **ptr);
 void		check_scene(t_global *global, t_scene *scene);
 int			ft_atoi_base(const char *str, int base);
 int			comp_floats(float a, float b);
-void		save_bmp(t_img *img, int width, int height, const char *filename);
-void		write_bmp_header(int fd, int width, int height);
+void		save_bmp(t_img *img, int width, int height, const char *filename,
+				t_global *global);
+void		write_bmp_header(int fd, int width, int height, t_global *global);
 int			open_bmp_file(const char *filename);
-int			write_pixel(int fd, char *pixel);
+int			write_pixel(int fd, char *pixel, t_global *global);
 int			write_padding(int fd, int width);
-int			write_bmp_row(int fd, t_img *img, int y, int width);
+int			write_bmp_row(int fd, t_img *img, int y, int width,
+				t_global *global);
 
 /* Parsing */
 void		parse_ambient(t_global *global, t_scene *scene, char *line);

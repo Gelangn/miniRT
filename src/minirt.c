@@ -5,8 +5,9 @@
 
 /* static void	background(t_img *data)
 {
-	int	x;
-	int	y;
+	int			x;
+	int			y;
+	const char	*ext;
 
 	x = 0;
 	y = 0;
@@ -21,12 +22,11 @@
 		x++;
 	}
 } */
-
 // Function to check the file extension
 void	check_file_extension(t_global *global, const char *filename)
 {
-	const char	*ext;
-
+	char	*ext;
+	
 	ext = ft_strrchr(filename, '.');
 	if (ft_strcmp(ext, ".rt") != 0)
 		finish(global, ERR_INVALID_EXT);
@@ -57,12 +57,14 @@ int	main(int argc, char **argv)
 	// background(&global->img);
 	render(global);
 	save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN,
-			"./imgs/ray_tracing.bmp");
+			"./imgs/ray_tracing.bmp", global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 			global->img.img, MARGIN / 2, MARGIN / 2);
+	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .89,
+			WIN_H * .96, MAGENTA, "By anavas-g");
 	set_hooks(global);
 	//mlx_do_sync(global->vars.mlx_conn);
 	printf("Rendering complete. Entering main loop...\n");
 	mlx_loop(global->vars.mlx_conn);
-	return (0);
+	return (SUCCESS);
 }

@@ -21,19 +21,19 @@ int	handle_keypress(int key, t_global *global)
 	}
 	else
 		printf("Key %d is pressed!\n", key);
-	return (0);
+	return (SUCCESS);
 }
 
 int	handle_keyrelease(int key)
 {
 	printf("Key %d is released!\n", key);
-	return (0);
+	return (SUCCESS);
 }
 
 int	handle_mouse_move(int x, int y)
 {
 	printf("Mouse is at position (%d, %d)\n", x, y);
-	return (0);
+	return (SUCCESS);
 }
 
 int	handle_mouse_scroll(int button, int x, int y, t_global *global)
@@ -49,7 +49,7 @@ int	handle_mouse_scroll(int button, int x, int y, t_global *global)
 		printf("Mouse scroll down at position (%d, %d)\n", x, y);
 		// Añade aquí el código para manejar el desplazamiento hacia abajo
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 void	set_hooks(t_global *global)

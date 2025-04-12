@@ -9,10 +9,7 @@ int	init(t_global *global)
 	printf("Initializing MLX\n");
 	global->vars.mlx_conn = mlx_init();
 	if (!global->vars.mlx_conn)
-	{
-		perror("Error initializing MLX");
-		return (MLX_ERROR);
-	}
+		finish(global, ERR_MLX);
 	printf("Initialized MLX OK\n");
 	return (MLX_SUCCESS);
 }
@@ -66,4 +63,3 @@ void	init_lateral_intersec_vars(t_cylinder *cylinder, t_vector ray_origin,
 				vars->dir_dot_axis));
 	vars->oc_perp = subtract(vars->oc, multiply(vars->axis, vars->oc_dot_axis));
 }
-

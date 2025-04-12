@@ -16,9 +16,9 @@
 # include <string.h>
 # include <unistd.h>
 
-# define WIN_W 600 // Screen width
-# define WIN_H 400 // Screen height
-# define MARGIN 100  // Margin for the screen
+# define WIN_W 600  // Screen width
+# define WIN_H 400  // Screen height
+# define MARGIN 100 // Margin for the screen
 
 # define PI 3.14159265359f
 # define MAX_PLANES 5
@@ -33,6 +33,8 @@
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0
+# define SUCCESS 0
+# define FAILURE 1
 
 # define ESC 53
 # define ESC_KEY 65307
@@ -84,5 +86,8 @@
 # define ERR_POSITION "\nError position\n"
 # define ERR_PARSE "\nError parsing\n"
 # define ERR_WIN "\nError creating window\n"
+# define ERR_IMG "\nError: Image not initialized correctly\n"
+# define ERR_MLX "\nError initializing MLX\n"
+# define ERR_SAVE "\nError saving BMP\n"
 
 #endif

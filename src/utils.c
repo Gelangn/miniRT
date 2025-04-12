@@ -15,7 +15,7 @@ void	finish(t_global *global, const char *message)
 		free_global(global);
 	}
 	printf("Exiting program\n");
-	exit(1);
+	exit(FAILURE);
 }
 
 // Function to compare two floats using EPSILON
@@ -58,9 +58,9 @@ int	is_valid_pixel(int x, int y, int width, int height)
 	return (x >= 0 && x < width && y >= 0 && y < height);
 }
 
-void	write_bmp_header(int fd, int width, int height)
+void	write_bmp_header(int fd, int width, int height, t_global *global)
 {
-	unsigned char	header[54] = {0};
+	unsigned char	header[54];
 
 	header[0] = 'B';
 	header[1] = 'M';
@@ -76,9 +76,8 @@ void	write_bmp_header(int fd, int width, int height)
 	header[28] = 24;               // Bits por píxel (RGB - 24 bits)
 	if (write(fd, header, 54) != 54)
 	{
-		perror("Error al escribir el encabezado BMP");
 		close(fd);
-		exit(EXIT_FAILURE);
+		finish(global, ERR_SAVE);
 	}
 }
 
@@ -96,7 +95,7 @@ int	open_bmp_file(const char *filename)
 }
 
 // Escribe un píxel en el archivo
-int	write_pixel(int fd, char *pixel)
+int	write_pixel(int fd, char *pixel, t_global *global)
 {
 	unsigned char	b;
 	unsigned char	g;
@@ -107,10 +106,10 @@ int	write_pixel(int fd, char *pixel)
 	r = pixel[2];
 	if (write(fd, &b, 1) != 1 || write(fd, &g, 1) != 1 || write(fd, &r, 1) != 1)
 	{
-		perror("Error al escribir datos de píxeles");
-		return (0);
+		close(fd);
+		finish(global, ERR_SAVE);
 	}
-	return (EXIT_FAILURE);
+	return (FAILURE);
 }
 
 // Escribe el padding al final de cada fila
@@ -126,14 +125,14 @@ int	write_padding(int fd, int width)
 		if (write(fd, "\0", 1) != 1)
 		{
 			perror("Error al escribir relleno");
-			return (0);
+			return (SUCCESS);
 		}
 	}
-	return (EXIT_FAILURE);
+	return (FAILURE);
 }
 
 // Escribe una fila de píxeles optimizada
-int	write_bmp_row(int fd, t_img *img, int y, int width)
+int	write_bmp_row(int fd, t_img *img, int y, int width, t_global *global)
 {
 	int				x;
 	char			*pixel;
@@ -146,7 +145,7 @@ int	write_bmp_row(int fd, t_img *img, int y, int width)
 	// Crear un buffer para toda la fila, incluyendo padding
 	row_buffer = malloc(row_size);
 	if (!row_buffer)
-		return (0);
+		finish(global, ERR_MEM); 
 	// Llenar el buffer con datos de píxeles
 	x = -1;
 	while (++x < width)
@@ -162,14 +161,15 @@ int	write_bmp_row(int fd, t_img *img, int y, int width)
 	if (write(fd, row_buffer, row_size) != row_size)
 	{
 		free(row_buffer);
-		return (0);
+		finish(global, ERR_SAVE);
 	}
 	free(row_buffer);
-	return (1); // Éxito (en lugar de EXIT_FAILURE)
+	return (FAILURE);
 }
 
 // Función principal que coordina el guardado de la imagen
-void	save_bmp(t_img *img, int width, int height, const char *filename)
+void	save_bmp(t_img *img, int width, int height, const char *filename,
+		t_global *global)
 {
 	int fd;
 	int y;
@@ -180,15 +180,15 @@ void	save_bmp(t_img *img, int width, int height, const char *filename)
 
 	fd = open_bmp_file(filename);
 	if (fd < 0)
-		return ;
+		finish(global, ERR_OPEN);
 
-	write_bmp_header(fd, width, height);
+	write_bmp_header(fd, width, height, global);
 
 	// Escribir filas de arriba hacia abajo para coincidir con la altura negativa
 	y = -1;
 	while (++y < height)
 	{
-		if (!write_bmp_row(fd, img, y, width))
+		if (!write_bmp_row(fd, img, y, width, global))
 		{
 			close(fd);
 			return ;

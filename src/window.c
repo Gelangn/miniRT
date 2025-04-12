@@ -18,7 +18,7 @@ int	close_window(t_global *global)
 		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
 		global->vars.mlx_win = NULL;
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 void	*new_window(t_global *global)
@@ -28,25 +28,19 @@ void	*new_window(t_global *global)
 	printf("Creating window\n");
 	win = mlx_new_window(global->vars.mlx_conn, WIN_W, WIN_H, "miniRT");
 	if (!win)
-		return (NULL);
-	// Crear una imagen más pequeña que la ventana
+		finish(global, ERR_WIN);
 	global->img.img = mlx_new_image(global->vars.mlx_conn, WIN_W - MARGIN, WIN_H
 			- MARGIN);
 	if (!global->img.img)
-	{
-		mlx_destroy_window(global->vars.mlx_conn, win);
-		return (NULL);
-	}
+		finish(global, ERR_IMG);
 	global->img.addr = mlx_get_data_addr(global->img.img, &global->img.bpp,
 			&global->img.bpl, &global->img.endian);
 	if (!global->img.addr)
 	{
 		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
 		mlx_destroy_window(global->vars.mlx_conn, win);
-		return (NULL);
+		finish(global, ERR_IMG);
 	}
 	printf("Window created\n");
-	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .89,
-			WIN_H * .96, MAGENTA, "By anavas-g");
 	return (win);
 }

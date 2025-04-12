@@ -15,17 +15,17 @@
 /* This function needs to exist, but is useless by the moment */
 int	handle_no_event(void)
 {
-	return (0);
+	return (SUCCESS);
 }
 
 int	mouse_press_hook(int button, int x, int y)
 {
 	printf("Mouse button %d pressed at position (%d, %d)\n", button, x, y);
-	return (0);
+	return (SUCCESS);
 }
 
 int	mouse_release_hook(int button, int x, int y)
 {
 	printf("Mouse button %d released at position (%d, %d)\n", button, x, y);
-	return (0);
+	return (SUCCESS);
 }

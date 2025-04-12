@@ -62,6 +62,8 @@ void	write_bmp_header(int fd, int width, int height, t_global *global)
 {
 	unsigned char	header[54];
 
+	// Inicializar todo el header a cero
+	memset(header, 0, 54);
 	header[0] = 'B';
 	header[1] = 'M';
 	*(int *)&header[2] = 54 + (width * height * 3 + height * ((4 - (width * 3)
@@ -94,43 +96,6 @@ int	open_bmp_file(const char *filename)
 	return (fd);
 }
 
-// Escribe un píxel en el archivo
-int	write_pixel(int fd, char *pixel, t_global *global)
-{
-	unsigned char	b;
-	unsigned char	g;
-	unsigned char	r;
-
-	b = pixel[0];
-	g = pixel[1];
-	r = pixel[2];
-	if (write(fd, &b, 1) != 1 || write(fd, &g, 1) != 1 || write(fd, &r, 1) != 1)
-	{
-		close(fd);
-		finish(global, ERR_SAVE);
-	}
-	return (FAILURE);
-}
-
-// Escribe el padding al final de cada fila
-int	write_padding(int fd, int width)
-{
-	int	padding;
-	int	i;
-
-	padding = (4 - (width * 3) % 4) % 4;
-	i = -1;
-	while (++i < padding)
-	{
-		if (write(fd, "\0", 1) != 1)
-		{
-			perror("Error al escribir relleno");
-			return (SUCCESS);
-		}
-	}
-	return (FAILURE);
-}
-
 // Escribe una fila de píxeles optimizada
 int	write_bmp_row(int fd, t_img *img, int y, int width, t_global *global)
 {
@@ -145,7 +110,7 @@ int	write_bmp_row(int fd, t_img *img, int y, int width, t_global *global)
 	// Crear un buffer para toda la fila, incluyendo padding
 	row_buffer = malloc(row_size);
 	if (!row_buffer)
-		finish(global, ERR_MEM); 
+		finish(global, ERR_MEM);
 	// Llenar el buffer con datos de píxeles
 	x = -1;
 	while (++x < width)

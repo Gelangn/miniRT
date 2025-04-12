@@ -17,7 +17,8 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_vector ray_origin,
 		return (intersec);
 	hit_point = add(ray_origin, multiply(ray_dir, t));
 	hit_height = dot(subtract(hit_point, cylinder->base), vars.axis);
-	if (is_less_than(hit_height, 0) || is_greater_than(hit_height, cylinder->height))
+	if (is_less_than(hit_height, 0) || is_greater_than(hit_height,
+			cylinder->height))
 		return (intersec);
 	hit_to_axis = multiply(vars.axis, hit_height);
 	center_at_height = add(cylinder->base, hit_to_axis);

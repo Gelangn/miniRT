@@ -25,15 +25,15 @@ int	comp_floats(float a, float b)
 }
 
 // Devuelve true si a es menor que b-EPSILON
-int is_less_than(float a, float b)
+int	is_less_than(float a, float b)
 {
-    return (a < b - EPSILON);
+	return (a < b - EPSILON);
 }
 
 // Devuelve true si a es mayor que b+EPSILON
-int is_greater_than(float a, float b)
+int	is_greater_than(float a, float b)
 {
-    return (a > b + EPSILON);
+	return (a > b + EPSILON);
 }
 
 int	ft_atoi_base(const char *str, int base)

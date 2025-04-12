@@ -7,7 +7,6 @@ int	rgb_to_int(t_color color)
 	return ((color.r << 16) | (color.g << 8) | color.b);
 }
 
-// Añade esta función a raytracing.c o en color.c
 t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 {
 	// Verificación inicial para evitar acceder a objetos inexistentes
@@ -36,7 +35,7 @@ t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 		object_color = global->scene.spheres[intersec.obj_index].color;
 	else if (intersec.obj_type == 1)
 		object_color = global->scene.planes[intersec.obj_index].color;
-	else // cilindro
+	else
 		object_color = global->scene.cylinders[intersec.obj_index].color;
 
 	// Comprobar sombras

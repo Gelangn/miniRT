@@ -9,6 +9,7 @@
 	int			y;
 	const char	*ext;
 	char		*ext;
+	char		*ext;
 
 	x = 0;
 	y = 0;
@@ -61,8 +62,8 @@ int	main(int argc, char **argv)
 		"./imgs/ray_tracing.bmp", global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
-	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .89,
-		WIN_H * .96, MAGENTA, "By anavas-g");
+	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .86,
+		WIN_H * .98, MAGENTA, "By anavas-g");
 	set_hooks(global);
 	// mlx_do_sync(global->vars.mlx_conn);
 	printf("Rendering complete. Entering main loop...\n");

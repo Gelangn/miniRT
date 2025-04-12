@@ -23,7 +23,7 @@ t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir)
 	t_vector	oc;
 
 	intersec = init_intersec();
-		// Usar la función en lugar de inicializar manualmente
+	// Usar la función en lugar de inicializar manualmente
 	oc = subtract(ray_origin, sphere->center);
 	discriminant = cal_discriminant(oc, ray_dir, sphere->radius);
 	if (discriminant < 0)
@@ -158,7 +158,7 @@ float	cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars)
 	c = dot(vars.oc_perp, vars.oc_perp) - (cylinder->radius * cylinder->radius);
 	discriminant = b * b - 4 * a * c;
 	if (comp_floats(a, 0))
-		return -1;
+		return (-1);
 	return (discriminant);
 }
 

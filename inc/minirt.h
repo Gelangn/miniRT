@@ -18,7 +18,7 @@
 
 # define WIN_W 600 // Screen width
 # define WIN_H 400 // Screen height
-# define MARGIN 50  // Margin for the screen
+# define MARGIN 100  // Margin for the screen
 
 # define PI 3.14159265359f
 # define MAX_PLANES 5

@@ -174,10 +174,12 @@ t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y)
 	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
 	scrn_h = scrn_w / aspect_ratio;
 	forward = normalize(cam.orientation);
-	right = normalize(cross((t_vector){0, 1, 0}, forward));
+	// Cambiamos el vector de referencia para Y (ahora Y apunta hacia abajo)
+	right = normalize(cross((t_vector){0, -1, 0}, forward));
 	up = cross(forward, right);
 	u = (2 * ((pixel_x + 0.5) / WIN_W) - 1) * scrn_w / 2;
-	v = (1 - 2 * ((pixel_y + 0.5) / WIN_H)) * scrn_h / 2;
+	// Invertimos el cálculo de v para que crezca hacia abajo
+	v = (2 * ((pixel_y + 0.5) / WIN_H) - 1) * scrn_h / 2;
 	ray_dir = normalize(add(add(multiply(right, u), multiply(up, v)), forward));
 	return (ray_dir);
 }

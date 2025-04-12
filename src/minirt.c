@@ -10,6 +10,7 @@
 	const char	*ext;
 	char		*ext;
 	char		*ext;
+	char		*ext;
 
 	x = 0;
 	y = 0;

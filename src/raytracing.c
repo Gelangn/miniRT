@@ -17,7 +17,7 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_vector ray_origin,
 		return (intersec);
 	hit_point = add(ray_origin, multiply(ray_dir, t));
 	hit_height = dot(subtract(hit_point, cylinder->base), vars.axis);
-	if (hit_height < -EPSILON || hit_height > cylinder->height + EPSILON)
+	if (is_less_than(hit_height, 0) || is_greater_than(hit_height, cylinder->height))
 		return (intersec);
 	hit_to_axis = multiply(vars.axis, hit_height);
 	center_at_height = add(cylinder->base, hit_to_axis);
@@ -209,9 +209,9 @@ t_vector	get_cy_normal(t_global *global, t_intersec intersec)
 	cylinder = global->scene.cylinders[intersec.obj_index];
 	axis = normalize(cylinder.orientation);
 	hit_height = dot(subtract(intersec.point, cylinder.base), axis);
-	if (hit_height < EPSILON)
+	if (comp_floats(hit_height, 0))
 		return (multiply(axis, -1));
-	else if (fabs(hit_height - cylinder.height) < EPSILON)
+	else if (comp_floats(hit_height, cylinder.height))
 		return (axis);
 	else
 	{
@@ -225,14 +225,14 @@ t_vector	get_surface_normal(t_global *global, t_intersec intersec)
 	t_vector	normal;
 
 	normal = (t_vector){0, 0, 0};
-	if (intersec.obj_type == 0 && intersec.obj_index >= 0 &&
-		intersec.obj_index < global->scene.num_sp)
+	if (intersec.obj_type == 0 && intersec.obj_index >= 0
+		&& intersec.obj_index < global->scene.num_sp)
 		normal = get_sp_normal(global, intersec);
-	else if (intersec.obj_type == 1 && intersec.obj_index >= 0 &&
-				intersec.obj_index < global->scene.num_pl)
+	else if (intersec.obj_type == 1 && intersec.obj_index >= 0
+		&& intersec.obj_index < global->scene.num_pl)
 		normal = get_pl_normal(global, intersec);
-	else if (intersec.obj_type == 2 && intersec.obj_index >= 0 &&
-				intersec.obj_index < global->scene.num_cy)
+	else if (intersec.obj_type == 2 && intersec.obj_index >= 0
+		&& intersec.obj_index < global->scene.num_cy)
 		normal = get_cy_normal(global, intersec);
 	return (normal);
 }

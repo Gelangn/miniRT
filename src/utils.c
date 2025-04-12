@@ -24,6 +24,18 @@ int	comp_floats(float a, float b)
 	return (fabs(a - b) < EPSILON);
 }
 
+// Devuelve true si a es menor que b-EPSILON
+int is_less_than(float a, float b)
+{
+    return (a < b - EPSILON);
+}
+
+// Devuelve true si a es mayor que b+EPSILON
+int is_greater_than(float a, float b)
+{
+    return (a > b + EPSILON);
+}
+
 int	ft_atoi_base(const char *str, int base)
 {
 	int	neg;

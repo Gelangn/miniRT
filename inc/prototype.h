@@ -135,4 +135,7 @@ t_vector	rotate_x(t_vector a, float angle);
 t_vector	rotate_y(t_vector a, float angle);
 t_vector	rotate_z(t_vector a, float angle);
 
+int is_less_than(float a, float b);
+int is_greater_than(float a, float b);
+
 #endif

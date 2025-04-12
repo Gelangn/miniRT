@@ -11,13 +11,13 @@ int	rgb_to_int(t_color color)
 t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 {
 	// Verificación inicial para evitar acceder a objetos inexistentes
-	if ((intersec.obj_type < 0) ||
-		(intersec.obj_index < 0) ||
-		(intersec.obj_type == 0 && intersec.obj_index >= global->scene.num_sp)
-			||
-		(intersec.obj_type == 1 && intersec.obj_index >= global->scene.num_pl)
-			||
-		(intersec.obj_type == 2 && intersec.obj_index >= global->scene.num_cy))
+	if ((intersec.obj_type < 0) || (intersec.obj_index < 0)
+		|| (intersec.obj_type == 0
+			&& intersec.obj_index >= global->scene.num_sp)
+		|| (intersec.obj_type == 1
+			&& intersec.obj_index >= global->scene.num_pl)
+		|| (intersec.obj_type == 2
+			&& intersec.obj_index >= global->scene.num_cy))
 	{
 		// Devolver un color por defecto (negro o gris oscuro)
 		t_color default_color = {5, 5, 5}; // Gris muy oscuro
@@ -27,7 +27,7 @@ t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 	t_color result_color;
 	t_vector normal = get_surface_normal(global, intersec);
 	t_vector light_dir = normalize(subtract(global->scene.light.pos,
-											intersec.point));
+				intersec.point));
 	t_color object_color;
 	float light_intensity = global->scene.light.intensity;
 
@@ -41,18 +41,17 @@ t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 
 	// Comprobar sombras
 	t_vector shadow_origin = add(intersec.point, multiply(normal, 0.005f));
-		// Aumentado offset
+	// Aumentado offset
 	t_intersec shadow_intersec = find_closest_intersec(global, shadow_origin,
 			light_dir);
 	float light_distance = magnitude(subtract(global->scene.light.pos,
-												intersec.point));
+				intersec.point));
 
 	// Si hay una intersección antes de llegar a la luz, el punto está en sombra
 	// PERO ignoramos si el objeto intersectado es el mismo que estamos iluminando
-	if (shadow_intersec.obj_type >= 0 &&
-		shadow_intersec.dist < light_distance &&
-		!(shadow_intersec.obj_type == intersec.obj_type &&
-			shadow_intersec.obj_index == intersec.obj_index))
+	if (shadow_intersec.obj_type >= 0 && shadow_intersec.dist < light_distance
+		&& !(shadow_intersec.obj_type == intersec.obj_type
+			&& shadow_intersec.obj_index == intersec.obj_index))
 	{
 		light_intensity = 0; // Solo luz ambiental
 	}

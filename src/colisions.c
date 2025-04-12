@@ -22,8 +22,8 @@ t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir)
 	float		discriminant;
 	t_vector	oc;
 
-	intersec.dist = INFINITY;
-	intersec.point = (t_vector){0, 0, 0};
+	intersec = init_intersec();
+		// Usar la función en lugar de inicializar manualmente
 	oc = subtract(ray_origin, sphere->center);
 	discriminant = cal_discriminant(oc, ray_dir, sphere->radius);
 	if (discriminant < 0)
@@ -39,6 +39,7 @@ t_intersec	col_sp(t_sphere *sphere, t_vector ray_origin, t_vector ray_dir)
 	else
 		return (intersec);
 	intersec.point = add(ray_origin, multiply(ray_dir, intersec.dist));
+	intersec.obj_type = 0; // No olvides establecer el tipo de objeto
 	return (intersec);
 }
 
@@ -51,7 +52,7 @@ t_intersec	col_pl(t_plane *plane, t_vector ray_origin, t_vector ray_dir)
 
 	intersec = init_intersec();
 	denom = dot(plane->normal, ray_dir);
-	if (fabs(denom) < EPSILON)
+	if (comp_floats(denom, 0))
 		return (intersec);
 	p0l0 = subtract(plane->point, ray_origin);
 	t = dot(p0l0, plane->normal) / denom;
@@ -80,6 +81,9 @@ t_intersec	col_cy(t_cylinder *cylinder, t_vector ray_origin, t_vector ray_dir)
 		intersec = top_cap_intersec;
 	if (bottom_cap_intersec.dist < intersec.dist)
 		intersec = bottom_cap_intersec;
+	// Asegurar que el tipo de objeto esté correctamente establecido
+	if (intersec.dist < INFINITY)
+		intersec.obj_type = 2;
 	return (intersec);
 }
 
@@ -114,7 +118,7 @@ t_intersec	cal_cap_intersec(t_cylinder *cylinder, t_vector ray_origin,
 	cap_center = get_cap_center(cylinder, axis, cap_sign);
 	normal = get_cap_normal(axis, cap_sign);
 	denom = dot(normal, ray_dir);
-	if (fabs(denom) < EPSILON || denom > 0)
+	if (comp_floats(denom, 0) || denom > 0)
 		return (intersec);
 	t = dot(subtract(cap_center, ray_origin), normal) / denom;
 	if (t < 0)
@@ -141,10 +145,8 @@ t_intersec	cal_lateral_intersec(t_cylinder *cylinder, t_vector ray_origin,
 	discriminant = cal_lateral_discriminant(cylinder, vars);
 	if (discriminant < 0)
 		return (intersec);
-	get_intersec_points(dot(vars.dir_perp, vars.dir_perp),
-						2 * dot(vars.dir_perp, vars.oc_perp),
-						discriminant,
-						&vars);
+	get_intersec_points(dot(vars.dir_perp, vars.dir_perp), 2
+		* dot(vars.dir_perp, vars.oc_perp), discriminant, &vars);
 	return (check_lateral_hits(cylinder, ray_origin, ray_dir, vars));
 }
 
@@ -155,7 +157,9 @@ float	cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars)
 	b = 2 * dot(vars.dir_perp, vars.oc_perp);
 	c = dot(vars.oc_perp, vars.oc_perp) - (cylinder->radius * cylinder->radius);
 	discriminant = b * b - 4 * a * c;
-	return (a < EPSILON ? -1 : discriminant);
+	if (comp_floats(a, 0))
+		return -1;
+	return (discriminant);
 }
 
 void	get_intersec_points(float a, float b, float discriminant,

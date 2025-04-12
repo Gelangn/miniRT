@@ -13,10 +13,8 @@ int			init(t_global *global);
 int			init(t_global *global);
 int			init_scene(t_global *global, t_scene *scene);
 t_intersec	init_intersec(void);
-void	init_lateral_intersec_vars(t_cylinder *cylinder,
-								t_vector ray_origin,
-								t_vector ray_dir,
-								t_cyl_lat *vars);
+void		init_lateral_intersec_vars(t_cylinder *cylinder,
+				t_vector ray_origin, t_vector ray_dir, t_cyl_lat *vars);
 
 /* Save BMP */
 
@@ -135,7 +133,7 @@ t_vector	rotate_x(t_vector a, float angle);
 t_vector	rotate_y(t_vector a, float angle);
 t_vector	rotate_z(t_vector a, float angle);
 
-int is_less_than(float a, float b);
-int is_greater_than(float a, float b);
+int			is_less_than(float a, float b);
+int			is_greater_than(float a, float b);
 
 #endif

@@ -16,8 +16,8 @@
 # include <string.h>
 # include <unistd.h>
 
-# define WIN_W 600  // Screen width
-# define WIN_H 400  // Screen height
+# define WIN_W 600 // Screen width
+# define WIN_H 400 // Screen height
 # define MARGIN 50 // Margin for the screen
 
 # define PI 3.14159265359f

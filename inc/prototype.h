@@ -17,7 +17,6 @@ void		init_lateral_intersec_vars(t_cylinder *cylinder,
 void		set_hooks(t_global *global);
 int			handle_no_event(void);
 int			handle_keypress(int keysym, t_global *global);
-int			handle_keyrelease(int keysym);
 int			handle_mouse_move(int x, int y, t_global *global);
 int			handle_mouse_scroll(int button, int x, int y, t_global *global);
 int			mouse_press_hook(int button, int x, int y, t_global *global);

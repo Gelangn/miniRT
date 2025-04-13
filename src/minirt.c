@@ -36,8 +36,6 @@ int	main(int argc, char **argv)
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);
 	render(global);
-	save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN,
-		"./imgs/ray_tracing.bmp", global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
 		global->img.img, MARGIN / 2, MARGIN / 2);
 	sprintf(buffer, "%s    By anavas-g", global->scene.file_path);

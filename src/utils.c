@@ -32,9 +32,9 @@ int	is_greater_than(float a, float b)
 	return (a > b + EPSILON);
 }
 
-int	is_valid_pixel(int x, int y, int width, int height)
+int	is_valid_pixel(int px_x, int px_y, int width, int height)
 {
-	return (x >= 0 && x < width && y >= 0 && y < height);
+	return (px_x >= 0 && px_x < width && px_y >= 0 && px_y < height);
 }
 
 void	write_bmp_header(int fd, t_global *global)
@@ -64,13 +64,13 @@ void	write_bmp_header(int fd, t_global *global)
 	}
 }
 
-int	write_bmp_row(int fd, int y, t_global *global)
+int	write_bmp_row(int fd, int px_y, t_global *global)
 {
 	int				width;
 	int				padding;
 	int				row_size;
 	unsigned char	*row_buffer;
-	int				x;
+	int				px_x;
 	char			*pixel;
 
 	width = WIN_W - MARGIN;
@@ -79,14 +79,14 @@ int	write_bmp_row(int fd, int y, t_global *global)
 	row_buffer = malloc(row_size);
 	if (!row_buffer)
 		finish(global, ERR_MEM);
-	x = -1;
-	while (++x < width)
+	px_x = -1;
+	while (++px_x < width)
 	{
-		pixel = global->img.addr + (y * global->img.bpl + x * (global->img.bpp
+		pixel = global->img.addr + (px_y * global->img.bpl + px_x * (global->img.bpp
 					/ 8));
-		row_buffer[x * 3] = pixel[0];     // B
-		row_buffer[x * 3 + 1] = pixel[1]; // G
-		row_buffer[x * 3 + 2] = pixel[2]; // R
+		row_buffer[px_x * 3] = pixel[0];     // B
+		row_buffer[px_x * 3 + 1] = pixel[1]; // G
+		row_buffer[px_x * 3 + 2] = pixel[2]; // R
 	}
 	memset(row_buffer + width * 3, 0, padding);
 	if (write(fd, row_buffer, row_size) != row_size)
@@ -101,7 +101,7 @@ int	write_bmp_row(int fd, int y, t_global *global)
 void	save_bmp(t_global *global, const char *filename)
 {
 	int	fd;
-	int	y;
+	int	px_y;
 	int	width;
 	int	height;
 
@@ -113,10 +113,10 @@ void	save_bmp(t_global *global, const char *filename)
 	if (fd < 0)
 		finish(global, ERR_OPEN);
 	write_bmp_header(fd, global);
-	y = -1;
-	while (++y < height)
+	px_y = -1;
+	while (++px_y < height)
 	{
-		if (!write_bmp_row(fd, y, global))
+		if (!write_bmp_row(fd, px_y, global))
 		{
 			close(fd);
 			return ;

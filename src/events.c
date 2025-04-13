@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/13 13:05:27 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/13 19:27:57 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	handle_keypress(int keysym, t_global *global)
 	float		move_speed;
 	float		rotate_speed;
 	int			needs_render;
-	t_vector	forward;
-	t_vector	right;
-	t_vector	up;
+	t_vector	z;
+	t_vector	x;
+	t_vector	y;
 	char		filename[100];
 	static int	screenshot_count = 1;
 
@@ -28,39 +28,39 @@ int	handle_keypress(int keysym, t_global *global)
 	rotate_speed = 0.05f;
 	needs_render = 0;
 	// Vectores de dirección
-	forward = normalize(global->scene.cam.orientation);
-	right = normalize(cross((t_vector){0, -1, 0}, forward));
-	up = cross(forward, right);
+	z = normalize(global->scene.cam.orientation);
+	x = normalize(cross((t_vector){0, -1, 0}, z));
+	y = cross(z, x);
 	// Teclas de movimiento
 	if (keysym == XK_Up || keysym == 119) // W o flecha arriba
 	{
-		move_camera(global, forward, move_speed);
+		move_camera(global, z, move_speed);
 		needs_render = 1;
 	}
 	else if (keysym == XK_Down || keysym == 115) // S o flecha abajo
 	{
-		move_camera(global, forward, -move_speed);
+		move_camera(global, z, -move_speed);
 		needs_render = 1;
 	}
 	else if (keysym == XK_Left || keysym == 97) // A o flecha izquierda
 	{
-		move_camera(global, right, -move_speed);
+		move_camera(global, x, -move_speed);
 		needs_render = 1;
 	}
 	else if (keysym == XK_Right || keysym == 100) // D o flecha derecha
 	{
-		move_camera(global, right, move_speed);
+		move_camera(global, x, move_speed);
 		needs_render = 1;
 	}
 	// Teclas para subir/bajar
 	else if (keysym == XK_space) // Espacio
 	{
-		move_camera(global, up, move_speed);
+		move_camera(global, y, move_speed);
 		needs_render = 1;
 	}
 	else if (keysym == XK_c) // C
 	{
-		move_camera(global, up, -move_speed);
+		move_camera(global, y, -move_speed);
 		needs_render = 1;
 	}
 	// Rotación

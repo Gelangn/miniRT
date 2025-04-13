@@ -142,41 +142,46 @@ void	trace_all_rays(t_global *global, t_intersec *intersecs)
 	printf("Total calculate rays: %d\n", i);
 }
 
-t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y)
+t_intersec	cal_ray(t_global *global, int px_x, int px_y)
 {
 	t_camera	cam;
 	t_intersec	intersec;
 
 	cam = global->scene.cam;
 	global->current_ray_origin = cam.pos;
-	global->current_ray_dir = get_ray_direction(cam, pixel_x, pixel_y);
+	global->current_ray_dir = get_ray_direction(cam, px_x, px_y);
 	intersec = find_closest_intersec(global);
 	return (intersec);
 }
 
-t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y)
+t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 {
-	float		u;
-	float		v;
-	float		scrn_w;
-	float		scrn_h;
-	float		aspect_ratio;
-	t_vector	forward;
-	t_vector	right;
-	t_vector	up;
-	t_vector	ray_dir;
+    float u, v;
+    float scrn_w, scrn_h;
+    float aspect_ratio;
+    t_vector z, x, y; // forward Z, right X, up Y
+    t_vector ray_dir;
 
-	aspect_ratio = (float)WIN_W / (float)WIN_H;
-	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
-	scrn_h = scrn_w / aspect_ratio;
-	forward = normalize(cam.orientation);
-	right = normalize(cross((t_vector){0, 1, 0}, forward));
-	up = normalize(cross(forward, right));
-	u = (2 * ((pixel_x + 0.5) / WIN_W) - 1) * scrn_w / 2;
-	// Invertimos el cálculo de v para que crezca hacia abajo
-	v = (2 * ((pixel_y + 0.5) / WIN_H) - 1) * scrn_h / 2;
-	ray_dir = normalize(add(add(multiply(right, u), multiply(up, v)), forward));
-	return (ray_dir);
+    // Calcular el tamaño efectivo de la pantalla (sin márgenes)
+    int effective_width = WIN_W - MARGIN;
+    int effective_height = WIN_H - MARGIN;
+    
+    // Calcular la relación de aspecto efectiva
+    aspect_ratio = (float)effective_width / (float)effective_height;
+    scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
+    scrn_h = scrn_w / aspect_ratio;
+    
+    z = normalize(cam.orientation);
+    x = normalize(cross((t_vector){0, 1, 0}, z));
+    y = normalize(cross(z, x));
+    
+    // Calcular u y v centrados en el área efectiva
+    u = (2 * ((px_x + 0.5) / effective_width) - 1) * scrn_w / 2;
+    // Invertimos el cálculo de v para que crezca hacia abajo
+    v = (2 * ((px_y + 0.5) / effective_height) - 1) * scrn_h / 2;
+    
+    ray_dir = normalize(add(add(multiply(x, u), multiply(y, v)), z));
+    return ray_dir;
 }
 
 t_vector	get_sp_normal(t_global *global, t_intersec intersec)

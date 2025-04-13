@@ -11,7 +11,7 @@ int			init(t_global *global);
 int			init_scene(t_global *global, t_scene *scene);
 t_intersec	init_intersec(void);
 void		init_lateral_intersec_vars(t_cylinder *cylinder,
-				t_vector ray_origin, t_vector ray_dir, t_cyl_lat *vars);
+                t_vector ray_origin, t_vector ray_dir, t_cyl_lat *vars);
 
 /* MLX y eventos  */
 void		set_hooks(t_global *global);
@@ -36,7 +36,7 @@ void		check_scene(t_global *global, t_scene *scene);
 void		free_scene(t_scene *scene);
 
 /* Graphics-Render-Draw */
-void		pixel_put(t_img *data, int x, int y, int color);
+void		pixel_put(t_img *img, int x, int y, int color);
 int			rgb_to_int(t_color color);
 
 /* Utils */
@@ -47,6 +47,7 @@ void		dbl_free(char **ptr);
 int			comp_floats(float a, float b);
 int			is_less_than(float a, float b);
 int			is_greater_than(float a, float b);
+int			is_valid_pixel(int x, int y, int width, int height);
 
 /* Save BMP */
 void		save_bmp(t_global *global, const char *filename);
@@ -72,6 +73,8 @@ t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 void		check_sp_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_pl_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_cy_intersecs(t_global *global, t_intersec *closest_intersec);
+void		render_all_pixels(t_global *global, t_intersec *intersecs);
+void		render_pixel(t_global *global, t_intersec intersec, t_img *img, int x, int y);
 
 /* Colisions */
 t_intersec	col_sp(t_sphere *sphere, t_global *global);
@@ -80,11 +83,11 @@ t_intersec	col_cy(t_cylinder *cylinder, t_global *global);
 float		cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars);
 t_intersec	cal_lateral_intersec(t_cylinder *cylinder, t_global *global);
 t_intersec	cal_cap_intersec(t_cylinder *cylinder, t_global *global,
-				int cap_sign);
+                int cap_sign);
 t_intersec	check_lateral_hits(t_cylinder *cylinder, t_global *global,
-				t_cyl_lat vars);
+                t_cyl_lat vars);
 t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
-				t_cyl_lat vars, float t);
+                t_cyl_lat vars, float t);
 t_vector	get_cap_center(t_cylinder *cylinder, t_vector axis, int cap_sign);
 t_vector	get_cap_normal(t_vector axis, int cap_sign);
 t_vector	get_cy_normal(t_global *global, t_intersec intersec);
@@ -92,10 +95,12 @@ t_vector	get_pl_normal(t_global *global, t_intersec intersec);
 t_vector	get_sp_normal(t_global *global, t_intersec intersec);
 t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 void		get_intersec_points(float a, float b, float discriminant,
-				t_cyl_lat *vars);
+                t_cyl_lat *vars);
+
 /* Colors*/
 t_color		cal_lighting(t_global *global, t_intersec intersec,
-				t_vector ray_dir);
+                t_vector ray_dir);
+t_color		cal_color(t_global *global, t_intersec intersec);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

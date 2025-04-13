@@ -2,7 +2,6 @@
 
 int	init(t_global *global)
 {
-	// global->scene.points = NULL;
 	global->img.img = NULL;
 	global->img.addr = NULL;
 	global->scene = (t_scene){0};
@@ -11,7 +10,7 @@ int	init(t_global *global)
 	if (!global->vars.mlx_conn)
 		finish(global, ERR_MLX);
 	printf("Initialized MLX OK\n");
-	return (MLX_SUCCESS);
+	return (SUCCESS);
 }
 
 int	init_scene(t_global *global, t_scene *scene)
@@ -38,7 +37,7 @@ int	init_scene(t_global *global, t_scene *scene)
 	if (!scene->cylinders)
 		finish(global, ERR_MEM);
 	scene->num_cy = 0;
-	return (MLX_SUCCESS);
+	return (SUCCESS);
 }
 
 t_intersec	init_intersec(void)

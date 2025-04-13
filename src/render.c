@@ -2,19 +2,19 @@
 
 #include "../inc/minirt.h"
 
-void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
-		int y)
+void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int px_x,
+		int px_y)
 {
 	int			color;
 	t_vector	ray_dir;
 	t_color		lit_color;
 
 	// Verificar límites
-	if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H || !img || !img->addr)
+	if (px_x < 0 || px_x >= WIN_W || px_y < 0 || px_y >= WIN_H || !img || !img->addr)
 		return ;
 	if (intersec.obj_type >= 0 && intersec.obj_index >= 0)
 	{
-		ray_dir = get_ray_direction(global->scene.cam, x, y);
+		ray_dir = get_ray_direction(global->scene.cam, px_x, px_y);
 		lit_color = cal_lighting(global, intersec, ray_dir);
 		color = rgb_to_int(lit_color);
 	}
@@ -22,13 +22,13 @@ void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
 	{
 		color = DARK_GREY;
 	}
-	pixel_put(img, x, y, color);
+	pixel_put(img, px_x, px_y, color);
 }
 
 void	render_all_pixels(t_global *global, t_intersec *intersecs)
 {
-	int			x;
-	int			y;
+	int			px_x;
+	int			px_y;
 	int			i;
 	t_vector	ray_dir;
 	t_intersec	center_intersec;
@@ -36,16 +36,16 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 	t_vector	saved_dir;
 
 	i = 0;
-	x = -1;
+	px_x = -1;
 	// Solo renderizar para el tamaño de la imagen
-	while (++x < (WIN_W - MARGIN))
+	while (++px_x < (WIN_W - MARGIN))
 	{
-		y = -1;
-		while (++y < (WIN_H - MARGIN))
+		px_y = -1;
+		while (++px_y < (WIN_H - MARGIN))
 		{
-			if (x == WIN_W / 2 && y == WIN_H / 2)
+			if (px_x == WIN_W / 2 && px_y == WIN_H / 2)
 			{
-				ray_dir = get_ray_direction(global->scene.cam, x, y);
+				ray_dir = get_ray_direction(global->scene.cam, px_x, px_y);
 				printf("Center ray direction: (%f, %f, %f)\n", ray_dir.x,
 					ray_dir.y, ray_dir.z);
 				// Guarda los valores actuales si es necesario
@@ -63,7 +63,7 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 					center_intersec.obj_type, center_intersec.obj_index,
 					center_intersec.dist);
 			}
-			render_pixel(global, intersecs[i++], &global->img, x, y);
+			render_pixel(global, intersecs[i++], &global->img, px_x, px_y);
 		}
 	}
 }

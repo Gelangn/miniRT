@@ -156,32 +156,30 @@ t_intersec	cal_ray(t_global *global, int px_x, int px_y)
 
 t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 {
-    float u, v;
-    float scrn_w, scrn_h;
-    float aspect_ratio;
-    t_vector z, x, y; // forward Z, right X, up Y
-    t_vector ray_dir;
+	float		aspect_ratio;
+	t_vector	ray_dir;
+	int			effective_width;
+	int			effective_height;
 
-    // Calcular el tamaño efectivo de la pantalla (sin márgenes)
-    int effective_width = WIN_W - MARGIN;
-    int effective_height = WIN_H - MARGIN;
-    
-    // Calcular la relación de aspecto efectiva
-    aspect_ratio = (float)effective_width / (float)effective_height;
-    scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
-    scrn_h = scrn_w / aspect_ratio;
-    
-    z = normalize(cam.orientation);
-    x = normalize(cross((t_vector){0, 1, 0}, z));
-    y = normalize(cross(z, x));
-    
-    // Calcular u y v centrados en el área efectiva
-    u = (2 * ((px_x + 0.5) / effective_width) - 1) * scrn_w / 2;
-    // Invertimos el cálculo de v para que crezca hacia abajo
-    v = (2 * ((px_y + 0.5) / effective_height) - 1) * scrn_h / 2;
-    
-    ray_dir = normalize(add(add(multiply(x, u), multiply(y, v)), z));
-    return ray_dir;
+	float u, v;
+	float scrn_w, scrn_h;
+	t_vector z, x, y; // forward Z, right X, up Y
+	// Calcular el tamaño efectivo de la pantalla (sin márgenes)
+	effective_width = WIN_W - MARGIN;
+	effective_height = WIN_H - MARGIN;
+	// Calcular la relación de aspecto efectiva
+	aspect_ratio = (float)effective_width / (float)effective_height;
+	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
+	scrn_h = scrn_w / aspect_ratio;
+	z = normalize(cam.orientation);
+	x = normalize(cross((t_vector){0, 1, 0}, z));
+	y = normalize(cross(z, x));
+	// Calcular u y v centrados en el área efectiva
+	u = (2 * ((px_x + 0.5) / effective_width) - 1) * scrn_w / 2;
+	// Invertimos el cálculo de v para que crezca hacia abajo
+	v = (2 * ((px_y + 0.5) / effective_height) - 1) * scrn_h / 2;
+	ray_dir = normalize(add(add(multiply(x, u), multiply(y, v)), z));
+	return (ray_dir);
 }
 
 t_vector	get_sp_normal(t_global *global, t_intersec intersec)

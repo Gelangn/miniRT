@@ -2,15 +2,16 @@
 
 #include "../inc/minirt.h"
 
-void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int px_x,
-		int px_y)
+void	render_pixel(t_global *global, t_intersec intersec, t_img *img,
+		int px_x, int px_y)
 {
 	int			color;
 	t_vector	ray_dir;
 	t_color		lit_color;
 
 	// Verificar límites
-	if (px_x < 0 || px_x >= WIN_W || px_y < 0 || px_y >= WIN_H || !img || !img->addr)
+	if (px_x < 0 || px_x >= WIN_W || px_y < 0 || px_y >= WIN_H || !img
+		|| !img->addr)
 		return ;
 	if (intersec.obj_type >= 0 && intersec.obj_index >= 0)
 	{

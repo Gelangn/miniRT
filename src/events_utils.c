@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/13 19:38:11 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/13 20:25:13 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	handle_mouse_move(int pos_x, int pos_y, t_global *global)
 	float		rotation_speed;
 	int			dx;
 	int			dy;
-	t_vector	x;
+	t_vector	vc_x;
 
 	if (global->mouse_pressed)
 	{
@@ -52,10 +52,10 @@ int	handle_mouse_move(int pos_x, int pos_y, t_global *global)
 		// Rotación horizontal (eje Y)
 		rotate_camera(global, (t_vector){0, 1, 0}, -dx * rotation_speed);
 		// Rotación vertical (eje X)
-		x = multiply(normalize(cross((t_vector){0, -1, 0}, normalize(global->scene.cam.orientation))), -1.0f);
-		// O Opción 2: Cambiar el vector Y
-		// x = normalize(cross((t_vector){0, 1, 0}, normalize(global->scene.cam.orientation)));
-		rotate_camera(global, x, -dy * rotation_speed);
+		vc_x = multiply(normalize(cross((t_vector){0, -1, 0},
+						normalize(global->scene.cam.orientation))), -1.0f);
+		normalize(global->scene.cam.orientation);
+		rotate_camera(global, vc_x, -dy * rotation_speed);
 		global->last_mouse_x = pos_x;
 		global->last_mouse_y = pos_y;
 		// Re-renderizar
@@ -68,16 +68,42 @@ int	handle_mouse_move(int pos_x, int pos_y, t_global *global)
 
 int	handle_mouse_scroll(int button, int pos_x, int pos_y, t_global *global)
 {
-	(void)global;    // Marca el parámetro como no utilizado
-	if (button == 4) // Scroll up
+	float	zoom_factor;
+
+	// Añadir mensaje de depuración
+	printf("Evento de mouse: botón %d en posición (%d, %d)\n", button, pos_x,
+		pos_y);
+	zoom_factor = 5.0f;
+	(void)pos_x;
+	(void)pos_y;
+	// Comprobar todos los posibles botones para scroll
+	if (button == 4) // Scroll up - Zoom in (probamos valores alternativos)
 	{
-		printf("Mouse scroll up at position (%d, %d)\n", pos_x, pos_y);
-		// Añade aquí el código para manejar el desplazamiento hacia arriba
+		// Reducir el FOV para hacer zoom in
+		if (global->scene.cam.fov > 10.0f)
+		{
+			global->scene.cam.fov -= zoom_factor;
+			if (global->scene.cam.fov < 10.0f)
+				global->scene.cam.fov = 10.0f;
+			// Re-renderizar con el nuevo FOV
+			render(global);
+			mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
+				global->img.img, MARGIN / 2, MARGIN / 2);
+		}
 	}
-	else if (button == 5) // Scroll down
+	else if (button == 5) // Scroll down - Zoom out
 	{
-		printf("Mouse scroll down at position (%d, %d)\n", pos_x, pos_y);
-		// Añade aquí el código para manejar el desplazamiento hacia abajo
+		// Aumentar el FOV para hacer zoom out
+		if (global->scene.cam.fov < 120.0f)
+		{
+			global->scene.cam.fov += zoom_factor;
+			if (global->scene.cam.fov > 120.0f)
+				global->scene.cam.fov = 120.0f;
+			// Re-renderizar con el nuevo FOV
+			render(global);
+			mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
+				global->img.img, MARGIN / 2, MARGIN / 2);
+		}
 	}
 	return (SUCCESS);
 }

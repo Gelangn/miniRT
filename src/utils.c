@@ -82,8 +82,8 @@ int	write_bmp_row(int fd, int px_y, t_global *global)
 	px_x = -1;
 	while (++px_x < width)
 	{
-		pixel = global->img.addr + (px_y * global->img.bpl + px_x * (global->img.bpp
-					/ 8));
+		pixel = global->img.addr + (px_y * global->img.bpl + px_x
+				* (global->img.bpp / 8));
 		row_buffer[px_x * 3] = pixel[0];     // B
 		row_buffer[px_x * 3 + 1] = pixel[1]; // G
 		row_buffer[px_x * 3 + 2] = pixel[2]; // R

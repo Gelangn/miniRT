@@ -20,7 +20,6 @@ int	main(int argc, char **argv)
 	t_global	*global;
 	char		buffer[PATH_MAX + 20];
 
-	// Inicializa global a cero para evitar punteros no válidos
 	if (argc != 2)
 		finish(NULL, ERR_ARGS);
 	global = (t_global *)malloc(sizeof(t_global));

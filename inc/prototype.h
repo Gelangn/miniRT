@@ -22,9 +22,9 @@ void		init_lateral_intersec_vars(t_cylinder *cylinder,
 int			handle_no_event(void);
 int			handle_keypress(int keysym, t_global *global);
 int			handle_keyrelease(int keysym);
-int			handle_mouse_move(int x, int y);
-int			mouse_press_hook(int button, int x, int y);
-int			mouse_release_hook(int button, int x, int y);
+int			handle_mouse_move(int x, int y, t_global *global);
+// int			mouse_press_hook(int button, int x, int y, t_global *global);
+// int			mouse_release_hook(int button, int x, int y, t_global *global);
 void		set_hooks(t_global *global);
 int			handle_mouse_scroll(int button, int x, int y, t_global *global);
 
@@ -135,5 +135,13 @@ t_vector	rotate_z(t_vector a, float angle);
 
 int			is_less_than(float a, float b);
 int			is_greater_than(float a, float b);
+
+// Controles de cámara
+void		move_camera(t_global *global, t_vector direction, float distance);
+void		rotate_camera(t_global *global, t_vector axis, float angle);
+int			handle_keypress(int keysym, t_global *global);
+int			mouse_press_hook(int button, int x, int y, t_global *global);
+int			mouse_release_hook(int button, int x, int y, t_global *global);
+int			handle_mouse_move(int x, int y, t_global *global);
 
 #endif

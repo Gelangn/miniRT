@@ -142,6 +142,9 @@ typedef struct s_global
 	t_scene		scene;
 	t_point		*points;
 	t_intersec	intersec;
+	int			mouse_pressed;
+	int			last_mouse_x;
+	int			last_mouse_y;
 }				t_global;
 
 #endif

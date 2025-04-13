@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/13 10:44:07 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/13 18:16:45 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ int	handle_mouse_move(int x, int y, t_global *global)
 		// Rotación horizontal (eje Y)
 		rotate_camera(global, (t_vector){0, 1, 0}, -dx * rotation_speed);
 		// Rotación vertical (eje X)
-		right = normalize(cross((t_vector){0, -1, 0},
-					normalize(global->scene.cam.orientation)));
+		right = multiply(normalize(cross((t_vector){0, -1, 0}, normalize(global->scene.cam.orientation))), -1.0f);
+		// O Opción 2: Cambiar el vector Y
+		// right = normalize(cross((t_vector){0, 1, 0}, normalize(global->scene.cam.orientation)));
 		rotate_camera(global, right, -dy * rotation_speed);
 		global->last_mouse_x = x;
 		global->last_mouse_y = y;

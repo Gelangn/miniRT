@@ -15,8 +15,11 @@ void	rotate_camera(t_global *global, t_vector axis, float angle)
 	// Implementación de rotación usando un cuaternión o matriz
 	// Versión simplificada:
 	t_vector forward = normalize(global->scene.cam.orientation);
-	t_vector right = normalize(cross((t_vector){0, -1, 0}, forward));
-	t_vector up = cross(forward, right);
+	
+	// Invertir la generación del vector "right":
+	t_vector right = normalize(cross(forward, (t_vector){0, -1, 0}));
+	
+	t_vector up = normalize(cross(right, forward));
 
 	// Crear matriz de rotación (simplificada)
 	if (comp_floats(magnitude(axis), 0))

@@ -4,7 +4,7 @@ C   0,0,-40      0,0,1           70
 L   -10,10,-30    0.7            255,255,255
 
 # Esfera central (origen del triedro)
-sp  0,0,0         2              220,220,220
+sp  0,0,0         3              220,220,220
 
 # Eje X - Cilindro rojo
 cy  5,0,0         1,0,0         0.7    10    255,0,0

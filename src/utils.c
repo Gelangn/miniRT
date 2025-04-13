@@ -98,18 +98,6 @@ int	write_bmp_row(int fd, int y, t_global *global)
 	return (FAILURE);
 }
 
-int	open_bmp_file(const char *filename)
-{
-	int	fd;
-
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-	{
-		perror("Error opening BMP file");
-	}
-	return (fd);
-}
-
 void	save_bmp(t_global *global, const char *filename)
 {
 	int	fd;
@@ -121,7 +109,7 @@ void	save_bmp(t_global *global, const char *filename)
 	height = WIN_H - MARGIN;
 	printf("Saving image: width=%d, height=%d\n", width, height);
 	printf("img->bpp=%d, img->bpl=%d\n", global->img.bpp, global->img.bpl);
-	fd = open_bmp_file(filename);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		finish(global, ERR_OPEN);
 	write_bmp_header(fd, global);

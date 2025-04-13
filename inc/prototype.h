@@ -50,7 +50,6 @@ int			is_greater_than(float a, float b);
 
 /* Save BMP */
 void		save_bmp(t_global *global, const char *filename);
-int			open_bmp_file(const char *filename);
 void		write_bmp_header(int fd, t_global *global);
 int			write_bmp_row(int fd, int y, t_global *global);
 

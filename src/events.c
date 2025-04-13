@@ -6,12 +6,12 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/13 12:25:05 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/13 13:05:27 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
-#include <sys/stat.h>  // Para mkdir
+#include <sys/stat.h> // Para mkdir
 
 int	handle_keypress(int keysym, t_global *global)
 {
@@ -21,6 +21,8 @@ int	handle_keypress(int keysym, t_global *global)
 	t_vector	forward;
 	t_vector	right;
 	t_vector	up;
+		char filename[100];
+		static int screenshot_count = 1;
 
 	move_speed = 0.5f;
 	rotate_speed = 0.05f;
@@ -74,24 +76,16 @@ int	handle_keypress(int keysym, t_global *global)
 	}
 	else if (keysym == XK_p || keysym == 112) // Tecla 'P'
 	{
-		char filename[100];
-		static int screenshot_count = 1;
-		
 		// Generar nombre de archivo con contador
 		sprintf(filename, "./imgs/screenshot_%03d.bmp", screenshot_count++);
-		
 		printf("Guardando imagen en: %s\n", filename);
-		
 		// Verificar que el directorio existe
 		mkdir("./imgs", 0777); // Crear directorio si no existe
-		
-		// Guardar la imagen renderizada
-		save_bmp(&global->img, WIN_W - MARGIN, WIN_H - MARGIN,
-			filename, global);
-			
+		// Llamada simplificada
+		save_bmp(global, filename);
 		// No necesitamos re-renderizar, solo mostrar un mensaje
-		mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, 
-			WIN_W * 0.35, WIN_H * 0.5, 0xFFFFFF, "¡Imagen guardada!");
+		mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W
+			* 0.35, WIN_H * 0.5, 0xFFFFFF, "¡Imagen guardada!");
 	}
 	else if (keysym == XK_Escape)
 		finish(global, SUCCESS);
@@ -108,6 +102,7 @@ int	handle_keypress(int keysym, t_global *global)
 int	window_close_handler(t_global *global)
 {
 	finish(global, SUCCESS);
+	return (SUCCESS);
 }
 
 void	set_hooks(t_global *global)

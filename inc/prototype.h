@@ -49,12 +49,10 @@ int			is_less_than(float a, float b);
 int			is_greater_than(float a, float b);
 
 /* Save BMP */
-void		save_bmp(t_img *img, int width, int height, const char *filename,
-				t_global *global);
+void		save_bmp(t_global *global, const char *filename);
 int			open_bmp_file(const char *filename);
-void		write_bmp_header(int fd, int width, int height, t_global *global);
-int			write_bmp_row(int fd, t_img *img, int y, int width,
-				t_global *global);
+void		write_bmp_header(int fd, t_global *global);
+int			write_bmp_row(int fd, int y, t_global *global);
 
 /* Parsing */
 void		parse_ambient(t_global *global, t_scene *scene, char *line);

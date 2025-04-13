@@ -5,19 +5,8 @@
 int	close_window(t_global *global)
 {
 	printf("Closing window\n");
-	// No liberar global aquí, solo marcar la ventana como cerrada
-	if (global->img.img)
-	{
-		printf("Destroying image\n");
-		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
-		global->img.img = NULL;
-	}
-	if (global->vars.mlx_win)
-	{
-		printf("Destroying window\n");
-		mlx_destroy_window(global->vars.mlx_conn, global->vars.mlx_win);
-		global->vars.mlx_win = NULL;
-	}
+	global->vars.mlx_win = NULL;  // Solo marcar como cerrado, no destruir
+	global->img.img = NULL;       // Solo marcar como cerrado, no destruir
 	return (SUCCESS);
 }
 

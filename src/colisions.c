@@ -81,7 +81,6 @@ t_intersec	col_cy(t_cylinder *cylinder, t_vector ray_origin, t_vector ray_dir)
 		intersec = top_cap_intersec;
 	if (bottom_cap_intersec.dist < intersec.dist)
 		intersec = bottom_cap_intersec;
-	// Asegurar que el tipo de objeto esté correctamente establecido
 	if (intersec.dist < INFINITY)
 		intersec.obj_type = 2;
 	return (intersec);

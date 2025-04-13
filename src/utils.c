@@ -9,13 +9,9 @@ void	finish(t_global *global, const char *message)
 	else
 		perror(message);
 	if (global)
-	{
-		if (global->vars.mlx_conn || global->vars.mlx_win)
-			close_window(global);
-		free_global(global);
-	}
+		free_global(global);  // Que free_global haga toda la limpieza
 	printf("Exiting program\n");
-	exit(FAILURE);
+	exit(SUCCESS);
 }
 
 // Function to compare two floats using EPSILON

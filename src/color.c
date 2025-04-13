@@ -40,9 +40,22 @@ t_color	cal_lighting(t_global *global, t_intersec intersec, t_vector ray_dir)
 
 	// Comprobar sombras
 	t_vector shadow_origin = add(intersec.point, multiply(normal, 0.005f));
-	// Aumentado offset
-	t_intersec shadow_intersec = find_closest_intersec(global, shadow_origin,
-			light_dir);
+
+	// Guarda los valores actuales del rayo
+	t_vector saved_origin = global->current_ray_origin;
+	t_vector saved_dir = global->current_ray_dir;
+
+	// Configura el rayo de sombra
+	global->current_ray_origin = shadow_origin;
+	global->current_ray_dir = light_dir;
+
+	// Llama a find_closest_intersec con la nueva firma
+	t_intersec shadow_intersec = find_closest_intersec(global);
+
+	// Restaura los valores originales
+	global->current_ray_origin = saved_origin;
+	global->current_ray_dir = saved_dir;
+
 	float light_distance = magnitude(subtract(global->scene.light.pos,
 				intersec.point));
 

@@ -2,8 +2,8 @@
 
 #include "../inc/minirt.h"
 
-t_intersec	process_lateral_hit(t_cylinder *cylinder, t_vector ray_origin,
-		t_vector ray_dir, t_cyl_lat vars, float t)
+t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
+		t_cyl_lat vars, float t)
 {
 	t_intersec	intersec;
 	t_vector	hit_point;
@@ -15,7 +15,8 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_vector ray_origin,
 	intersec = init_intersec();
 	if (t < 0)
 		return (intersec);
-	hit_point = add(ray_origin, multiply(ray_dir, t));
+	hit_point = add(global->current_ray_origin,
+			multiply(global->current_ray_dir, t));
 	hit_height = dot(subtract(hit_point, cylinder->base), vars.axis);
 	if (is_less_than(hit_height, 0) || is_greater_than(hit_height,
 			cylinder->height))
@@ -23,7 +24,7 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_vector ray_origin,
 	hit_to_axis = multiply(vars.axis, hit_height);
 	center_at_height = add(cylinder->base, hit_to_axis);
 	normal = normalize(subtract(hit_point, center_at_height));
-	if (dot(normal, ray_dir) >= 0)
+	if (dot(normal, global->current_ray_dir) >= 0)
 		return (intersec);
 	intersec.dist = t;
 	intersec.point = hit_point;
@@ -31,24 +32,23 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_vector ray_origin,
 	return (intersec);
 }
 
-t_intersec	check_lateral_hits(t_cylinder *cylinder, t_vector ray_origin,
-		t_vector ray_dir, t_cyl_lat vars)
+t_intersec	check_lateral_hits(t_cylinder *cylinder, t_global *global,
+		t_cyl_lat vars)
 {
 	t_intersec	hit1;
 	t_intersec	hit2;
 	float		t;
 
 	t = vars.t1;
-	hit1 = process_lateral_hit(cylinder, ray_origin, ray_dir, vars, t);
+	hit1 = process_lateral_hit(cylinder, global, vars, t);
 	if (hit1.obj_type >= 0)
 		return (hit1);
 	t = vars.t2;
-	hit2 = process_lateral_hit(cylinder, ray_origin, ray_dir, vars, t);
+	hit2 = process_lateral_hit(cylinder, global, vars, t);
 	return (hit2);
 }
 
-void	check_sp_intersecs(t_global *global, t_vector ray_origin,
-		t_vector ray_dir, t_intersec *closest_intersec)
+void	check_sp_intersecs(t_global *global, t_intersec *closest_intersec)
 {
 	t_sphere	*sphere;
 	t_intersec	temp_intersec;
@@ -58,7 +58,7 @@ void	check_sp_intersecs(t_global *global, t_vector ray_origin,
 	i = -1;
 	while (++i < global->scene.num_sp)
 	{
-		temp_intersec = col_sp(&sphere[i], ray_origin, ray_dir);
+		temp_intersec = col_sp(&sphere[i], global);
 		if (temp_intersec.dist < closest_intersec->dist)
 		{
 			*closest_intersec = temp_intersec;
@@ -68,8 +68,7 @@ void	check_sp_intersecs(t_global *global, t_vector ray_origin,
 	}
 }
 
-void	check_pl_intersecs(t_global *global, t_vector ray_origin,
-		t_vector ray_dir, t_intersec *closest_intersec)
+void	check_pl_intersecs(t_global *global, t_intersec *closest_intersec)
 {
 	t_plane		*plane;
 	t_intersec	temp_intersec;
@@ -79,7 +78,7 @@ void	check_pl_intersecs(t_global *global, t_vector ray_origin,
 	i = -1;
 	while (++i < global->scene.num_pl)
 	{
-		temp_intersec = col_pl(&plane[i], ray_origin, ray_dir);
+		temp_intersec = col_pl(&plane[i], global);
 		if (temp_intersec.dist < closest_intersec->dist)
 		{
 			*closest_intersec = temp_intersec;
@@ -89,8 +88,7 @@ void	check_pl_intersecs(t_global *global, t_vector ray_origin,
 	}
 }
 
-void	check_cy_intersecs(t_global *global, t_vector ray_origin,
-		t_vector ray_dir, t_intersec *closest_intersec)
+void	check_cy_intersecs(t_global *global, t_intersec *closest_intersec)
 {
 	t_cylinder	*cylinder;
 	t_intersec	temp_intersec;
@@ -100,7 +98,7 @@ void	check_cy_intersecs(t_global *global, t_vector ray_origin,
 	i = -1;
 	while (++i < global->scene.num_cy)
 	{
-		temp_intersec = col_cy(&cylinder[i], ray_origin, ray_dir);
+		temp_intersec = col_cy(&cylinder[i], global);
 		if (temp_intersec.dist < closest_intersec->dist)
 		{
 			*closest_intersec = temp_intersec;
@@ -110,19 +108,17 @@ void	check_cy_intersecs(t_global *global, t_vector ray_origin,
 	}
 }
 
-t_intersec	find_closest_intersec(t_global *global, t_vector ray_origin,
-		t_vector ray_dir)
+t_intersec	find_closest_intersec(t_global *global)
 {
 	t_intersec	closest_intersec;
 
 	closest_intersec = init_intersec();
-	// Solo buscar intersecciones con tipos de objetos que realmente existen en la escena
 	if (global->scene.num_sp > 0)
-		check_sp_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+		check_sp_intersecs(global, &closest_intersec);
 	if (global->scene.num_pl > 0)
-		check_pl_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+		check_pl_intersecs(global, &closest_intersec);
 	if (global->scene.num_cy > 0)
-		check_cy_intersecs(global, ray_origin, ray_dir, &closest_intersec);
+		check_cy_intersecs(global, &closest_intersec);
 	return (closest_intersec);
 }
 
@@ -148,13 +144,13 @@ void	trace_all_rays(t_global *global, t_intersec *intersecs)
 
 t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y)
 {
-	t_vector	ray_dir;
 	t_camera	cam;
 	t_intersec	intersec;
 
 	cam = global->scene.cam;
-	ray_dir = get_ray_direction(cam, pixel_x, pixel_y);
-	intersec = find_closest_intersec(global, cam.pos, ray_dir);
+	global->current_ray_origin = cam.pos;
+	global->current_ray_dir = get_ray_direction(cam, pixel_x, pixel_y);
+	intersec = find_closest_intersec(global);
 	return (intersec);
 }
 

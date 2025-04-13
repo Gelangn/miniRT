@@ -21,8 +21,8 @@ int	handle_keypress(int keysym, t_global *global)
 	t_vector	forward;
 	t_vector	right;
 	t_vector	up;
-		char filename[100];
-		static int screenshot_count = 1;
+	char		filename[100];
+	static int	screenshot_count = 1;
 
 	move_speed = 0.5f;
 	rotate_speed = 0.05f;

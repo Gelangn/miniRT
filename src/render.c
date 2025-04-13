@@ -32,6 +32,8 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 	int			i;
 	t_vector	ray_dir;
 	t_intersec	center_intersec;
+	t_vector	saved_origin;
+	t_vector	saved_dir;
 
 	i = 0;
 	x = -1;
@@ -46,8 +48,17 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 				ray_dir = get_ray_direction(global->scene.cam, x, y);
 				printf("Center ray direction: (%f, %f, %f)\n", ray_dir.x,
 					ray_dir.y, ray_dir.z);
-				center_intersec = find_closest_intersec(global,
-						global->scene.cam.pos, ray_dir);
+				// Guarda los valores actuales si es necesario
+				saved_origin = global->current_ray_origin;
+				saved_dir = global->current_ray_dir;
+				// Configura el rayo central
+				global->current_ray_origin = global->scene.cam.pos;
+				global->current_ray_dir = ray_dir;
+				// Llama a find_closest_intersec con la nueva firma
+				center_intersec = find_closest_intersec(global);
+				// Restaura los valores originales
+				global->current_ray_origin = saved_origin;
+				global->current_ray_dir = saved_dir;
 				printf("Center ray hit: type=%d, index=%d, distance=%f\n",
 					center_intersec.obj_type, center_intersec.obj_index,
 					center_intersec.dist);

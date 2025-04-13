@@ -145,6 +145,10 @@ typedef struct s_global
 	int			mouse_pressed;
 	int			last_mouse_x;
 	int			last_mouse_y;
+
+	// Variables para el rayo actual
+	t_vector	current_ray_origin;
+	t_vector	current_ray_dir;
 }				t_global;
 
 #endif

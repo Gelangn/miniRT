@@ -14,14 +14,16 @@ float	cal_discriminant(t_vector oc, t_vector ray_dir, float radius)
 	return (discriminant);
 }
 
-t_intersec	col_sp(t_sphere *sphere, t_global *global)
+t_intersec	col_sp(t_global *global, int sp_id)
 {
 	t_intersec	intersec;
 	t_vector	oc;
 	float		discriminant;
 	float		t1;
 	float		t2;
+	t_sphere	*sphere;
 
+	sphere = &global->scene.spheres[sp_id];
 	intersec = init_intersec();
 	oc = subtract(global->current_ray_origin, sphere->center);
 	discriminant = cal_discriminant(oc, global->current_ray_dir,
@@ -39,17 +41,19 @@ t_intersec	col_sp(t_sphere *sphere, t_global *global)
 	else
 		return (intersec);
 	intersec.point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, intersec.dist));
+							multiply(global->current_ray_dir, intersec.dist));
 	return (intersec);
 }
 
-t_intersec	col_pl(t_plane *plane, t_global *global)
+t_intersec	col_pl(t_global *global, int pl_id)
 {
 	t_intersec	intersec;
 	float		denom;
 	float		t;
 	t_vector	p0l0;
+	t_plane		*plane;
 
+	plane = &global->scene.planes[pl_id];
 	intersec = init_intersec();
 	denom = dot(plane->normal, global->current_ray_dir);
 	if (comp_floats(denom, 0))
@@ -60,18 +64,20 @@ t_intersec	col_pl(t_plane *plane, t_global *global)
 		return (intersec);
 	intersec.dist = t;
 	intersec.point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, t));
+							multiply(global->current_ray_dir, t));
 	intersec.obj_type = 1;
 	return (intersec);
 }
 
-t_intersec	col_cy(t_cylinder *cylinder, t_global *global)
+t_intersec	col_cy(t_global *global, int cy_id)
 {
 	t_intersec	intersec;
 	t_intersec	lateral_intersec;
 	t_intersec	top_cap_intersec;
 	t_intersec	bottom_cap_intersec;
+	t_cylinder	*cylinder;
 
+	cylinder = &global->scene.cylinders[cy_id];
 	intersec = init_intersec();
 	lateral_intersec = cal_lateral_intersec(cylinder, global);
 	top_cap_intersec = cal_cap_intersec(cylinder, global, 1);
@@ -124,7 +130,7 @@ t_intersec	cal_cap_intersec(t_cylinder *cylinder, t_global *global,
 	if (t < 0)
 		return (intersec);
 	hit_point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, t));
+					multiply(global->current_ray_dir, t));
 	dist_from_center = magnitude(subtract(hit_point, cap_center));
 	if (dist_from_center > cylinder->radius)
 		return (intersec);
@@ -142,12 +148,12 @@ t_intersec	cal_lateral_intersec(t_cylinder *cylinder, t_global *global)
 
 	intersec = init_intersec();
 	init_lateral_intersec_vars(cylinder, global->current_ray_origin,
-		global->current_ray_dir, &vars);
+			global->current_ray_dir, &vars);
 	discriminant = cal_lateral_discriminant(cylinder, vars);
 	if (discriminant < 0)
 		return (intersec);
 	get_intersec_points(dot(vars.dir_perp, vars.dir_perp), 2
-		* dot(vars.dir_perp, vars.oc_perp), discriminant, &vars);
+			* dot(vars.dir_perp, vars.oc_perp), discriminant, &vars);
 	return (check_lateral_hits(cylinder, global, vars));
 }
 

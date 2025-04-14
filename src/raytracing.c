@@ -50,15 +50,13 @@ t_intersec	check_lateral_hits(t_cylinder *cylinder, t_global *global,
 
 void	check_sp_intersecs(t_global *global, t_intersec *closest_intersec)
 {
-	t_sphere	*sphere;
-	t_intersec	temp_intersec;
 	int			i;
+	t_intersec	temp_intersec;
 
-	sphere = global->scene.spheres;
 	i = -1;
 	while (++i < global->scene.num_sp)
 	{
-		temp_intersec = col_sp(&sphere[i], global);
+		temp_intersec = col_sp(global, i);
 		if (temp_intersec.dist < closest_intersec->dist)
 		{
 			*closest_intersec = temp_intersec;
@@ -70,15 +68,13 @@ void	check_sp_intersecs(t_global *global, t_intersec *closest_intersec)
 
 void	check_pl_intersecs(t_global *global, t_intersec *closest_intersec)
 {
-	t_plane		*plane;
-	t_intersec	temp_intersec;
 	int			i;
+	t_intersec	temp_intersec;
 
-	plane = global->scene.planes;
 	i = -1;
 	while (++i < global->scene.num_pl)
 	{
-		temp_intersec = col_pl(&plane[i], global);
+		temp_intersec = col_pl(global, i);
 		if (temp_intersec.dist < closest_intersec->dist)
 		{
 			*closest_intersec = temp_intersec;
@@ -90,15 +86,13 @@ void	check_pl_intersecs(t_global *global, t_intersec *closest_intersec)
 
 void	check_cy_intersecs(t_global *global, t_intersec *closest_intersec)
 {
-	t_cylinder	*cylinder;
-	t_intersec	temp_intersec;
 	int			i;
+	t_intersec	temp_intersec;
 
-	cylinder = global->scene.cylinders;
 	i = -1;
 	while (++i < global->scene.num_cy)
 	{
-		temp_intersec = col_cy(&cylinder[i], global);
+		temp_intersec = col_cy(global, i);
 		if (temp_intersec.dist < closest_intersec->dist)
 		{
 			*closest_intersec = temp_intersec;
@@ -165,7 +159,6 @@ t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 
 	float u, v;
 	float scrn_w, scrn_h;
-
 	// Calcular la relación de aspecto efectiva
 	aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
 	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);

@@ -80,9 +80,9 @@ void		render_pixel(t_global *global, t_intersec intersec, t_img *img,
 				int x, int y);
 
 /* Colisions */
-t_intersec	col_sp(t_sphere *sphere, t_global *global);
-t_intersec	col_pl(t_plane *plane, t_global *global);
-t_intersec	col_cy(t_cylinder *cylinder, t_global *global);
+t_intersec	col_sp(t_global *global, int sp_id);
+t_intersec	col_pl(t_global *global, int pl_id);
+t_intersec	col_cy(t_global *global, int cy_id);
 float		cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars);
 t_intersec	cal_lateral_intersec(t_cylinder *cylinder, t_global *global);
 t_intersec	cal_cap_intersec(t_cylinder *cylinder, t_global *global,

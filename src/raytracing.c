@@ -142,7 +142,7 @@ void	trace_all_rays(t_global *global, t_intersec *intersecs)
 		intersecs[i] = find_closest_intersec(global);
 		i++;
 	}
-	printf("Total rayos calculados: %d\n", i);
+	printf("Total calculated rays: %d\n", i);
 }
 
 t_intersec	cal_ray(t_global *global, int px_x, int px_y)

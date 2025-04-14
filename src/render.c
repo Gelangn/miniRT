@@ -41,7 +41,7 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 		// Verificar el píxel central para debug
 		if (px_x == WIN_W / 2 && px_y == WIN_H / 2)
 		{
-			printf("Rayo central: tipo=%d, índice=%d, distancia=%f\n",
+			printf("Central ray: type=%d, index=%d, distance=%f\n",
 					intersecs[i].obj_type,
 					intersecs[i].obj_index,
 					intersecs[i].dist);
@@ -74,11 +74,11 @@ void	render(t_global *global)
 		free(intersecs);
 		finish(global, ERR_IMG);
 	}
-	printf("Posición de cámara: (%f, %f, %f)\n",
+	printf("Camera position: (%f, %f, %f)\n",
 			global->scene.cam.pos.x,
 			global->scene.cam.pos.y,
 			global->scene.cam.pos.z);
-	printf("Orientación de cámara: (%f, %f, %f)\n",
+	printf("Camera orientation: (%f, %f, %f)\n",
 			global->scene.cam.orientation.x,
 			global->scene.cam.orientation.y,
 			global->scene.cam.orientation.z);

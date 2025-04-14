@@ -32,8 +32,8 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 	int	px_x;
 	int	px_y;
 
-	i = 0;
-	while (i < (WIN_W - MARGIN) * (WIN_H - MARGIN))
+	i = -1;
+	while (++i < (WIN_W - MARGIN) * (WIN_H - MARGIN))
 	{
 		// Usar las coordenadas precalculadas
 		px_x = global->points[i].scrn_x;
@@ -47,7 +47,6 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 					intersecs[i].dist);
 		}
 		render_pixel(global, intersecs[i], &global->img, px_x, px_y);
-		i++;
 	}
 }
 

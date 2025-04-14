@@ -12,13 +12,8 @@ void	move_camera(t_global *global, t_vector direction, float distance)
 // Rotar la cámara alrededor de un eje
 void	rotate_camera(t_global *global, t_vector axis, float angle)
 {
-	// Implementación de rotación usando un cuaternión o matriz
-	// Versión simplificada:
 	t_vector z = normalize(global->scene.cam.orientation);
-
-	// Invertir la generación del vector "x":
 	t_vector x = normalize(cross(z, (t_vector){0, -1, 0}));
-
 	t_vector y = normalize(cross(x, z));
 
 	// Crear matriz de rotación (simplificada)
@@ -29,11 +24,10 @@ void	rotate_camera(t_global *global, t_vector axis, float angle)
 	float c = cosf(angle);
 	float s = sinf(angle);
 
-	// Aplicar rotación (ejemplo muy simplificado)
+	// Aplicar rotación
 	if (comp_floats(axis.x, 1))
 		global->scene.cam.orientation = add(multiply(z, c), multiply(y, s));
 	else if (comp_floats(axis.y, 1))
 		global->scene.cam.orientation = add(multiply(z, c), multiply(x, s));
-
 	global->scene.cam.orientation = normalize(global->scene.cam.orientation);
 }

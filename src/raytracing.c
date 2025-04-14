@@ -130,8 +130,8 @@ void	trace_all_rays(t_global *global, t_intersec *intersecs)
 	t_vector	ray_dir;
 
 	total_rays = (WIN_W - MARGIN) * (WIN_H - MARGIN);
-	i = 0;
-	while (i < total_rays)
+	i = -1;
+	while (++i < total_rays)
 	{
 		// Usar la dirección precalculada
 		ray_dir.x = global->points[i].point_x;
@@ -140,7 +140,6 @@ void	trace_all_rays(t_global *global, t_intersec *intersecs)
 		global->current_ray_origin = global->scene.cam.pos;
 		global->current_ray_dir = ray_dir;
 		intersecs[i] = find_closest_intersec(global);
-		i++;
 	}
 	printf("Total calculated rays: %d\n", i);
 }
@@ -166,8 +165,7 @@ t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 
 	float u, v;
 	float scrn_w, scrn_h;
-	// Ya no necesitamos calcular el triedro para cada rayo
-	// Usamos los vectores precalculados
+
 	// Calcular la relación de aspecto efectiva
 	aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
 	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);

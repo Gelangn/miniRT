@@ -57,10 +57,13 @@ typedef struct s_ambient
 
 typedef struct s_camera
 {
-	int fov;              // field of view (grados o radianes)
-	double dist_scrn;     // distance from the camera to the screen
-	t_vector pos;         // position of the camera
-	t_vector orientation; // orientation of the camera (vector)
+	int			fov;
+	double		dist_scrn;
+	t_vector	pos;
+	t_vector	orientation;
+	t_vector x; // Vector derecha precalculado
+	t_vector y; // Vector arriba precalculado
+	t_vector z; // Vector adelante precalculado
 	int			init;
 }				t_camera;
 

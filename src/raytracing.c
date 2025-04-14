@@ -16,7 +16,7 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
 	if (t < 0)
 		return (intersec);
 	hit_point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, t));
+					multiply(global->current_ray_dir, t));
 	hit_height = dot(subtract(hit_point, cylinder->base), vars.axis);
 	if (is_less_than(hit_height, 0) || is_greater_than(hit_height,
 			cylinder->height))
@@ -121,7 +121,8 @@ t_intersec	find_closest_intersec(t_global *global)
 		check_cy_intersecs(global, &closest_intersec);
 	return (closest_intersec);
 }
-
+/* Nucleo central del raytracing, llama a cal_ray, y a su ves a 
+get_ray_direction */
 void	trace_all_rays(t_global *global, t_intersec *intersecs)
 {
 	int	x;
@@ -130,14 +131,11 @@ void	trace_all_rays(t_global *global, t_intersec *intersecs)
 
 	i = 0;
 	x = -1;
-	// Solo calcular para el tamaño de la imagen
 	while (++x < (WIN_W - MARGIN))
 	{
 		y = -1;
 		while (++y < (WIN_H - MARGIN))
-		{
 			intersecs[i++] = cal_ray(global, x, y);
-		}
 	}
 	printf("Total calculate rays: %d\n", i);
 }
@@ -153,31 +151,28 @@ t_intersec	cal_ray(t_global *global, int px_x, int px_y)
 	intersec = find_closest_intersec(global);
 	return (intersec);
 }
-
+/* Aqui definimos el entorno, la direccion de los
+ ejes, el centro del universo (camara/observador), las relaciones de pantalla
+  para poder aprovechar toda la vista */
 t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 {
 	float		aspect_ratio;
 	t_vector	ray_dir;
-	int			effective_width;
-	int			effective_height;
 
 	float u, v;
-	float scrn_w, scrn_h;
-	t_vector z, x, y; // forward Z, right X, up Y
-	// Calcular el tamaño efectivo de la pantalla (sin márgenes)
-	effective_width = WIN_W - MARGIN;
-	effective_height = WIN_H - MARGIN;
-	// Calcular la relación de aspecto efectiva
-	aspect_ratio = (float)effective_width / (float)effective_height;
-	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
-	scrn_h = scrn_w / aspect_ratio;
+	float scrn_w, scrn_h; // pantalla virtual
+	// Determinar la orientación del triedro
+	t_vector x, y, z; // right X, down Y, forward Z
 	z = normalize(cam.orientation);
 	x = normalize(cross((t_vector){0, 1, 0}, z));
 	y = normalize(cross(z, x));
-	// Calcular u y v centrados en el área efectiva
-	u = (2 * ((px_x + 0.5) / effective_width) - 1) * scrn_w / 2;
-	// Invertimos el cálculo de v para que crezca hacia abajo
-	v = (2 * ((px_y + 0.5) / effective_height) - 1) * scrn_h / 2;
+	// Calcular la relación de aspecto efectiva
+	aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
+	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
+	scrn_h = scrn_w / aspect_ratio;
+	// Calcular u y v (nuevos px_x e px_y aproximadamente) centrados en el área efectiva
+	u = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
+	v = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
 	ray_dir = normalize(add(add(multiply(x, u), multiply(y, v)), z));
 	return (ray_dir);
 }
@@ -230,10 +225,10 @@ t_vector	get_surface_normal(t_global *global, t_intersec intersec)
 		&& intersec.obj_index < global->scene.num_sp)
 		normal = get_sp_normal(global, intersec);
 	else if (intersec.obj_type == 1 && intersec.obj_index >= 0
-		&& intersec.obj_index < global->scene.num_pl)
+			&& intersec.obj_index < global->scene.num_pl)
 		normal = get_pl_normal(global, intersec);
 	else if (intersec.obj_type == 2 && intersec.obj_index >= 0
-		&& intersec.obj_index < global->scene.num_cy)
+			&& intersec.obj_index < global->scene.num_cy)
 		normal = get_cy_normal(global, intersec);
 	return (normal);
 }

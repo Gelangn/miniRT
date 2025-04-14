@@ -125,19 +125,24 @@ t_intersec	find_closest_intersec(t_global *global)
 get_ray_direction */
 void	trace_all_rays(t_global *global, t_intersec *intersecs)
 {
-	int	x;
-	int	y;
-	int	i;
+	int			i;
+	int			total_rays;
+	t_vector	ray_dir;
 
+	total_rays = (WIN_W - MARGIN) * (WIN_H - MARGIN);
 	i = 0;
-	x = -1;
-	while (++x < (WIN_W - MARGIN))
+	while (i < total_rays)
 	{
-		y = -1;
-		while (++y < (WIN_H - MARGIN))
-			intersecs[i++] = cal_ray(global, x, y);
+		// Usar la dirección precalculada
+		ray_dir.x = global->points[i].point_x;
+		ray_dir.y = global->points[i].point_y;
+		ray_dir.z = global->points[i].point_z;
+		global->current_ray_origin = global->scene.cam.pos;
+		global->current_ray_dir = ray_dir;
+		intersecs[i] = find_closest_intersec(global);
+		i++;
 	}
-	printf("Total calculate rays: %d\n", i);
+	printf("Total rayos calculados: %d\n", i);
 }
 
 t_intersec	cal_ray(t_global *global, int px_x, int px_y)
@@ -160,20 +165,19 @@ t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 	t_vector	ray_dir;
 
 	float u, v;
-	float scrn_w, scrn_h; // pantalla virtual
-	// Determinar la orientación del triedro
-	t_vector x, y, z; // right X, down Y, forward Z
-	z = normalize(cam.orientation);
-	x = normalize(cross((t_vector){0, 1, 0}, z));
-	y = normalize(cross(z, x));
+	float scrn_w, scrn_h;
+	// Ya no necesitamos calcular el triedro para cada rayo
+	// Usamos los vectores precalculados
 	// Calcular la relación de aspecto efectiva
 	aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
 	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
 	scrn_h = scrn_w / aspect_ratio;
-	// Calcular u y v (nuevos px_x e px_y aproximadamente) centrados en el área efectiva
+	// Calcular u y v
 	u = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
 	v = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
-	ray_dir = normalize(add(add(multiply(x, u), multiply(y, v)), z));
+	// Usar los vectores precalculados
+	ray_dir = normalize(add(add(multiply(cam.x, u), multiply(cam.y, v)),
+							cam.z));
 	return (ray_dir);
 }
 

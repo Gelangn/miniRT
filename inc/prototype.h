@@ -25,6 +25,8 @@ int			mouse_release_hook(int button, int x, int y, t_global *global);
 /* Camera controls*/
 void		move_camera(t_global *global, t_vector direction, float distance);
 void		rotate_camera(t_global *global, t_vector axis, float angle);
+void		precalculate_camera_axis(t_global *global);
+void		precalculate_rays(t_global *global);
 
 /* Window */
 int			close_window(t_global *global);

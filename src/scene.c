@@ -21,11 +21,9 @@ void	read_scene(t_global *global)
 {
 	char	*line_ptr;
 	int		fd;
-	t_scene	*scene;
 	char	*filename;
 
 	filename = global->scene.file_path;
-	scene = &global->scene;
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		finish(global, ERR_OPEN);
@@ -36,21 +34,21 @@ void	read_scene(t_global *global)
 		while (line_ptr)
 		{
 			if (line_ptr[0] == 'A')
-				parse_ambient(global, scene, line_ptr);
+				parse_ambient(global, line_ptr);
 			else if (line_ptr[0] == 'C')
-				parse_cam(global, scene, line_ptr);
+				parse_cam(global, line_ptr);
 			else if (line_ptr[0] == 'L')
-				parse_light(global, scene, line_ptr);
+				parse_light(global, line_ptr);
 			else if (strncmp(line_ptr, "sp", 2) == 0)
-				parse_sphere(global, scene, line_ptr);
+				parse_sphere(global, line_ptr);
 			else if (strncmp(line_ptr, "pl", 2) == 0)
-				parse_plane(global, scene, line_ptr);
+				parse_plane(global, line_ptr);
 			else if (strncmp(line_ptr, "cy", 2) == 0)
-				parse_cylinder(global, scene, line_ptr);
+				parse_cylinder(global, line_ptr);
 			free(line_ptr);
 			line_ptr = get_next_line(fd);
 		}
 	}
-	check_scene(global, scene);
+	check_scene(global, &global->scene);
 	close(fd);
 }

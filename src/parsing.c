@@ -13,7 +13,7 @@ static void	replace_tabs_with_spaces(char *str)
 	}
 }
 
-// Función para parsear un vector
+// Function to parse vector
 static void	parse_vector(t_global *global, char *str, t_vector *vector)
 {
 	char	**tokens;
@@ -27,7 +27,7 @@ static void	parse_vector(t_global *global, char *str, t_vector *vector)
 	dbl_free(tokens);
 }
 
-// Función para parsear un color
+// Function to parse color
 static void	parse_color(t_global *global, char *str, t_color *color)
 {
 	char	**tokens;
@@ -41,7 +41,7 @@ static void	parse_color(t_global *global, char *str, t_color *color)
 	dbl_free(tokens);
 }
 
-// Función para parsear un token flotante
+// Function to parse a float token
 static float	parse_float_token(t_global *global, char **tokens)
 {
 	if (!*tokens)
@@ -49,7 +49,7 @@ static float	parse_float_token(t_global *global, char **tokens)
 	return (ft_atof(*tokens));
 }
 
-// Función para parsear un token entero
+// Function to parse a integer token
 static int	parse_int_token(t_global *global, char **tokens)
 {
 	if (!*tokens)
@@ -57,11 +57,13 @@ static int	parse_int_token(t_global *global, char **tokens)
 	return (ft_atoi(*tokens));
 }
 
-// Función para parsear la luz ambiental
-void	parse_ambient(t_global *global, t_scene *scene, char *line)
+// Function to parse ambient light
+void	parse_ambient(t_global *global, char *line)
 {
 	char	**tokens;
+	t_scene	*scene;
 
+	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens || scene->ambient.init)
@@ -75,11 +77,13 @@ void	parse_ambient(t_global *global, t_scene *scene, char *line)
 	dbl_free(tokens);
 }
 
-// Función para parsear la cámara
-void	parse_cam(t_global *global, t_scene *scene, char *line)
+// Function to parse camera
+void	parse_cam(t_global *global, char *line)
 {
 	char	**tokens;
+	t_scene	*scene;
 
+	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens || scene->cam.init)
@@ -95,11 +99,13 @@ void	parse_cam(t_global *global, t_scene *scene, char *line)
 	dbl_free(tokens);
 }
 
-// Función para parsear la luz
-void	parse_light(t_global *global, t_scene *scene, char *line)
+// Function to parse light
+void	parse_light(t_global *global, char *line)
 {
 	char	**tokens;
+	t_scene	*scene;
 
+	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens || scene->light.init)
@@ -113,12 +119,14 @@ void	parse_light(t_global *global, t_scene *scene, char *line)
 	dbl_free(tokens);
 }
 
-// Función para parsear una esfera
-void	parse_sphere(t_global *global, t_scene *scene, char *line)
+// Function to parse a sphere
+void	parse_sphere(t_global *global, char *line)
 {
 	t_sphere	sphere;
 	char		**tokens;
+	t_scene		*scene;
 
+	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
@@ -135,12 +143,14 @@ void	parse_sphere(t_global *global, t_scene *scene, char *line)
 	dbl_free(tokens);
 }
 
-// Función para parsear un plano
-void	parse_plane(t_global *global, t_scene *scene, char *line)
+// Function to parse a plane
+void	parse_plane(t_global *global, char *line)
 {
 	t_plane	plane;
 	char	**tokens;
+	t_scene	*scene;
 
+	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
@@ -156,12 +166,14 @@ void	parse_plane(t_global *global, t_scene *scene, char *line)
 	dbl_free(tokens);
 }
 
-// Función para parsear un cilindro
-void	parse_cylinder(t_global *global, t_scene *scene, char *line)
+// Function to parse a cylinder
+void	parse_cylinder(t_global *global, char *line)
 {
 	t_cylinder	cylinder;
 	char		**tokens;
+	t_scene		*scene;
 
+	scene = &global->scene;
 	t_vector center; // Centro de masa temporal
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');

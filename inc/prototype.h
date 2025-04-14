@@ -57,12 +57,12 @@ void		write_bmp_header(int fd, t_global *global);
 int			write_bmp_row(int fd, int y, t_global *global);
 
 /* Parsing */
-void		parse_ambient(t_global *global, t_scene *scene, char *line);
-void		parse_cam(t_global *global, t_scene *scene, char *line);
-void		parse_light(t_global *global, t_scene *scene, char *line);
-void		parse_sphere(t_global *global, t_scene *scene, char *line);
-void		parse_plane(t_global *global, t_scene *scene, char *line);
-void		parse_cylinder(t_global *global, t_scene *scene, char *line);
+void		parse_ambient(t_global *global, char *line);
+void		parse_cam(t_global *global, char *line);
+void		parse_light(t_global *global, char *line);
+void		parse_sphere(t_global *global, char *line);
+void		parse_plane(t_global *global, char *line);
+void		parse_cylinder(t_global *global, char *line);
 
 /* Raytracing */
 void		render(t_global *global);

@@ -71,7 +71,7 @@ t_vector	normalize(t_vector a)
 	return (result);
 }
 
-// Function to calculate the cross product of two vectors
+// Function to calculate the cross product of two vectors (producto vectorial)
 t_vector	cross(t_vector a, t_vector b)
 {
 	t_vector	result;

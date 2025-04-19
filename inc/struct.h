@@ -9,49 +9,48 @@
 // struct for bitscene
 typedef struct s_img
 {
-	void *img;  // image pointer
-	char *addr; // address of the image
-	int bpp;    // bits per pixel
-	int bpl;    // bytes per line
-	int endian; // endian
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			bpl;
+	int			endian;
 }				t_img;
 typedef struct s_var
 {
-	void *mlx_conn; // connection to the window
-	void *mlx_win;  // window to be drawn
+	void		*mlx_conn;
+	void		*mlx_win;
 }				t_var;
 
-// struct for points
+// struct for points in object space and screen
 typedef struct s_point
 {
-	float point_x; // x coordinate of the point in object space
-	float point_y; // y coordinate of the point in object space
-	float point_z; // z coordinate of the point in object space
-	int color;     // color of the point in the map
-	double scrn_x; // coordinate x in the screen
-	double scrn_y; // coordinate y in the screen
+	float		point_x;
+	float		point_y;
+	float		point_z;
+	int			color;
+	double		scrn_x;
+	double		scrn_y;
 }				t_point;
 
 // struct for mlx
-
 typedef struct s_color
 {
-	int r; // red component of the color
-	int g; // green component of the color
-	int b; // blue component of the color
+	int			r;
+	int			g;
+	int			b;
 }				t_color;
 
 typedef struct s_vector
 {
-	float x; // x coordinate of the vector
-	float y; // y coordinate of the vector
-	float z; // z coordinate of the vector
+	float		x;
+	float		y;
+	float		z;
 }				t_vector;
 
 typedef struct s_ambient
 {
-	float intensity; // intensity of the ambient light
-	t_color color;   // color of the ambient light
+	float		intensity;
+	t_color		color;
 	int			init;
 }				t_ambient;
 
@@ -61,25 +60,25 @@ typedef struct s_camera
 	double		dist_scrn;
 	t_vector	pos;
 	t_vector	orientation;
-	t_vector x; // Vector derecha precalculado
-	t_vector y; // Vector arriba precalculado
-	t_vector z; // Vector adelante precalculado
+	t_vector	x;
+	t_vector	y;
+	t_vector	z;
 	int			init;
 }				t_camera;
 
 typedef struct s_light
 {
-	float intensity; // intensity of the light
-	t_vector pos;    // position of the light
+	float		intensity;
+	t_vector	pos;
 	int			init;
 }				t_light;
 
 typedef struct s_intersec
 {
-	float dist;     // distance from the camera to the intersection point
-	t_vector point; // intersection point
-	int obj_index;  // Índice del objeto intersectado
-	int obj_type;   // Tipo de objeto: 0-esfera, 1-plano, 2-cilindro
+	float		dist;
+	t_vector	point;
+	int			obj_index;
+	int			obj_type;
 }				t_intersec;
 
 typedef struct s_sphere
@@ -98,23 +97,23 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
-	t_vector base;        // Centro de la base inferior
-	t_vector orientation; // Dirección normalizada del eje
-	float radius;         // Radio del cilindro
-	float height;         // Altura del cilindro
+	t_vector	base;
+	t_vector	orientation;
+	float		radius;
+	float		height;
 	t_color		color;
 }				t_cylinder;
 
 typedef struct s_cyl_lat
 {
-	t_vector axis;      // Eje normalizado del cilindro
-	t_vector oc;        // Vector desde origen del rayo a la base del cilindro
-	float dir_dot_axis; // Producto escalar de dirección-eje
-	float oc_dot_axis;  // Producto escalar de oc-eje
-	t_vector dir_perp;  // Componente perpendicular de dirección
-	t_vector oc_perp;   // Componente perpendicular de oc
-	float t1;           // Primera intersección potencial
-	float t2;           // Segunda intersección potencial
+	t_vector	axis;
+	t_vector	oc;
+	float		dir_dot_axis;
+	float		oc_dot_axis;
+	t_vector	dir_perp;
+	t_vector	oc_perp;
+	float		t1;
+	float		t2;
 }				t_cyl_lat;
 
 typedef struct s_scene
@@ -130,10 +129,10 @@ typedef struct s_scene
 	t_plane		*planes;
 	t_cylinder	*cylinders;
 
-	float scale; // scale of the scene
+	float		scale;
 
-	int fd;          // file descriptor
-	char *file_path; // path of the file
+	int			fd;
+	char		*file_path;
 	char		**lines;
 }				t_scene;
 
@@ -144,9 +143,7 @@ typedef struct s_global
 	t_img		img;
 	t_scene		scene;
 	t_point		*points;
-	t_intersec *intersecs;
-		// Nuevo campo para almacenar todas las intersecciones
-	// t_intersec	intersec;
+	t_intersec	*intersecs;
 	int			mouse_pressed;
 	int			last_mouse_x;
 	int			last_mouse_y;
@@ -156,17 +153,18 @@ typedef struct s_global
 	t_vector	current_ray_dir;
 	t_intersec	current_intersec;
 
-    // Campos nuevos para cálculos de iluminación
-    t_color     current_object_color;    // Color del objeto actual
-    t_vector    current_normal;          // Normal en el punto de intersección
-    t_vector    current_light_dir;       // Dirección a la fuente de luz
-    float       current_light_distance;  // Distancia a la luz
+	// Variables para cálculos de iluminación
+	t_color		current_object_color;
+	t_vector	current_normal;
+	t_vector	current_light_dir;
+	float		current_light_distance;
 }				t_global;
 
-typedef struct s_ray_state {
-    t_vector origin;
-    t_vector dir;
-    t_intersec intersec;
-} t_ray_state;
+typedef struct s_ray_state
+{
+	t_vector	origin;
+	t_vector	dir;
+	t_intersec	intersec;
+}				t_ray_state;
 
 #endif

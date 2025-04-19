@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 00:33:40 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 00:45:01 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,44 +67,38 @@ int	handle_mouse_move(int pos_x, int pos_y, t_global *global)
 	return (0);
 }
 
+// Función auxiliar para ajustar el FOV de la cámara
+void	adjust_camera_fov(t_global *global, float delta)
+{
+	float	new_fov;
+
+	new_fov = global->scene.cam.fov + delta;
+	// Limitar el FOV entre 10 y 120 grados
+	if (new_fov < 10.0f)
+		new_fov = 10.0f;
+	else if (new_fov > 120.0f)
+		new_fov = 120.0f;
+	// Solo actualizar si hubo cambio real
+	if (new_fov != global->scene.cam.fov)
+	{
+		global->scene.cam.fov = new_fov;
+		update_display(global);
+	}
+}
+
+// Manejar eventos de scroll para zoom
 int	handle_mouse_scroll(int button, int pos_x, int pos_y, t_global *global)
 {
 	float	zoom_factor;
 
-	// Añadir mensaje de depuración
-	printf("Evento de mouse: botón %d en posición (%d, %d)\n", button, pos_x,
-		pos_y);
-	zoom_factor = 5.0f;
+	// Ignorar posición del mouse para el zoom
 	(void)pos_x;
 	(void)pos_y;
-	// Comprobar todos los posibles botones para scroll
-	if (button == 4) // Scroll up - Zoom in (probamos valores alternativos)
-	{
-		// Reducir el FOV para hacer zoom in
-		if (global->scene.cam.fov > 10.0f)
-		{
-			global->scene.cam.fov -= zoom_factor;
-			if (global->scene.cam.fov < 10.0f)
-				global->scene.cam.fov = 10.0f;
-			// Re-renderizar con el nuevo FOV
-			render(global);
-			mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-				global->img.img, MARGIN / 2, MARGIN / 2);
-		}
-	}
+	zoom_factor = 5.0f;
+	// Manejar scroll con una sola condición
+	if (button == 4) // Scroll up - Zoom in
+		adjust_camera_fov(global, -zoom_factor);
 	else if (button == 5) // Scroll down - Zoom out
-	{
-		// Aumentar el FOV para hacer zoom out
-		if (global->scene.cam.fov < 120.0f)
-		{
-			global->scene.cam.fov += zoom_factor;
-			if (global->scene.cam.fov > 120.0f)
-				global->scene.cam.fov = 120.0f;
-			// Re-renderizar con el nuevo FOV
-			render(global);
-			mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-				global->img.img, MARGIN / 2, MARGIN / 2);
-		}
-	}
+		adjust_camera_fov(global, zoom_factor);
 	return (SUCCESS);
 }

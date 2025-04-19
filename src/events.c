@@ -6,12 +6,11 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 00:38:31 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 00:41:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
-#include <sys/stat.h> // Para mkdir
 
 // Funciones auxiliares para manejar diferentes tipos de eventos
 void	handle_movement_keys(t_global *global, int keysym, int *needs_render)

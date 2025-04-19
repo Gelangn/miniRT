@@ -102,7 +102,6 @@ void		get_intersec_points(float a, float b, float discriminant,
 
 /* Colors */
 t_color		cal_lighting(t_global *global);
-t_color		cal_color(t_global *global, t_intersec intersec);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

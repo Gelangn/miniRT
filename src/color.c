@@ -102,19 +102,3 @@ t_color	cal_lighting(t_global *global)
 	result_color.b = fmin(255, fmax(0, result_color.b));
 	return (result_color);
 }
-
-t_color	cal_color(t_global *global, t_intersec intersec)
-{
-	// Si no hay intersección, devolver color de fondo
-	if (intersec.obj_type < 0)
-	{
-		t_color bg_color = {5, 5, 5}; // Gris oscuro de fondo
-		return (bg_color);
-	}
-
-	// Guardar la intersección actual en global
-	global->current_intersec = intersec;
-
-	// Calcular el color con iluminación
-	return (cal_lighting(global));
-}

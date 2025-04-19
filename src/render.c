@@ -2,19 +2,29 @@
 
 #include "../inc/minirt.h"
 
-void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
-		int y)
+// Función simplificada que aprovecha datos ya almacenados en global
+void	render_single_pixel(t_global *global, int index)
 {
-	int		color;
-	t_color	lit_color;
+	int			x;
+	int			y;
+	t_intersec	intersec;
+	int			color;
+	t_color		lit_color;
 
-	// Verificar límites
-	if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H || !img || !img->addr)
+	x = global->points[index].scrn_x;
+	y = global->points[index].scrn_y;
+	intersec = global->intersecs[index];
+	// Verificar límites (por seguridad)
+	if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H)
 		return ;
 	if (intersec.obj_type >= 0 && intersec.obj_index >= 0)
 	{
-		global->current_ray_dir = get_ray_direction(global->scene.cam, x, y);
+		// Usar directamente la dirección del rayo precalculada
+		global->current_ray_dir.x = global->points[index].point_x;
+		global->current_ray_dir.y = global->points[index].point_y;
+		global->current_ray_dir.z = global->points[index].point_z;
 		global->current_intersec = intersec;
+		// Calcular color con iluminación
 		lit_color = cal_lighting(global);
 		color = rgb_to_int(lit_color);
 	}
@@ -22,36 +32,38 @@ void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
 	{
 		color = DARK_GREY;
 	}
-	pixel_put(img, x, y, color);
+	pixel_put(&global->img, x, y, color);
 }
 
-void	render_all_pixels(t_global *global, t_intersec *intersecs)
+// Función simplificada que itera sobre todos los píxeles
+void	render_all_pixels(t_global *global)
 {
 	int	i;
-	int	px_x;
-	int	px_y;
+	int	total_pixels;
+	int	center_idx;
 
-	i = -1;
-	while (++i < (WIN_W - MARGIN) * (WIN_H - MARGIN))
+	total_pixels = (WIN_W - MARGIN) * (WIN_H - MARGIN);
+	// Verificar el píxel central para debug
+	center_idx = (WIN_H / 2) * (WIN_W - MARGIN) + (WIN_W / 2);
+	if (center_idx < total_pixels)
 	{
-		// Usar las coordenadas precalculadas
-		px_x = global->points[i].scrn_x;
-		px_y = global->points[i].scrn_y;
-		// Verificar el píxel central para debug
-		if (px_x == WIN_W / 2 && px_y == WIN_H / 2)
-		{
-			printf("Central ray: type=%d, index=%d, distance=%f\n",
-				intersecs[i].obj_type, intersecs[i].obj_index,
-				intersecs[i].dist);
-		}
-		render_pixel(global, intersecs[i], &global->img, px_x, px_y);
+		printf("Central ray: type=%d, index=%d, distance=%f\n",
+			global->intersecs[center_idx].obj_type,
+			global->intersecs[center_idx].obj_index,
+			global->intersecs[center_idx].dist);
+	}
+	// Renderizar todos los píxeles
+	i = 0;
+	while (i < total_pixels)
+	{
+		render_single_pixel(global, i);
+		i++;
 	}
 }
 
+// Función principal de renderizado simplificada
 void	render(t_global *global)
 {
-	t_intersec	*intersecs;
-
 	// Verificar orientación válida
 	if (comp_floats(magnitude(global->scene.cam.orientation), 0))
 	{
@@ -61,14 +73,15 @@ void	render(t_global *global)
 	// Precalcular los rayos
 	precalculate_rays(global);
 	// Asignar memoria para las intersecciones
-	intersecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
+	global->intersecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
 			* sizeof(t_intersec));
-	if (!intersecs)
+	if (!global->intersecs)
 		finish(global, ERR_MEM);
 	// Verificar validez de la imagen
 	if (!global->img.img || !global->img.addr)
 	{
-		free(intersecs);
+		free(global->intersecs);
+		global->intersecs = NULL;
 		finish(global, ERR_IMG);
 	}
 	printf("Camera position: (%f, %f, %f)\n", global->scene.cam.pos.x,
@@ -77,11 +90,12 @@ void	render(t_global *global)
 		global->scene.cam.orientation.x, global->scene.cam.orientation.y,
 		global->scene.cam.orientation.z);
 	// Calcular intersecciones
-	trace_all_rays(global, intersecs);
+	trace_all_rays(global);
 	// Renderizar píxeles
-	render_all_pixels(global, intersecs);
+	render_all_pixels(global);
 	// Liberar memoria
-	free(intersecs);
+	free(global->intersecs);
+	global->intersecs = NULL;
 }
 
 void	precalculate_camera_axis(t_global *global)

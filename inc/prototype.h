@@ -66,16 +66,17 @@ void		parse_cylinder(t_global *global, char *line);
 
 /* Raytracing */
 void		render(t_global *global);
+void		render_all_pixels(t_global *global);
+void		render_single_pixel(t_global *global, int index);
+void		trace_all_rays(t_global *global);
 float		cal_discriminant(t_vector oc, t_vector ray_dir, float radius);
 t_intersec	find_closest_intersec(t_global *global);
-void		trace_all_rays(t_global *global, t_intersec *intersecs);
 t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 void		check_sp_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_pl_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_cy_intersecs(t_global *global, t_intersec *closest_intersec);
-void		render_all_pixels(t_global *global, t_intersec *intersecs);
 void		render_pixel(t_global *global, t_intersec intersec, t_img *img,
 				int x, int y);
 

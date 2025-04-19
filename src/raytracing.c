@@ -117,25 +117,27 @@ t_intersec	find_closest_intersec(t_global *global)
 }
 /* Nucleo central del raytracing, llama a cal_ray, y a su ves a
 get_ray_direction */
-void	trace_all_rays(t_global *global, t_intersec *intersecs)
+// Versión optimizada de trace_all_rays
+void	trace_all_rays(t_global *global)
 {
 	int			i;
-	int			total_rays;
+	int			total_pixels;
 	t_vector	ray_dir;
 
-	total_rays = (WIN_W - MARGIN) * (WIN_H - MARGIN);
+	total_pixels = (WIN_W - MARGIN) * (WIN_H - MARGIN);
 	i = -1;
-	while (++i < total_rays)
+	while (++i < total_pixels)
 	{
-		// Usar la dirección precalculada
+		// Configurar el rayo usando direcciones precalculadas
 		ray_dir.x = global->points[i].point_x;
 		ray_dir.y = global->points[i].point_y;
 		ray_dir.z = global->points[i].point_z;
+		// Actualizar el origin y direction actuales
 		global->current_ray_origin = global->scene.cam.pos;
 		global->current_ray_dir = ray_dir;
-		intersecs[i] = find_closest_intersec(global);
+		// Buscar la intersección más cercana
+		global->intersecs[i] = find_closest_intersec(global);
 	}
-	printf("Total calculated rays: %d\n", i);
 }
 
 t_intersec	cal_ray(t_global *global, int px_x, int px_y)

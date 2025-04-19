@@ -135,10 +135,8 @@ void	set_hooks(t_global *global)
 {
 	// Eventos de teclado
 	mlx_hook(global->vars.mlx_win, 2, 1L << 0, handle_keypress, global);
-	
 	// Evento de cierre de ventana
 	mlx_hook(global->vars.mlx_win, 17, 1L << 17, window_close_handler, global);
-	
 	// Eventos de ratón
 	mlx_hook(global->vars.mlx_win, 4, 1L << 2, mouse_press_hook, global);
 	mlx_hook(global->vars.mlx_win, 5, 1L << 3, mouse_release_hook, global);

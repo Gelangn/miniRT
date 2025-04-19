@@ -100,9 +100,9 @@ t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 void		get_intersec_points(float a, float b, float discriminant,
 				t_cyl_lat *vars);
 
-/* Colors*/
-t_color		cal_lighting(t_global *global, t_intersec intersec,
-				t_vector ray_dir);
+/* Colors */
+t_color		cal_lighting(t_global *global);
+t_color		cal_color(t_global *global, t_intersec intersec);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

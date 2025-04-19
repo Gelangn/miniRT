@@ -2,28 +2,27 @@
 
 #include "../inc/minirt.h"
 
-void	render_pixel(t_global *global, t_intersec intersec, t_img *img,
-		int px_x, int px_y)
+void	render_pixel(t_global *global, t_intersec intersec, t_img *img, int x,
+		int y)
 {
-	int			color;
-	t_vector	ray_dir;
-	t_color		lit_color;
+	int		color;
+	t_color	lit_color;
 
 	// Verificar límites
-	if (px_x < 0 || px_x >= WIN_W || px_y < 0 || px_y >= WIN_H || !img
-		|| !img->addr)
+	if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H || !img || !img->addr)
 		return ;
 	if (intersec.obj_type >= 0 && intersec.obj_index >= 0)
 	{
-		ray_dir = get_ray_direction(global->scene.cam, px_x, px_y);
-		lit_color = cal_lighting(global, intersec, ray_dir);
+		global->current_ray_dir = get_ray_direction(global->scene.cam, x, y);
+		global->current_intersec = intersec;
+		lit_color = cal_lighting(global);
 		color = rgb_to_int(lit_color);
 	}
 	else
 	{
 		color = DARK_GREY;
 	}
-	pixel_put(img, px_x, px_y, color);
+	pixel_put(img, x, y, color);
 }
 
 void	render_all_pixels(t_global *global, t_intersec *intersecs)
@@ -42,9 +41,8 @@ void	render_all_pixels(t_global *global, t_intersec *intersecs)
 		if (px_x == WIN_W / 2 && px_y == WIN_H / 2)
 		{
 			printf("Central ray: type=%d, index=%d, distance=%f\n",
-					intersecs[i].obj_type,
-					intersecs[i].obj_index,
-					intersecs[i].dist);
+				intersecs[i].obj_type, intersecs[i].obj_index,
+				intersecs[i].dist);
 		}
 		render_pixel(global, intersecs[i], &global->img, px_x, px_y);
 	}
@@ -73,14 +71,11 @@ void	render(t_global *global)
 		free(intersecs);
 		finish(global, ERR_IMG);
 	}
-	printf("Camera position: (%f, %f, %f)\n",
-			global->scene.cam.pos.x,
-			global->scene.cam.pos.y,
-			global->scene.cam.pos.z);
+	printf("Camera position: (%f, %f, %f)\n", global->scene.cam.pos.x,
+		global->scene.cam.pos.y, global->scene.cam.pos.z);
 	printf("Camera orientation: (%f, %f, %f)\n",
-			global->scene.cam.orientation.x,
-			global->scene.cam.orientation.y,
-			global->scene.cam.orientation.z);
+		global->scene.cam.orientation.x, global->scene.cam.orientation.y,
+		global->scene.cam.orientation.z);
 	// Calcular intersecciones
 	trace_all_rays(global, intersecs);
 	// Renderizar píxeles

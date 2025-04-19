@@ -16,7 +16,7 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
 	if (t < 0)
 		return (intersec);
 	hit_point = add(global->current_ray_origin,
-					multiply(global->current_ray_dir, t));
+			multiply(global->current_ray_dir, t));
 	hit_height = dot(subtract(hit_point, cylinder->base), vars.axis);
 	if (is_less_than(hit_height, 0) || is_greater_than(hit_height,
 			cylinder->height))
@@ -115,7 +115,7 @@ t_intersec	find_closest_intersec(t_global *global)
 		check_cy_intersecs(global, &closest_intersec);
 	return (closest_intersec);
 }
-/* Nucleo central del raytracing, llama a cal_ray, y a su ves a 
+/* Nucleo central del raytracing, llama a cal_ray, y a su ves a
 get_ray_direction */
 void	trace_all_rays(t_global *global, t_intersec *intersecs)
 {
@@ -168,7 +168,7 @@ t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 	v = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
 	// Usar los vectores precalculados
 	ray_dir = normalize(add(add(multiply(cam.x, u), multiply(cam.y, v)),
-							cam.z));
+				cam.z));
 	return (ray_dir);
 }
 
@@ -220,10 +220,10 @@ t_vector	get_surface_normal(t_global *global, t_intersec intersec)
 		&& intersec.obj_index < global->scene.num_sp)
 		normal = get_sp_normal(global, intersec);
 	else if (intersec.obj_type == 1 && intersec.obj_index >= 0
-			&& intersec.obj_index < global->scene.num_pl)
+		&& intersec.obj_index < global->scene.num_pl)
 		normal = get_pl_normal(global, intersec);
 	else if (intersec.obj_type == 2 && intersec.obj_index >= 0
-			&& intersec.obj_index < global->scene.num_cy)
+		&& intersec.obj_index < global->scene.num_cy)
 		normal = get_cy_normal(global, intersec);
 	return (normal);
 }

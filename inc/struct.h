@@ -152,6 +152,7 @@ typedef struct s_global
 	// Variables para el rayo actual
 	t_vector	current_ray_origin;
 	t_vector	current_ray_dir;
+	t_intersec	current_intersec;
 }				t_global;
 
 #endif

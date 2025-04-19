@@ -101,7 +101,12 @@ void		get_intersec_points(float a, float b, float discriminant,
 				t_cyl_lat *vars);
 
 /* Colors */
+int			rgb_to_int(t_color color);
+int			is_valid_intersec(t_global *global);
+float		calculate_shadow(t_global *global);
 t_color		cal_lighting(t_global *global);
+t_color		get_object_color(t_global *global);
+t_color		apply_lighting(t_global *global, float light_intensity);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

@@ -7,26 +7,7 @@ int	rgb_to_int(t_color color)
 	return ((color.r << 16) | (color.g << 8) | color.b);
 }
 
-// Función 1: Verificar si la intersección es válida
-int	is_valid_intersec(t_global *global)
-{
-	t_intersec	intersec;
-
-	intersec = global->current_intersec;
-	if ((intersec.obj_type < 0) || (intersec.obj_index < 0)
-		|| (intersec.obj_type == 0
-			&& intersec.obj_index >= global->scene.num_sp)
-		|| (intersec.obj_type == 1
-			&& intersec.obj_index >= global->scene.num_pl)
-		|| (intersec.obj_type == 2
-			&& intersec.obj_index >= global->scene.num_cy))
-	{
-		return (0);
-	}
-	return (1);
-}
-
-// Función 2: Obtener el color del objeto
+// Obtener el color del objeto
 t_color	get_object_color(t_global *global)
 {
 	t_intersec	intersec;
@@ -40,8 +21,8 @@ t_color	get_object_color(t_global *global)
 		return (global->scene.cylinders[intersec.obj_index].color);
 }
 
-// Función 3: Calcular sombras
-float	calculate_shadow(t_global *global)
+// Calcular sombras
+float	cal_shadow(t_global *global)
 {
 	t_intersec	intersec;
 	t_vector	normal;
@@ -84,7 +65,7 @@ float	calculate_shadow(t_global *global)
 	return (light_intensity);
 }
 
-// Función 4: Aplicar componentes de iluminación
+// Aplicar componentes de iluminación
 t_color	apply_lighting(t_global *global, float light_intensity)
 {
 	t_color		object_color;
@@ -132,6 +113,25 @@ t_color	apply_lighting(t_global *global, float light_intensity)
 	return (result_color);
 }
 
+// Verificar si la intersección es válida
+int	is_valid_intersec(t_global *global)
+{
+	t_intersec	intersec;
+
+	intersec = global->current_intersec;
+	if ((intersec.obj_type < 0) || (intersec.obj_index < 0)
+		|| (intersec.obj_type == 0
+			&& intersec.obj_index >= global->scene.num_sp)
+		|| (intersec.obj_type == 1
+			&& intersec.obj_index >= global->scene.num_pl)
+		|| (intersec.obj_type == 2
+			&& intersec.obj_index >= global->scene.num_cy))
+	{
+		return (0);
+	}
+	return (1);
+}
+
 // Función principal simplificada
 t_color	cal_lighting(t_global *global)
 {
@@ -144,7 +144,7 @@ t_color	cal_lighting(t_global *global)
 		return (default_color);
 	}
 	// Calcular sombras e iluminación
-	light_intensity = calculate_shadow(global);
+	light_intensity = cal_shadow(global);
 	// Aplicar modelo de iluminación
 	return (apply_lighting(global, light_intensity));
 }

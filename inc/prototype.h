@@ -77,8 +77,6 @@ t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 void		check_sp_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_pl_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_cy_intersecs(t_global *global, t_intersec *closest_intersec);
-void		render_pixel(t_global *global, t_intersec intersec, t_img *img,
-				int x, int y);
 
 /* Colisions */
 t_intersec	col_sp(t_global *global, int sp_id);
@@ -104,7 +102,7 @@ void		get_intersec_points(float a, float b, float discriminant,
 /* Colors */
 int			rgb_to_int(t_color color);
 int			is_valid_intersec(t_global *global);
-float		calculate_shadow(t_global *global);
+float		cal_shadow(t_global *global);
 t_color		cal_lighting(t_global *global);
 t_color		get_object_color(t_global *global);
 t_color		apply_lighting(t_global *global, float light_intensity);

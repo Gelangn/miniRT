@@ -155,6 +155,18 @@ typedef struct s_global
 	t_vector	current_ray_origin;
 	t_vector	current_ray_dir;
 	t_intersec	current_intersec;
+
+    // Campos nuevos para cálculos de iluminación
+    t_color     current_object_color;    // Color del objeto actual
+    t_vector    current_normal;          // Normal en el punto de intersección
+    t_vector    current_light_dir;       // Dirección a la fuente de luz
+    float       current_light_distance;  // Distancia a la luz
 }				t_global;
+
+typedef struct s_ray_state {
+    t_vector origin;
+    t_vector dir;
+    t_intersec intersec;
+} t_ray_state;
 
 #endif

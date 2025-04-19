@@ -106,6 +106,7 @@ float		cal_shadow(t_global *global);
 t_color		cal_lighting(t_global *global);
 t_color		get_object_color(t_global *global);
 t_color		apply_lighting(t_global *global, float light_intensity);
+void		prepare_lighting_data(t_global *global);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);
@@ -117,5 +118,9 @@ float		magnitude(t_vector a);
 t_vector	normalize(t_vector a);
 t_vector	cross(t_vector a, t_vector b);
 t_vector	reflect(t_vector a, t_vector b);
+
+/* Shadow ray utilities */
+t_ray_state	save_ray_state(t_global *global);
+void		restore_ray_state(t_global *global, t_ray_state state);
 
 #endif

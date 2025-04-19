@@ -21,95 +21,137 @@ t_color	get_object_color(t_global *global)
 		return (global->scene.cylinders[intersec.obj_index].color);
 }
 
-// Calcular sombras
+// Guardar el estado actual del ray tracing
+t_ray_state	save_ray_state(t_global *global)
+{
+	t_ray_state	state;
+
+	state.origin = global->current_ray_origin;
+	state.dir = global->current_ray_dir;
+	state.intersec = global->current_intersec;
+	return (state);
+}
+
+// Restaurar el estado del ray tracing
+void	restore_ray_state(t_global *global, t_ray_state state)
+{
+	global->current_ray_origin = state.origin;
+	global->current_ray_dir = state.dir;
+	global->current_intersec = state.intersec;
+}
+
+// Preparar datos para cálculos de iluminación
+void	prepare_lighting_data(t_global *global)
+{
+	// Calcular datos que se usarán en varias funciones
+	global->current_object_color = get_object_color(global);
+	global->current_normal = get_surface_normal(global,
+			global->current_intersec);
+	global->current_light_dir = normalize(subtract(global->scene.light.pos,
+				global->current_intersec.point));
+	global->current_light_distance = magnitude(subtract(global->scene.light.pos,
+				global->current_intersec.point));
+}
+
+// Calcular si un punto está en sombra
 float	cal_shadow(t_global *global)
 {
-	t_intersec	intersec;
-	t_vector	normal;
-	t_vector	light_dir;
 	float		light_intensity;
 	t_vector	shadow_origin;
-	t_vector	saved_origin;
-	t_vector	saved_dir;
-	t_intersec	saved_intersec;
+	t_ray_state	state;
 	t_intersec	shadow_intersec;
-	float		light_distance;
 
-	intersec = global->current_intersec;
-	normal = get_surface_normal(global, intersec);
-	light_dir = normalize(subtract(global->scene.light.pos, intersec.point));
 	light_intensity = global->scene.light.intensity;
-	// Punto de origen ligeramente desplazado
-	shadow_origin = add(intersec.point, multiply(normal, 0.005f));
+	// Desplazar ligeramente el origen para evitar auto-intersecciones
+	shadow_origin = add(global->current_intersec.point,
+			multiply(global->current_normal, 0.005f));
 	// Guardar estado actual
-	saved_origin = global->current_ray_origin;
-	saved_dir = global->current_ray_dir;
-	saved_intersec = global->current_intersec;
-	// Configurar rayo de sombra
+	state = save_ray_state(global);
+	// Configurar rayo de sombra directamente
 	global->current_ray_origin = shadow_origin;
-	global->current_ray_dir = light_dir;
+	global->current_ray_dir = global->current_light_dir;
 	shadow_intersec = find_closest_intersec(global);
-	// Restaurar estado
-	global->current_ray_origin = saved_origin;
-	global->current_ray_dir = saved_dir;
-	global->current_intersec = saved_intersec;
-	light_distance = magnitude(subtract(global->scene.light.pos,
-				intersec.point));
+	// Restaurar estado original
+	restore_ray_state(global, state);
 	// Verificar si hay sombra
-	if (shadow_intersec.obj_type >= 0 && shadow_intersec.dist < light_distance
-		&& !(shadow_intersec.obj_type == intersec.obj_type
-			&& shadow_intersec.obj_index == intersec.obj_index))
+	if (shadow_intersec.obj_type >= 0
+		&& shadow_intersec.dist < global->current_light_distance
+		&& !(shadow_intersec.obj_type == global->current_intersec.obj_type
+			&& shadow_intersec.obj_index == global->current_intersec.obj_index))
 	{
-		light_intensity = 0;
+		return (0); // Punto en sombra
 	}
 	return (light_intensity);
 }
 
-// Aplicar componentes de iluminación
-t_color	apply_lighting(t_global *global, float light_intensity)
+// Calcular componente ambiental
+t_color	calculate_ambient(t_color object_color, float ambient_intensity)
 {
-	t_color		object_color;
-	t_intersec	intersec;
-	t_vector	ray_dir;
-	t_vector	normal;
-	t_vector	light_dir;
-	float		ambient_intensity;
-	t_color		result_color;
-	float		diff;
+	t_color	result;
+
+	result.r = object_color.r * ambient_intensity;
+	result.g = object_color.g * ambient_intensity;
+	result.b = object_color.b * ambient_intensity;
+	return (result);
+}
+
+// Calcular componente difusa
+void	add_diffuse(t_color *color, t_color object_color, float light_intensity,
+		t_vector normal, t_vector light_dir)
+{
+	float	diff;
+
+	diff = fmax(0.0f, dot(normal, light_dir));
+	color->r += object_color.r * light_intensity * diff;
+	color->g += object_color.g * light_intensity * diff;
+	color->b += object_color.b * light_intensity * diff;
+}
+
+// Calcular componente especular
+void	add_specular(t_color *color, t_vector normal, t_vector light_dir,
+		t_vector ray_dir, float light_intensity)
+{
 	t_vector	reflect_dir;
 	float		spec;
 
-	object_color = get_object_color(global);
-	intersec = global->current_intersec;
-	ray_dir = global->current_ray_dir;
-	normal = get_surface_normal(global, intersec);
-	light_dir = normalize(subtract(global->scene.light.pos, intersec.point));
+	reflect_dir = subtract(multiply(normal, 2.0f * dot(normal, light_dir)),
+			light_dir);
+	spec = pow(fmax(0.0f, dot(normalize(multiply(ray_dir, -1.0f)),
+					reflect_dir)), 32);
+	color->r += 255 * spec * light_intensity * 0.5f;
+	color->g += 255 * spec * light_intensity * 0.5f;
+	color->b += 255 * spec * light_intensity * 0.5f;
+}
+
+// Limitar valores de color al rango [0, 255]
+void	clamp_color(t_color *color)
+{
+	color->r = fmin(255, fmax(0, color->r));
+	color->g = fmin(255, fmax(0, color->g));
+	color->b = fmin(255, fmax(0, color->b));
+}
+
+// Función principal de aplicación de iluminación
+t_color	apply_lighting(t_global *global, float light_intensity)
+{
+	t_color	result_color;
+	float	ambient_intensity;
+
 	ambient_intensity = global->scene.ambient.intensity;
-	// Componente ambiental
-	result_color.r = object_color.r * ambient_intensity;
-	result_color.g = object_color.g * ambient_intensity;
-	result_color.b = object_color.b * ambient_intensity;
-	// Componentes difusa y especular
+	// Calcular iluminación ambiental (siempre presente)
+	result_color = calculate_ambient(global->current_object_color,
+			ambient_intensity);
+	// Añadir componentes difusa y especular si no está en sombra
 	if (light_intensity > 0)
 	{
-		// Difusa
-		diff = fmax(0.0f, dot(normal, light_dir));
-		result_color.r += object_color.r * light_intensity * diff;
-		result_color.g += object_color.g * light_intensity * diff;
-		result_color.b += object_color.b * light_intensity * diff;
-		// Especular
-		reflect_dir = subtract(multiply(normal, 2.0f * dot(normal, light_dir)),
-				light_dir);
-		spec = pow(fmax(0.0f, dot(normalize(multiply(ray_dir, -1.0f)),
-						reflect_dir)), 32);
-		result_color.r += 255 * spec * 0.5f;
-		result_color.g += 255 * spec * 0.5f;
-		result_color.b += 255 * spec * 0.5f;
+		add_diffuse(&result_color, global->current_object_color,
+			light_intensity, global->current_normal, global->current_light_dir);
+		add_specular(&result_color, global->current_normal,
+			global->current_light_dir, global->current_ray_dir,
+			light_intensity);
 	}
-	// Limitar valores
-	result_color.r = fmin(255, fmax(0, result_color.r));
-	result_color.g = fmin(255, fmax(0, result_color.g));
-	result_color.b = fmin(255, fmax(0, result_color.b));
+	// Limitar valores finales
+	clamp_color(&result_color);
 	return (result_color);
 }
 
@@ -143,6 +185,8 @@ t_color	cal_lighting(t_global *global)
 		t_color default_color = {5, 5, 5}; // Gris oscuro
 		return (default_color);
 	}
+	// Preparar datos para cálculos de iluminación
+	prepare_lighting_data(global);
 	// Calcular sombras e iluminación
 	light_intensity = cal_shadow(global);
 	// Aplicar modelo de iluminación

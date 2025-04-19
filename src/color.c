@@ -95,32 +95,30 @@ t_color	calculate_ambient(t_color object_color, float ambient_intensity)
 	return (result);
 }
 
-// Calcular componente difusa
-void	add_diffuse(t_color *color, t_color object_color, float light_intensity,
-		t_vector normal, t_vector light_dir)
+// Calcular componente difusa (versión simplificada)
+void add_diffuse(t_global *global, t_color *color, float light_intensity)
 {
-	float	diff;
-
-	diff = fmax(0.0f, dot(normal, light_dir));
-	color->r += object_color.r * light_intensity * diff;
-	color->g += object_color.g * light_intensity * diff;
-	color->b += object_color.b * light_intensity * diff;
+    float diff = fmax(0.0f, dot(global->current_normal, global->current_light_dir));
+    
+    color->r += global->current_object_color.r * light_intensity * diff;
+    color->g += global->current_object_color.g * light_intensity * diff;
+    color->b += global->current_object_color.b * light_intensity * diff;
 }
 
-// Calcular componente especular
-void	add_specular(t_color *color, t_vector normal, t_vector light_dir,
-		t_vector ray_dir, float light_intensity)
+// Calcular componente especular (versión simplificada)
+void add_specular(t_global *global, t_color *color, float light_intensity)
 {
-	t_vector	reflect_dir;
-	float		spec;
-
-	reflect_dir = subtract(multiply(normal, 2.0f * dot(normal, light_dir)),
-			light_dir);
-	spec = pow(fmax(0.0f, dot(normalize(multiply(ray_dir, -1.0f)),
-					reflect_dir)), 32);
-	color->r += 255 * spec * light_intensity * 0.5f;
-	color->g += 255 * spec * light_intensity * 0.5f;
-	color->b += 255 * spec * light_intensity * 0.5f;
+    t_vector reflect_dir = subtract(
+        multiply(global->current_normal, 2.0f * dot(global->current_normal, global->current_light_dir)),
+        global->current_light_dir
+    );
+    
+    float spec = pow(fmax(0.0f, dot(normalize(multiply(global->current_ray_dir, -1.0f)), 
+                    reflect_dir)), 32);
+    
+    color->r += 255 * spec * light_intensity * 0.5f;
+    color->g += 255 * spec * light_intensity * 0.5f;
+    color->b += 255 * spec * light_intensity * 0.5f;
 }
 
 // Limitar valores de color al rango [0, 255]
@@ -132,27 +130,24 @@ void	clamp_color(t_color *color)
 }
 
 // Función principal de aplicación de iluminación
-t_color	apply_lighting(t_global *global, float light_intensity)
+t_color apply_lighting(t_global *global, float light_intensity)
 {
-	t_color	result_color;
-	float	ambient_intensity;
-
-	ambient_intensity = global->scene.ambient.intensity;
-	// Calcular iluminación ambiental (siempre presente)
-	result_color = calculate_ambient(global->current_object_color,
-			ambient_intensity);
-	// Añadir componentes difusa y especular si no está en sombra
-	if (light_intensity > 0)
-	{
-		add_diffuse(&result_color, global->current_object_color,
-			light_intensity, global->current_normal, global->current_light_dir);
-		add_specular(&result_color, global->current_normal,
-			global->current_light_dir, global->current_ray_dir,
-			light_intensity);
-	}
-	// Limitar valores finales
-	clamp_color(&result_color);
-	return (result_color);
+    t_color result_color;
+    
+    // Calcular iluminación ambiental (siempre presente)
+    result_color = calculate_ambient(global->current_object_color,
+            global->scene.ambient.intensity);
+    
+    // Añadir componentes difusa y especular si no está en sombra
+    if (light_intensity > 0)
+    {
+        add_diffuse(global, &result_color, light_intensity);
+        add_specular(global, &result_color, light_intensity);
+    }
+    
+    // Limitar valores finales
+    clamp_color(&result_color);
+    return (result_color);
 }
 
 // Verificar si la intersección es válida

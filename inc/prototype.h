@@ -107,6 +107,8 @@ t_color		cal_lighting(t_global *global);
 t_color		get_object_color(t_global *global);
 t_color		apply_lighting(t_global *global, float light_intensity);
 void		prepare_lighting_data(t_global *global);
+void		add_diffuse(t_global *global, t_color *color, float light_intensity);
+void		add_specular(t_global *global, t_color *color, float light_intensity);
 
 /* Matrix */
 t_vector	add(t_vector a, t_vector b);

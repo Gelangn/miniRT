@@ -22,6 +22,13 @@ int			handle_mouse_scroll(int button, int x, int y, t_global *global);
 int			mouse_press_hook(int button, int x, int y, t_global *global);
 int			mouse_release_hook(int button, int x, int y, t_global *global);
 
+/* Event handling */
+void		handle_movement_keys(t_global *global, int keysym, int *needs_render);
+void		handle_rotation_keys(t_global *global, int keysym, int *needs_render);
+void		handle_zoom_keys(t_global *global, int keysym);
+void		handle_screenshot(t_global *global);
+void		update_display(t_global *global);
+
 /* Camera controls*/
 void		move_camera(t_global *global, t_vector direction, float distance);
 void		rotate_camera(t_global *global, t_vector axis, float angle);

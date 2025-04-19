@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/13 20:25:13 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 00:33:40 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	handle_no_event(void)
 {
 	return (SUCCESS);
 }
+
 int	mouse_press_hook(int button, int pos_x, int pos_y, t_global *global)
 {
 	if (button == 1) // Botón izquierdo

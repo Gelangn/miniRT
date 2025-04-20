@@ -108,10 +108,10 @@ t_color		get_object_color(t_global *global);
 int			is_valid_intersec(t_global *global);
 void		prepare_lighting_data(t_global *global);
 float		cal_shadow(t_global *global);
-t_color		calculate_ambient(t_color object_color, float ambient_intensity);
-t_color		calculate_diffuse(t_global *global, float light_intensity);
-t_color		calculate_specular(t_global *global, float light_intensity);
-t_color		apply_lighting(t_global *global, float light_intensity);
+t_color		calculate_ambient(t_global *global);
+t_color		calculate_diffuse(t_global *global);
+t_color		calculate_specular(t_global *global);
+t_color		apply_lighting(t_global *global, float shadow_factor);
 t_color		cal_lighting(t_global *global);
 
 /* Shadow ray utilities */

@@ -6,13 +6,13 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:17:47 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:38:06 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	init(t_global *global)
+void	init(t_global *global)
 {
 	global->img.img = NULL;
 	global->img.addr = NULL;
@@ -22,11 +22,9 @@ int	init(t_global *global)
 	if (!global->vars.mlx_conn)
 		finish(global, ERR_MLX);
 	printf("Initialized MLX OK\n");
-	return (SUCCESS);
 }
 
-// Versión optimizada - eliminando el parámetro redundante
-int	init_scene(t_global *global)
+void	init_scene(t_global *global)
 {
 	t_scene	*scene;
 
@@ -53,7 +51,6 @@ int	init_scene(t_global *global)
 	if (!scene->cylinders)
 		finish(global, ERR_MEM);
 	scene->num_cy = 0;
-	return (SUCCESS);
 }
 
 t_intersec	init_intersec(void)

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:18:09 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:29:25 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,16 @@ t_intersec	cal_ray(t_global *global, int px_x, int px_y)
    and screen relationships to take advantage of the entire view */
 t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 {
-	t_camera	cam;
+	t_camera		cam;
+	static float	aspect_ratio;
+	static float	scrn_w;
+	static float	scrn_h;
+	static float	last_fov;
+	float			u;
+	float			v;
 
-	static float aspect_ratio, scrn_w, scrn_h, last_fov = -1;
-	float u, v;
 	cam = global->scene.cam;
+	last_fov = -1;
 	if (last_fov != cam.fov)
 	{
 		aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
@@ -59,7 +64,5 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 	}
 	u = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
 	v = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
-	return (norm(add(add(multiply(cam.x, u),
-							multiply(cam.y, v)),
-						cam.z)));
+	return (norm(add(add(multiply(cam.x, u), multiply(cam.y, v)), cam.z)));
 }

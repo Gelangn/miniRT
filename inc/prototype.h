@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:17:31 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:44:48 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 /***** PROTOTYPES *****/
 /* Initialization */
-int			init(t_global *global);
-int			init_scene(t_global *global);
+void		init(t_global *global);
+void		init_scene(t_global *global);
 t_intersec	init_intersec(void);
 
 /* Window and MLX */

@@ -82,6 +82,8 @@ t_intersec	find_closest_intersec(t_global *global);
 t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec intersec);
+void		check_obj_intersecs(t_global *global, t_intersec *closest_intersec,
+				int obj_type);
 void		check_sp_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_pl_intersecs(t_global *global, t_intersec *closest_intersec);
 void		check_cy_intersecs(t_global *global, t_intersec *closest_intersec);

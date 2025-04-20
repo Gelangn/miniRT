@@ -8,24 +8,27 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
 	t_intersec	intersec;
 	t_vector	hit_point;
 	float		hit_height;
-	t_vector	hit_to_axis;
 	t_vector	center_at_height;
 	t_vector	normal;
 
 	intersec = init_intersec();
 	if (t < 0)
 		return (intersec);
+	// Calcular punto de intersección una sola vez
 	hit_point = add(global->current_ray_origin,
 			multiply(global->current_ray_dir, t));
 	hit_height = dot(subtract(hit_point, cylinder->base), vars.axis);
+	// Verificar si el punto está dentro del cilindro
 	if (is_less_than(hit_height, 0) || is_greater_than(hit_height,
 			cylinder->height))
 		return (intersec);
-	hit_to_axis = multiply(vars.axis, hit_height);
-	center_at_height = add(cylinder->base, hit_to_axis);
+	// Calcular normal en el punto
+	center_at_height = add(cylinder->base, multiply(vars.axis, hit_height));
 	normal = normalize(subtract(hit_point, center_at_height));
+	// Verificar orientación de la normal
 	if (dot(normal, global->current_ray_dir) >= 0)
 		return (intersec);
+	// Configurar datos de intersección
 	intersec.dist = t;
 	intersec.point = hit_point;
 	intersec.obj_type = 2;
@@ -107,12 +110,13 @@ t_intersec	find_closest_intersec(t_global *global)
 	t_intersec	closest_intersec;
 
 	closest_intersec = init_intersec();
+	// Revisar los tres tipos de objetos
 	if (global->scene.num_sp > 0)
-		check_sp_intersecs(global, &closest_intersec);
+		check_obj_intersecs(global, &closest_intersec, 0);
 	if (global->scene.num_pl > 0)
-		check_pl_intersecs(global, &closest_intersec);
+		check_obj_intersecs(global, &closest_intersec, 1);
 	if (global->scene.num_cy > 0)
-		check_cy_intersecs(global, &closest_intersec);
+		check_obj_intersecs(global, &closest_intersec, 2);
 	return (closest_intersec);
 }
 /* Nucleo central del raytracing, llama a cal_ray, y a su ves a
@@ -156,19 +160,25 @@ t_intersec	cal_ray(t_global *global, int px_x, int px_y)
   para poder aprovechar toda la vista */
 t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 {
-	float		aspect_ratio;
-	t_vector	ray_dir;
+	static float	aspect_ratio = 0;
+	static float	scrn_w = 0;
+	static float	scrn_h = 0;
+	static float	last_fov = -1;
+	t_vector		ray_dir;
 
 	float u, v;
-	float scrn_w, scrn_h;
-	// Calcular la relación de aspecto efectiva
-	aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
-	scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
-	scrn_h = scrn_w / aspect_ratio;
-	// Calcular u y v
+	// Precalcular dimensiones de pantalla solo cuando cambie el FOV
+	if (last_fov != cam.fov)
+	{
+		aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
+		scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
+		scrn_h = scrn_w / aspect_ratio;
+		last_fov = cam.fov;
+	}
+	// Calcular coordenadas u,v
 	u = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
 	v = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
-	// Usar los vectores precalculados
+	// Construir vector de dirección
 	ray_dir = normalize(add(add(multiply(cam.x, u), multiply(cam.y, v)),
 				cam.z));
 	return (ray_dir);
@@ -213,19 +223,86 @@ t_vector	get_cy_normal(t_global *global, t_intersec intersec)
 	}
 }
 
+// Simplificar get_surface_normal fusionando la lógica común
 t_vector	get_surface_normal(t_global *global, t_intersec intersec)
 {
-	t_vector	normal;
+	int			obj_type;
+	int			obj_index;
+	t_sphere	sphere;
+	t_plane		plane;
+	t_cylinder	cylinder;
+	t_vector	axis;
+	float		hit_height;
+	t_vector	center_at_height;
 
-	normal = (t_vector){0, 0, 0};
-	if (intersec.obj_type == 0 && intersec.obj_index >= 0
-		&& intersec.obj_index < global->scene.num_sp)
-		normal = get_sp_normal(global, intersec);
-	else if (intersec.obj_type == 1 && intersec.obj_index >= 0
-		&& intersec.obj_index < global->scene.num_pl)
-		normal = get_pl_normal(global, intersec);
-	else if (intersec.obj_type == 2 && intersec.obj_index >= 0
-		&& intersec.obj_index < global->scene.num_cy)
-		normal = get_cy_normal(global, intersec);
-	return (normal);
+	obj_type = intersec.obj_type;
+	obj_index = intersec.obj_index;
+	// Validar índices para evitar accesos inválidos
+	if (obj_type < 0 || obj_index < 0 || (obj_type == 0
+			&& obj_index >= global->scene.num_sp) || (obj_type == 1
+			&& obj_index >= global->scene.num_pl) || (obj_type == 2
+			&& obj_index >= global->scene.num_cy))
+	{
+		return ((t_vector){0, 1, 0}); // Vector normal por defecto
+	}
+	// Calcular normal según tipo de objeto
+	if (obj_type == 0)
+	{
+		sphere = global->scene.spheres[obj_index];
+		return (normalize(subtract(intersec.point, sphere.center)));
+	}
+	else if (obj_type == 1)
+	{
+		plane = global->scene.planes[obj_index];
+		return (normalize(plane.normal));
+	}
+	else // obj_type == 2
+	{
+		cylinder = global->scene.cylinders[obj_index];
+		axis = normalize(cylinder.orientation);
+		hit_height = dot(subtract(intersec.point, cylinder.base), axis);
+		if (comp_floats(hit_height, 0))
+			return (multiply(axis, -1));
+		else if (comp_floats(hit_height, cylinder.height))
+			return (axis);
+		else
+		{
+			center_at_height = add(cylinder.base, multiply(axis, hit_height));
+			return (normalize(subtract(intersec.point, center_at_height)));
+		}
+	}
+}
+
+// Función unificada para verificar intersecciones con cualquier tipo de objeto
+void	check_obj_intersecs(t_global *global, t_intersec *closest_intersec,
+		int obj_type)
+{
+	int			i;
+	int			max_objs;
+	t_intersec	temp_intersec;
+
+	i = -1;
+	// Determinar el número máximo de objetos según el tipo
+	if (obj_type == 0)
+		max_objs = global->scene.num_sp;
+	else if (obj_type == 1)
+		max_objs = global->scene.num_pl;
+	else
+		max_objs = global->scene.num_cy;
+	while (++i < max_objs)
+	{
+		// Llamar a la función de colisión correspondiente
+		if (obj_type == 0)
+			temp_intersec = col_sp(global, i);
+		else if (obj_type == 1)
+			temp_intersec = col_pl(global, i);
+		else
+			temp_intersec = col_cy(global, i);
+		if (temp_intersec.dist < closest_intersec->dist)
+		{
+			*closest_intersec = temp_intersec;
+			closest_intersec->obj_index = i;
+			closest_intersec->obj_type = obj_type;
+		}
+	}
 }

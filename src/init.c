@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:38:06 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:51:36 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,15 @@ void	init_lateral_intersec_vars(t_global *global, int cy_id)
 	cylinder = &global->scene.cylinders[cy_id];
 	global->current_cyl_vars.axis = norm(cylinder->orientation);
 	global->current_cyl_vars.oc = subtract(global->c_ray.origin,
-											cylinder->base);
+			cylinder->base);
 	global->current_cyl_vars.dir_dot_axis = dot(global->c_ray.dir,
-												global->current_cyl_vars.axis);
+			global->current_cyl_vars.axis);
 	global->current_cyl_vars.oc_dot_axis = dot(global->current_cyl_vars.oc,
-												global->current_cyl_vars.axis);
+			global->current_cyl_vars.axis);
 	global->current_cyl_vars.dir_perp = subtract(global->c_ray.dir,
-													multiply(global->current_cyl_vars.axis,
-															global->current_cyl_vars.dir_dot_axis));
+			multiply(global->current_cyl_vars.axis,
+				global->current_cyl_vars.dir_dot_axis));
 	global->current_cyl_vars.oc_perp = subtract(global->current_cyl_vars.oc,
-												multiply(global->current_cyl_vars.axis,
-															global->current_cyl_vars.oc_dot_axis));
+			multiply(global->current_cyl_vars.axis,
+				global->current_cyl_vars.oc_dot_axis));
 }

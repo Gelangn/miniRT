@@ -6,13 +6,12 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:17:45 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:50:21 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-// Funciones auxiliares para manejar diferentes tipos de eventos
 void	handle_movement_keys(t_global *global, int keysym, int *needs_render)
 {
 	float		move_speed;
@@ -90,18 +89,17 @@ void	handle_screenshot(t_global *global)
 	printf("Guardando imagen en: %s\n", filename);
 	save_bmp(global, filename);
 	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * 0.35,
-			WIN_H * 0.5, 0xFFFFFF, "¡Imagen guardada!");
+		WIN_H * 0.5, 0xFFFFFF, "Imagen guardada!");
 }
 
-// Función centralizada para actualizar la pantalla después de cambios
+
 void	update_display(t_global *global)
 {
 	render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-			global->img.img, MARGIN / 2, MARGIN / 2);
+		global->img.img, MARGIN / 2, MARGIN / 2);
 }
 
-// Función principal simplificada
 int	handle_keypress(int keysym, t_global *global)
 {
 	int	needs_render;

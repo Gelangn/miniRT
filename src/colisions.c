@@ -6,13 +6,12 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:44:21 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:17:40 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:47:48 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// Funciones auxiliares simplificadas
 t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign)
 {
 	t_vector	axis;

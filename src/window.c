@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:29:26 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:29:32 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:20:05 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	close_window(t_global *global)
 {
 	printf("Closing window\n");
-	global->vars.mlx_win = NULL; // Solo marcar como cerrado, no destruir
-	global->img.img = NULL;      // Solo marcar como cerrado, no destruir
+	global->vars.mlx_win = NULL;
+	global->img.img = NULL;
 	return (SUCCESS);
 }
 

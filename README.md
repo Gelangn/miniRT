@@ -20,8 +20,8 @@ Este esquema refleja el orden de ejecución con las optimizaciones implementadas
 - **render** → Coordina el proceso de renderizado
   - **trace_all_rays** → Para cada píxel de la pantalla:
     - **cal_ray** → Calcula un rayo para el píxel
-      - **global->current_ray_origin = cam.pos** → Almacena origen en estructura global
-      - **global->current_ray_dir = get_ray_direction()** → Almacena dirección en estructura global
+      - **global->c_ray.origin = cam.pos** → Almacena origen en estructura global
+      - **global->c_ray.dir = get_ray_direction()** → Almacena dirección en estructura global
       - **find_closest_intersec** → Busca intersecciones usando la estructura global
         - **check_sp_intersecs** → Prueba intersecciones con esferas
           - **col_sp** → Calcula intersección con una esfera

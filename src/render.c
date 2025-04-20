@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:37:50 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:53:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	render_single_pixel(t_global *global, int index)
 		return ;
 	if (isec.obj_type >= 0 && isec.obj_index >= 0)
 	{
-		global->current_ray_dir.x = global->points[index].point_x;
-		global->current_ray_dir.y = global->points[index].point_y;
-		global->current_ray_dir.z = global->points[index].point_z;
-		global->current_intersec = isec;
+		global->c_ray.dir.x = global->points[index].point_x;
+		global->c_ray.dir.y = global->points[index].point_y;
+		global->c_ray.dir.z = global->points[index].point_z;
+		global->c_ray.hit = isec;
 		lit_color = cal_lighting(global);
 		color = rgb_to_int(lit_color);
 	}

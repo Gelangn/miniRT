@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:37:35 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:52:54 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	trace_all_rays(t_global *global)
 		ray_dir.x = global->points[i].point_x;
 		ray_dir.y = global->points[i].point_y;
 		ray_dir.z = global->points[i].point_z;
-		global->current_ray_origin = global->scene.cam.pos;
-		global->current_ray_dir = ray_dir;
+		global->c_ray.origin = global->scene.cam.pos;
+		global->c_ray.dir = ray_dir;
 		global->isecs[i] = find_closest_intersec(global);
 	}
 	printf("Total calculated rays: %d\n", total_pixels);
@@ -35,8 +35,8 @@ void	trace_all_rays(t_global *global)
 
 t_intersec	cal_ray(t_global *global, int px_x, int px_y)
 {
-	global->current_ray_origin = global->scene.cam.pos;
-	global->current_ray_dir = get_ray_direction(global, px_x, px_y);
+	global->c_ray.origin = global->scene.cam.pos;
+	global->c_ray.dir = get_ray_direction(global, px_x, px_y);
 	return (find_closest_intersec(global));
 }
 

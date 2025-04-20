@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:06:30 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:09:14 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:56:16 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ t_color	calculate_ambient(t_global *global)
 {
 	t_color	result;
 
-	result.r = global->current_object_color.r * global->scene.ambient.intensity;
-	result.g = global->current_object_color.g * global->scene.ambient.intensity;
-	result.b = global->current_object_color.b * global->scene.ambient.intensity;
+	result.r = global->c_ray.obj_color.r * global->scene.ambient.intensity;
+	result.g = global->c_ray.obj_color.g * global->scene.ambient.intensity;
+	result.b = global->c_ray.obj_color.b * global->scene.ambient.intensity;
 	return (result);
 }
 
@@ -28,8 +28,8 @@ t_color	calculate_diffuse(t_global *global)
 	float	light_intensity;
 
 	light_intensity = global->scene.light.intensity;
-	diff = fmax(0.0f, dot(global->current_normal, global->current_light_dir));
-	return (color_scale(global->current_object_color, light_intensity * diff));
+	diff = fmax(0.0f, dot(global->c_ray.normal, global->c_light.dir));
+	return (color_scale(global->c_ray.obj_color, light_intensity * diff));
 }
 
 t_color	calculate_specular(t_global *global)
@@ -41,10 +41,10 @@ t_color	calculate_specular(t_global *global)
 	float		light_intensity;
 
 	light_intensity = global->scene.light.intensity;
-	view_dir = normalize(multiply(global->current_ray_dir, -1.0f));
-	reflect_dir = subtract(multiply(global->current_normal, 2.0f
-				* dot(global->current_normal, global->current_light_dir)),
-			global->current_light_dir);
+	view_dir = normalize(multiply(global->c_ray.dir, -1.0f));
+	reflect_dir = subtract(multiply(global->c_ray.normal, 2.0f
+				* dot(global->c_ray.normal, global->c_light.dir)),
+							global->c_light.dir);
 	spec = pow(fmax(0.0f, dot(view_dir, reflect_dir)), 32);
 	white.r = 255;
 	white.g = 255;

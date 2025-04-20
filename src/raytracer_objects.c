@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:42:15 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:53:01 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ float	cal_discriminant(t_global *global, t_vector center, float radius)
 	float		b;
 	float		c;
 
-	oc = subtract(global->current_ray_origin, center);
-	ray_dir = global->current_ray_dir;
+	oc = subtract(global->c_ray.origin, center);
+	ray_dir = global->c_ray.dir;
 	a = dot(ray_dir, ray_dir);
 	b = 2.0 * dot(oc, ray_dir);
 	c = dot(oc, oc) - radius * radius;
@@ -69,22 +69,22 @@ t_intersec	col_sp(t_global *global, int sp_id)
 
 	sphere = &global->scene.spheres[sp_id];
 	isec = init_intersec();
-	oc = subtract(global->current_ray_origin, sphere->center);
+	oc = subtract(global->c_ray.origin, sphere->center);
 	discr = cal_discriminant(global, sphere->center, sphere->radius);
 	if (discr < 0)
 		return (isec);
-	t1 = (-dot(global->current_ray_dir, oc) - sqrt(discr))
-		/ dot(global->current_ray_dir, global->current_ray_dir);
-	t2 = (-dot(global->current_ray_dir, oc) + sqrt(discr))
-		/ dot(global->current_ray_dir, global->current_ray_dir);
+	t1 = (-dot(global->c_ray.dir, oc) - sqrt(discr)) / dot(global->c_ray.dir,
+			global->c_ray.dir);
+	t2 = (-dot(global->c_ray.dir, oc) + sqrt(discr)) / dot(global->c_ray.dir,
+			global->c_ray.dir);
 	if (t1 > 0 && t1 < t2)
 		isec.dist = t1;
 	else if (t2 > 0)
 		isec.dist = t2;
 	else
 		return (isec);
-	isec.point = add(global->current_ray_origin,
-						multiply(global->current_ray_dir, isec.dist));
+	isec.point = add(global->c_ray.origin,
+						multiply(global->c_ray.dir, isec.dist));
 	return (isec);
 }
 
@@ -98,16 +98,16 @@ t_intersec	col_pl(t_global *global, int pl_id)
 
 	plane = &global->scene.planes[pl_id];
 	isec = init_intersec();
-	denom = dot(plane->normal, global->current_ray_dir);
+	denom = dot(plane->normal, global->c_ray.dir);
 	if (comp_floats(denom, 0))
 		return (isec);
-	p0l0 = subtract(plane->point, global->current_ray_origin);
+	p0l0 = subtract(plane->point, global->c_ray.origin);
 	t = dot(p0l0, plane->normal) / denom;
 	if (t < 0)
 		return (isec);
 	isec.dist = t;
-	isec.point = add(global->current_ray_origin,
-						multiply(global->current_ray_dir, t));
+	isec.point = add(global->c_ray.origin,
+						multiply(global->c_ray.dir, t));
 	isec.obj_type = 1;
 	return (isec);
 }

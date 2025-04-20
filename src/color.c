@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:13:10 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:36:00 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:53:45 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_color	get_object_color(t_global *global)
 {
 	t_intersec	isec;
 
-	isec = global->current_intersec;
+	isec = global->c_ray.hit;
 	if (isec.obj_type == 0)
 		return (global->scene.spheres[isec.obj_index].color);
 	else if (isec.obj_type == 1)
@@ -49,15 +49,15 @@ t_ray_state	save_ray_state(t_global *global)
 {
 	t_ray_state	state;
 
-	state.origin = global->current_ray_origin;
-	state.dir = global->current_ray_dir;
-	state.isec = global->current_intersec;
+	state.origin = global->c_ray.origin;
+	state.dir = global->c_ray.dir;
+	state.isec = global->c_ray.hit;
 	return (state);
 }
 
 void	restore_ray_state(t_global *global, t_ray_state state)
 {
-	global->current_ray_origin = state.origin;
-	global->current_ray_dir = state.dir;
-	global->current_intersec = state.isec;
+	global->c_ray.origin = state.origin;
+	global->c_ray.dir = state.dir;
+	global->c_ray.hit = state.isec;
 }

@@ -7,7 +7,26 @@ int	rgb_to_int(t_color color)
 	return ((color.r << 16) | (color.g << 8) | color.b);
 }
 
-// Obtener el color del objeto
+t_color	color_scale(t_color color, float factor)
+{
+	t_color	result;
+
+	result.r = color.r * factor;
+	result.g = color.g * factor;
+	result.b = color.b * factor;
+	return (result);
+}
+
+t_color	color_add(t_color c1, t_color c2)
+{
+	t_color	result;
+
+	result.r = c1.r + c2.r;
+	result.g = c1.g + c2.g;
+	result.b = c1.b + c2.b;
+	return (result);
+}
+
 t_color	get_object_color(t_global *global)
 {
 	t_intersec	intersec;
@@ -21,7 +40,6 @@ t_color	get_object_color(t_global *global)
 		return (global->scene.cylinders[intersec.obj_index].color);
 }
 
-// Guardar el estado actual del ray tracing
 t_ray_state	save_ray_state(t_global *global)
 {
 	t_ray_state	state;
@@ -32,7 +50,6 @@ t_ray_state	save_ray_state(t_global *global)
 	return (state);
 }
 
-// Restaurar el estado del ray tracing
 void	restore_ray_state(t_global *global, t_ray_state state)
 {
 	global->current_ray_origin = state.origin;
@@ -40,10 +57,8 @@ void	restore_ray_state(t_global *global, t_ray_state state)
 	global->current_intersec = state.intersec;
 }
 
-// Preparar datos para cálculos de iluminación
 void	prepare_lighting_data(t_global *global)
 {
-	// Calcular datos que se usarán en varias funciones
 	global->current_object_color = get_object_color(global);
 	global->current_normal = get_surface_normal(global,
 			global->current_intersec);
@@ -53,7 +68,6 @@ void	prepare_lighting_data(t_global *global)
 				global->current_intersec.point));
 }
 
-// Calcular si un punto está en sombra
 float	cal_shadow(t_global *global)
 {
 	float		light_intensity;
@@ -62,29 +76,23 @@ float	cal_shadow(t_global *global)
 	t_intersec	shadow_intersec;
 
 	light_intensity = global->scene.light.intensity;
-	// Desplazar ligeramente el origen para evitar auto-intersecciones
 	shadow_origin = add(global->current_intersec.point,
 			multiply(global->current_normal, 0.005f));
-	// Guardar estado actual
 	state = save_ray_state(global);
-	// Configurar rayo de sombra directamente
 	global->current_ray_origin = shadow_origin;
 	global->current_ray_dir = global->current_light_dir;
 	shadow_intersec = find_closest_intersec(global);
-	// Restaurar estado original
 	restore_ray_state(global, state);
-	// Verificar si hay sombra
 	if (shadow_intersec.obj_type >= 0
 		&& shadow_intersec.dist < global->current_light_distance
 		&& !(shadow_intersec.obj_type == global->current_intersec.obj_type
 			&& shadow_intersec.obj_index == global->current_intersec.obj_index))
 	{
-		return (0); // Punto en sombra
+		return (0);
 	}
 	return (light_intensity);
 }
 
-// Calcular componente ambiental
 t_color	calculate_ambient(t_color object_color, float ambient_intensity)
 {
 	t_color	result;
@@ -95,34 +103,32 @@ t_color	calculate_ambient(t_color object_color, float ambient_intensity)
 	return (result);
 }
 
-// Calcular componente difusa (versión simplificada)
-void	add_diffuse(t_global *global, t_color *color, float light_intensity)
+t_color	calculate_diffuse(t_global *global, float light_intensity)
 {
 	float	diff;
 
 	diff = fmax(0.0f, dot(global->current_normal, global->current_light_dir));
-	color->r += global->current_object_color.r * light_intensity * diff;
-	color->g += global->current_object_color.g * light_intensity * diff;
-	color->b += global->current_object_color.b * light_intensity * diff;
+	return (color_scale(global->current_object_color, light_intensity * diff));
 }
 
-// Calcular componente especular (versión simplificada)
-void	add_specular(t_global *global, t_color *color, float light_intensity)
+t_color	calculate_specular(t_global *global, float light_intensity)
 {
+	t_vector	view_dir;
 	t_vector	reflect_dir;
 	float		spec;
+	t_color		white;
 
+	view_dir = normalize(multiply(global->current_ray_dir, -1.0f));
 	reflect_dir = subtract(multiply(global->current_normal, 2.0f
 				* dot(global->current_normal, global->current_light_dir)),
 			global->current_light_dir);
-	spec = pow(fmax(0.0f, dot(normalize(multiply(global->current_ray_dir,
-							-1.0f)), reflect_dir)), 32);
-	color->r += 255 * spec * light_intensity * 0.5f;
-	color->g += 255 * spec * light_intensity * 0.5f;
-	color->b += 255 * spec * light_intensity * 0.5f;
+	spec = pow(fmax(0.0f, dot(view_dir, reflect_dir)), 32);
+	white.r = 255;
+	white.g = 255;
+	white.b = 255;
+	return (color_scale(white, spec * light_intensity * 0.5f));
 }
 
-// Limitar valores de color al rango [0, 255]
 void	clamp_color(t_color *color)
 {
 	color->r = fmin(255, fmax(0, color->r));
@@ -130,26 +136,25 @@ void	clamp_color(t_color *color)
 	color->b = fmin(255, fmax(0, color->b));
 }
 
-// Función principal de aplicación de iluminación
 t_color	apply_lighting(t_global *global, float light_intensity)
 {
 	t_color	result_color;
+	t_color	diffuse;
+	t_color	specular;
 
-	// Calcular iluminación ambiental (siempre presente)
 	result_color = calculate_ambient(global->current_object_color,
 			global->scene.ambient.intensity);
-	// Añadir componentes difusa y especular si no está en sombra
 	if (light_intensity > 0)
 	{
-		add_diffuse(global, &result_color, light_intensity);
-		add_specular(global, &result_color, light_intensity);
+		diffuse = calculate_diffuse(global, light_intensity);
+		specular = calculate_specular(global, light_intensity);
+		result_color = color_add(result_color, diffuse);
+		result_color = color_add(result_color, specular);
 	}
-	// Limitar valores finales
 	clamp_color(&result_color);
 	return (result_color);
 }
 
-// Verificar si la intersección es válida
 int	is_valid_intersec(t_global *global)
 {
 	t_intersec	intersec;
@@ -168,21 +173,19 @@ int	is_valid_intersec(t_global *global)
 	return (1);
 }
 
-// Función principal simplificada
 t_color	cal_lighting(t_global *global)
 {
 	float	light_intensity;
+	t_color	default_color;
 
-	// Verificar intersección válida
 	if (!is_valid_intersec(global))
 	{
-		t_color default_color = {5, 5, 5}; // Gris oscuro
+		default_color.r = 5;
+		default_color.g = 5;
+		default_color.b = 5;
 		return (default_color);
 	}
-	// Preparar datos para cálculos de iluminación
 	prepare_lighting_data(global);
-	// Calcular sombras e iluminación
 	light_intensity = cal_shadow(global);
-	// Aplicar modelo de iluminación
 	return (apply_lighting(global, light_intensity));
 }

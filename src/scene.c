@@ -1,4 +1,14 @@
-// incluir cabecera 42
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   scene.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
+/*   Updated: 2025/04/20 17:27:18 by anavas-g         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
@@ -16,6 +26,7 @@ void	check_scene(t_global *global, t_scene *scene)
 	if (scene->num_sp == 0 && scene->num_pl == 0 && scene->num_cy == 0)
 		finish(global, ERR_SCENE);
 }
+
 // Function to read and parse the scene file
 void	read_scene(t_global *global)
 {

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
+/*   Updated: 2025/04/20 17:19:16 by anavas-g         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -10,6 +22,7 @@
 # include <X11/keysym.h>
 # include <errno.h>
 # include <fcntl.h>
+# include <linux/limits.h>
 # include <math.h>
 # include <stddef.h>
 # include <stdio.h>
@@ -62,7 +75,8 @@
 # define MY_COLOR 0x89CE94
 
 # define ARGS "Usage: ./miniRT <file.rt>\n"
-# define ERR_ARGS "\nIncorrect number of arguments, expected 1 " ARGS
+# define ERR_ARGS "\nIncorrect number of arguments, expected 1 Usage: \
+ ./miniRT <file.rt>\n "
 # define ERR_OPEN "\nError opening the file\n"
 # define ERR_READ "\nError reading the file\n"
 # define ERR_SPLIT "\nError splitting the line\n"

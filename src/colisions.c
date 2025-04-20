@@ -78,11 +78,9 @@ t_intersec	col_cy(t_global *global, int cy_id)
 	t_intersec	bottom_cap_intersec;
 
 	intersec = init_intersec();
-	// Calcular intersecciones con las diferentes partes del cilindro
 	lateral_intersec = cal_lateral_intersec(global, cy_id);
 	top_cap_intersec = cal_cap_intersec(global, cy_id, 1);
 	bottom_cap_intersec = cal_cap_intersec(global, cy_id, -1);
-	// Tomar la intersección más cercana
 	if (lateral_intersec.dist < intersec.dist)
 		intersec = lateral_intersec;
 	if (top_cap_intersec.dist < intersec.dist)

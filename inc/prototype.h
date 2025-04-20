@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prototype.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
+/*   Updated: 2025/04/20 17:20:14 by anavas-g         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PROTOTYPE_H
 # define PROTOTYPE_H
 
@@ -107,7 +119,7 @@ void		clamp_color(t_color *color);
 t_color		get_object_color(t_global *global);
 int			is_valid_intersec(t_global *global);
 void		prepare_lighting_data(t_global *global);
-int	cal_shadow(t_global *global); // Cambiado de float a int
+int			cal_shadow(t_global *global);
 t_color		calculate_ambient(t_global *global);
 t_color		calculate_diffuse(t_global *global);
 t_color		calculate_specular(t_global *global);

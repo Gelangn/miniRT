@@ -1,7 +1,16 @@
-// incluir cabecera 42
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minirt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
+/*   Updated: 2025/04/20 17:20:41 by anavas-g         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minirt.h"
-#include <linux/limits.h>
 
 // Function to check the file extension
 void	check_file_extension(t_global *global, const char *filename)
@@ -32,7 +41,7 @@ int	main(int argc, char **argv)
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path);
 	read_scene(global);
-	global->vars.mlx_win = new_window(global); // Create a new window
+	global->vars.mlx_win = new_window(global);
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);
 	render(global);

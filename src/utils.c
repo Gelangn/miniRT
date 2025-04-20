@@ -1,4 +1,14 @@
-// incluir cabecera 42
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:27:57 by anavas-g          #+#    #+#             */
+/*   Updated: 2025/04/20 17:58:12 by anavas-g         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
@@ -9,7 +19,7 @@ void	finish(t_global *global, const char *message)
 	else
 		perror(message);
 	if (global)
-		free_global(global); // Que free_global haga toda la limpieza
+		free_global(global);
 	printf("Exiting program\n");
 	exit(SUCCESS);
 }
@@ -37,7 +47,6 @@ int	is_valid_pixel(int px_x, int px_y, int width, int height)
 	return (px_x >= 0 && px_x < width && px_y >= 0 && px_y < height);
 }
 
-// Antes: void write_bmp_header(int fd, t_global *global)
 void	write_bmp_header(t_global *global, int fd)
 {
 	unsigned char	header[54];
@@ -46,7 +55,6 @@ void	write_bmp_header(t_global *global, int fd)
 
 	width = WIN_W - MARGIN;
 	height = WIN_H - MARGIN;
-	// Inicializar todo el header a cero
 	memset(header, 0, 54);
 	header[0] = 'B';
 	header[1] = 'M';
@@ -65,7 +73,6 @@ void	write_bmp_header(t_global *global, int fd)
 	}
 }
 
-// Antes: int write_bmp_row(int fd, int px_y, t_global *global)
 int	write_bmp_row(t_global *global, int fd, int px_y)
 {
 	int				width;
@@ -86,9 +93,9 @@ int	write_bmp_row(t_global *global, int fd, int px_y)
 	{
 		pixel = global->img.addr + (px_y * global->img.bpl + px_x
 				* (global->img.bpp / 8));
-		row_buffer[px_x * 3] = pixel[0];     // B
-		row_buffer[px_x * 3 + 1] = pixel[1]; // G
-		row_buffer[px_x * 3 + 2] = pixel[2]; // R
+		row_buffer[px_x * 3] = pixel[0];
+		row_buffer[px_x * 3 + 1] = pixel[1];
+		row_buffer[px_x * 3 + 2] = pixel[2];
 	}
 	memset(row_buffer + width * 3, 0, padding);
 	if (write(fd, row_buffer, row_size) != row_size)
@@ -114,11 +121,11 @@ void	save_bmp(t_global *global, const char *filename)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		finish(global, ERR_OPEN);
-	write_bmp_header(global, fd); // Cambiado el orden
+	write_bmp_header(global, fd);
 	px_y = -1;
 	while (++px_y < height)
 	{
-		if (!write_bmp_row(global, fd, px_y)) // Cambiado el orden
+		if (!write_bmp_row(global, fd, px_y))
 		{
 			close(fd);
 			return ;

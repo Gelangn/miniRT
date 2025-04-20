@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
+/*   Updated: 2025/04/20 17:39:50 by anavas-g         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	init(t_global *global)
@@ -55,23 +67,18 @@ t_intersec	init_intersec(void)
 	return (intersec);
 }
 
-// Versión simplificada - usando current_cyl_vars en global
 void	init_lateral_intersec_vars(t_global *global, int cy_id)
 {
 	t_cylinder	*cylinder;
 
 	cylinder = &global->scene.cylinders[cy_id];
-	// Normalizar eje del cilindro
 	global->current_cyl_vars.axis = normalize(cylinder->orientation);
-	// Calcular vector entre origen del rayo y base del cilindro
 	global->current_cyl_vars.oc = subtract(global->current_ray_origin,
 			cylinder->base);
-	// Calcular proyecciones
 	global->current_cyl_vars.dir_dot_axis = dot(global->current_ray_dir,
 			global->current_cyl_vars.axis);
 	global->current_cyl_vars.oc_dot_axis = dot(global->current_cyl_vars.oc,
 			global->current_cyl_vars.axis);
-	// Calcular componentes perpendiculares
 	global->current_cyl_vars.dir_perp = subtract(global->current_ray_dir,
 			multiply(global->current_cyl_vars.axis,
 				global->current_cyl_vars.dir_dot_axis));

@@ -1,11 +1,22 @@
-// Incluir encabezado 42
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shadows.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/20 17:57:09 by anavas-g          #+#    #+#             */
+/*   Updated: 2025/04/20 17:57:44 by anavas-g         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	cal_shadow(t_global *global)
 {
-	t_vector shadow_origin;
-	t_ray_state state;
-	t_intersec shadow_intersec;
+	t_vector	shadow_origin;
+	t_ray_state	state;
+	t_intersec	shadow_intersec;
 
 	shadow_origin = add(global->current_intersec.point,
 			multiply(global->current_normal, 0.005f));
@@ -19,7 +30,7 @@ int	cal_shadow(t_global *global)
 		&& !(shadow_intersec.obj_type == global->current_intersec.obj_type
 			&& shadow_intersec.obj_index == global->current_intersec.obj_index))
 	{
-		return (0); // En sombra (false)
+		return (0);
 	}
-	return (1); // No en sombra (true)
+	return (1);
 }

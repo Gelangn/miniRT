@@ -55,21 +55,27 @@ t_intersec	init_intersec(void)
 	return (intersec);
 }
 
-// Versión optimizada - usando global directamente
-void	init_lateral_intersec_vars(t_global *global, t_cylinder *cylinder,
-		t_cyl_lat *vars)
+// Versión simplificada - usando current_cyl_vars en global
+void	init_lateral_intersec_vars(t_global *global, int cy_id)
 {
-	t_vector	ray_origin;
-	t_vector	ray_dir;
+	t_cylinder	*cylinder;
 
-	// Usar directamente las variables de global
-	ray_origin = global->current_ray_origin;
-	ray_dir = global->current_ray_dir;
-	vars->axis = normalize(cylinder->orientation);
-	vars->oc = subtract(ray_origin, cylinder->base);
-	vars->dir_dot_axis = dot(ray_dir, vars->axis);
-	vars->oc_dot_axis = dot(vars->oc, vars->axis);
-	vars->dir_perp = subtract(ray_dir, multiply(vars->axis,
-				vars->dir_dot_axis));
-	vars->oc_perp = subtract(vars->oc, multiply(vars->axis, vars->oc_dot_axis));
+	cylinder = &global->scene.cylinders[cy_id];
+	// Normalizar eje del cilindro
+	global->current_cyl_vars.axis = normalize(cylinder->orientation);
+	// Calcular vector entre origen del rayo y base del cilindro
+	global->current_cyl_vars.oc = subtract(global->current_ray_origin,
+			cylinder->base);
+	// Calcular proyecciones
+	global->current_cyl_vars.dir_dot_axis = dot(global->current_ray_dir,
+			global->current_cyl_vars.axis);
+	global->current_cyl_vars.oc_dot_axis = dot(global->current_cyl_vars.oc,
+			global->current_cyl_vars.axis);
+	// Calcular componentes perpendiculares
+	global->current_cyl_vars.dir_perp = subtract(global->current_ray_dir,
+			multiply(global->current_cyl_vars.axis,
+				global->current_cyl_vars.dir_dot_axis));
+	global->current_cyl_vars.oc_perp = subtract(global->current_cyl_vars.oc,
+			multiply(global->current_cyl_vars.axis,
+				global->current_cyl_vars.oc_dot_axis));
 }

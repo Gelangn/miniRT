@@ -152,6 +152,7 @@ typedef struct s_global
 	t_vector	current_ray_origin;
 	t_vector	current_ray_dir;
 	t_intersec	current_intersec;
+	t_cyl_lat	current_cyl_vars;
 
 	// Variables para cálculos de iluminación
 	t_color		current_object_color;

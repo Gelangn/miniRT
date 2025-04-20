@@ -2,9 +2,8 @@
 
 #include "../inc/minirt.h"
 
-// Versión optimizada - usando el índice del cilindro en lugar del puntero
-t_intersec	process_lateral_hit(t_global *global, int cy_id, t_cyl_lat vars,
-		float t)
+// Versión simplificada - usando current_cyl_vars en global
+t_intersec	process_lateral_hit(t_global *global, int cy_id, float t)
 {
 	t_intersec	intersec;
 	t_cylinder	*cylinder;
@@ -20,13 +19,15 @@ t_intersec	process_lateral_hit(t_global *global, int cy_id, t_cyl_lat vars,
 	// Calcular punto de intersección una sola vez
 	hit_point = add(global->current_ray_origin,
 			multiply(global->current_ray_dir, t));
-	hit_height = dot(subtract(hit_point, cylinder->base), vars.axis);
+	hit_height = dot(subtract(hit_point, cylinder->base),
+			global->current_cyl_vars.axis);
 	// Verificar si el punto está dentro del cilindro
 	if (is_less_than(hit_height, 0) || is_greater_than(hit_height,
 			cylinder->height))
 		return (intersec);
 	// Calcular normal en el punto
-	center_at_height = add(cylinder->base, multiply(vars.axis, hit_height));
+	center_at_height = add(cylinder->base,
+			multiply(global->current_cyl_vars.axis, hit_height));
 	normal = normalize(subtract(hit_point, center_at_height));
 	// Verificar orientación de la normal
 	if (dot(normal, global->current_ray_dir) >= 0)
@@ -39,15 +40,16 @@ t_intersec	process_lateral_hit(t_global *global, int cy_id, t_cyl_lat vars,
 	return (intersec);
 }
 
-t_intersec	check_lateral_hits(t_global *global, int cy_id, t_cyl_lat vars)
+// Versión simplificada - usando current_cyl_vars en global
+t_intersec	check_lateral_hits(t_global *global, int cy_id)
 {
 	t_intersec	hit1;
 	t_intersec	hit2;
 
-	hit1 = process_lateral_hit(global, cy_id, vars, vars.t1);
+	hit1 = process_lateral_hit(global, cy_id, global->current_cyl_vars.t1);
 	if (hit1.obj_type >= 0)
 		return (hit1);
-	hit2 = process_lateral_hit(global, cy_id, vars, vars.t2);
+	hit2 = process_lateral_hit(global, cy_id, global->current_cyl_vars.t2);
 	return (hit2);
 }
 

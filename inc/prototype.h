@@ -10,8 +10,6 @@
 int			init(t_global *global);
 int			init_scene(t_global *global);
 t_intersec	init_intersec(void);
-void		init_lateral_intersec_vars(t_global *global, t_cylinder *cylinder,
-				t_cyl_lat *vars);
 
 /* MLX y eventos  */
 void		set_hooks(t_global *global);
@@ -92,19 +90,18 @@ void		check_cy_intersecs(t_global *global, t_intersec *closest_intersec);
 t_intersec	col_sp(t_global *global, int sp_id);
 t_intersec	col_pl(t_global *global, int pl_id);
 t_intersec	col_cy(t_global *global, int cy_id);
-float		cal_lateral_discriminant(t_global *global, int cy_id,
-				t_cyl_lat vars);
-t_intersec	check_lateral_hits(t_global *global, int cy_id, t_cyl_lat vars);
-t_intersec	process_lateral_hit(t_global *global, int cy_id, t_cyl_lat vars,
-				float t);
 
 /* Cylinder intersection helpers */
 t_intersec	cal_lateral_intersec(t_global *global, int cy_id);
 t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
-void		get_intersec_points(float a, float b, float discriminant,
-				t_cyl_lat *vars);
 t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign);
 t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign);
+void		init_lateral_intersec_vars(t_global *global, int cy_id);
+float		cal_lateral_discriminant(t_global *global, int cy_id);
+void		get_intersec_points(t_global *global, float a, float b,
+				float discriminant);
+t_intersec	check_lateral_hits(t_global *global, int cy_id);
+t_intersec	process_lateral_hit(t_global *global, int cy_id, float t);
 
 /* Colors */
 int			rgb_to_int(t_color color);

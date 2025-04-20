@@ -1,6 +1,5 @@
 #include "minirt.h"
 
-// Simplificada para usar global directamente
 float	cal_discriminant(t_global *global, t_vector center, float radius)
 {
 	t_vector	oc;
@@ -156,31 +155,24 @@ t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
 t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 {
 	t_intersec	intersec;
-	t_cylinder	*cylinder;
-	t_cyl_lat	vars;
 	float		discriminant;
 
 	intersec = init_intersec();
-	cylinder = &global->scene.cylinders[cy_id];
-	// Usar la nueva función optimizada
-	init_lateral_intersec_vars(global, cylinder, &vars);
-	discriminant = cal_lateral_discriminant(global, cy_id, vars);
+	// Inicializar variables en la estructura global
+	init_lateral_intersec_vars(global, cy_id);
+	discriminant = cal_lateral_discriminant(global, cy_id);
 	if (discriminant < 0)
 		return (intersec);
-	get_intersec_points(dot(vars.dir_perp, vars.dir_perp), 2
-		* dot(vars.dir_perp, vars.oc_perp), discriminant, &vars);
-	intersec = check_lateral_hits(global, cy_id, vars);
-	// Asegurarse de que se establece el índice del objeto
-	if (intersec.dist < INFINITY)
-	{
-		intersec.obj_type = 2;
-		intersec.obj_index = cy_id;
-	}
+	get_intersec_points(global, dot(global->current_cyl_vars.dir_perp,
+			global->current_cyl_vars.dir_perp), 2
+		* dot(global->current_cyl_vars.dir_perp,
+			global->current_cyl_vars.oc_perp), discriminant);
+	intersec = check_lateral_hits(global, cy_id);
 	return (intersec);
 }
 
-// Versión optimizada
-float	cal_lateral_discriminant(t_global *global, int cy_id, t_cyl_lat vars)
+// Versión simplificada - usando current_cyl_vars en global
+float	cal_lateral_discriminant(t_global *global, int cy_id)
 {
 	t_cylinder	*cylinder;
 	float		a;
@@ -188,23 +180,22 @@ float	cal_lateral_discriminant(t_global *global, int cy_id, t_cyl_lat vars)
 	float		c;
 
 	cylinder = &global->scene.cylinders[cy_id];
-	a = dot(vars.dir_perp, vars.dir_perp);
-	b = 2 * dot(vars.dir_perp, vars.oc_perp);
-	c = dot(vars.oc_perp, vars.oc_perp) - cylinder->radius * cylinder->radius;
+	a = dot(global->current_cyl_vars.dir_perp,
+			global->current_cyl_vars.dir_perp);
+	b = 2 * dot(global->current_cyl_vars.dir_perp,
+			global->current_cyl_vars.oc_perp);
+	c = dot(global->current_cyl_vars.oc_perp, global->current_cyl_vars.oc_perp)
+		- cylinder->radius * cylinder->radius;
 	return (b * b - 4 * a * c);
 }
 
-void	get_intersec_points(float a, float b, float discriminant,
-		t_cyl_lat *vars)
+// Versión simplificada - usando current_cyl_vars en global
+void	get_intersec_points(t_global *global, float a, float b,
+		float discriminant)
 {
-	float	temp;
+	float	sqrt_disc;
 
-	vars->t1 = (-b - sqrt(discriminant)) / (2 * a);
-	vars->t2 = (-b + sqrt(discriminant)) / (2 * a);
-	if (vars->t1 > vars->t2)
-	{
-		temp = vars->t1;
-		vars->t1 = vars->t2;
-		vars->t2 = temp;
-	}
+	sqrt_disc = sqrt(discriminant);
+	global->current_cyl_vars.t1 = (-b - sqrt_disc) / (2 * a);
+	global->current_cyl_vars.t2 = (-b + sqrt_disc) / (2 * a);
 }

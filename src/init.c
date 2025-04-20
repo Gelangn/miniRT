@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:39:50 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:36:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ int	init_scene(t_global *global)
 
 t_intersec	init_intersec(void)
 {
-	t_intersec	intersec;
+	t_intersec	isec;
 
-	intersec.dist = INFINITY;
-	intersec.point = (t_vector){0, 0, 0};
-	intersec.obj_index = -1;
-	intersec.obj_type = -1;
-	return (intersec);
+	isec.dist = INFINITY;
+	isec.point = (t_vector){0, 0, 0};
+	isec.obj_index = -1;
+	isec.obj_type = -1;
+	return (isec);
 }
 
 void	init_lateral_intersec_vars(t_global *global, int cy_id)
@@ -74,15 +74,15 @@ void	init_lateral_intersec_vars(t_global *global, int cy_id)
 	cylinder = &global->scene.cylinders[cy_id];
 	global->current_cyl_vars.axis = normalize(cylinder->orientation);
 	global->current_cyl_vars.oc = subtract(global->current_ray_origin,
-			cylinder->base);
+											cylinder->base);
 	global->current_cyl_vars.dir_dot_axis = dot(global->current_ray_dir,
-			global->current_cyl_vars.axis);
+												global->current_cyl_vars.axis);
 	global->current_cyl_vars.oc_dot_axis = dot(global->current_cyl_vars.oc,
-			global->current_cyl_vars.axis);
+												global->current_cyl_vars.axis);
 	global->current_cyl_vars.dir_perp = subtract(global->current_ray_dir,
-			multiply(global->current_cyl_vars.axis,
-				global->current_cyl_vars.dir_dot_axis));
+													multiply(global->current_cyl_vars.axis,
+															global->current_cyl_vars.dir_dot_axis));
 	global->current_cyl_vars.oc_perp = subtract(global->current_cyl_vars.oc,
-			multiply(global->current_cyl_vars.axis,
-				global->current_cyl_vars.oc_dot_axis));
+												multiply(global->current_cyl_vars.axis,
+															global->current_cyl_vars.oc_dot_axis));
 }

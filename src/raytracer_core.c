@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:00:15 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:37:35 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	trace_all_rays(t_global *global)
 		ray_dir.z = global->points[i].point_z;
 		global->current_ray_origin = global->scene.cam.pos;
 		global->current_ray_dir = ray_dir;
-		global->intersecs[i] = find_closest_intersec(global);
+		global->isecs[i] = find_closest_intersec(global);
 	}
 	printf("Total calculated rays: %d\n", total_pixels);
 }
@@ -46,9 +46,9 @@ t_intersec	cal_ray(t_global *global, int px_x, int px_y)
 t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 {
 	t_camera	cam;
+
 	static float aspect_ratio, scrn_w, scrn_h, last_fov = -1;
 	float u, v;
-
 	cam = global->scene.cam;
 	if (last_fov != cam.fov)
 	{
@@ -60,6 +60,6 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 	u = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
 	v = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
 	return (normalize(add(add(multiply(cam.x, u),
-					multiply(cam.y, v)),
-						cam.z)));
+								multiply(cam.y, v)),
+							cam.z)));
 }

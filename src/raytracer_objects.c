@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:10:59 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:42:15 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,79 +60,79 @@ void	check_obj_intersecs(t_global *global, t_intersec *closest, int obj_type)
 
 t_intersec	col_sp(t_global *global, int sp_id)
 {
-	t_intersec	intersec;
+	t_intersec	isec;
 	t_vector	oc;
-	float		discriminant;
+	float		discr;
 	float		t1;
 	float		t2;
 	t_sphere	*sphere;
 
 	sphere = &global->scene.spheres[sp_id];
-	intersec = init_intersec();
+	isec = init_intersec();
 	oc = subtract(global->current_ray_origin, sphere->center);
-	discriminant = cal_discriminant(global, sphere->center, sphere->radius);
-	if (discriminant < 0)
-		return (intersec);
-	t1 = (-dot(global->current_ray_dir, oc) - sqrt(discriminant))
+	discr = cal_discriminant(global, sphere->center, sphere->radius);
+	if (discr < 0)
+		return (isec);
+	t1 = (-dot(global->current_ray_dir, oc) - sqrt(discr))
 		/ dot(global->current_ray_dir, global->current_ray_dir);
-	t2 = (-dot(global->current_ray_dir, oc) + sqrt(discriminant))
+	t2 = (-dot(global->current_ray_dir, oc) + sqrt(discr))
 		/ dot(global->current_ray_dir, global->current_ray_dir);
 	if (t1 > 0 && t1 < t2)
-		intersec.dist = t1;
+		isec.dist = t1;
 	else if (t2 > 0)
-		intersec.dist = t2;
+		isec.dist = t2;
 	else
-		return (intersec);
-	intersec.point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, intersec.dist));
-	return (intersec);
+		return (isec);
+	isec.point = add(global->current_ray_origin,
+						multiply(global->current_ray_dir, isec.dist));
+	return (isec);
 }
 
 t_intersec	col_pl(t_global *global, int pl_id)
 {
-	t_intersec	intersec;
+	t_intersec	isec;
 	float		denom;
 	float		t;
 	t_vector	p0l0;
 	t_plane		*plane;
 
 	plane = &global->scene.planes[pl_id];
-	intersec = init_intersec();
+	isec = init_intersec();
 	denom = dot(plane->normal, global->current_ray_dir);
 	if (comp_floats(denom, 0))
-		return (intersec);
+		return (isec);
 	p0l0 = subtract(plane->point, global->current_ray_origin);
 	t = dot(p0l0, plane->normal) / denom;
 	if (t < 0)
-		return (intersec);
-	intersec.dist = t;
-	intersec.point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, t));
-	intersec.obj_type = 1;
-	return (intersec);
+		return (isec);
+	isec.dist = t;
+	isec.point = add(global->current_ray_origin,
+						multiply(global->current_ray_dir, t));
+	isec.obj_type = 1;
+	return (isec);
 }
 
 t_intersec	col_cy(t_global *global, int cy_id)
 {
-	t_intersec	intersec;
+	t_intersec	isec;
 	t_intersec	lateral_intersec;
 	t_intersec	top_cap_intersec;
 	t_intersec	bottom_cap_intersec;
 
-	intersec = init_intersec();
+	isec = init_intersec();
 	lateral_intersec = cal_lateral_intersec(global, cy_id);
 	top_cap_intersec = cal_cap_intersec(global, cy_id, 1);
 	bottom_cap_intersec = cal_cap_intersec(global, cy_id, -1);
-	if (lateral_intersec.dist < intersec.dist)
-		intersec = lateral_intersec;
-	if (top_cap_intersec.dist < intersec.dist)
-		intersec = top_cap_intersec;
-	if (bottom_cap_intersec.dist < intersec.dist)
-		intersec = bottom_cap_intersec;
-	if (intersec.dist < INFINITY)
+	if (lateral_intersec.dist < isec.dist)
+		isec = lateral_intersec;
+	if (top_cap_intersec.dist < isec.dist)
+		isec = top_cap_intersec;
+	if (bottom_cap_intersec.dist < isec.dist)
+		isec = bottom_cap_intersec;
+	if (isec.dist < INFINITY)
 	{
-		intersec.obj_type = 2;
-		intersec.obj_index = cy_id;
+		isec.obj_type = 2;
+		isec.obj_index = cy_id;
 	}
-	return (intersec);
+	return (isec);
 }

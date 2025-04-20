@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:44:21 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 20:44:25 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:42:02 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,28 @@ t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign)
 	return (multiply(axis, -1));
 }
 
-float	cal_lateral_discriminant(t_global *global, int cy_id)
+float	cal_lat_discriminant(t_global *global, int cy_id)
 {
 	t_cylinder	*cylinder;
-	float		a;
-	float		b;
-	float		c;
+	t_cyl_lat	*vars;
 
 	cylinder = &global->scene.cylinders[cy_id];
-	a = dot(global->current_cyl_vars.dir_perp,
-			global->current_cyl_vars.dir_perp);
-	b = 2 * dot(global->current_cyl_vars.dir_perp,
-			global->current_cyl_vars.oc_perp);
-	c = dot(global->current_cyl_vars.oc_perp, global->current_cyl_vars.oc_perp)
-		- cylinder->radius * cylinder->radius;
-	return (b * b - 4 * a * c);
+	vars = &global->current_cyl_vars;
+	vars->a = dot(vars->dir_perp, vars->dir_perp);
+	vars->b = 2 * dot(vars->dir_perp, vars->oc_perp);
+	vars->c = dot(vars->oc_perp, vars->oc_perp) - cylinder->radius
+		* cylinder->radius;
+	vars->discr = vars->b * vars->b - 4 * vars->a * vars->c;
+	return (vars->discr);
 }
 
-// Versión simplificada - usando current_cyl_vars en global
-void	get_intersec_points(t_global *global, float a, float b,
-		float discriminant)
+void	get_intersec_points(t_global *global, float a, float b, float discr)
 {
-	float	sqrt_disc;
+	float		sqrt_disc;
+	t_cyl_lat	*vars;
 
-	sqrt_disc = sqrt(discriminant);
-	global->current_cyl_vars.t1 = (-b - sqrt_disc) / (2 * a);
-	global->current_cyl_vars.t2 = (-b + sqrt_disc) / (2 * a);
+	vars = &global->current_cyl_vars;
+	sqrt_disc = sqrt(discr);
+	vars->t1 = (-b - sqrt_disc) / (2 * a);
+	vars->t2 = (-b + sqrt_disc) / (2 * a);
 }

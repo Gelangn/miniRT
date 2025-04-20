@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 18:18:36 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:41:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void		trace_all_rays(t_global *global);
 t_intersec	find_closest_intersec(t_global *global);
 t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_ray_direction(t_global *global, int pixel_x, int pixel_y);
-t_vector	get_surface_normal(t_global *global, t_intersec intersec);
+t_vector	get_surface_normal(t_global *global, t_intersec isec);
 void		check_obj_intersecs(t_global *global, t_intersec *closest_intersec,
 				int obj_type);
 void		check_sp_intersecs(t_global *global, t_intersec *closest_intersec);
@@ -103,9 +103,9 @@ t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
 t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign);
 t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign);
 void		init_lateral_intersec_vars(t_global *global, int cy_id);
-float		cal_lateral_discriminant(t_global *global, int cy_id);
+float		cal_lat_discriminant(t_global *global, int cy_id);
 void		get_intersec_points(t_global *global, float a, float b,
-				float discriminant);
+				float discr);
 t_intersec	check_lateral_hits(t_global *global, int cy_id);
 t_intersec	process_lateral_hit(t_global *global, int cy_id, float t);
 

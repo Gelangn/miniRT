@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:13:10 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:07:17 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:36:00 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ t_color	color_add(t_color c1, t_color c2)
 
 t_color	get_object_color(t_global *global)
 {
-	t_intersec	intersec;
+	t_intersec	isec;
 
-	intersec = global->current_intersec;
-	if (intersec.obj_type == 0)
-		return (global->scene.spheres[intersec.obj_index].color);
-	else if (intersec.obj_type == 1)
-		return (global->scene.planes[intersec.obj_index].color);
+	isec = global->current_intersec;
+	if (isec.obj_type == 0)
+		return (global->scene.spheres[isec.obj_index].color);
+	else if (isec.obj_type == 1)
+		return (global->scene.planes[isec.obj_index].color);
 	else
-		return (global->scene.cylinders[intersec.obj_index].color);
+		return (global->scene.cylinders[isec.obj_index].color);
 }
 
 t_ray_state	save_ray_state(t_global *global)
@@ -51,7 +51,7 @@ t_ray_state	save_ray_state(t_global *global)
 
 	state.origin = global->current_ray_origin;
 	state.dir = global->current_ray_dir;
-	state.intersec = global->current_intersec;
+	state.isec = global->current_intersec;
 	return (state);
 }
 
@@ -59,6 +59,5 @@ void	restore_ray_state(t_global *global, t_ray_state state)
 {
 	global->current_ray_origin = state.origin;
 	global->current_ray_dir = state.dir;
-	global->current_intersec = state.intersec;
+	global->current_intersec = state.isec;
 }
-

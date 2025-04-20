@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:59:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:08:54 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:36:27 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,13 @@ t_intersec	find_closest_intersec(t_global *global)
 
 int	is_valid_intersec(t_global *global)
 {
-	t_intersec	intersec;
+	t_intersec	isec;
 
-	intersec = global->current_intersec;
-	if ((intersec.obj_type < 0) || (intersec.obj_index < 0)
-		|| (intersec.obj_type == 0
-			&& intersec.obj_index >= global->scene.num_sp)
-		|| (intersec.obj_type == 1
-			&& intersec.obj_index >= global->scene.num_pl)
-		|| (intersec.obj_type == 2
-			&& intersec.obj_index >= global->scene.num_cy))
+	isec = global->current_intersec;
+	if ((isec.obj_type < 0) || (isec.obj_index < 0) || (isec.obj_type == 0
+			&& isec.obj_index >= global->scene.num_sp) || (isec.obj_type == 1
+			&& isec.obj_index >= global->scene.num_pl) || (isec.obj_type == 2
+			&& isec.obj_index >= global->scene.num_cy))
 	{
 		return (0);
 	}

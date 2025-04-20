@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:17:39 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:41:57 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,22 @@ typedef struct s_cyl_lat
 	t_vector	oc_perp;
 	float		t1;
 	float		t2;
+
+	// Variables temporales para process_lateral_hit
+	t_vector	hit_point;
+	float		hit_height;
+	t_vector	center_at_height;
+	t_vector	normal;
+
+	// Variables temporales para cal_cap_intersec
+	t_vector	cap_center;
+	float		dist_from_center;
+
+	// Variables para cálculo discriminante
+	float		a;
+	float		b;
+	float		c;
+	float		discr;
 }				t_cyl_lat;
 
 typedef struct s_scene
@@ -155,7 +171,7 @@ typedef struct s_global
 	t_img		img;
 	t_scene		scene;
 	t_point		*points;
-	t_intersec	*intersecs;
+	t_intersec	*isecs;
 	int			mouse_pressed;
 	int			last_mouse_x;
 	int			last_mouse_y;
@@ -177,7 +193,7 @@ typedef struct s_ray_state
 {
 	t_vector	origin;
 	t_vector	dir;
-	t_intersec	intersec;
+	t_intersec	isec;
 }				t_ray_state;
 
 #endif

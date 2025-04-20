@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:32:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:12:31 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:42:10 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,86 +14,94 @@
 
 t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 {
-	t_intersec	intersec;
-	float		discriminant;
+	t_intersec	isec;
+	float		discr;
 
-	intersec = init_intersec();
+	isec = init_intersec();
 	init_lateral_intersec_vars(global, cy_id);
-	discriminant = cal_lateral_discriminant(global, cy_id);
-	if (discriminant < 0)
-		return (intersec);
+	discr = cal_lat_discriminant(global, cy_id);
+	if (discr < 0)
+		return (isec);
 	get_intersec_points(global, dot(global->current_cyl_vars.dir_perp,
-			global->current_cyl_vars.dir_perp), 2
-		* dot(global->current_cyl_vars.dir_perp,
-			global->current_cyl_vars.oc_perp), discriminant);
-	intersec = check_lateral_hits(global, cy_id);
-	return (intersec);
+				global->current_cyl_vars.dir_perp), 2
+			* dot(global->current_cyl_vars.dir_perp,
+				global->current_cyl_vars.oc_perp), discr);
+	isec = check_lateral_hits(global, cy_id);
+	return (isec);
 }
 
-// Función de intersección de tapas simplificada
 t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
 {
-	t_intersec	intersec;
-	t_cylinder	*cylinder;
-	t_vector	cap_center;
-	t_vector	normal;
+	t_intersec	isec;
+	t_cylinder	*cyl;
+	t_cyl_lat	*vars;
 	float		denom;
 	float		t;
-	t_vector	hit_point;
-	float		dist_from_center;
 
-	intersec = init_intersec();
-	cylinder = &global->scene.cylinders[cy_id];
-	cap_center = get_cap_center(cylinder, cap_sign);
-	normal = get_cap_normal(cylinder, cap_sign);
-	denom = dot(normal, global->current_ray_dir);
+	isec = init_intersec();
+	cyl = &global->scene.cylinders[cy_id];
+	vars = &global->current_cyl_vars;
+	if (cap_sign == 1)
+	{
+		vars->cap_center = add(cyl->base,
+								multiply(vars->axis, cyl->height));
+		vars->normal = vars->axis;
+	}
+	else
+	{
+		vars->cap_center = cyl->base;
+		vars->normal = multiply(vars->axis, -1);
+	}
+	denom = dot(vars->normal, global->current_ray_dir);
 	if (comp_floats(denom, 0) || denom > 0)
-		return (intersec);
-	t = dot(subtract(cap_center, global->current_ray_origin), normal) / denom;
+		return (isec);
+	t = dot(subtract(vars->cap_center, global->current_ray_origin),
+			vars->normal) /
+		denom;
 	if (t < 0)
-		return (intersec);
-	hit_point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, t));
-	dist_from_center = magnitude(subtract(hit_point, cap_center));
-	if (dist_from_center > cylinder->radius)
-		return (intersec);
-	intersec.dist = t;
-	intersec.point = hit_point;
-	intersec.obj_type = 2;
-	intersec.obj_index = cy_id;
-	return (intersec);
+		return (isec);
+	vars->hit_point = add(global->current_ray_origin,
+							multiply(global->current_ray_dir, t));
+	vars->dist_from_center = magnitude(
+		subtract(vars->hit_point, vars->cap_center));
+	if (vars->dist_from_center > cyl->radius)
+		return (isec);
+	isec.dist = t;
+	isec.point = vars->hit_point;
+	isec.obj_type = 2;
+	isec.obj_index = cy_id;
+	return (isec);
 }
 
 t_intersec	process_lateral_hit(t_global *global, int cy_id, float t)
 {
-	t_intersec	intersec;
-	t_cylinder	*cylinder;
-	t_vector	hit_point;
-	float		hit_height;
-	t_vector	center_at_height;
-	t_vector	normal;
+	t_intersec	isec;
+	t_cylinder	*cyl;
+	t_cyl_lat	*vars;
 
-	intersec = init_intersec();
+	isec = init_intersec();
 	if (t < 0)
-		return (intersec);
-	cylinder = &global->scene.cylinders[cy_id];
-	hit_point = add(global->current_ray_origin,
-			multiply(global->current_ray_dir, t));
-	hit_height = dot(subtract(hit_point, cylinder->base),
-			global->current_cyl_vars.axis);
-	if (is_less_than(hit_height, 0) || is_greater_than(hit_height,
-			cylinder->height))
-		return (intersec);
-	center_at_height = add(cylinder->base,
-			multiply(global->current_cyl_vars.axis, hit_height));
-	normal = normalize(subtract(hit_point, center_at_height));
-	if (dot(normal, global->current_ray_dir) >= 0)
-		return (intersec);
-	intersec.dist = t;
-	intersec.point = hit_point;
-	intersec.obj_type = 2;
-	intersec.obj_index = cy_id;
-	return (intersec);
+		return (isec);
+	cyl = &global->scene.cylinders[cy_id];
+	vars = &global->current_cyl_vars;
+	vars->hit_point = add(global->current_ray_origin,
+							multiply(global->current_ray_dir, t));
+	vars->hit_height = dot(subtract(vars->hit_point, cyl->base),
+							vars->axis);
+	if (is_less_than(vars->hit_height, 0) || is_greater_than(vars->hit_height,
+			cyl->height))
+		return (isec);
+	vars->center_at_height = add(cyl->base,
+									multiply(vars->axis, vars->hit_height));
+	vars->normal = normalize(subtract(vars->hit_point,
+										vars->center_at_height));
+	if (dot(vars->normal, global->current_ray_dir) >= 0)
+		return (isec);
+	isec.dist = t;
+	isec.point = vars->hit_point;
+	isec.obj_type = 2;
+	isec.obj_index = cy_id;
+	return (isec);
 }
 
 t_intersec	check_lateral_hits(t_global *global, int cy_id)

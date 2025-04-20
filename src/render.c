@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:09:57 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:37:50 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@ void	render_single_pixel(t_global *global, int index)
 {
 	int			x;
 	int			y;
-	t_intersec	intersec;
+	t_intersec	isec;
 	int			color;
 	t_color		lit_color;
 
 	x = global->points[index].scrn_x;
 	y = global->points[index].scrn_y;
-	intersec = global->intersecs[index];
+	isec = global->isecs[index];
 	if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H)
 		return ;
-	if (intersec.obj_type >= 0 && intersec.obj_index >= 0)
+	if (isec.obj_type >= 0 && isec.obj_index >= 0)
 	{
 		global->current_ray_dir.x = global->points[index].point_x;
 		global->current_ray_dir.y = global->points[index].point_y;
 		global->current_ray_dir.z = global->points[index].point_z;
-		global->current_intersec = intersec;
+		global->current_intersec = isec;
 		lit_color = cal_lighting(global);
 		color = rgb_to_int(lit_color);
 	}
@@ -50,9 +50,9 @@ void	render_all_pixels(t_global *global)
 	if (center_idx < total_pixels)
 	{
 		printf("Central ray: type=%d, index=%d, distance=%f\n",
-			global->intersecs[center_idx].obj_type,
-			global->intersecs[center_idx].obj_index,
-			global->intersecs[center_idx].dist);
+				global->isecs[center_idx].obj_type,
+				global->isecs[center_idx].obj_index,
+				global->isecs[center_idx].dist);
 	}
 	i = -1;
 	while (++i < total_pixels)
@@ -64,26 +64,26 @@ void	render(t_global *global)
 	if (comp_floats(magnitude(global->scene.cam.orientation), 0))
 		global->scene.cam.orientation = (t_vector){0, 0, 1};
 	precalculate_rays(global);
-	global->intersecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
+	global->isecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
 			* sizeof(t_intersec));
-	if (!global->intersecs)
+	if (!global->isecs)
 		finish(global, ERR_MEM);
 	if (!global->img.img || !global->img.addr)
 	{
-		free(global->intersecs);
-		global->intersecs = NULL;
+		free(global->isecs);
+		global->isecs = NULL;
 		finish(global, ERR_IMG);
 	}
 	printf("Camera position: (%f, %f, %f)\n", global->scene.cam.pos.x,
-		global->scene.cam.pos.y, global->scene.cam.pos.z);
+			global->scene.cam.pos.y, global->scene.cam.pos.z);
 	printf("Camera orientation: (%f, %f, %f)\n",
-		global->scene.cam.orientation.x,
-		global->scene.cam.orientation.y,
-		global->scene.cam.orientation.z);
+			global->scene.cam.orientation.x,
+			global->scene.cam.orientation.y,
+			global->scene.cam.orientation.z);
 	trace_all_rays(global);
 	render_all_pixels(global);
-	free(global->intersecs);
-	global->intersecs = NULL;
+	free(global->isecs);
+	global->isecs = NULL;
 }
 
 void	precalculate_camera_axis(t_global *global)
@@ -94,40 +94,4 @@ void	precalculate_camera_axis(t_global *global)
 	cam->z = normalize(cam->orientation);
 	cam->x = normalize(cross((t_vector){0, 1, 0}, cam->z));
 	cam->y = normalize(cross(cam->z, cam->x));
-}
-
-static void	calculate_ray_for_pixel(t_global *global, int px_x, int px_y,
-		int idx)
-{
-	t_vector	dir;
-
-	global->points[idx].scrn_x = px_x;
-	global->points[idx].scrn_y = px_y;
-	dir = get_ray_direction(global, px_x, px_y);
-	global->points[idx].point_x = dir.x;
-	global->points[idx].point_y = dir.y;
-	global->points[idx].point_z = dir.z;
-}
-
-void	precalculate_rays(t_global *global)
-{
-	int	px_x;
-	int	px_y;
-	int	i;
-
-	if (global->points)
-		free(global->points);
-	global->points = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
-			* sizeof(t_point));
-	if (!global->points)
-		finish(global, ERR_MEM);
-	precalculate_camera_axis(global);
-	i = 0;
-	px_x = -1;
-	while (++px_x < (WIN_W - MARGIN))
-	{
-		px_y = -1;
-		while (++px_y < (WIN_H - MARGIN))
-			calculate_ray_for_pixel(global, px_x, px_y, i++);
-	}
 }

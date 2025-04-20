@@ -169,7 +169,7 @@ t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 		return (intersec);
 	get_intersec_points(dot(vars.dir_perp, vars.dir_perp), 2
 		* dot(vars.dir_perp, vars.oc_perp), discriminant, &vars);
-	intersec = check_lateral_hits(cylinder, global, vars);
+	intersec = check_lateral_hits(global, cy_id, vars);
 	// Asegurarse de que se establece el índice del objeto
 	if (intersec.dist < INFINITY)
 	{

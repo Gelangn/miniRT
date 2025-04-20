@@ -2,16 +2,19 @@
 
 #include "../inc/minirt.h"
 
-t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
-		t_cyl_lat vars, float t)
+// Versión optimizada - usando el índice del cilindro en lugar del puntero
+t_intersec	process_lateral_hit(t_global *global, int cy_id, t_cyl_lat vars,
+		float t)
 {
 	t_intersec	intersec;
+	t_cylinder	*cylinder;
 	t_vector	hit_point;
 	float		hit_height;
 	t_vector	center_at_height;
 	t_vector	normal;
 
 	intersec = init_intersec();
+	cylinder = &global->scene.cylinders[cy_id];
 	if (t < 0)
 		return (intersec);
 	// Calcular punto de intersección una sola vez
@@ -32,22 +35,19 @@ t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
 	intersec.dist = t;
 	intersec.point = hit_point;
 	intersec.obj_type = 2;
+	intersec.obj_index = cy_id;
 	return (intersec);
 }
 
-t_intersec	check_lateral_hits(t_cylinder *cylinder, t_global *global,
-		t_cyl_lat vars)
+t_intersec	check_lateral_hits(t_global *global, int cy_id, t_cyl_lat vars)
 {
 	t_intersec	hit1;
 	t_intersec	hit2;
-	float		t;
 
-	t = vars.t1;
-	hit1 = process_lateral_hit(cylinder, global, vars, t);
+	hit1 = process_lateral_hit(global, cy_id, vars, vars.t1);
 	if (hit1.obj_type >= 0)
 		return (hit1);
-	t = vars.t2;
-	hit2 = process_lateral_hit(cylinder, global, vars, t);
+	hit2 = process_lateral_hit(global, cy_id, vars, vars.t2);
 	return (hit2);
 }
 
@@ -146,27 +146,25 @@ void	trace_all_rays(t_global *global)
 
 t_intersec	cal_ray(t_global *global, int px_x, int px_y)
 {
-	t_camera	cam;
-	t_intersec	intersec;
-
-	cam = global->scene.cam;
-	global->current_ray_origin = cam.pos;
-	global->current_ray_dir = get_ray_direction(cam, px_x, px_y);
-	intersec = find_closest_intersec(global);
-	return (intersec);
+	// No necesitamos extraer cam ya que la pasaremos a get_ray_direction
+	global->current_ray_origin = global->scene.cam.pos;
+	global->current_ray_dir = get_ray_direction(global, px_x, px_y);
+	return (find_closest_intersec(global));
 }
 /* Aqui definimos el entorno, la direccion de los
  ejes, el centro del universo (camara/observador), las relaciones de pantalla
   para poder aprovechar toda la vista */
-t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
+t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 {
 	static float	aspect_ratio = 0;
 	static float	scrn_w = 0;
 	static float	scrn_h = 0;
 	static float	last_fov = -1;
 	t_vector		ray_dir;
+	t_camera		cam;
 
 	float u, v;
+	cam = global->scene.cam;
 	// Precalcular dimensiones de pantalla solo cuando cambie el FOV
 	if (last_fov != cam.fov)
 	{
@@ -184,22 +182,19 @@ t_vector	get_ray_direction(t_camera cam, int px_x, int px_y)
 	return (ray_dir);
 }
 
-t_vector	get_sp_normal(t_global *global, t_intersec intersec)
+t_vector	get_sp_normal(t_global *global, int sp_id, t_vector point)
 {
 	t_sphere	sphere;
 
-	sphere = global->scene.spheres[intersec.obj_index];
-	return (normalize(subtract(intersec.point, sphere.center)));
+	sphere = global->scene.spheres[sp_id];
+	return (normalize(subtract(point, sphere.center)));
 }
 
-t_vector	get_pl_normal(t_global *global, t_intersec intersec)
+t_vector	get_pl_normal(t_global *global, int pl_id)
 {
-	t_plane	plane;
-
-	if (intersec.obj_index < 0 || intersec.obj_index >= global->scene.num_pl)
+	if (pl_id < 0 || pl_id >= global->scene.num_pl)
 		return ((t_vector){0, 1, 0}); // Valor predeterminado seguro
-	plane = global->scene.planes[intersec.obj_index];
-	return (normalize(plane.normal));
+	return (normalize(global->scene.planes[pl_id].normal));
 }
 
 t_vector	get_cy_normal(t_global *global, t_intersec intersec)

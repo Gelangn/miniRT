@@ -80,7 +80,7 @@ void		render_single_pixel(t_global *global, int index);
 void		trace_all_rays(t_global *global);
 t_intersec	find_closest_intersec(t_global *global);
 t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y);
-t_vector	get_ray_direction(t_camera cam, int pixel_x, int pixel_y);
+t_vector	get_ray_direction(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec intersec);
 void		check_obj_intersecs(t_global *global, t_intersec *closest_intersec,
 				int obj_type);
@@ -93,21 +93,17 @@ t_intersec	col_sp(t_global *global, int sp_id);
 t_intersec	col_pl(t_global *global, int pl_id);
 t_intersec	col_cy(t_global *global, int cy_id);
 float		cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars);
-t_intersec	check_lateral_hits(t_cylinder *cylinder, t_global *global,
-				t_cyl_lat vars);
-t_intersec	process_lateral_hit(t_cylinder *cylinder, t_global *global,
-				t_cyl_lat vars, float t);
-t_vector	get_cy_normal(t_global *global, t_intersec intersec);
-t_vector	get_pl_normal(t_global *global, t_intersec intersec);
-t_vector	get_sp_normal(t_global *global, t_intersec intersec);
-t_vector	get_surface_normal(t_global *global, t_intersec intersec);
+t_intersec	check_lateral_hits(t_global *global, int cy_id, t_cyl_lat vars);
+t_intersec	process_lateral_hit(t_global *global, int cy_id, t_cyl_lat vars,
+				float t);
+
+/* Cylinder intersection helpers */
+t_intersec	cal_lateral_intersec(t_global *global, int cy_id);
+t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
 void		get_intersec_points(float a, float b, float discriminant,
 				t_cyl_lat *vars);
-float		cal_discriminant(t_global *global, t_vector center, float radius);
 t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign);
 t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign);
-t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
-t_intersec	cal_lateral_intersec(t_global *global, int cy_id);
 
 /* Colors */
 int			rgb_to_int(t_color color);

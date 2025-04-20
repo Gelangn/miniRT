@@ -138,7 +138,7 @@ void	precalculate_rays(t_global *global)
 			global->points[i].scrn_x = px_x;
 			global->points[i].scrn_y = px_y;
 			// Precalcular y guardar la dirección del rayo
-			dir = get_ray_direction(global->scene.cam, px_x, px_y);
+			dir = get_ray_direction(global, px_x, px_y);
 			global->points[i].point_x = dir.x;
 			global->points[i].point_y = dir.y;
 			global->points[i].point_z = dir.z;

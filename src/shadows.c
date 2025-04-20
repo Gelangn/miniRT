@@ -1,7 +1,7 @@
 // Incluir encabezado 42
 #include "minirt.h"
 
-float	cal_shadow(t_global *global)
+int	cal_shadow(t_global *global)
 {
 	t_vector shadow_origin;
 	t_ray_state state;
@@ -19,7 +19,7 @@ float	cal_shadow(t_global *global)
 		&& !(shadow_intersec.obj_type == global->current_intersec.obj_type
 			&& shadow_intersec.obj_index == global->current_intersec.obj_index))
 	{
-		return (0.0f); // En sombra
+		return (0); // En sombra (false)
 	}
-	return (1.0f); // No en sombra
+	return (1); // No en sombra (true)
 }

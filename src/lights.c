@@ -12,16 +12,16 @@ void	prepare_lighting_data(t_global *global)
 				global->current_intersec.point));
 }
 
-t_color	apply_lighting(t_global *global, float shadow_factor)
+t_color	apply_lighting(t_global *global, int in_shadow)
 {
 	t_color	result_color;
 	t_color	diffuse;
 	t_color	specular;
 
-	// Luz ambiental - siempre presente
+	// Luz ambiental siempre presente
 	result_color = calculate_ambient(global);
 	// Componentes difusa y especular solo si no está en sombra
-	if (shadow_factor > 0)
+	if (in_shadow)
 	{
 		diffuse = calculate_diffuse(global);
 		specular = calculate_specular(global);

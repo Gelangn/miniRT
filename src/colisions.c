@@ -1,17 +1,20 @@
 #include "minirt.h"
 
-float	cal_discriminant(t_vector oc, t_vector ray_dir, float radius)
+// Simplificada para usar global directamente
+float	cal_discriminant(t_global *global, t_vector center, float radius)
 {
-	float	a;
-	float	b;
-	float	c;
-	float	discriminant;
+	t_vector	oc;
+	t_vector	ray_dir;
+	float		a;
+	float		b;
+	float		c;
 
+	oc = subtract(global->current_ray_origin, center);
+	ray_dir = global->current_ray_dir;
 	a = dot(ray_dir, ray_dir);
 	b = 2.0 * dot(oc, ray_dir);
 	c = dot(oc, oc) - radius * radius;
-	discriminant = b * b - 4 * a * c;
-	return (discriminant);
+	return (b * b - 4 * a * c);
 }
 
 t_intersec	col_sp(t_global *global, int sp_id)
@@ -26,8 +29,7 @@ t_intersec	col_sp(t_global *global, int sp_id)
 	sphere = &global->scene.spheres[sp_id];
 	intersec = init_intersec();
 	oc = subtract(global->current_ray_origin, sphere->center);
-	discriminant = cal_discriminant(oc, global->current_ray_dir,
-			sphere->radius);
+	discriminant = cal_discriminant(global, sphere->center, sphere->radius);
 	if (discriminant < 0)
 		return (intersec);
 	t1 = (-dot(global->current_ray_dir, oc) - sqrt(discriminant))
@@ -75,13 +77,13 @@ t_intersec	col_cy(t_global *global, int cy_id)
 	t_intersec	lateral_intersec;
 	t_intersec	top_cap_intersec;
 	t_intersec	bottom_cap_intersec;
-	t_cylinder	*cylinder;
 
-	cylinder = &global->scene.cylinders[cy_id];
 	intersec = init_intersec();
-	lateral_intersec = cal_lateral_intersec(cylinder, global);
-	top_cap_intersec = cal_cap_intersec(cylinder, global, 1);
-	bottom_cap_intersec = cal_cap_intersec(cylinder, global, -1);
+	// Calcular intersecciones con las diferentes partes del cilindro
+	lateral_intersec = cal_lateral_intersec(global, cy_id);
+	top_cap_intersec = cal_cap_intersec(global, cy_id, 1);
+	bottom_cap_intersec = cal_cap_intersec(global, cy_id, -1);
+	// Tomar la intersección más cercana
 	if (lateral_intersec.dist < intersec.dist)
 		intersec = lateral_intersec;
 	if (top_cap_intersec.dist < intersec.dist)
@@ -89,40 +91,50 @@ t_intersec	col_cy(t_global *global, int cy_id)
 	if (bottom_cap_intersec.dist < intersec.dist)
 		intersec = bottom_cap_intersec;
 	if (intersec.dist < INFINITY)
+	{
 		intersec.obj_type = 2;
+		intersec.obj_index = cy_id;
+	}
 	return (intersec);
 }
 
-t_vector	get_cap_center(t_cylinder *cylinder, t_vector axis, int cap_sign)
+// Funciones auxiliares simplificadas
+t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign)
 {
+	t_vector	axis;
+
+	axis = normalize(cylinder->orientation);
 	if (cap_sign == 1)
 		return (add(cylinder->base, multiply(axis, cylinder->height)));
 	return (cylinder->base);
 }
 
-t_vector	get_cap_normal(t_vector axis, int cap_sign)
+t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign)
 {
+	t_vector	axis;
+
+	axis = normalize(cylinder->orientation);
 	if (cap_sign == 1)
 		return (axis);
 	return (multiply(axis, -1));
 }
 
-t_intersec	cal_cap_intersec(t_cylinder *cylinder, t_global *global,
-		int cap_sign)
+// Función de intersección de tapas simplificada
+t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
 {
 	t_intersec	intersec;
+	t_cylinder	*cylinder;
 	t_vector	cap_center;
-	t_vector	axis;
+	t_vector	normal;
+	float		denom;
 	float		t;
 	t_vector	hit_point;
 	float		dist_from_center;
-	float		denom;
-	t_vector	normal;
 
 	intersec = init_intersec();
-	axis = normalize(cylinder->orientation);
-	cap_center = get_cap_center(cylinder, axis, cap_sign);
-	normal = get_cap_normal(axis, cap_sign);
+	cylinder = &global->scene.cylinders[cy_id];
+	cap_center = get_cap_center(cylinder, cap_sign);
+	normal = get_cap_normal(cylinder, cap_sign);
 	denom = dot(normal, global->current_ray_dir);
 	if (comp_floats(denom, 0) || denom > 0)
 		return (intersec);
@@ -137,16 +149,19 @@ t_intersec	cal_cap_intersec(t_cylinder *cylinder, t_global *global,
 	intersec.dist = t;
 	intersec.point = hit_point;
 	intersec.obj_type = 2;
+	intersec.obj_index = cy_id;
 	return (intersec);
 }
 
-t_intersec	cal_lateral_intersec(t_cylinder *cylinder, t_global *global)
+t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 {
 	t_intersec	intersec;
+	t_cylinder	*cylinder;
 	t_cyl_lat	vars;
 	float		discriminant;
 
 	intersec = init_intersec();
+	cylinder = &global->scene.cylinders[cy_id];
 	init_lateral_intersec_vars(cylinder, global->current_ray_origin,
 		global->current_ray_dir, &vars);
 	discriminant = cal_lateral_discriminant(cylinder, vars);
@@ -154,7 +169,14 @@ t_intersec	cal_lateral_intersec(t_cylinder *cylinder, t_global *global)
 		return (intersec);
 	get_intersec_points(dot(vars.dir_perp, vars.dir_perp), 2
 		* dot(vars.dir_perp, vars.oc_perp), discriminant, &vars);
-	return (check_lateral_hits(cylinder, global, vars));
+	intersec = check_lateral_hits(cylinder, global, vars);
+	// Asegurarse de que se establece el índice del objeto
+	if (intersec.dist < INFINITY)
+	{
+		intersec.obj_type = 2;
+		intersec.obj_index = cy_id;
+	}
+	return (intersec);
 }
 
 float	cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars)

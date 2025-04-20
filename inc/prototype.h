@@ -6,12 +6,12 @@
 # include <stddef.h>
 
 /***** PROTOTYPES *****/
-/* Main - init */
+/* Initialization */
 int			init(t_global *global);
-int			init_scene(t_global *global, t_scene *scene);
+int			init_scene(t_global *global);
 t_intersec	init_intersec(void);
-void		init_lateral_intersec_vars(t_cylinder *cylinder,
-				t_vector ray_origin, t_vector ray_dir, t_cyl_lat *vars);
+void		init_lateral_intersec_vars(t_global *global, t_cylinder *cylinder,
+				t_cyl_lat *vars);
 
 /* MLX y eventos  */
 void		set_hooks(t_global *global);
@@ -92,7 +92,8 @@ void		check_cy_intersecs(t_global *global, t_intersec *closest_intersec);
 t_intersec	col_sp(t_global *global, int sp_id);
 t_intersec	col_pl(t_global *global, int pl_id);
 t_intersec	col_cy(t_global *global, int cy_id);
-float		cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars);
+float		cal_lateral_discriminant(t_global *global, int cy_id,
+				t_cyl_lat vars);
 t_intersec	check_lateral_hits(t_global *global, int cy_id, t_cyl_lat vars);
 t_intersec	process_lateral_hit(t_global *global, int cy_id, t_cyl_lat vars,
 				float t);

@@ -27,7 +27,7 @@ int	main(int argc, char **argv)
 		finish(NULL, ERR_MALLOC);
 	memset(global, 0, sizeof(t_global));
 	check_file_extension(global, argv[1]);
-	if ((init(global) != 0) || (init_scene(global, &global->scene) != 0))
+	if ((init(global) != 0) || (init_scene(global) != 0))
 		finish(global, ERR_MEM);
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path);

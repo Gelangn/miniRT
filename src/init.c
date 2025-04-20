@@ -13,8 +13,12 @@ int	init(t_global *global)
 	return (SUCCESS);
 }
 
-int	init_scene(t_global *global, t_scene *scene)
+// Versión optimizada - eliminando el parámetro redundante
+int	init_scene(t_global *global)
 {
+	t_scene	*scene;
+
+	scene = &global->scene;
 	scene->file_path = NULL;
 	scene->fd = 0;
 	scene->lines = NULL;
@@ -51,9 +55,16 @@ t_intersec	init_intersec(void)
 	return (intersec);
 }
 
-void	init_lateral_intersec_vars(t_cylinder *cylinder, t_vector ray_origin,
-		t_vector ray_dir, t_cyl_lat *vars)
+// Versión optimizada - usando global directamente
+void	init_lateral_intersec_vars(t_global *global, t_cylinder *cylinder,
+		t_cyl_lat *vars)
 {
+	t_vector	ray_origin;
+	t_vector	ray_dir;
+
+	// Usar directamente las variables de global
+	ray_origin = global->current_ray_origin;
+	ray_dir = global->current_ray_dir;
 	vars->axis = normalize(cylinder->orientation);
 	vars->oc = subtract(ray_origin, cylinder->base);
 	vars->dir_dot_axis = dot(ray_dir, vars->axis);

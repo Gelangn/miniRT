@@ -162,9 +162,9 @@ t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 
 	intersec = init_intersec();
 	cylinder = &global->scene.cylinders[cy_id];
-	init_lateral_intersec_vars(cylinder, global->current_ray_origin,
-		global->current_ray_dir, &vars);
-	discriminant = cal_lateral_discriminant(cylinder, vars);
+	// Usar la nueva función optimizada
+	init_lateral_intersec_vars(global, cylinder, &vars);
+	discriminant = cal_lateral_discriminant(global, cy_id, vars);
 	if (discriminant < 0)
 		return (intersec);
 	get_intersec_points(dot(vars.dir_perp, vars.dir_perp), 2
@@ -179,16 +179,19 @@ t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 	return (intersec);
 }
 
-float	cal_lateral_discriminant(t_cylinder *cylinder, t_cyl_lat vars)
+// Versión optimizada
+float	cal_lateral_discriminant(t_global *global, int cy_id, t_cyl_lat vars)
 {
-	float a, b, c, discriminant;
+	t_cylinder	*cylinder;
+	float		a;
+	float		b;
+	float		c;
+
+	cylinder = &global->scene.cylinders[cy_id];
 	a = dot(vars.dir_perp, vars.dir_perp);
 	b = 2 * dot(vars.dir_perp, vars.oc_perp);
-	c = dot(vars.oc_perp, vars.oc_perp) - (cylinder->radius * cylinder->radius);
-	discriminant = b * b - 4 * a * c;
-	if (comp_floats(a, 0))
-		return (-1);
-	return (discriminant);
+	c = dot(vars.oc_perp, vars.oc_perp) - cylinder->radius * cylinder->radius;
+	return (b * b - 4 * a * c);
 }
 
 void	get_intersec_points(float a, float b, float discriminant,

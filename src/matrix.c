@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:56 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:16:02 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:20:34 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,21 @@ t_vector	divide(t_vector a, float scalar)
 }
 
 // Function to calculate the magnitude of a vector
-float	magnitude(t_vector a)
+float	mag(t_vector a)
 {
 	return (sqrt(a.x * a.x + a.y * a.y + a.z * a.z)); // sqrt(x^2 + y^2 + z^2)
 }
 
 // Function to normalize a vector
-t_vector	normalize(t_vector a)
+t_vector	norm(t_vector a)
 {
-	float		mag;
+	float		magnitude;
 	t_vector	result;
 
-	mag = magnitude(a);
-	result.x = a.x / mag;
-	result.y = a.y / mag;
-	result.z = a.z / mag;
+	magnitude = mag(a);
+	result.x = a.x / magnitude;
+	result.y = a.y / magnitude;
+	result.z = a.z / magnitude;
 	return (result);
 }
 

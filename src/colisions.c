@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:44:21 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:42:02 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:17:40 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign)
 {
 	t_vector	axis;
 
-	axis = normalize(cylinder->orientation);
+	axis = norm(cylinder->orientation);
 	if (cap_sign == 1)
 		return (add(cylinder->base, multiply(axis, cylinder->height)));
 	return (cylinder->base);
@@ -27,7 +27,7 @@ t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign)
 {
 	t_vector	axis;
 
-	axis = normalize(cylinder->orientation);
+	axis = norm(cylinder->orientation);
 	if (cap_sign == 1)
 		return (axis);
 	return (multiply(axis, -1));

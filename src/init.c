@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:52:52 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:17:47 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	init_lateral_intersec_vars(t_global *global, int cy_id)
 	t_cylinder	*cylinder;
 
 	cylinder = &global->scene.cylinders[cy_id];
-	global->current_cyl_vars.axis = normalize(cylinder->orientation);
+	global->current_cyl_vars.axis = norm(cylinder->orientation);
 	global->current_cyl_vars.oc = subtract(global->c_ray.origin,
 											cylinder->base);
 	global->current_cyl_vars.dir_dot_axis = dot(global->c_ray.dir,

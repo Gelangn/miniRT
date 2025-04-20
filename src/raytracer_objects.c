@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:53:01 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:04:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ t_intersec	col_sp(t_global *global, int sp_id)
 		isec.dist = t2;
 	else
 		return (isec);
-	isec.point = add(global->c_ray.origin,
-						multiply(global->c_ray.dir, isec.dist));
+	isec.point = add(global->c_ray.origin, multiply(global->c_ray.dir, isec.dist));
 	return (isec);
 }
 

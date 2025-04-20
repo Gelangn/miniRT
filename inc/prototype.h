@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:41:55 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:17:31 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ t_vector	subtract(t_vector a, t_vector b);
 float		dot(t_vector a, t_vector b);
 t_vector	multiply(t_vector a, float scalar);
 t_vector	divide(t_vector a, float scalar);
-float		magnitude(t_vector a);
-t_vector	normalize(t_vector a);
+float		mag(t_vector a);
+t_vector	norm(t_vector a);
 t_vector	cross(t_vector a, t_vector b);
 t_vector	reflect(t_vector a, t_vector b);
 

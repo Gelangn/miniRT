@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:12:58 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:18:07 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ void	parse_cylinder(t_global *global, char *line)
 	tokens++;
 	parse_vector(global, *tokens, &cylinder.orientation);
 	// Normalizar inmediatamente la orientación
-	cylinder.orientation = normalize(cylinder.orientation);
+	cylinder.orientation = norm(cylinder.orientation);
 	tokens++;
 	cylinder.radius = parse_float_token(global, tokens) / 2;
 	tokens++;

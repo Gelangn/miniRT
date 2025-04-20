@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:53:55 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:18:20 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	render_all_pixels(t_global *global)
 
 void	render(t_global *global)
 {
-	if (comp_floats(magnitude(global->scene.cam.orientation), 0))
+	if (comp_floats(mag(global->scene.cam.orientation), 0))
 		global->scene.cam.orientation = (t_vector){0, 0, 1};
 	precalculate_rays(global);
 	global->isecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
@@ -91,7 +91,7 @@ void	precalculate_camera_axis(t_global *global)
 	t_camera	*cam;
 
 	cam = &global->scene.cam;
-	cam->z = normalize(cam->orientation);
-	cam->x = normalize(cross((t_vector){0, 1, 0}, cam->z));
-	cam->y = normalize(cross(cam->z, cam->x));
+	cam->z = norm(cam->orientation);
+	cam->x = norm(cross((t_vector){0, 1, 0}, cam->z));
+	cam->y = norm(cross(cam->z, cam->x));
 }

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:06:30 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:56:16 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:18:08 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_color	calculate_specular(t_global *global)
 	float		light_intensity;
 
 	light_intensity = global->scene.light.intensity;
-	view_dir = normalize(multiply(global->c_ray.dir, -1.0f));
+	view_dir = norm(multiply(global->c_ray.dir, -1.0f));
 	reflect_dir = subtract(multiply(global->c_ray.normal, 2.0f
 				* dot(global->c_ray.normal, global->c_light.dir)),
 							global->c_light.dir);

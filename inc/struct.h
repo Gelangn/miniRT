@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:02:40 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:08:41 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,8 @@ typedef struct s_cyl_lat
 
 	// Variables temporales para process_lateral_hit
 	t_vector		hit_point;
-	float			hit_height;
-	t_vector		center_at_height;
+	float			hit_h;
+	t_vector		ctr_h;
 	t_vector		normal;
 
 	// Variables temporales para cal_cap_intersec

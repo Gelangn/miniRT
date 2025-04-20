@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:32:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:52:57 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:19:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
 	vars = &global->current_cyl_vars;
 	if (cap_sign == 1)
 	{
-		vars->cap_center = add(cyl->base,
-								multiply(vars->axis, cyl->height));
+		vars->cap_center = add(cyl->base, multiply(vars->axis, cyl->height));
 		vars->normal = vars->axis;
 	}
 	else
@@ -56,14 +55,11 @@ t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
 	if (comp_floats(denom, 0) || denom > 0)
 		return (isec);
 	t = dot(subtract(vars->cap_center, global->c_ray.origin),
-			vars->normal) /
-		denom;
+			vars->normal) / denom;
 	if (t < 0)
 		return (isec);
-	vars->hit_point = add(global->c_ray.origin,
-							multiply(global->c_ray.dir, t));
-	vars->dist_from_center = magnitude(
-		subtract(vars->hit_point, vars->cap_center));
+	vars->hit_point = add(global->c_ray.origin, multiply(global->c_ray.dir, t));
+	vars->dist_from_center = mag(subtract(vars->hit_point, vars->cap_center));
 	if (vars->dist_from_center > cyl->radius)
 		return (isec);
 	isec.dist = t;
@@ -84,17 +80,13 @@ t_intersec	process_lateral_hit(t_global *global, int cy_id, float t)
 		return (isec);
 	cyl = &global->scene.cylinders[cy_id];
 	vars = &global->current_cyl_vars;
-	vars->hit_point = add(global->c_ray.origin,
-							multiply(global->c_ray.dir, t));
-	vars->hit_height = dot(subtract(vars->hit_point, cyl->base),
-							vars->axis);
-	if (is_less_than(vars->hit_height, 0) || is_greater_than(vars->hit_height,
+	vars->hit_point = add(global->c_ray.origin, multiply(global->c_ray.dir, t));
+	vars->hit_h = dot(subtract(vars->hit_point, cyl->base), vars->axis);
+	if (is_less_than(vars->hit_h, 0) || is_greater_than(vars->hit_h,
 			cyl->height))
 		return (isec);
-	vars->center_at_height = add(cyl->base,
-									multiply(vars->axis, vars->hit_height));
-	vars->normal = normalize(subtract(vars->hit_point,
-										vars->center_at_height));
+	vars->ctr_h = add(cyl->base, multiply(vars->axis, vars->hit_h));
+	vars->normal = norm(subtract(vars->hit_point, vars->ctr_h));
 	if (dot(vars->normal, global->c_ray.dir) >= 0)
 		return (isec);
 	isec.dist = t;

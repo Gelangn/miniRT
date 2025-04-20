@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:30:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:31:28 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:17:38 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,32 @@
 // Move the camera in a specific direction
 void	move_camera(t_global *global, t_vector direction, float distance)
 {
-    t_vector	movement;
+	t_vector	movement;
 
-    movement = multiply(direction, distance);
-    global->scene.cam.pos = add(global->scene.cam.pos, movement);
+	movement = multiply(direction, distance);
+	global->scene.cam.pos = add(global->scene.cam.pos, movement);
 }
 
 // Rotate the camera around an axis
 void	rotate_camera(t_global *global, t_vector axis, float angle)
 {
-    t_vector	z;
-    t_vector	x;
-    t_vector	y;
-    float		c;
-    float		s;
+	t_vector	z;
+	t_vector	x;
+	t_vector	y;
+	float		c;
+	float		s;
 
-    z = normalize(global->scene.cam.orientation);
-    x = normalize(cross(z, (t_vector){0, -1, 0}));
-    y = normalize(cross(x, z));
-    if (comp_floats(magnitude(axis), 0))
-        return ;
-    axis = normalize(axis);
-    c = cosf(angle);
-    s = sinf(angle);
-    if (comp_floats(axis.x, 1))
-        global->scene.cam.orientation = add(multiply(z, c), multiply(y, s));
-    else if (comp_floats(axis.y, 1))
-        global->scene.cam.orientation = add(multiply(z, c), multiply(x, s));
-    global->scene.cam.orientation = normalize(global->scene.cam.orientation);
+	z = norm(global->scene.cam.orientation);
+	x = norm(cross(z, (t_vector){0, -1, 0}));
+	y = norm(cross(x, z));
+	if (comp_floats(mag(axis), 0))
+		return ;
+	axis = norm(axis);
+	c = cosf(angle);
+	s = sinf(angle);
+	if (comp_floats(axis.x, 1))
+		global->scene.cam.orientation = add(multiply(z, c), multiply(y, s));
+	else if (comp_floats(axis.y, 1))
+		global->scene.cam.orientation = add(multiply(z, c), multiply(x, s));
+	global->scene.cam.orientation = norm(global->scene.cam.orientation);
 }

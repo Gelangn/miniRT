@@ -60,10 +60,10 @@ int			is_less_than(float a, float b);
 int			is_greater_than(float a, float b);
 int			is_valid_pixel(int x, int y, int width, int height);
 
-/* Save BMP */
+/* BMP functions */
+void		write_bmp_header(t_global *global, int fd);
+int			write_bmp_row(t_global *global, int fd, int px_y);
 void		save_bmp(t_global *global, const char *filename);
-void		write_bmp_header(int fd, t_global *global);
-int			write_bmp_row(int fd, int y, t_global *global);
 
 /* Parsing */
 void		parse_ambient(t_global *global, char *line);

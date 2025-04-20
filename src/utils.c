@@ -37,7 +37,8 @@ int	is_valid_pixel(int px_x, int px_y, int width, int height)
 	return (px_x >= 0 && px_x < width && px_y >= 0 && px_y < height);
 }
 
-void	write_bmp_header(int fd, t_global *global)
+// Antes: void write_bmp_header(int fd, t_global *global)
+void	write_bmp_header(t_global *global, int fd)
 {
 	unsigned char	header[54];
 	int				width;
@@ -64,7 +65,8 @@ void	write_bmp_header(int fd, t_global *global)
 	}
 }
 
-int	write_bmp_row(int fd, int px_y, t_global *global)
+// Antes: int write_bmp_row(int fd, int px_y, t_global *global)
+int	write_bmp_row(t_global *global, int fd, int px_y)
 {
 	int				width;
 	int				padding;
@@ -112,11 +114,11 @@ void	save_bmp(t_global *global, const char *filename)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		finish(global, ERR_OPEN);
-	write_bmp_header(fd, global);
+	write_bmp_header(global, fd); // Cambiado el orden
 	px_y = -1;
 	while (++px_y < height)
 	{
-		if (!write_bmp_row(fd, px_y, global))
+		if (!write_bmp_row(global, fd, px_y)) // Cambiado el orden
 		{
 			close(fd);
 			return ;

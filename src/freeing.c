@@ -6,11 +6,23 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:15:39 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:05:13 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
+
+void	finish(t_global *global, const char *message)
+{
+	if (errno == 0)
+		ft_putendl_fd((char *)message, 2);
+	else
+		perror(message);
+	if (global)
+		free_global(global);
+	printf("Exiting program\n");
+	exit(SUCCESS);
+}
 
 void	free_scene(t_scene *scene)
 {

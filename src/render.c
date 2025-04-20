@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 17:56:35 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:09:57 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ void	render(t_global *global)
 	printf("Camera position: (%f, %f, %f)\n", global->scene.cam.pos.x,
 		global->scene.cam.pos.y, global->scene.cam.pos.z);
 	printf("Camera orientation: (%f, %f, %f)\n",
-		global->scene.cam.orientation.x, global->scene.cam.orientation.y,
+		global->scene.cam.orientation.x,
+		global->scene.cam.orientation.y,
 		global->scene.cam.orientation.z);
 	trace_all_rays(global);
 	render_all_pixels(global);
@@ -95,12 +96,24 @@ void	precalculate_camera_axis(t_global *global)
 	cam->y = normalize(cross(cam->z, cam->x));
 }
 
+static void	calculate_ray_for_pixel(t_global *global, int px_x, int px_y,
+		int idx)
+{
+	t_vector	dir;
+
+	global->points[idx].scrn_x = px_x;
+	global->points[idx].scrn_y = px_y;
+	dir = get_ray_direction(global, px_x, px_y);
+	global->points[idx].point_x = dir.x;
+	global->points[idx].point_y = dir.y;
+	global->points[idx].point_z = dir.z;
+}
+
 void	precalculate_rays(t_global *global)
 {
-	int			i;
-	int			px_x;
-	int			px_y;
-	t_vector	dir;
+	int	px_x;
+	int	px_y;
+	int	i;
 
 	if (global->points)
 		free(global->points);
@@ -115,14 +128,6 @@ void	precalculate_rays(t_global *global)
 	{
 		px_y = -1;
 		while (++px_y < (WIN_H - MARGIN))
-		{
-			global->points[i].scrn_x = px_x;
-			global->points[i].scrn_y = px_y;
-			dir = get_ray_direction(global, px_x, px_y);
-			global->points[i].point_x = dir.x;
-			global->points[i].point_y = dir.y;
-			global->points[i].point_z = dir.z;
-			i++;
-		}
+			calculate_ray_for_pixel(global, px_x, px_y, i++);
 	}
 }

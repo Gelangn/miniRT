@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_scene.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:51:36 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:11:36 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-void	init(t_global *global)
-{
-	global->img.img = NULL;
-	global->img.addr = NULL;
-	global->scene = (t_scene){0};
-	printf("Initializing MLX\n");
-	global->vars.mlx_conn = mlx_init();
-	if (!global->vars.mlx_conn)
-		finish(global, ERR_MLX);
-	printf("Initialized MLX OK\n");
-}
 
 void	init_scene(t_global *global)
 {
@@ -82,4 +70,19 @@ void	init_lateral_intersec_vars(t_global *global, int cy_id)
 	global->current_cyl_vars.oc_perp = subtract(global->current_cyl_vars.oc,
 			multiply(global->current_cyl_vars.axis,
 				global->current_cyl_vars.oc_dot_axis));
+}
+
+void	check_scene(t_global *global, t_scene *scene)
+{
+	if (scene->ambient.init == 0 || scene->cam.init == 0
+		|| scene->light.init == 0)
+		finish(global, ERR_SCENE);
+	if (scene->num_sp > MAX_SPHERES)
+		finish(global, ERR_SPHERE);
+	if (scene->num_pl > MAX_PLANES)
+		finish(global, ERR_PLANE);
+	if (scene->num_cy > MAX_CYLINDERS)
+		finish(global, ERR_CYLINDER);
+	if (scene->num_sp == 0 && scene->num_pl == 0 && scene->num_cy == 0)
+		finish(global, ERR_SCENE);
 }

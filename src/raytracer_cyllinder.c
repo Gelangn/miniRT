@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:32:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:19:11 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:50:43 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 	if (discr < 0)
 		return (isec);
 	get_intersec_points(global, dot(global->current_cyl_vars.dir_perp,
-				global->current_cyl_vars.dir_perp), 2
-			* dot(global->current_cyl_vars.dir_perp,
-				global->current_cyl_vars.oc_perp), discr);
+			global->current_cyl_vars.dir_perp), 2
+		* dot(global->current_cyl_vars.dir_perp,
+			global->current_cyl_vars.oc_perp), discr);
 	isec = check_lateral_hits(global, cy_id);
 	return (isec);
 }

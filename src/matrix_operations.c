@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matrix_II.c                                        :+:      :+:    :+:   */
+/*   matrix_operations.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:56 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:24:17 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:17:32 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ t_vector	norm(t_vector a)
 	result.y = a.y / magnitude;
 	result.z = a.z / magnitude;
 	return (result);
+}
+
+// Function to calculate the dot product (producto escalar) of two vectors
+float	dot(t_vector a, t_vector b)
+{
+	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
 // Function to calculate the cross product of two vectors (producto vectorial)

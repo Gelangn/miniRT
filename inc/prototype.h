@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:44:48 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:21:26 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ int			comp_floats(float a, float b);
 int			is_less_than(float a, float b);
 int			is_greater_than(float a, float b);
 int			is_valid_pixel(int x, int y, int width, int height);
+void		replace_tabs_with_spaces(char *str);
+float		parse_float_token(t_global *global, char **tokens);
+int			parse_int_token(t_global *global, char **tokens);
+void		parse_color(t_global *global, char *token, t_color *color);
+void		parse_vector(t_global *global, char *token, t_vector *vector);
 
 /* BMP functions */
 void		write_bmp_header(t_global *global, int fd);

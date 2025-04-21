@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:05:13 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:11:33 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,9 @@ void	free_scene(t_scene *scene)
 
 void	free_global(t_global *global)
 {
-	// Liberar los puntos precalculados
 	if (global->points)
 		free(global->points);
-	// Liberar los recursos de la escena
 	free_scene(&global->scene);
-	// Luego liberar MLX en el orden correcto
 	if (global->img.img)
 		mlx_destroy_image(global->vars.mlx_conn, global->img.img);
 	if (global->vars.mlx_win)
@@ -63,7 +60,6 @@ void	free_global(t_global *global)
 		mlx_destroy_display(global->vars.mlx_conn);
 		free(global->vars.mlx_conn);
 	}
-	// Finalmente liberar la estructura global
 	free(global);
 }
 

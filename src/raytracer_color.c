@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:06:30 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:18:08 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:58:03 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_color	calculate_diffuse(t_global *global)
 	float	diff;
 	float	light_intensity;
 
-	light_intensity = global->scene.light.intensity;
+	light_intensity = global->scene.light.intensity * 1.2f;
 	diff = fmax(0.0f, dot(global->c_ray.normal, global->c_light.dir));
 	return (color_scale(global->c_ray.obj_color, light_intensity * diff));
 }

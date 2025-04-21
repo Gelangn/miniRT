@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:09 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 19:54:12 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:02:23 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	cal_shadow(t_global *global)
 		&& !(shadow_intersec.obj_type == global->c_ray.hit.obj_type
 			&& shadow_intersec.obj_index == global->c_ray.hit.obj_index))
 	{
-		return (SUCCESS);
+		return (1);
 	}
-	return (FAILURE);
+	return (0);
 }

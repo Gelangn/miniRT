@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   events.c                                           :+:      :+:    :+:   */
+/*   events_handle.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 19:48:05 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:11:05 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	handle_screenshot(t_global *global)
 	printf("Guardando imagen en: %s\n", filename);
 	save_bmp(global, filename);
 	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * 0.35,
-			WIN_H * 0.5, 0xFFFFFF, "Imagen guardada!");
+		WIN_H * 0.5, 0xFFFFFF, "Imagen guardada!");
 }
 
 int	handle_keypress(int keysym, t_global *global)

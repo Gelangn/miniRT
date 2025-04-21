@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:04:29 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 22:13:38 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,14 @@ t_intersec	col_pl(t_global *global, int pl_id)
 	plane = &global->scene.planes[pl_id];
 	isec = init_intersec();
 	denom = dot(plane->normal, global->c_ray.dir);
-	if (comp_floats(denom, 0))
+	if (comp_floats(denom, 0) || denom > 0)
 		return (isec);
 	p0l0 = subtract(plane->point, global->c_ray.origin);
 	t = dot(p0l0, plane->normal) / denom;
 	if (t < 0)
 		return (isec);
 	isec.dist = t;
-	isec.point = add(global->c_ray.origin,
-						multiply(global->c_ray.dir, t));
+	isec.point = add(global->c_ray.origin, multiply(global->c_ray.dir, t));
 	isec.obj_type = 1;
 	return (isec);
 }

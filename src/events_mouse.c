@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   events_utils.c                                     :+:      :+:    :+:   */
+/*   events_mouse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 19:45:11 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/21 21:33:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	handle_mouse_move(int pos_x, int pos_y, t_global *global)
 	return (0);
 }
 
-// Función auxiliar para ajustar el FOV de la cámara
 void	adjust_camera_fov(t_global *global, float delta)
 {
 	float	new_fov;
@@ -75,7 +74,6 @@ void	adjust_camera_fov(t_global *global, float delta)
 	}
 }
 
-// Manejar eventos de scroll para zoom
 int	handle_mouse_scroll(int button, int pos_x, int pos_y, t_global *global)
 {
 	float	zoom_factor;

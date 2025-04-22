@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:33:03 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:40:35 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	parse_sphere(t_global *global, char *line)
 	parse_vector(global, *tokens, &sphere.center);
 	tokens++;
 	sphere.radius = parse_float_token(global, tokens) / 2;
-	// Recibimos el diámetro
 	tokens++;
 	parse_color(global, *tokens, &sphere.color);
 	scene->spheres[scene->num_sp++] = sphere;

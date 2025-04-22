@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 22:13:38 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:58:53 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,36 +26,6 @@ float	cal_discriminant(t_global *global, t_vector center, float radius)
 	b = 2.0 * dot(oc, ray_dir);
 	c = dot(oc, oc) - radius * radius;
 	return (b * b - 4 * a * c);
-}
-
-void	check_obj_intersecs(t_global *global, t_intersec *closest, int obj_type)
-{
-	int			i;
-	int			max_objs;
-	t_intersec	temp;
-
-	if (obj_type == 0)
-		max_objs = global->scene.num_sp;
-	else if (obj_type == 1)
-		max_objs = global->scene.num_pl;
-	else
-		max_objs = global->scene.num_cy;
-	i = -1;
-	while (++i < max_objs)
-	{
-		if (obj_type == 0)
-			temp = col_sp(global, i);
-		else if (obj_type == 1)
-			temp = col_pl(global, i);
-		else
-			temp = col_cy(global, i);
-		if (temp.dist < closest->dist)
-		{
-			*closest = temp;
-			closest->obj_index = i;
-			closest->obj_type = obj_type;
-		}
-	}
 }
 
 t_intersec	col_sp(t_global *global, int sp_id)
@@ -83,7 +53,8 @@ t_intersec	col_sp(t_global *global, int sp_id)
 		isec.dist = t2;
 	else
 		return (isec);
-	isec.point = add(global->c_ray.origin, multiply(global->c_ray.dir, isec.dist));
+	isec.point = add(global->c_ray.origin, multiply(global->c_ray.dir,
+				isec.dist));
 	return (isec);
 }
 

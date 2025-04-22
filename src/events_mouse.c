@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 21:33:55 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:23:43 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,15 @@ int	handle_mouse_move(int pos_x, int pos_y, t_global *global)
 		dy = pos_y - global->last_mouse_y;
 		rotate_camera(global, (t_vector){0, 1, 0}, -dx * rotation_speed);
 		vc_x = multiply(norm(cross((t_vector){0, -1, 0},
-						norm(global->scene.cam.orientation))), -1.0f);
-		norm(global->scene.cam.orientation);
+									norm(global->scene.cam.dir))),
+						-1.0f);
+		norm(global->scene.cam.dir);
 		rotate_camera(global, vc_x, -dy * rotation_speed);
 		global->last_mouse_x = pos_x;
 		global->last_mouse_y = pos_y;
 		render(global);
 		mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-			global->img.img, MARGIN / 2, MARGIN / 2);
+				global->img.img, MARGIN / 2, MARGIN / 2);
 	}
 	return (0);
 }

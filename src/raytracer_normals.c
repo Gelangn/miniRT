@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:54:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:18:17 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:33:41 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,21 @@ t_vector	get_pl_normal(t_global *global, int pl_id)
 
 t_vector	get_cy_normal(t_global *global, t_intersec isec)
 {
-	t_cylinder	cylinder;
+	t_cylinder	cyl;
 	t_vector	axis;
 	float		hit_h;
 	t_vector	ctr_h;
 
-	cylinder = global->scene.cylinders[isec.obj_index];
-	axis = norm(cylinder.orientation);
-	hit_h = dot(subtract(isec.point, cylinder.base), axis);
+	cyl = global->scene.cyls[isec.obj_index];
+	axis = norm(cyl.orientation);
+	hit_h = dot(subtract(isec.point, cyl.base), axis);
 	if (comp_floats(hit_h, 0))
 		return (multiply(axis, -1));
-	else if (comp_floats(hit_h, cylinder.height))
+	else if (comp_floats(hit_h, cyl.height))
 		return (axis);
 	else
 	{
-		ctr_h = add(cylinder.base, multiply(axis, hit_h));
+		ctr_h = add(cyl.base, multiply(axis, hit_h));
 		return (norm(subtract(isec.point, ctr_h)));
 	}
 }

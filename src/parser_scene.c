@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 21:16:12 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:23:44 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	parse_cam(t_global *global, char *line)
 	tokens++;
 	parse_vector(global, *tokens, &scene->cam.pos);
 	tokens++;
-	parse_vector(global, *tokens, &scene->cam.orientation);
+	parse_vector(global, *tokens, &scene->cam.dir);
 	tokens++;
 	scene->cam.fov = parse_int_token(global, tokens);
 	scene->cam.init = 1;

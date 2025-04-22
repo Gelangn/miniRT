@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 21:53:32 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:08:41 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ t_color	apply_lighting(t_global *global, int in_shadow)
 	t_color	diffuse;
 	t_color	specular;
 
-	result_color = calculate_ambient(global);
+	result_color = cal_ambient(global);
 	if (!in_shadow)
 	{
-		diffuse = calculate_diffuse(global);
-		specular = calculate_specular(global);
+		diffuse = cal_diffuse(global);
+		specular = cal_specular(global);
 		result_color = color_add(result_color, diffuse);
 		result_color = color_add(result_color, specular);
 	}

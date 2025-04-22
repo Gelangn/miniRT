@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 22:11:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:32:10 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	free_scene(t_scene *scene)
 		free(scene->spheres);
 	if (scene->planes)
 		free(scene->planes);
-	if (scene->cylinders)
-		free(scene->cylinders);
+	if (scene->cyls)
+		free(scene->cyls);
 	if (scene->lines)
 	{
 		lines = scene->lines;

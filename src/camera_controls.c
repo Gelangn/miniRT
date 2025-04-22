@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:30:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:17:38 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:23:36 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	rotate_camera(t_global *global, t_vector axis, float angle)
 	float		c;
 	float		s;
 
-	z = norm(global->scene.cam.orientation);
+	z = norm(global->scene.cam.dir);
 	x = norm(cross(z, (t_vector){0, -1, 0}));
 	y = norm(cross(x, z));
 	if (comp_floats(mag(axis), 0))
@@ -39,8 +39,8 @@ void	rotate_camera(t_global *global, t_vector axis, float angle)
 	c = cosf(angle);
 	s = sinf(angle);
 	if (comp_floats(axis.x, 1))
-		global->scene.cam.orientation = add(multiply(z, c), multiply(y, s));
+		global->scene.cam.dir = add(multiply(z, c), multiply(y, s));
 	else if (comp_floats(axis.y, 1))
-		global->scene.cam.orientation = add(multiply(z, c), multiply(x, s));
-	global->scene.cam.orientation = norm(global->scene.cam.orientation);
+		global->scene.cam.dir = add(multiply(z, c), multiply(x, s));
+	global->scene.cam.dir = norm(global->scene.cam.dir);
 }

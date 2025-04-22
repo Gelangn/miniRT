@@ -6,13 +6,13 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:06:30 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 21:58:03 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:05:46 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-t_color	calculate_ambient(t_global *global)
+t_color	cal_ambient(t_global *global)
 {
 	t_color	result;
 
@@ -22,7 +22,7 @@ t_color	calculate_ambient(t_global *global)
 	return (result);
 }
 
-t_color	calculate_diffuse(t_global *global)
+t_color	cal_diffuse(t_global *global)
 {
 	float	diff;
 	float	light_intensity;
@@ -32,7 +32,7 @@ t_color	calculate_diffuse(t_global *global)
 	return (color_scale(global->c_ray.obj_color, light_intensity * diff));
 }
 
-t_color	calculate_specular(t_global *global)
+t_color	cal_specular(t_global *global)
 {
 	t_vector	view_dir;
 	t_vector	reflect_dir;
@@ -44,7 +44,7 @@ t_color	calculate_specular(t_global *global)
 	view_dir = norm(multiply(global->c_ray.dir, -1.0f));
 	reflect_dir = subtract(multiply(global->c_ray.normal, 2.0f
 				* dot(global->c_ray.normal, global->c_light.dir)),
-							global->c_light.dir);
+			global->c_light.dir);
 	spec = pow(fmax(0.0f, dot(view_dir, reflect_dir)), 32);
 	white.r = 255;
 	white.g = 255;

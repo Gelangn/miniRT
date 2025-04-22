@@ -6,27 +6,27 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:44:21 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:47:48 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:31:47 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign)
+t_vector	get_cap_center(t_cylinder *cyl, int cap_sign)
 {
 	t_vector	axis;
 
-	axis = norm(cylinder->orientation);
+	axis = norm(cyl->orientation);
 	if (cap_sign == 1)
-		return (add(cylinder->base, multiply(axis, cylinder->height)));
-	return (cylinder->base);
+		return (add(cyl->base, multiply(axis, cyl->height)));
+	return (cyl->base);
 }
 
-t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign)
+t_vector	get_cap_normal(t_cylinder *cyl, int cap_sign)
 {
 	t_vector	axis;
 
-	axis = norm(cylinder->orientation);
+	axis = norm(cyl->orientation);
 	if (cap_sign == 1)
 		return (axis);
 	return (multiply(axis, -1));
@@ -34,20 +34,19 @@ t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign)
 
 float	cal_lat_discriminant(t_global *global, int cy_id)
 {
-	t_cylinder	*cylinder;
+	t_cylinder	*cyl;
 	t_cyl_lat	*vars;
 
-	cylinder = &global->scene.cylinders[cy_id];
+	cyl = &global->scene.cyls[cy_id];
 	vars = &global->current_cyl_vars;
 	vars->a = dot(vars->dir_perp, vars->dir_perp);
 	vars->b = 2 * dot(vars->dir_perp, vars->oc_perp);
-	vars->c = dot(vars->oc_perp, vars->oc_perp) - cylinder->radius
-		* cylinder->radius;
+	vars->c = dot(vars->oc_perp, vars->oc_perp) - cyl->radius * cyl->radius;
 	vars->discr = vars->b * vars->b - 4 * vars->a * vars->c;
 	return (vars->discr);
 }
 
-void	get_intersec_points(t_global *global, float a, float b, float discr)
+void	get_isec_points(t_global *global, float a, float b, float discr)
 {
 	float		sqrt_disc;
 	t_cyl_lat	*vars;

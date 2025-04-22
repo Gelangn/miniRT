@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 21:21:26 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:34:02 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void		update_display(t_global *global);
 /* Camera controls */
 void		move_camera(t_global *global, t_vector direction, float distance);
 void		rotate_camera(t_global *global, t_vector axis, float angle);
-void		precalculate_camera_axis(t_global *global);
-void		precalculate_rays(t_global *global);
+void		precal_camera_axis(t_global *global);
+void		precal_rays(t_global *global);
 
 /* Scene handling */
 void		read_scene(t_global *global);
@@ -105,12 +105,11 @@ t_intersec	col_cy(t_global *global, int cy_id);
 /* Cylinder intersection helpers */
 t_intersec	cal_lateral_intersec(t_global *global, int cy_id);
 t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
-t_vector	get_cap_center(t_cylinder *cylinder, int cap_sign);
-t_vector	get_cap_normal(t_cylinder *cylinder, int cap_sign);
-void		init_lateral_intersec_vars(t_global *global, int cy_id);
+t_vector	get_cap_center(t_cylinder *cyl, int cap_sign);
+t_vector	get_cap_normal(t_cylinder *cyl, int cap_sign);
+void		init_lateral_isec_vars(t_global *global, int cy_id);
 float		cal_lat_discriminant(t_global *global, int cy_id);
-void		get_intersec_points(t_global *global, float a, float b,
-				float discr);
+void		get_isec_points(t_global *global, float a, float b, float discr);
 t_intersec	check_lateral_hits(t_global *global, int cy_id);
 t_intersec	process_lateral_hit(t_global *global, int cy_id, float t);
 
@@ -125,9 +124,9 @@ t_color		get_object_color(t_global *global);
 int			is_valid_intersec(t_global *global);
 void		prepare_lighting_data(t_global *global);
 int			cal_shadow(t_global *global);
-t_color		calculate_ambient(t_global *global);
-t_color		calculate_diffuse(t_global *global);
-t_color		calculate_specular(t_global *global);
+t_color		cal_ambient(t_global *global);
+t_color		cal_diffuse(t_global *global);
+t_color		cal_specular(t_global *global);
 t_color		apply_lighting(t_global *global, int in_shadow);
 t_color		cal_lighting(t_global *global);
 

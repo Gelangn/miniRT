@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:18:20 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:25:38 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void	render_all_pixels(t_global *global)
 
 void	render(t_global *global)
 {
-	if (comp_floats(mag(global->scene.cam.orientation), 0))
-		global->scene.cam.orientation = (t_vector){0, 0, 1};
-	precalculate_rays(global);
+	if (comp_floats(mag(global->scene.cam.dir), 0))
+		global->scene.cam.dir = (t_vector){0, 0, 1};
+	precal_rays(global);
 	global->isecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
 			* sizeof(t_intersec));
 	if (!global->isecs)
@@ -75,23 +75,23 @@ void	render(t_global *global)
 		finish(global, ERR_IMG);
 	}
 	printf("Camera position: (%f, %f, %f)\n", global->scene.cam.pos.x,
-			global->scene.cam.pos.y, global->scene.cam.pos.z);
+		global->scene.cam.pos.y, global->scene.cam.pos.z);
 	printf("Camera orientation: (%f, %f, %f)\n",
-			global->scene.cam.orientation.x,
-			global->scene.cam.orientation.y,
-			global->scene.cam.orientation.z);
+		global->scene.cam.dir.x,
+		global->scene.cam.dir.y,
+		global->scene.cam.dir.z);
 	trace_all_rays(global);
 	render_all_pixels(global);
 	free(global->isecs);
 	global->isecs = NULL;
 }
 
-void	precalculate_camera_axis(t_global *global)
+void	precal_camera_axis(t_global *global)
 {
 	t_camera	*cam;
 
 	cam = &global->scene.cam;
-	cam->z = norm(cam->orientation);
+	cam->z = norm(cam->dir);
 	cam->x = norm(cross((t_vector){0, 1, 0}, cam->z));
 	cam->y = norm(cross(cam->z, cam->x));
 }

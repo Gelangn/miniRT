@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:13:10 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 21:53:45 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:31:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_color	get_object_color(t_global *global)
 	else if (isec.obj_type == 1)
 		return (global->scene.planes[isec.obj_index].color);
 	else
-		return (global->scene.cylinders[isec.obj_index].color);
+		return (global->scene.cyls[isec.obj_index].color);
 }
 
 t_ray_state	save_ray_state(t_global *global)

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 21:22:47 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:33:03 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	parse_cylinder(t_global *global, char *line)
 	tokens++;
 	parse_color(global, *tokens, &cyl.color);
 	cyl.base = subtract(center, multiply(cyl.orientation, cyl.height / 2));
-	scene->cylinders[scene->num_cy++] = cyl;
+	scene->cyls[scene->num_cy++] = cyl;
 	tokens -= 5;
 	dbl_free(tokens);
 }

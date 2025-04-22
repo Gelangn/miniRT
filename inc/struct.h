@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/20 22:08:41 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:29:43 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_camera
 	int				fov;
 	double			dist_scrn;
 	t_vector		pos;
-	t_vector		orientation;
+	t_vector		dir;
 	t_vector		x;
 	t_vector		y;
 	t_vector		z;
@@ -155,7 +155,7 @@ typedef struct s_scene
 	int				num_cy;
 	t_sphere		*spheres;
 	t_plane			*planes;
-	t_cylinder		*cylinders;
+	t_cylinder		*cyls;
 
 	float			scale;
 

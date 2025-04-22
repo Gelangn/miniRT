@@ -6,55 +6,43 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:58:53 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:18:15 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-float	cal_discriminant(t_global *global, t_vector center, float radius)
-{
-	t_vector	oc;
-	t_vector	ray_dir;
-	float		a;
-	float		b;
-	float		c;
-
-	oc = subtract(global->c_ray.origin, center);
-	ray_dir = global->c_ray.dir;
-	a = dot(ray_dir, ray_dir);
-	b = 2.0 * dot(oc, ray_dir);
-	c = dot(oc, oc) - radius * radius;
-	return (b * b - 4 * a * c);
-}
-
+/**
+ * Calcula la intersección entre un rayo y una esfera.
+ * Combina las antiguas funciones cal_discriminant() y col_sp().
+ * discriminante: at² + bt + c = 0
+ */
 t_intersec	col_sp(t_global *global, int sp_id)
 {
 	t_intersec	isec;
 	t_vector	oc;
 	float		discr;
-	float		t1;
-	float		t2;
-	t_sphere	*sphere;
+	float		abc[3];
+	float		t[2];
 
-	sphere = &global->scene.spheres[sp_id];
 	isec = init_intersec();
-	oc = subtract(global->c_ray.origin, sphere->center);
-	discr = cal_discriminant(global, sphere->center, sphere->radius);
-	if (discr < 0)
-		return (isec);
-	t1 = (-dot(global->c_ray.dir, oc) - sqrt(discr)) / dot(global->c_ray.dir,
-			global->c_ray.dir);
-	t2 = (-dot(global->c_ray.dir, oc) + sqrt(discr)) / dot(global->c_ray.dir,
-			global->c_ray.dir);
-	if (t1 > 0 && t1 < t2)
-		isec.dist = t1;
-	else if (t2 > 0)
-		isec.dist = t2;
-	else
-		return (isec);
-	isec.point = add(global->c_ray.origin, multiply(global->c_ray.dir,
-				isec.dist));
+	oc = subtract(global->c_ray.origin, global->scene.spheres[sp_id].center);
+	abc[0] = dot(global->c_ray.dir, global->c_ray.dir);
+	abc[1] = 2.0 * dot(oc, global->c_ray.dir);
+	abc[2] = dot(oc, oc) - pow(global->scene.spheres[sp_id].radius, 2);
+	discr = abc[1] * abc[1] - 4 * abc[0] * abc[2];
+	if (discr >= 0)
+	{
+		t[0] = (-abc[1] - sqrt(discr)) / (2 * abc[0]);
+		t[1] = (-abc[1] + sqrt(discr)) / (2 * abc[0]);
+		if (t[0] > 0 && t[0] < t[1])
+			isec.dist = t[0];
+		else if (t[1] > 0)
+			isec.dist = t[1];
+		if (isec.dist < INFINITY)
+			isec.point = add(global->c_ray.origin,
+					multiply(global->c_ray.dir, isec.dist));
+	}
 	return (isec);
 }
 

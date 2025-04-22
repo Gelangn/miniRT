@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 22:17:08 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:50:19 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include <unistd.h>
 
 # define WIN_W 1024 // Screen width
-# define WIN_H 940 // Screen height
+# define WIN_H 768 // Screen height
 # define MARGIN 50 // Margin for the screen
 
 # define PI 3.14159265359f

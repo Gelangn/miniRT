@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:25:38 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 22:17:15 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ void	render_all_pixels(t_global *global)
 	center_idx = (WIN_H / 2) * (WIN_W - MARGIN) + (WIN_W / 2);
 	if (center_idx < total_pixels)
 	{
-		printf("Central ray: type=%d, index=%d, distance=%f\n",
-				global->isecs[center_idx].obj_type,
-				global->isecs[center_idx].obj_index,
-				global->isecs[center_idx].dist);
+		printf("Central ray: type=%d, index=%d, distance=%f\n\n",
+			global->isecs[center_idx].obj_type,
+			global->isecs[center_idx].obj_index,
+			global->isecs[center_idx].dist);
 	}
 	i = -1;
 	while (++i < total_pixels)
@@ -91,7 +91,7 @@ void	precal_camera_axis(t_global *global)
 	t_camera	*cam;
 
 	cam = &global->scene.cam;
-	cam->z = norm(cam->dir);
-	cam->x = norm(cross((t_vector){0, 1, 0}, cam->z));
-	cam->y = norm(cross(cam->z, cam->x));
+	cam->forward_axis = norm(cam->dir);
+	cam->right_axis = norm(cross((t_vector){0, 1, 0}, cam->forward_axis));
+	cam->up_axis = norm(cross(cam->forward_axis, cam->right_axis));
 }

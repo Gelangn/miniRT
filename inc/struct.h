@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:29:43 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 22:21:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ typedef struct s_camera
 {
 	int				fov;
 	double			dist_scrn;
-	t_vector		pos;
-	t_vector		dir;
-	t_vector		x;
-	t_vector		y;
-	t_vector		z;
+	t_vector		pos;			// Posición de la cámara en el mundo
+	t_vector		dir;			// Vector de dirección (hacia dónde mira)
+	t_vector		right_axis;		// Antiguo 'x' - Eje derecho de la cámara
+	t_vector		up_axis;		// Antiguo 'y' - Eje superior de la cámara
+	t_vector		forward_axis;	// Antiguo 'z' - Eje de visión de la cámara
 	int				init;
 }					t_camera;
 

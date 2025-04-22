@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:44:21 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:31:47 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:48:04 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_vector	get_cap_normal(t_cylinder *cyl, int cap_sign)
 	return (multiply(axis, -1));
 }
 
-float	cal_lat_discriminant(t_global *global, int cy_id)
+/* float	cal_lat_discriminant(t_global *global, int cy_id)
 {
 	t_cylinder	*cyl;
 	t_cyl_lat	*vars;
@@ -44,7 +44,7 @@ float	cal_lat_discriminant(t_global *global, int cy_id)
 	vars->c = dot(vars->oc_perp, vars->oc_perp) - cyl->radius * cyl->radius;
 	vars->discr = vars->b * vars->b - 4 * vars->a * vars->c;
 	return (vars->discr);
-}
+} */
 
 void	get_isec_points(t_global *global, float a, float b, float discr)
 {

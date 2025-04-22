@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 20:11:04 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 21:33:49 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,9 @@ static t_global	*initialize_global(int argc, char **argv)
 
 	if (argc != 2)
 		finish(NULL, ERR_ARGS);
-	global = (t_global *)malloc(sizeof(t_global));
+	global = (t_global *)ft_calloc(1, sizeof(t_global));
 	if (!global)
 		finish(NULL, ERR_MALLOC);
-	memset(global, 0, sizeof(t_global));
 	check_file_extension(global, argv[1]);
 	init(global);
 	init_scene(global);

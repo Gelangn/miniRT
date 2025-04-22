@@ -1,5 +1,6 @@
 miniRT
-.a
-.o
+*.a
+*.o
 make
 .json
+.vscode

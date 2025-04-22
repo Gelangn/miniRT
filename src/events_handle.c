@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 22:19:54 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/22 22:29:17 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,8 @@ void	apply_roll_rotation(t_global *global, int key, float speed)
 		angle = -speed;
 	else
 		angle = speed;
+	global->scene.cam.roll_angle += angle;
 	precal_camera_axis(global);
-	global->scene.cam.right_axis = norm(add(
-				multiply(global->scene.cam.right_axis, cosf(angle)),
-				multiply(global->scene.cam.up_axis, sinf(angle))));
-	global->scene.cam.up_axis = norm(cross(global->scene.cam.forward_axis,
-				global->scene.cam.right_axis));
-	rotate_camera(global, global->scene.cam.forward_axis, angle);
 }
 
 // Función principal de manejo de rotación simplificada

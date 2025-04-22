@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/23 01:00:27 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/23 01:08:10 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,11 @@
 # define MAX_PLANES 5
 # define MAX_SPHERES 100
 # define MAX_CYLINDERS 15
-# define VECTOR 0 // 0 for vector, 1 for point
+# define VECTOR 0			// 0 for vector, 1 for point
 # define POINT 1
 
-# define SCALAR 1
-# define DSCR 1.0f      // Distance from the camera to the screen
-# define EPSILON 0.0001 // Epsilon for floating point comparison
+# define DSCR 1.0f			// Distance from the camera to the screen
+# define EPSILON 0.0001		// Epsilon for floating point comparison
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0

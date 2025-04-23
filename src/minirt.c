@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 20:11:04 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/23 22:15:18 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ void	check_file_extension(t_global *global, const char *filename)
 		finish(global, ERR_ARGS);
 }
 
-static t_global	*initialize_global(int argc, char **argv)
+static t_global	*initialize_global(t_global *global,int argc, char **argv)
 {
-	t_global	*global;
+	//t_global	*global;
 
 	if (argc != 2)
 		finish(NULL, ERR_ARGS);
-	global = (t_global *)malloc(sizeof(t_global));
-	if (!global)
-		finish(NULL, ERR_MALLOC);
+	//global = (t_global *)malloc(sizeof(t_global));
+	//if (!global)
+	//	finish(NULL, ERR_MALLOC);
 	memset(global, 0, sizeof(t_global));
 	check_file_extension(global, argv[1]);
 	init(global);
@@ -77,12 +77,12 @@ static void	setup_render_window(t_global *global)
 
 int	main(int argc, char **argv)
 {
-	t_global	*global;
+	t_global	global;
 
-	global = initialize_global(argc, argv);
-	setup_render_window(global);
+	initialize_global(&global, argc, argv);
+	setup_render_window(&global);
 	printf("Rendering complete. Entering main loop...\n");
-	set_hooks(global);
-	mlx_loop(global->vars.mlx_conn);
+	set_hooks(&global);
+	mlx_loop(global.vars.mlx_conn);
 	return (SUCCESS);
 }

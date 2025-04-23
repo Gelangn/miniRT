@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 22:29:17 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:21:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_movement_keys(t_global *global, int keysym, int *needs_render)
 	*needs_render = 1;
 }
 
-// Función auxiliar para la rotación estándar (W, A, S, D)
+/* Helper function for standard rotation (W, A, S, D) */
 void	apply_standard_rotation(t_global *global, int key, float speed)
 {
 	if (key == 119)
@@ -55,7 +55,7 @@ void	apply_standard_rotation(t_global *global, int key, float speed)
 		rotate_camera(global, (t_vector){0, 1, 0}, -speed);
 }
 
-// Función auxiliar para la rotación roll (Q, E)
+/* Helper function for roll rotation (Q, E) */
 void	apply_roll_rotation(t_global *global, int key, float speed)
 {
 	float	angle;
@@ -68,7 +68,7 @@ void	apply_roll_rotation(t_global *global, int key, float speed)
 	precal_camera_axis(global);
 }
 
-// Función principal de manejo de rotación simplificada
+/* Main rotation handling function */
 void	handle_rotation_keys(t_global *global, int keysym, int *needs_render)
 {
 	float	rotate_speed;
@@ -118,7 +118,7 @@ void	handle_screenshot(t_global *global)
 	printf("Guardando imagen en: %s\n", filename);
 	save_bmp(global, filename);
 	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * 0.35,
-			WIN_H * 0.5, 0xFFFFFF, "Imagen guardada!");
+		WIN_H * 0.5, 0xFFFFFF, "Imagen guardada!");
 }
 
 int	handle_keypress(int keysym, t_global *global)

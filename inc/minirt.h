@@ -39,11 +39,11 @@
 # define MAX_PLANES 5
 # define MAX_SPHERES 100
 # define MAX_CYLINDERS 15
-# define VECTOR 0			// 0 for vector, 1 for point
+# define VECTOR 0 // 0 for vector, 1 for point
 # define POINT 1
 
-# define DSCR 1.0f			// Distance from the camera to the screen
-# define EPSILON 0.0001		// Epsilon for floating point comparison
+# define DSCR 1.0f      // Distance from the camera to the screen
+# define EPSILON 0.0001 // Epsilon for floating point comparison
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0
@@ -74,7 +74,8 @@
 # define MY_COLOR 0x89CE94
 
 # define ARGS "Usage: ./miniRT <file.rt>\n"
-# define ERR_ARGS "\nIncorrect number of arguments, expected 1 Usage: \
+# define ERR_ARGS \
+	"\nIncorrect number of arguments, expected 1 Usage: \
  ./miniRT <file.rt>\n "
 # define ERR_OPEN "\nError opening the file\n"
 # define ERR_READ "\nError reading the file\n"

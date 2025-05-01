@@ -126,7 +126,6 @@ int	handle_keypress(int keysym, t_global *global)
 	int	needs_render;
 
 	printf("Tecla presionada: %d\n", keysym);
-
 	needs_render = 0;
 	if (keysym == XK_Escape)
 		finish(global, SUCCESS);

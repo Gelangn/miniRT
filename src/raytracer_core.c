@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 22:17:49 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/02 00:01:15 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,29 @@ t_intersec	cal_ray(t_global *global, int px_x, int px_y)
 	return (find_closest_intersec(global));
 }
 
-/* Here we define the environment, axis directions,
-	universe center (camera/observer),
-   and screen relationships to take advantage of the entire view */
+/**
+ * Calculates ray direction based on pixel coordinates and camera settings
+ * Uses screen dimensions and camera orientation to determine ray vector
+ */
 t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 {
-	t_camera		cam;
 	static float	aspect_ratio;
 	static float	scrn_w;
 	static float	scrn_h;
-	static float	last_fov;
-	float			u;
-	float			v;
+	static float	last_fov = -1;
+	t_vector		direction;
 
-	cam = global->scene.cam;
-	last_fov = -1;
-	if (last_fov != cam.fov)
+	if (last_fov != global->scene.cam.fov)
 	{
 		aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
-		scrn_w = 2.0 * DSCR * tan((cam.fov * PI / 180.0) / 2.0);
+		scrn_w = 2.0 * DSCR * tan((global->scene.cam.fov * PI / 180.0) / 2.0);
 		scrn_h = scrn_w / aspect_ratio;
-		last_fov = cam.fov;
+		last_fov = global->scene.cam.fov;
 	}
-	u = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
-	v = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
-	return (norm(add(add(multiply(cam.right_axis, u), multiply(cam.up_axis, v)),
-				cam.forward_axis)));
+	direction.x = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
+	direction.y = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
+	direction = add(add(multiply(global->scene.cam.right_axis, direction.x),
+				multiply(global->scene.cam.up_axis, direction.y)),
+			global->scene.cam.forward_axis);
+	return (norm(direction));
 }

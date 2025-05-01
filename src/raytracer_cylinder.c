@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raytracer_cyllinder.c                              :+:      :+:    :+:   */
+/*   raytracer_cylinder.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:32:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 20:47:09 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/02 00:19:33 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,45 +35,6 @@ t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 		vars->t2 = (-vars->b + sqrt_discr) / (2 * a);
 		isec = check_lateral_hits(global, cy_id);
 	}
-	return (isec);
-}
-
-t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
-{
-	t_intersec	isec;
-	t_cylinder	*cyl;
-	t_cyl_lat	*vars;
-	float		denom;
-	float		t;
-
-	isec = init_intersec();
-	cyl = &global->scene.cyls[cy_id];
-	vars = &global->current_cyl_vars;
-	if (cap_sign == 1)
-	{
-		vars->cap_center = add(cyl->base, multiply(vars->axis, cyl->height));
-		vars->normal = vars->axis;
-	}
-	else
-	{
-		vars->cap_center = cyl->base;
-		vars->normal = multiply(vars->axis, -1);
-	}
-	denom = dot(vars->normal, global->c_ray.dir);
-	if (comp_floats(denom, 0) || denom > 0)
-		return (isec);
-	t = dot(subtract(vars->cap_center, global->c_ray.origin), vars->normal)
-		/ denom;
-	if (t < 0)
-		return (isec);
-	vars->hit_point = add(global->c_ray.origin, multiply(global->c_ray.dir, t));
-	vars->dist_from_center = mag(subtract(vars->hit_point, vars->cap_center));
-	if (vars->dist_from_center > cyl->radius)
-		return (isec);
-	isec.dist = t;
-	isec.point = vars->hit_point;
-	isec.obj_type = 2;
-	isec.obj_index = cy_id;
 	return (isec);
 }
 

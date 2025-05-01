@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 22:44:23 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/01 23:45:07 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,8 @@ void	check_file_extension(t_global *global, const char *filename)
 
 static t_global	*initialize_global(t_global *global, int argc, char **argv)
 {
-	// t_global	*global;
 	if (argc != 2)
 		finish(NULL, ERR_ARGS);
-	// global = (t_global *)malloc(sizeof(t_global));
-	// if (!global)
-	//	finish(NULL, ERR_MALLOC);
 	memset(global, 0, sizeof(t_global));
 	check_file_extension(global, argv[1]);
 	init(global);
@@ -79,7 +75,6 @@ int	main(int argc, char **argv)
 	t_global	global;
 
 	initialize_global(&global, argc, argv);
-	// init_signal_handlers(&global);
 	setup_render_window(&global);
 	printf("Rendering complete. Entering main loop...\n");
 	set_hooks(&global);

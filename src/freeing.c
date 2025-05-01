@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 22:08:58 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/01 23:49:08 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	free_global(t_global *global)
 		mlx_destroy_display(global->vars.mlx_conn);
 		free(global->vars.mlx_conn);
 	}
-	// free(global);
 }
 
 void	dbl_free(char **ptr)

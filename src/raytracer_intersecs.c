@@ -6,65 +6,11 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:59:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:59:01 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/02 00:20:43 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
-
-void	check_sp_intersecs(t_global *global, t_intersec *closest_intersec)
-{
-	int			i;
-	t_intersec	temp_intersec;
-
-	i = -1;
-	while (++i < global->scene.num_sp)
-	{
-		temp_intersec = col_sp(global, i);
-		if (temp_intersec.dist < closest_intersec->dist)
-		{
-			*closest_intersec = temp_intersec;
-			closest_intersec->obj_index = i;
-			closest_intersec->obj_type = 0;
-		}
-	}
-}
-
-void	check_pl_intersecs(t_global *global, t_intersec *closest_intersec)
-{
-	int			i;
-	t_intersec	temp_intersec;
-
-	i = -1;
-	while (++i < global->scene.num_pl)
-	{
-		temp_intersec = col_pl(global, i);
-		if (temp_intersec.dist < closest_intersec->dist)
-		{
-			*closest_intersec = temp_intersec;
-			closest_intersec->obj_index = i;
-			closest_intersec->obj_type = 1;
-		}
-	}
-}
-
-void	check_cy_intersecs(t_global *global, t_intersec *closest_intersec)
-{
-	int			i;
-	t_intersec	temp_intersec;
-
-	i = -1;
-	while (++i < global->scene.num_cy)
-	{
-		temp_intersec = col_cy(global, i);
-		if (temp_intersec.dist < closest_intersec->dist)
-		{
-			*closest_intersec = temp_intersec;
-			closest_intersec->obj_index = i;
-			closest_intersec->obj_type = 2;
-		}
-	}
-}
 
 t_intersec	find_closest_intersec(t_global *global)
 {
@@ -94,6 +40,7 @@ int	is_valid_intersec(t_global *global)
 	}
 	return (1);
 }
+
 static int	get_max_objects(t_global *global, int obj_type)
 {
 	if (obj_type == 0)

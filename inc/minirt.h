@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/23 01:08:10 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/01 23:38:51 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define WIN_H 630 // Screen height 768 630
 # define MARGIN 50 // Margin for the screen
 
-# define PI ((float)M_PI)
+# define PI 3.14159265358979323846f
 # define MAX_PLANES 5
 # define MAX_SPHERES 100
 # define MAX_CYLINDERS 15

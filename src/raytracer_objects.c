@@ -6,16 +6,16 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 20:18:15 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/01 23:04:07 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
 /**
- * Calcula la intersección entre un rayo y una esfera.
- * Combina las antiguas funciones cal_discriminant() y col_sp().
- * discriminante: at² + bt + c = 0
+ * Calculates the intersection between a ray and a sphere.
+ * Combines the former cal_discriminant() and col_sp() functions.
+ * discriminant: at² + bt + c = 0
  */
 t_intersec	col_sp(t_global *global, int sp_id)
 {
@@ -46,6 +46,11 @@ t_intersec	col_sp(t_global *global, int sp_id)
 	return (isec);
 }
 
+/**
+ * Calculates the intersection between a ray and a plane.
+ * Uses the plane equation and ray parametric form to find intersection point.
+ * Returns infinite distance if ray is parallel or pointing away from the plane.
+ */
 t_intersec	col_pl(t_global *global, int pl_id)
 {
 	t_intersec	isec;
@@ -69,6 +74,11 @@ t_intersec	col_pl(t_global *global, int pl_id)
 	return (isec);
 }
 
+/**
+ * Calculates the intersection between a ray and a cylinder.
+ * Checks intersection with three components: lateral surface and both caps.
+ * Returns the closest valid intersection point among all components.
+ */
 t_intersec	col_cy(t_global *global, int cy_id)
 {
 	t_intersec	isec;

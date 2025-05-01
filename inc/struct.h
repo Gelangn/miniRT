@@ -70,12 +70,12 @@ typedef struct s_camera
 {
 	int				fov;
 	double			dist_scrn;
-	t_vector		pos;			// Posición de la cámara en el mundo
-	t_vector		dir;			// Vector de dirección (hacia dónde mira)
-	t_vector		right_axis;		// Eje derecho de la cámara
-	t_vector		up_axis;		// Eje superior de la cámara
-	t_vector		forward_axis;	// Eje de visión de la cámara
-	float			roll_angle;		// Nuevo: Ángulo roll acumulado
+	t_vector pos;          // Posición de la cámara en el mundo
+	t_vector dir;          // Vector de dirección (hacia dónde mira)
+	t_vector right_axis;   // Eje derecho de la cámara
+	t_vector up_axis;      // Eje superior de la cámara
+	t_vector forward_axis; // Eje de visión de la cámara
+	float roll_angle;      // Nuevo: Ángulo roll acumulado
 	int				init;
 }					t_camera;
 

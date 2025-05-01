@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 21:27:17 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/02 00:24:18 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ void		move_camera(t_global *global, t_vector direction, float distance);
 void		rotate_camera(t_global *global, t_vector axis, float angle);
 void		precal_camera_axis(t_global *global);
 void		precal_rays(t_global *global);
+
+/* Camera rotation functions */
+void		apply_standard_rotation(t_global *global, int keysym,
+				float rotate_speed);
+void		apply_roll_rotation(t_global *global, int keysym,
+				float rotate_speed);
 
 /* Scene handling */
 void		read_scene(t_global *global);

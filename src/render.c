@@ -50,9 +50,9 @@ void	render_all_pixels(t_global *global)
 	if (center_idx < total_pixels)
 	{
 		printf("Central ray: type=%d, index=%d, distance=%f\n\n",
-				global->isecs[center_idx].obj_type,
-				global->isecs[center_idx].obj_index,
-				global->isecs[center_idx].dist);
+			global->isecs[center_idx].obj_type,
+			global->isecs[center_idx].obj_index,
+			global->isecs[center_idx].dist);
 	}
 	i = -1;
 	while (++i < total_pixels)
@@ -75,11 +75,9 @@ void	render(t_global *global)
 		finish(global, ERR_IMG);
 	}
 	printf("Camera position: (%f, %f, %f)\n", global->scene.cam.pos.x,
-			global->scene.cam.pos.y, global->scene.cam.pos.z);
-	printf("Camera orientation: (%f, %f, %f)\n",
-			global->scene.cam.dir.x,
-			global->scene.cam.dir.y,
-			global->scene.cam.dir.z);
+		global->scene.cam.pos.y, global->scene.cam.pos.z);
+	printf("Camera orientation: (%f, %f, %f)\n", global->scene.cam.dir.x,
+		global->scene.cam.dir.y, global->scene.cam.dir.z);
 	trace_all_rays(global);
 	render_all_pixels(global);
 	free(global->isecs);
@@ -100,8 +98,7 @@ void	precal_camera_axis(t_global *global)
 	{
 		cos_angle = cosf(cam->roll_angle);
 		sin_angle = sinf(cam->roll_angle);
-		cam->right_axis = norm(add(
-					multiply(cam->right_axis, cos_angle),
+		cam->right_axis = norm(add(multiply(cam->right_axis, cos_angle),
 					multiply(cam->up_axis, sin_angle)));
 		cam->up_axis = norm(cross(cam->forward_axis, cam->right_axis));
 	}

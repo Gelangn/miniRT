@@ -40,8 +40,8 @@ t_intersec	col_sp(t_global *global, int sp_id)
 		else if (t[1] > 0)
 			isec.dist = t[1];
 		if (isec.dist < INFINITY)
-			isec.point = add(global->c_ray.origin,
-					multiply(global->c_ray.dir, isec.dist));
+			isec.point = add(global->c_ray.origin, multiply(global->c_ray.dir,
+						isec.dist));
 	}
 	return (isec);
 }

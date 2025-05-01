@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/23 18:21:11 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/01 22:51:35 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	handle_movement_keys(t_global *global, int keysym, int *needs_render)
 		move_camera(global, right, move_speed);
 	else if (keysym == XK_space)
 		move_camera(global, up, move_speed);
-	else if (keysym == XK_c)
+	else if (keysym == XK_b)
 		move_camera(global, up, -move_speed);
 	else
 		return ;
@@ -85,7 +85,7 @@ void	handle_rotation_keys(t_global *global, int keysym, int *needs_render)
 
 void	handle_zoom_keys(t_global *global, int keysym)
 {
-	if (keysym == 65451 || keysym == 61)
+	if (keysym == 65451 || keysym == 61 || keysym == 43)
 	{
 		if (global->scene.cam.fov > 10.0f)
 		{
@@ -124,6 +124,8 @@ void	handle_screenshot(t_global *global)
 int	handle_keypress(int keysym, t_global *global)
 {
 	int	needs_render;
+
+	printf("Tecla presionada: %d\n", keysym);
 
 	needs_render = 0;
 	if (keysym == XK_Escape)

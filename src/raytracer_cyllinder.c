@@ -62,8 +62,8 @@ t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
 	denom = dot(vars->normal, global->c_ray.dir);
 	if (comp_floats(denom, 0) || denom > 0)
 		return (isec);
-	t = dot(subtract(vars->cap_center, global->c_ray.origin),
-			vars->normal) / denom;
+	t = dot(subtract(vars->cap_center, global->c_ray.origin), vars->normal)
+		/ denom;
 	if (t < 0)
 		return (isec);
 	vars->hit_point = add(global->c_ray.origin, multiply(global->c_ray.dir, t));

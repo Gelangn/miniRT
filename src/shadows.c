@@ -18,8 +18,8 @@ int	cal_shadow(t_global *global)
 	t_ray_state	state;
 	t_intersec	shadow_intersec;
 
-	shadow_origin = add(global->c_ray.hit.point,
-			multiply(global->c_ray.normal, 0.005f));
+	shadow_origin = add(global->c_ray.hit.point, multiply(global->c_ray.normal,
+				0.005f));
 	state = save_ray_state(global);
 	global->c_ray.origin = shadow_origin;
 	global->c_ray.dir = global->c_light.dir;

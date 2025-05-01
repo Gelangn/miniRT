@@ -46,7 +46,7 @@ int	handle_mouse_move(int pos_x, int pos_y, t_global *global)
 		dy = pos_y - global->last_mouse_y;
 		rotate_camera(global, (t_vector){0, 1, 0}, -dx * rotation_speed);
 		vc_x = multiply(norm(cross((t_vector){0, -1, 0},
-				norm(global->scene.cam.dir))), -1.0f);
+						norm(global->scene.cam.dir))), -1.0f);
 		norm(global->scene.cam.dir);
 		rotate_camera(global, vc_x, -dy * rotation_speed);
 		global->last_mouse_x = pos_x;

@@ -6,11 +6,22 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 22:27:43 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:19:00 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
+
+void	pixel_put(t_img *img, int px_x, int px_y, int color)
+{
+	char	*dst;
+
+	if (!img || !img->addr || px_x < 0 || px_x >= WIN_W || px_y < 0
+		|| px_y >= WIN_H)
+		return ;
+	dst = img->addr + (px_y * img->bpl + px_x * (img->bpp / 8));
+	*(unsigned int *)dst = color;
+}
 
 void	render_single_pixel(t_global *global, int index)
 {
@@ -82,24 +93,4 @@ void	render(t_global *global)
 	render_all_pixels(global);
 	free(global->isecs);
 	global->isecs = NULL;
-}
-
-void	precal_camera_axis(t_global *global)
-{
-	t_camera	*cam;
-	float		cos_angle;
-	float		sin_angle;
-
-	cam = &global->scene.cam;
-	cam->forward_axis = norm(cam->dir);
-	cam->right_axis = norm(cross((t_vector){0, 1, 0}, cam->forward_axis));
-	cam->up_axis = norm(cross(cam->forward_axis, cam->right_axis));
-	if (cam->roll_angle != 0)
-	{
-		cos_angle = cosf(cam->roll_angle);
-		sin_angle = sinf(cam->roll_angle);
-		cam->right_axis = norm(add(multiply(cam->right_axis, cos_angle),
-					multiply(cam->up_axis, sin_angle)));
-		cam->up_axis = norm(cross(cam->forward_axis, cam->right_axis));
-	}
 }

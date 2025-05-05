@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 19:57:44 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:33:27 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void		apply_roll_rotation(t_global *global, int keysym,
 				float rotate_speed);
 
 /* Scene handling */
+void		count_objects(t_global *global);
+void		allocate_objects(t_global *global);
 void		read_scene(t_global *global);
 void		check_scene(t_global *global, t_scene *scene);
 void		free_scene(t_scene *scene);

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:39:23 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:25:37 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,11 @@ void	init_scene(t_global *global)
 	scene->ambient.init = 0;
 	scene->cam.init = 0;
 	scene->light.init = 0;
-	scene->spheres = malloc(sizeof(t_plane) * MAX_SPHERES);
-	if (!scene->spheres)
-		finish(global, ERR_MEM);
+	scene->spheres = NULL;
+	scene->planes = NULL;
+	scene->cyls = NULL;
 	scene->num_sp = 0;
-	scene->planes = malloc(sizeof(t_plane) * MAX_PLANES);
-	if (!scene->planes)
-		finish(global, ERR_MEM);
 	scene->num_pl = 0;
-	scene->cyls = malloc(sizeof(t_plane) * MAX_CYLINDERS);
-	if (!scene->cyls)
-		finish(global, ERR_MEM);
 	scene->num_cy = 0;
 }
 

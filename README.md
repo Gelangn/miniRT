@@ -110,84 +110,105 @@ Where:
 - **Robust intersection testing**: Handles edge cases for all geometric primitives
 - **BMP screenshot capability**: Saves renders as bitmap images
 
-# Expresiones Matemáticas Utilizadas en MiniRT
+# Mathematical Expressions Used in miniRT
 
-Aquí están las expresiones matemáticas precisas de las fórmulas utilizadas en el ray tracer:
+Below are the precise mathematical expressions of the formulas used in the ray tracer:
 
-## 1. Ecuación Paramétrica del Rayo
-Para un punto $P(t)$ en el rayo a una distancia $t$:
-$$P(t) = O + t \cdot \vec{D}$$
-Donde:
-- $O$ es el origen del rayo (posición de la cámara)
-- $\vec{D}$ es el vector dirección normalizado
-- $t$ es el parámetro de distancia (distancia desde el origen)
+## 1. Parametric Ray Equation
+For a point P(t) on the ray at distance t:
+```
+P(t) = O + t·D
+```
+Where:
+- O is the ray origin (camera position)
+- D is the normalized direction vector
+- t is the distance parameter (distance from origin)
 
-## 2. Intersección Rayo-Esfera
-La intersección se calcula resolviendo:
-$$|\vec{D}|^2 t^2 + 2\vec{D} \cdot (\vec{O} - \vec{C})t + |\vec{O} - \vec{C}|^2 - r^2 = 0$$
-Donde:
-- $\vec{O}$ es el origen del rayo
-- $\vec{D}$ es la dirección del rayo
-- $\vec{C}$ es el centro de la esfera
-- $r$ es el radio de la esfera
+## 2. Ray-Sphere Intersection
+The intersection is calculated by solving:
+```
+|D|²·t² + 2D·(O-C)·t + |O-C|² - r² = 0
+```
+Where:
+- O is the ray origin
+- D is the ray direction
+- C is the sphere center
+- r is the sphere radius
 
-## 3. Intersección Rayo-Plano
-$$t = \frac{(\vec{P_0} - \vec{O}) \cdot \vec{N}}{\vec{D} \cdot \vec{N}}$$
-Donde:
-- $\vec{P_0}$ es un punto en el plano
-- $\vec{N}$ es el vector normal del plano
-- $\vec{O}$ es el origen del rayo
-- $\vec{D}$ es la dirección del rayo
+## 3. Ray-Plane Intersection
+```
+t = ((P₀-O)·N) / (D·N)
+```
+Where:
+- P₀ is a point on the plane
+- N is the plane normal vector
+- O is the ray origin
+- D is the ray direction
 
-## 4. Intersección Rayo-Cilindro
-Para la superficie lateral, resolvemos la ecuación cuadrática:
-$$at^2 + bt + c = 0$$
+## 4. Ray-Cylinder Intersection
+For the lateral surface, we solve the quadratic equation:
+```
+a·t² + b·t + c = 0
 
-Donde:
-$$a = |\vec{D_{perp}}|^2$$
-$$b = 2(\vec{D_{perp}} \cdot \vec{OC_{perp}})$$
-$$c = |\vec{OC_{perp}}|^2 - r^2$$
-$$\vec{D_{perp}} = \vec{D} - (\vec{D} \cdot \vec{A})\vec{A}$$
-$$\vec{OC_{perp}} = \vec{OC} - (\vec{OC} \cdot \vec{A})\vec{A}$$
+Where:
+a = |Dₚₑᵣₚ|²
+b = 2(Dₚₑᵣₚ·OCₚₑᵣₚ)
+c = |OCₚₑᵣₚ|² - r²
 
-- $\vec{A}$ es el vector eje normalizado del cilindro
-- $\vec{OC}$ es el vector desde el origen del rayo hasta la base del cilindro
-- $r$ es el radio del cilindro
-- $\vec{D_{perp}}$ y $\vec{OC_{perp}}$ son las componentes perpendiculares al eje
+Dₚₑᵣₚ = D - (D·A)·A
+OCₚₑᵣₚ = OC - (OC·A)·A
+```
+Where:
+- A is the normalized axis vector of the cylinder
+- OC is the vector from ray origin to cylinder base
+- r is the cylinder radius
+- Dₚₑᵣₚ and OCₚₑᵣₚ are components perpendicular to the axis
 
-## 5. Fórmula de Rotación de Rodrigues
-$$\vec{v}_{rot} = \vec{v}\cos(\theta) + (\vec{k} \times \vec{v})\sin(\theta) + \vec{k}(\vec{k} \cdot \vec{v})(1-\cos(\theta))$$
+## 5. Rodrigues Rotation Formula
+```
+v_rot = v·cos(θ) + (k×v)·sin(θ) + k(k·v)(1-cos(θ))
+```
+Where:
+- v is the vector to rotate
+- k is the normalized rotation axis
+- θ is the rotation angle
 
-Donde:
-- $\vec{v}$ es el vector a rotar
-- $\vec{k}$ es el eje de rotación normalizado
-- $\theta$ es el ángulo de rotación
+## 6. Lighting Calculation
 
-## 6. Cálculo de Iluminación
+### Ambient Lighting
+```
+I_a = k_a · C_obj
+```
 
-### Iluminación Ambiente
-$$I_a = k_a \cdot C_{obj}$$
+### Diffuse Lighting (Lambert's Law)
+```
+I_d = k_d · C_obj · max(0, N·L)
+```
 
-### Iluminación Difusa (Ley de Lambert)
-$$I_d = k_d \cdot C_{obj} \cdot \max(0, \vec{N} \cdot \vec{L})$$
+### Specular Lighting (Phong Model)
+```
+I_s = k_s · C_white · max(0, V·R)^n
+```
+Where:
+- k_a, k_d, k_s are lighting coefficients
+- C_obj is the object color
+- N is the surface normal
+- L is the vector toward the light source
+- V is the vector toward the viewer
+- R is the reflection vector
+- n is the shininess exponent
 
-### Iluminación Especular (Modelo de Phong)
-$$I_s = k_s \cdot C_{white} \cdot \max(0, \vec{V} \cdot \vec{R})^n$$
+## 7. Normalized Vector
+```
+v_norm = v/|v| = v/sqrt(v_x² + v_y² + v_z²)
+```
 
-Donde:
-- $k_a$, $k_d$, $k_s$ son los coeficientes de iluminación
-- $C_{obj}$ es el color del objeto
-- $\vec{N}$ es el vector normal de la superficie
-- $\vec{L}$ es el vector hacia la fuente de luz
-- $\vec{V}$ es el vector hacia el observador
-- $\vec{R}$ es el vector de reflexión
-- $n$ es el exponente de brillo (shininess)
+## 8. Cross Product (Vector)
+```
+a × b = (a_y·b_z - a_z·b_y, a_z·b_x - a_x·b_z, a_x·b_y - a_y·b_x)
+```
 
-## 7. Vector Normalizado
-$$\vec{v}_{norm} = \frac{\vec{v}}{|\vec{v}|} = \frac{\vec{v}}{\sqrt{v_x^2 + v_y^2 + v_z^2}}$$
-
-## 8. Producto Cruz (Vector)
-$$\vec{a} \times \vec{b} = \begin{pmatrix} a_y b_z - a_z b_y \\ a_z b_x - a_x b_z \\ a_x b_y - a_y b_x \end{pmatrix}$$
-
-## 9. Producto Punto (Escalar)
-$$\vec{a} \cdot \vec{b} = a_x b_x + a_y b_y + a_z b_z$$
+## 9. Dot Product (Scalar)
+```
+a · b = a_x·b_x + a_y·b_y + a_z·b_z
+```

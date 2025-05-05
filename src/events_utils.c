@@ -6,17 +6,11 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 19:48:45 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:55:32 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
-
-/* This function needs to exist, but is useless by the moment */
-int	handle_no_event(void)
-{
-	return (SUCCESS);
-}
 
 void	update_display(t_global *global)
 {
@@ -38,5 +32,4 @@ void	set_hooks(t_global *global)
 	mlx_hook(global->vars.mlx_win, 4, 1L << 2, mouse_press_hook, global);
 	mlx_hook(global->vars.mlx_win, 5, 1L << 3, mouse_release_hook, global);
 	mlx_hook(global->vars.mlx_win, 6, 1L << 6, handle_mouse_move, global);
-	mlx_mouse_hook(global->vars.mlx_win, handle_mouse_scroll, global);
 }

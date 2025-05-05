@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/02 00:24:18 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:57:44 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int			close_window(t_global *global);
 void		set_hooks(t_global *global);
 
 /* Event handling */
-int			handle_no_event(void);
 int			handle_keypress(int keysym, t_global *global);
 int			handle_mouse_move(int x, int y, t_global *global);
 int			handle_mouse_scroll(int button, int x, int y, t_global *global);
@@ -114,7 +113,6 @@ t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
 t_vector	get_cap_center(t_cylinder *cyl, int cap_sign);
 t_vector	get_cap_normal(t_cylinder *cyl, int cap_sign);
 void		init_lateral_isec_vars(t_global *global, int cy_id);
-float		cal_lat_discriminant(t_global *global, int cy_id);
 void		get_isec_points(t_global *global, float a, float b, float discr);
 t_intersec	check_lateral_hits(t_global *global, int cy_id);
 t_intersec	process_lateral_hit(t_global *global, int cy_id, float t);

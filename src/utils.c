@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:27:57 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 18:00:37 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:01:20 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int	comp_floats(float a, float b)
 // Returns true if a is less than b-EPSILON
 int	is_less_than(float a, float b)
 {
-    return (a < b - EPSILON);
+	return (a < b - EPSILON);
 }
 
 // Returns true if a is greater than b+EPSILON
 int	is_greater_than(float a, float b)
 {
-    return (a > b + EPSILON);
+	return (a > b + EPSILON);
 }
 
 int	is_valid_pixel(int px_x, int px_y, int width, int height)

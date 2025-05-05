@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:30:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/23 17:29:31 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:26:30 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	move_camera(t_global *global, t_vector direction, float distance)
 	global->scene.cam.pos = add(global->scene.cam.pos, movement);
 }
 
-/* Rotate the camera around an axis */
+/* Rotate the camera around an axis (Rodrigues formula) */
 void	rotate_camera(t_global *global, t_vector axis, float angle)
 {
 	t_vector	dir;

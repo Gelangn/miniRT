@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 23:36:42 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:59:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ typedef struct s_camera
 {
 	int				fov;
 	double			dist_scrn;
-	t_vector pos;          // Posición de la cámara en el mundo
-	t_vector dir;          // Vector de dirección (hacia dónde mira)
-	t_vector right_axis;   // Eje derecho de la cámara
-	t_vector up_axis;      // Eje superior de la cámara
-	t_vector forward_axis; // Eje de visión de la cámara
-	float roll_angle;      // Nuevo: Ángulo roll acumulado
+	t_vector		pos;			// Camera position in the world
+	t_vector		dir;			// Direction vector (where camera is looking)
+	t_vector		right_axis;		// Camera right axis
+	t_vector		up_axis;		// Camera up axis
+	t_vector		forward_axis;	// Camera forward axis
+	float			roll_angle;		// New: Accumulated roll angle
 	int				init;
 }					t_camera;
 
@@ -128,17 +128,17 @@ typedef struct s_cyl_lat
 	float			t1;
 	float			t2;
 
-	// Variables temporales para process_lateral_hit
+	// Temporary variables for process_lateral_hit
 	t_vector		hit_point;
 	float			hit_h;
 	t_vector		ctr_h;
 	t_vector		normal;
 
-	// Variables temporales para cal_cap_intersec
+	// Temporary variables for cal_cap_intersec
 	t_vector		cap_center;
 	float			dist_from_center;
 
-	// Variables para cálculo discriminante
+	// Variables for discriminant calculation
 	float			a;
 	float			b;
 	float			c;
@@ -201,13 +201,13 @@ typedef struct s_global
 	int				last_mouse_x;
 	int				last_mouse_y;
 
-	// Variables para el rayo actual
+	// Variables for the current ray
 	t_active_ray	c_ray;
 
-	// Variables para cálculos de iluminación
+	// Variables for lighting calculations
 	t_light_calc	c_light;
 
-	// Variables para cálculos de cilindros
+	// Variables for cylinder calculations
 	t_cyl_lat		current_cyl_vars;
 }					t_global;
 

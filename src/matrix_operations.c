@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:56 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/21 21:17:32 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:01:35 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ t_vector	norm(t_vector a)
 	return (result);
 }
 
-// Function to calculate the dot product (producto escalar) of two vectors
+// Function to calculate the dot product (escalar) of two vectors
 float	dot(t_vector a, t_vector b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
-// Function to calculate the cross product of two vectors (producto vectorial)
+// Function to calculate the cross product of two vectors (vectorial)
 t_vector	cross(t_vector a, t_vector b)
 {
 	t_vector	result;

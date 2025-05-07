@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 19:59:24 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:55:01 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ typedef struct s_camera
 {
 	int				fov;
 	double			dist_scrn;
-	t_vector		pos;			// Camera position in the world
-	t_vector		dir;			// Direction vector (where cam is looking)
-	t_vector		right_axis;		// Camera right axis
-	t_vector		up_axis;		// Camera up axis
-	t_vector		forward_axis;	// Camera forward axis
-	float			roll_angle;		// New: Accumulated roll angle
+	t_vector pos;          // Camera position in the world
+	t_vector dir;          // Direction vector (where cam is looking)
+	t_vector right_axis;   // Camera right axis
+	t_vector up_axis;      // Camera up axis
+	t_vector forward_axis; // Camera forward axis
+	float roll_angle;      // New: Accumulated roll angle
 	int				init;
 }					t_camera;
 
@@ -172,6 +172,12 @@ typedef struct s_ray_state
 	t_intersec		isec;
 }					t_ray_state;
 
+typedef struct s_ray
+{
+	t_vector		origin;
+	t_vector		dir;
+}					t_ray;
+
 typedef struct s_active_ray
 {
 	t_vector		origin;
@@ -188,6 +194,44 @@ typedef struct s_light_calc
 	t_color			obj_color;
 	t_vector		normal;
 }					t_light_calc;
+
+// Estructura para Axis-Aligned Bounding Box (AABB)
+typedef struct s_aabb
+{
+	t_vector min; // Punto mínimo (esquina inferior izquierda)
+	t_vector max; // Punto máximo (esquina superior derecha)
+}					t_aabb;
+
+// Tipos de objetos para el BVH
+typedef enum e_object_type
+{
+	OBJ_SPHERE,
+	OBJ_PLANE,
+	OBJ_CYLINDER
+}					t_object_type;
+
+// Estructura genérica para objetos
+typedef struct s_object
+{
+	t_object_type	type;
+	union
+	{
+		t_sphere	sphere;
+		t_plane		plane;
+		t_cylinder	cylinder;
+	} data;
+	t_aabb bounds; // Caja delimitadora de este objeto
+}					t_object;
+
+// Nodo del árbol BVH
+typedef struct s_bvh_node
+{
+	t_aabb bounds;            // Caja delimitadora de este nodo
+	struct s_bvh_node *left;  // Hijo izquierdo
+	struct s_bvh_node *right; // Hijo derecho
+	t_object **objects;       // Lista de objetos (solo para nodos hoja)
+	int object_count;         // Número de objetos en este nodo
+}					t_bvh_node;
 
 // global struct to store all the structs
 typedef struct s_global
@@ -209,6 +253,11 @@ typedef struct s_global
 
 	// Variables for cylinder calculations
 	t_cyl_lat		current_cyl_vars;
+
+	// BVH
+	t_bvh_node		*bvh_root;
+	t_object *objects; // Lista unificada de todos los objetos
+	int				total_objects;
 }					t_global;
 
 #endif

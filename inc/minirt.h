@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 23:38:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:54:33 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@
 # include <string.h>
 # include <sys/stat.h>
 # include <unistd.h>
+# include <time.h>
 
-# define WIN_W 840 // Screen width 1024 840
-# define WIN_H 630 // Screen height 768 630
+# define WIN_W 1024 // Screen width 1024 840
+# define WIN_H 768 // Screen height 768 630
 # define MARGIN 50 // Margin for the screen
 
 # define PI 3.14159265358979323846f

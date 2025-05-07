@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 21:33:27 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/07 20:00:18 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,14 @@ t_intersec	col_sp(t_global *global, int sp_id);
 t_intersec	col_pl(t_global *global, int pl_id);
 t_intersec	col_cy(t_global *global, int cy_id);
 
+// Nuevos prototipos para intersecciones
+
+// Adaptados para usar ray en lugar de c_ray global
+t_intersec	col_sp_direct(t_ray ray, t_sphere sphere, int sp_id);
+t_intersec	col_pl_direct(t_ray ray, t_plane plane, int pl_id);
+t_intersec	col_cy_direct(t_ray ray, t_cylinder cylinder, int cy_id,
+				t_global *global);
+
 /* Cylinder intersection helpers */
 t_intersec	cal_lateral_intersec(t_global *global, int cy_id);
 t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
@@ -154,5 +162,17 @@ t_vector	reflect(t_vector a, t_vector b);
 /* Signal handling */
 void		init_signal_handlers(t_global *global);
 void		handle_signal(int signum);
+
+/* BVH Prototypes */
+void		init_bvh(t_global *global);
+t_intersec	find_closest_intersec_bvh(t_global *global);
+int			ray_intersects_aabb(t_vector origin, t_vector dir, t_aabb box);
+t_aabb		create_aabb_for_object(t_object *obj);
+t_aabb		combine_aabb(t_aabb a, t_aabb b);
+t_bvh_node	*build_bvh_node(t_object **objects, int start, int end, int depth);
+t_intersec	check_object_intersection(t_ray ray, t_object *obj,
+				t_global *global);
+t_intersec	find_intersection_bvh(t_ray ray, t_bvh_node *node,
+				t_global *global);
 
 #endif

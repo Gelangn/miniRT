@@ -15,7 +15,8 @@ NAME = miniRT
 CC = gcc
 
 # Seudonimos carpetas, ejemplo uso: $S main.c
-S = src/
+SRC_DIR = src/
+OBJ_DIR = obj/
 
 # Otros seudonimos
 LIBS = lib
@@ -30,10 +31,40 @@ endif
 DEPS = $(LIB)/libft.a $(LIB_MLX)/libmlx.a
 
 # Archivos fuente
-SRC = $(wildcard $(S)*.c) 
+SRC_FILES = camera_controls.c \
+		colisions.c \
+		color.c \
+		draw.c \
+		events_handle.c \
+		events_mouse.c \
+		events_utils.c \
+		freeing.c \
+		init_scene.c \
+		matrix_operations.c \
+		matrix.c \
+		minirt.c \
+		parser_objects.c \
+		parser_scene.c \
+		raytracer_color.c \
+		raytracer_core.c \
+		raytracer_cyllinder.c \
+		raytracer_intersecs.c \
+		raytracer_lighting.c \
+		raytracer_normals.c \
+		raytracer_objects.c \
+		raytracer_render.c \
+		render.c \
+		save.c \
+		scene_reader.c \
+		shadows.c \
+		utils.c \
+		window.c \
+
+SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
+OBJ = $(addprefix $(OBJ_DIR), $(OBJ_FILES))
 
 # Archivos objeto
-OBJ = $(SRC:.c = .o)
+OBJ_FILES = $(SRC_FILES:.c=.o)
 
 OS := $(shell uname)
 ifeq ($(OS),Windows_NT)
@@ -46,7 +77,7 @@ else ifeq ($(OS),Darwin)
 	FFLAGS = -Llib/mlx -lmlx -framework OpenGL -framework AppKit
 else ifeq ($(OS),Linux)
 #	@echo "Compilando en Linux"
-	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O3 -g3
+	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O0 -g0
 	# Flags normales (sin sanitize)
 	FFLAGS = -L./lib/minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 	# Flags con sanitize
@@ -64,14 +95,27 @@ endif
 # *** Reglas ***
 
 # Regla por defecto
-all: $(NAME)
+all: libs obj_dir $(NAME)
+
+obj_dir:
+	@mkdir -p $(OBJ_DIR)
+	@echo "$(GREEN)*** Creando directorio de objetos: $(OBJ_DIR) ***$(DEFAULT)"
 
 # Regla de compilación
-%.o: %.c 
+$(OBJ_DIR)%.o:$(SRC_DIR)%.c 
 	$(CC) $(CFLAGS) -o $@ -c $<
+	#@echo "$(GREEN)*** Compilación de $< completada ***$(DEFAULT)"
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
+	@echo "$(YELLOW)\n*** Creando ejecutable ***$(DEFAULT)"
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
+
+libs:
+	@echo
+	@echo "$(GREY)*** Compilación de las librerías ***$(DEFAULT)"
+	@echo
 	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
 	make -C $(LIB) all
 	@echo
@@ -82,14 +126,8 @@ $(NAME): $(OBJ)
 	@echo
 	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
 	make -C $(LIB_MLX)
-
 	@echo
-	@echo "$(YELLOW)*** Creando ejecutable ***$(DEFAULT)"
-	@echo
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
-	@echo
-	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
-	@echo
+	@echo "$(GREEN)*** Compilación de las librerías completada ***$(DEFAULT)"
 
 # Regla para compilar en modo DEBUG
 debug:
@@ -127,6 +165,7 @@ sanitize:
 clean:
 	@make -C $(LIB) clean
 	@make -C $(LIB_MLX) clean
+	@rm -rf $(OBJ_DIR)
 
 # Regla para limpiar archivos objeto y el archivo estático
 fclean: clean

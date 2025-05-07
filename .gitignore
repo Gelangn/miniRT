@@ -3,3 +3,5 @@ miniRT
 .o
 make
 .json
+.idea_*
+.vscode*

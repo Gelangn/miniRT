@@ -1,6 +1,6 @@
 miniRT
-.a
-.o
+*.a
+*.o
 make
 .json
 .idea_*

@@ -110,14 +110,14 @@ centradas en lo funcional, para facilitar el control de los elementos a crear.
 
 Para la realización de este proyecto necesitaremos:
 - Crear un parser que lea el archivo .rt y cree una estructura de datos
- con la información de la escena. OK
-- Crear una función que genere la imagen de la escena.OK
-- Crear una función que muestre la imagen en una ventana. OK
-- Crear una función que maneje los eventos de la ventana. OK
-- Crear una función que libere la memoria utilizada. OK
-- Crear una función que maneje los errores. OK
-- Generador de rayos. OK
-- Crear una función que maneje las intersecciones de los rayos con los objetos. OK
+ con la información de la escena.
+- Crear una función que genere la imagen de la escena.
+- Crear una función que muestre la imagen en una ventana.
+- Crear una función que maneje los eventos de la ventana.
+- Crear una función que libere la memoria utilizada.
+- Crear una función que maneje los errores.
+- Generador de rayos.
+- Crear una función que maneje las intersecciones de los rayos con los objetos.
 - Crear una función que maneje los objetos geométricos. OK PARCIAL (ESFERA)
 - Crear una función que maneje las cámaras.
 - Crear una función que maneje las luces.
@@ -161,17 +161,17 @@ el modelo de iluminación para obtener el color del pixel, si no intersecta con
 ningún objeto, el color del pixel es el color de fondo.
 
 PASOS A SEGUIR:
-1. Crear la estructura de datos de la escena. OK
-2. Crear el parser que lea el archivo .rt y llene la estructura de datos. OK
-3. Crear la función que genere la imagen de la escena. OK
-4. Crear la función que muestre la imagen en una ventana. OK
-5. Crear la función que maneje los eventos de la ventana. OK
-6. Crear la función que libere la memoria utilizada. OK
-7. Crear la función que maneje los errores. OK
-8. Crear la función que maneje los rayos. OK
-8. Crear la función que maneje las intersecciones de los rayos con los objetos.OK
+1. Crear la estructura de datos de la escena.
+2. Crear el parser que lea el archivo .rt y llene la estructura de datos.
+3. Crear la función que genere la imagen de la escena.
+4. Crear la función que muestre la imagen en una ventana.
+5. Crear la función que maneje los eventos de la ventana.
+6. Crear la función que libere la memoria utilizada.
+7. Crear la función que maneje los errores.
+8. Crear la función que maneje los rayos.
+8. Crear la función que maneje las intersecciones de los rayos con los objetos.
 9. Crear la función que maneje los objetos geométricos.
-	Esfera OK
+	Esfera
 	Plano 
 	Cilindro
 10. Crear la función que maneje las cámaras.

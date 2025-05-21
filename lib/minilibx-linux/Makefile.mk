@@ -10,6 +10,15 @@
 
 ## Please use configure script
 
+# Colours
+DEFAULT 	= \033[0m
+GREEN 		= \033[38;5;46m
+WHITE 		= \033[38;5;15m
+GREY 		= \033[38;5;8m
+ORANGE 		= \033[38;5;202m
+RED 		= \033[38;5;160m
+YELLOW 		= \033[38;5;226m
+BLUE 		= \033[38;5;27m
 
 INC	=%%%%
 
@@ -42,12 +51,12 @@ all	: $(NAME)
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 $(NAME)	: $(OBJ)
-	ar -r $(NAME) $(OBJ)
-	ranlib $(NAME)
-	cp $(NAME) $(NAME_UNAME)
+	@ar -r $(NAME) $(OBJ)
+	@ranlib $(NAME)
+	@cp $(NAME) $(NAME_UNAME)
 
 check: all
 	@test/run_tests.sh
@@ -55,12 +64,13 @@ check: all
 show:
 	@printf "NAME  		: $(NAME)\n"
 	@printf "NAME_UNAME	: $(NAME_UNAME)\n"
-	@printf "CC		: $(CC)\n"
+	@printf "CC			: $(CC)\n"
 	@printf "CFLAGS		: $(CFLAGS)\n"
 	@printf "SRC		:\n	$(SRC)\n"
 	@printf "OBJ		:\n	$(OBJ)\n"
 
 clean	:
-	rm -rf $(OBJ_DIR)/ $(NAME) $(NAME_UNAME) *~ core *.core
+	@echo "$(RED)*** Limpiando MLX ***$(DEFAULT)"
+	@rm -rf $(OBJ_DIR)/ $(NAME) $(NAME_UNAME) *~ core *.core
 
 .PHONY: all check show clean

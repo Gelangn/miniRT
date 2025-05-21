@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 20:19:00 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:51:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,39 @@ void	render_single_pixel(t_global *global, int index)
 void	render_all_pixels(t_global *global)
 {
 	int	i;
-	int	total_pixels;
 	int	center_idx;
 
-	total_pixels = (WIN_W - MARGIN) * (WIN_H - MARGIN);
 	center_idx = (WIN_H / 2) * (WIN_W - MARGIN) + (WIN_W / 2);
-	if (center_idx < total_pixels)
+	if (center_idx < global->total_pixels)
 	{
 		printf("Central ray: type=%d, index=%d, distance=%f\n\n",
-			global->isecs[center_idx].obj_type,
-			global->isecs[center_idx].obj_index,
-			global->isecs[center_idx].dist);
+				global->isecs[center_idx].obj_type,
+				global->isecs[center_idx].obj_index,
+				global->isecs[center_idx].dist);
 	}
 	i = -1;
-	while (++i < total_pixels)
+	while (++i < global->total_pixels)
 		render_single_pixel(global, i);
+}
+
+void	print_info(t_global *global)
+{
+	printf("Camera position: (%.2f, %.2f, %.2f)\n", global->scene.cam.pos.x,
+			global->scene.cam.pos.y, global->scene.cam.pos.z);
+	printf("Camera orientation: (%.2f, %.2f, %.2f)\n", global->scene.cam.dir.x,
+			global->scene.cam.dir.y, global->scene.cam.dir.z);
+	printf("Camera up axis: (%.2f, %.2f, %.2f)\n", global->scene.cam.up_axis.x,
+			global->scene.cam.up_axis.y, global->scene.cam.up_axis.z);
+	printf("Camera right axis: (%.2f, %.2f, %.2f)\n",
+			global->scene.cam.right_axis.x,
+			global->scene.cam.right_axis.y,
+			global->scene.cam.right_axis.z);
+	printf("Field of view: %.1f°\n", (float)global->scene.cam.fov);
+	printf("Total calculated rays: %d\n", global->total_pixels);
+	printf("Scene objects: %d spheres, %d planes, %d cylinders\n",
+			global->scene.num_sp,
+			global->scene.num_pl,
+			global->scene.num_cy);
 }
 
 void	render(t_global *global)
@@ -75,8 +93,7 @@ void	render(t_global *global)
 	if (comp_floats(mag(global->scene.cam.dir), 0))
 		global->scene.cam.dir = (t_vector){0, 0, 1};
 	precal_rays(global);
-	global->isecs = malloc((WIN_W - MARGIN) * (WIN_H - MARGIN)
-			* sizeof(t_intersec));
+	global->isecs = malloc(global->total_pixels * sizeof(t_intersec));
 	if (!global->isecs)
 		finish(global, ERR_MEM);
 	if (!global->img.img || !global->img.addr)
@@ -85,10 +102,7 @@ void	render(t_global *global)
 		global->isecs = NULL;
 		finish(global, ERR_IMG);
 	}
-	printf("Camera position: (%f, %f, %f)\n", global->scene.cam.pos.x,
-		global->scene.cam.pos.y, global->scene.cam.pos.z);
-	printf("Camera orientation: (%f, %f, %f)\n", global->scene.cam.dir.x,
-		global->scene.cam.dir.y, global->scene.cam.dir.z);
+	print_info(global);
 	trace_all_rays(global);
 	render_all_pixels(global);
 	free(global->isecs);

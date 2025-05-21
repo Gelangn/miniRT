@@ -108,30 +108,30 @@ obj_dir:
 
 # Regla de compilación
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c 
-	$(CC) $(CFLAGS) -o $@ -c $<
-	#@echo "$(GREEN)*** Compilación de $< completada ***$(DEFAULT)"
+	@$(CC) $(CFLAGS) -o $@ -c $<
+	@echo "\033[H\033[J"
+	@echo "$(GREEN)*** Compilación de $< completada ***$(DEFAULT)"
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
+	@echo "\033[H\033[J"
 	@echo "$(YELLOW)\n*** Creando ejecutable ***$(DEFAULT)"
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
 	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
 
 libs:
-	@echo
+	@echo "\033[H\033[J"
 	@echo "$(GREY)*** Compilación de las librerías ***$(DEFAULT)"
-	@echo
+	@echo "\033[H\033[J"
 	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
-	make -C $(LIB) all
-	@echo
+	@make -C $(LIB) all
+	@echo "\033[H\033[J"
 	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
-	make -C $(LIB) bonus
-	@echo
+	@make -C $(LIB) bonus
 	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
-	@echo
+	@echo "\033[H\033[J"
 	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
-	make -C $(LIB_MLX)
-	@echo
+	@make -C $(LIB_MLX)
 	@echo "$(GREEN)*** Compilación de las librerías completada ***$(DEFAULT)"
 
 # Regla para compilar en modo DEBUG
@@ -139,29 +139,29 @@ debug:
 	@echo
 	@echo "$(GREY)*** Compilación en modo DEBUG ***$(DEFAULT)"
 	@echo
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
 	@echo
 	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
 	@echo
 
 sanitize:
-	@echo
+	@echo "\033[H\033[J"
 	@echo "$(GREY)*** Compilación en modo SANITIZE ***$(DEFAULT)"
-	@echo
+	@echo "\033[H\033[J"
 	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
-	make -C $(LIB) all
-	@echo
+	@make -C $(LIB) all
+	@echo "\033[H\033[J"
 	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
-	make -C $(LIB) bonus
+	@make -C $(LIB) bonus
 	@echo
 	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
-	@echo
+	@echo "\033[H\033[J"
 	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
-	make -C $(LIB_MLX)
+	@make -C $(LIB_MLX)
 	@echo
 	@echo "$(YELLOW)*** Creando ejecutable con AddressSanitizer ***$(DEFAULT)"
 	@echo
-	$(CC) $(CFLAGS) $(SANITIZE_FLAGS) -o $(NAME) $(SRC) $(DEPS) $(FFLAGS)
+	@$(CC) $(CFLAGS) $(SANITIZE_FLAGS) -o $(NAME) $(SRC) $(DEPS) $(FFLAGS)
 	@echo
 	@echo "$(GREEN)*** Compilación con sanitize completada ***$(DEFAULT)"
 	@echo

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/21 19:56:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:16:37 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,13 @@ void	handle_zoom_keys(t_global *global, int keysym)
 
 int	handle_keypress(int keysym, t_global *global)
 {
-	int	needs_render;
+	int		needs_render;
+	char	display_char;
 
-	printf("Key pressed: %d\n", keysym);
+	display_char = ' ';
+	if (keysym >= 32 && keysym <= 126)
+		display_char = (char)keysym;
+	printf("Key pressed: %d (%c)\n", keysym, display_char);
 	needs_render = 0;
 	if (keysym == XK_Escape)
 		finish(global, SUCCESS);

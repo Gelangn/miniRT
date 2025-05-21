@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 19:59:24 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:45:28 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ typedef struct s_camera
 {
 	int				fov;
 	double			dist_scrn;
-	t_vector		pos;			// Camera position in the world
-	t_vector		dir;			// Direction vector (where cam is looking)
-	t_vector		right_axis;		// Camera right axis
-	t_vector		up_axis;		// Camera up axis
-	t_vector		forward_axis;	// Camera forward axis
-	float			roll_angle;		// New: Accumulated roll angle
+	t_vector pos;          // Camera position in the world
+	t_vector dir;          // Direction vector (where cam is looking)
+	t_vector right_axis;   // Camera right axis
+	t_vector up_axis;      // Camera up axis
+	t_vector forward_axis; // Camera forward axis
+	float roll_angle;      // New: Accumulated roll angle
 	int				init;
 }					t_camera;
 
@@ -200,6 +200,7 @@ typedef struct s_global
 	int				mouse_pressed;
 	int				last_mouse_x;
 	int				last_mouse_y;
+	int				total_pixels;
 
 	// Variables for the current ray
 	t_active_ray	c_ray;

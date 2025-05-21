@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/02 00:01:15 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:51:15 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@
 void	trace_all_rays(t_global *global)
 {
 	int			i;
-	int			total_pixels;
 	t_vector	ray_dir;
 
-	total_pixels = (WIN_W - MARGIN) * (WIN_H - MARGIN);
 	i = -1;
-	while (++i < total_pixels)
+	while (++i < global->total_pixels)
 	{
 		ray_dir.x = global->points[i].point_x;
 		ray_dir.y = global->points[i].point_y;
@@ -30,7 +28,6 @@ void	trace_all_rays(t_global *global)
 		global->c_ray.dir = ray_dir;
 		global->isecs[i] = find_closest_intersec(global);
 	}
-	printf("Total calculated rays: %d\n", total_pixels);
 }
 
 t_intersec	cal_ray(t_global *global, int px_x, int px_y)
@@ -49,9 +46,10 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 	static float	aspect_ratio;
 	static float	scrn_w;
 	static float	scrn_h;
-	static float	last_fov = -1;
+	static float	last_fov;
 	t_vector		direction;
 
+	last_fov = -1;
 	if (last_fov != global->scene.cam.fov)
 	{
 		aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);
@@ -62,7 +60,7 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 	direction.x = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
 	direction.y = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
 	direction = add(add(multiply(global->scene.cam.right_axis, direction.x),
-				multiply(global->scene.cam.up_axis, direction.y)),
-			global->scene.cam.forward_axis);
+						multiply(global->scene.cam.up_axis, direction.y)),
+					global->scene.cam.forward_axis);
 	return (norm(direction));
 }

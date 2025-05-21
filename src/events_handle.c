@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 21:27:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/02 00:20:10 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/21 19:56:33 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void	handle_movement_keys(t_global *global, int keysym, int *needs_render)
 	forward = norm(global->scene.cam.dir);
 	right = norm(cross(forward, (t_vector){0, 1, 0}));
 	up = norm(cross(right, forward));
-	if (keysym == XK_Up)
+	if (keysym == XK_space)
 		move_camera(global, forward, move_speed);
-	else if (keysym == XK_Down)
+	else if (keysym == XK_b)
 		move_camera(global, forward, -move_speed);
 	else if (keysym == XK_Left)
 		move_camera(global, right, -move_speed);
 	else if (keysym == XK_Right)
 		move_camera(global, right, move_speed);
-	else if (keysym == XK_space)
+	else if (keysym == XK_Up)
 		move_camera(global, up, move_speed);
-	else if (keysym == XK_b)
+	else if (keysym == XK_Down)
 		move_camera(global, up, -move_speed);
 	else
 		return ;
@@ -83,7 +83,7 @@ int	handle_keypress(int keysym, t_global *global)
 {
 	int	needs_render;
 
-	printf("Tecla presionada: %d\n", keysym);
+	printf("Key pressed: %d\n", keysym);
 	needs_render = 0;
 	if (keysym == XK_Escape)
 		finish(global, SUCCESS);

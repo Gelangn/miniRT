@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 23:45:07 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/21 19:15:48 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	setup_render_window(t_global *global)
 	char	*info_str;
 	char	*suffix;
 
-	suffix = "    By anavas-g";
+	suffix = " By anavas-g & bde-mada";
 	global->vars.mlx_win = new_window(global);
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);

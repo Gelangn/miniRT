@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:06:30 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:05:46 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/21 19:00:37 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_color	cal_specular(t_global *global)
 	reflect_dir = subtract(multiply(global->c_ray.normal, 2.0f
 				* dot(global->c_ray.normal, global->c_light.dir)),
 			global->c_light.dir);
-	spec = pow(fmax(0.0f, dot(view_dir, reflect_dir)), 32);
+	spec = pow(fmax(0.0f, dot(view_dir, reflect_dir)), 200);
 	white.r = 255;
 	white.g = 255;
 	white.b = 255;

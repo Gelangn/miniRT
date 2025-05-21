@@ -153,12 +153,12 @@ for each pixel do
 		else
 			set pixel color to background color
 
-En resumen, para cada pixel de la imagen (canva), generamos un rayo que va
-desde la cámara hasta el pixel, calculamos si el rayo intersecta con algún
-objeto de la escena, si intersecta calculamos la normal (vector) del objeto en
-el punto de intersección y aplicamos el modelo de iluminación para obtener el
-color del pixel, si no intersecta con ningún objeto, el color del pixel es el
-color de fondo.
+En resumen, para cada pixel de la imagen (canva), generamos un rayo (un vector)
+que va desde la cámara hasta el pixel, calculamos si el rayo intersecta (punto 
+coincide con vector rayo) con algún objeto de la escena, si intersecta
+calculamos la normal (vector) del objeto en el punto de intersección y aplicamos
+el modelo de iluminación para obtener el color del pixel, si no intersecta con
+ningún objeto, el color del pixel es el color de fondo.
 
 PASOS A SEGUIR:
 1. Crear la estructura de datos de la escena. OK

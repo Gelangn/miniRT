@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/22 21:08:47 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:20:15 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,6 @@ t_vector	get_ray_direction(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec isec);
 void		check_obj_isecs(t_global *global, t_intersec *closest_isec,
 				int obj_type);
-void		check_sp_isecs(t_global *global, t_intersec *closest_intersec);
-void		check_pl_isecs(t_global *global, t_intersec *closest_intersec);
-void		check_cy_isecs(t_global *global, t_intersec *closest_intersec);
 
 /* Collision detection */
 t_intersec	col_sp(t_global *global, int sp_id);

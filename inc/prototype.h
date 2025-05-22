@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/22 21:20:15 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:26:12 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_intersec	init_isec(void);
 
 /* Window and MLX */
 void		*new_window(t_global *global);
-int			close_window(t_global *global);
 void		set_hooks(t_global *global);
 
 /* Event handling */

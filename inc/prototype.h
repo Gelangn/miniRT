@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 21:33:27 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:08:47 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 /* Initialization */
 void		init(t_global *global);
 void		init_scene(t_global *global);
-t_intersec	init_intersec(void);
+t_intersec	init_isec(void);
 
 /* Window and MLX */
 void		*new_window(t_global *global);
@@ -94,15 +94,15 @@ void		render_single_pixel(t_global *global, int index);
 void		trace_all_rays(t_global *global);
 
 /* Ray tracing core */
-t_intersec	find_closest_intersec(t_global *global);
+t_intersec	find_closest_isec(t_global *global);
 t_intersec	cal_ray(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_ray_direction(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec isec);
-void		check_obj_intersecs(t_global *global, t_intersec *closest_intersec,
+void		check_obj_isecs(t_global *global, t_intersec *closest_isec,
 				int obj_type);
-void		check_sp_intersecs(t_global *global, t_intersec *closest_intersec);
-void		check_pl_intersecs(t_global *global, t_intersec *closest_intersec);
-void		check_cy_intersecs(t_global *global, t_intersec *closest_intersec);
+void		check_sp_isecs(t_global *global, t_intersec *closest_intersec);
+void		check_pl_isecs(t_global *global, t_intersec *closest_intersec);
+void		check_cy_isecs(t_global *global, t_intersec *closest_intersec);
 
 /* Collision detection */
 t_intersec	col_sp(t_global *global, int sp_id);
@@ -110,8 +110,8 @@ t_intersec	col_pl(t_global *global, int pl_id);
 t_intersec	col_cy(t_global *global, int cy_id);
 
 /* Cylinder intersection helpers */
-t_intersec	cal_lateral_intersec(t_global *global, int cy_id);
-t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign);
+t_intersec	cal_lateral_isec(t_global *global, int cy_id);
+t_intersec	cal_cap_isec(t_global *global, int cy_id, int cap_sign);
 t_vector	get_cap_center(t_cylinder *cyl, int cap_sign);
 t_vector	get_cap_normal(t_cylinder *cyl, int cap_sign);
 void		init_lateral_isec_vars(t_global *global, int cy_id);
@@ -127,7 +127,7 @@ void		clamp_color(t_color *color);
 
 /* Lighting and shading */
 t_color		get_object_color(t_global *global);
-int			is_valid_intersec(t_global *global);
+int			is_valid_isec(t_global *global);
 void		prepare_lighting_data(t_global *global);
 int			cal_shadow(t_global *global);
 t_color		cal_ambient(t_global *global);

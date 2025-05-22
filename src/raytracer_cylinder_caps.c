@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 00:10:10 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/02 00:10:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:10:53 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,14 @@ int	validate_cap_hit(t_global *global, int cy_id, float t, t_intersec *isec)
  * Calculates intersection between a ray and a cylinder cap
  * Returns intersection information if valid, otherwise default values
  */
-t_intersec	cal_cap_intersec(t_global *global, int cy_id, int cap_sign)
+t_intersec	cal_cap_isec(t_global *global, int cy_id, int cap_sign)
 {
 	t_intersec	isec;
 	t_cyl_lat	*vars;
 	float		denom;
 	float		t;
 
-	isec = init_intersec();
+	isec = init_isec();
 	vars = &global->current_cyl_vars;
 	init_cap_vars(global, cy_id, cap_sign);
 	denom = dot(vars->normal, global->c_ray.dir);

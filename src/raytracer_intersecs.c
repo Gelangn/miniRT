@@ -6,27 +6,27 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:59:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/02 00:20:43 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:05:23 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-t_intersec	find_closest_intersec(t_global *global)
+t_intersec	find_closest_isec(t_global *global)
 {
-	t_intersec	closest_intersec;
+	t_intersec	closest_isec;
 
-	closest_intersec = init_intersec();
+	closest_isec = init_isec();
 	if (global->scene.num_sp > 0)
-		check_obj_intersecs(global, &closest_intersec, 0);
+		check_obj_isecs(global, &closest_isec, 0);
 	if (global->scene.num_pl > 0)
-		check_obj_intersecs(global, &closest_intersec, 1);
+		check_obj_isecs(global, &closest_isec, 1);
 	if (global->scene.num_cy > 0)
-		check_obj_intersecs(global, &closest_intersec, 2);
-	return (closest_intersec);
+		check_obj_isecs(global, &closest_isec, 2);
+	return (closest_isec);
 }
 
-int	is_valid_intersec(t_global *global)
+int	is_valid_isec(t_global *global)
 {
 	t_intersec	isec;
 
@@ -52,7 +52,7 @@ static int	get_max_objects(t_global *global, int obj_type)
 	return (0);
 }
 
-void	check_obj_intersecs(t_global *global, t_intersec *closest, int obj_type)
+void	check_obj_isecs(t_global *global, t_intersec *closest, int obj_type)
 {
 	int			i;
 	int			max_objs;

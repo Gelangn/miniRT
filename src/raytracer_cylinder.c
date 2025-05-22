@@ -6,13 +6,13 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:32:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/02 00:19:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:57:34 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
+t_intersec	cal_lateral_isec(t_global *global, int cy_id)
 {
 	t_intersec	isec;
 	t_cyl_lat	*vars;
@@ -20,7 +20,7 @@ t_intersec	cal_lateral_intersec(t_global *global, int cy_id)
 	float		a;
 	float		sqrt_discr;
 
-	isec = init_intersec();
+	isec = init_isec();
 	init_lateral_isec_vars(global, cy_id);
 	vars = &global->current_cyl_vars;
 	a = dot(vars->dir_perp, vars->dir_perp);
@@ -44,7 +44,7 @@ t_intersec	process_lateral_hit(t_global *global, int cy_id, float t)
 	t_cylinder	*cyl;
 	t_cyl_lat	*vars;
 
-	isec = init_intersec();
+	isec = init_isec();
 	if (t < 0)
 		return (isec);
 	cyl = &global->scene.cyls[cy_id];

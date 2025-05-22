@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:33:03 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 18:02:11 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:07:17 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_intersec	col_sp(t_global *global, int sp_id)
 	float		abc[3];
 	float		t[2];
 
-	isec = init_intersec();
+	isec = init_isec();
 	oc = subtract(global->c_ray.origin, global->scene.spheres[sp_id].center);
 	abc[0] = dot(global->c_ray.dir, global->c_ray.dir);
 	abc[1] = 2.0 * dot(oc, global->c_ray.dir);
@@ -60,7 +60,7 @@ t_intersec	col_pl(t_global *global, int pl_id)
 	t_plane		*plane;
 
 	plane = &global->scene.planes[pl_id];
-	isec = init_intersec();
+	isec = init_isec();
 	denom = dot(plane->normal, global->c_ray.dir);
 	if (comp_floats(denom, 0) || denom > 0)
 		return (isec);
@@ -82,20 +82,20 @@ t_intersec	col_pl(t_global *global, int pl_id)
 t_intersec	col_cy(t_global *global, int cy_id)
 {
 	t_intersec	isec;
-	t_intersec	lateral_intersec;
-	t_intersec	top_cap_intersec;
-	t_intersec	bottom_cap_intersec;
+	t_intersec	lateral_isec;
+	t_intersec	top_cap_isec;
+	t_intersec	bottom_cap_isec;
 
-	isec = init_intersec();
-	lateral_intersec = cal_lateral_intersec(global, cy_id);
-	top_cap_intersec = cal_cap_intersec(global, cy_id, 1);
-	bottom_cap_intersec = cal_cap_intersec(global, cy_id, -1);
-	if (lateral_intersec.dist < isec.dist)
-		isec = lateral_intersec;
-	if (top_cap_intersec.dist < isec.dist)
-		isec = top_cap_intersec;
-	if (bottom_cap_intersec.dist < isec.dist)
-		isec = bottom_cap_intersec;
+	isec = init_isec();
+	lateral_isec = cal_lateral_isec(global, cy_id);
+	top_cap_isec = cal_cap_isec(global, cy_id, 1);
+	bottom_cap_isec = cal_cap_isec(global, cy_id, -1);
+	if (lateral_isec.dist < isec.dist)
+		isec = lateral_isec;
+	if (top_cap_isec.dist < isec.dist)
+		isec = top_cap_isec;
+	if (bottom_cap_isec.dist < isec.dist)
+		isec = bottom_cap_isec;
 	if (isec.dist < INFINITY)
 	{
 		isec.obj_type = 2;

@@ -50,7 +50,6 @@ SRC_FILES = camera_controls.c \
 		raytracer_core.c \
 		raytracer_cylinder_caps.c \
 		raytracer_cylinder.c \
-		raytracer_intersecs_objs.c \
 		raytracer_intersecs.c \
 		raytracer_lighting.c \
 		raytracer_normals.c \

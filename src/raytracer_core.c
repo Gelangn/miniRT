@@ -6,13 +6,13 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/22 20:56:32 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:09:08 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-/* Core of the raytracing, calls cal_ray and in turn get_ray_direction */
+/* Core of the raytracing, get_ray_direction */
 void	trace_all_rays(t_global *global)
 {
 	int			i;
@@ -30,13 +30,6 @@ void	trace_all_rays(t_global *global)
 	}
 }
 
-t_intersec	cal_ray(t_global *global, int px_x, int px_y)
-{
-	global->c_ray.origin = global->scene.cam.pos;
-	global->c_ray.dir = get_ray_direction(global, px_x, px_y);
-	return (find_closest_isec(global));
-}
-
 /**
  * Calculates ray direction based on pixel coordinates and camera settings
  * Uses screen dimensions and camera orientation to determine ray vector
@@ -49,7 +42,6 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 	static float	last_fov;
 	t_vector		direction;
 
-	last_fov = -1;
 	if (last_fov != global->scene.cam.fov)
 	{
 		aspect_ratio = (float)(WIN_W - MARGIN) / (float)(WIN_H - MARGIN);

@@ -6,13 +6,19 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 16:19:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:41:49 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-/* Core of the raytracing, get_ray_direction */
+/**
+ * Performs ray tracing for all pixels in the scene
+ * For each pixel, gets the ray direction and finds the closest intersection
+ * Stores intersection results in the global structure for rendering
+ * 
+ * @param global Structure containing scene data and ray information
+ */
 void	trace_all_rays(t_global *global)
 {
 	int			i;
@@ -30,6 +36,13 @@ void	trace_all_rays(t_global *global)
 	}
 }
 
+/**
+ * Pre-calculates ray directions for all pixels in the scene
+ * This optimization avoids recalculating ray directions during rendering
+ * Sets up camera axes and stores ray information in global points array
+ * 
+ * @param global Structure containing scene data and camera settings
+ */
 void	precal_rays(t_global *global)
 {
 	int	px_x;
@@ -53,6 +66,15 @@ void	precal_rays(t_global *global)
 	}
 }
 
+/**
+ * Calculates ray information for a specific pixel
+ * Stores pixel coordinates and ray direction for later use
+ * 
+ * @param global Structure containing scene data
+ * @param px_x X-coordinate of the pixel in screen space
+ * @param px_y Y-coordinate of the pixel in screen space
+ * @param idx Index in the points array where data will be stored
+ */
 void	cal_ray_for_pixel(t_global *global, int px_x, int px_y, int idx)
 {
 	t_vector	dir;
@@ -67,7 +89,14 @@ void	cal_ray_for_pixel(t_global *global, int px_x, int px_y, int idx)
 
 /**
  * Calculates ray direction based on pixel coordinates and camera settings
- * Uses screen dimensions and camera orientation to determine ray vector
+ * Transforms screen coordinates to world space direction vector
+ * Uses camera's field of view and orientation to determine accurate ray paths
+ * Includes caching optimization for repeated FOV values
+ * 
+ * @param global Structure containing scene and camera information
+ * @param px_x X-coordinate of the pixel in screen space
+ * @param px_y Y-coordinate of the pixel in screen space
+ * @return Normalized vector representing the ray direction in world space
  */
 t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 {
@@ -87,7 +116,7 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 	direction.x = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
 	direction.y = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
 	direction = add(add(multiply(global->scene.cam.right_axis, direction.x),
-						multiply(global->scene.cam.up_axis, direction.y)),
-					global->scene.cam.forward_axis);
+				multiply(global->scene.cam.up_axis, direction.y)),
+			global->scene.cam.forward_axis);
 	return (norm(direction));
 }

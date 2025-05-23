@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/22 20:56:02 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:35:43 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,15 @@ void	init_lateral_isec_vars(t_global *global, int cy_id)
 	global->current_cyl_vars.axis = norm(cyl->orientation);
 	global->current_cyl_vars.oc = subtract(global->c_ray.origin, cyl->base);
 	global->current_cyl_vars.dir_dot_axis = dot(global->c_ray.dir,
-												global->current_cyl_vars.axis);
+			global->current_cyl_vars.axis);
 	global->current_cyl_vars.oc_dot_axis = dot(global->current_cyl_vars.oc,
-												global->current_cyl_vars.axis);
+			global->current_cyl_vars.axis);
 	global->current_cyl_vars.dir_perp = subtract(global->c_ray.dir,
-													multiply(global->current_cyl_vars.axis,
-															global->current_cyl_vars.dir_dot_axis));
+			multiply(global->current_cyl_vars.axis,
+				global->current_cyl_vars.dir_dot_axis));
 	global->current_cyl_vars.oc_perp = subtract(global->current_cyl_vars.oc,
-												multiply(global->current_cyl_vars.axis,
-															global->current_cyl_vars.oc_dot_axis));
+			multiply(global->current_cyl_vars.axis,
+				global->current_cyl_vars.oc_dot_axis));
 }
 
 void	check_scene(t_global *global, t_scene *scene)

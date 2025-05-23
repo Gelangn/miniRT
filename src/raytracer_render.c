@@ -6,12 +6,19 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:20:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 16:13:43 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:43:13 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
+/**
+ * Calculates and updates the camera coordinate system
+ * Sets the forward, right, and up axis vectors based on camera orientation
+ * Also handles roll angle adjustments if applicable
+ * 
+ * @param global Structure containing scene and camera information
+ */
 void	precal_camera_axis(t_global *global)
 {
 	t_camera	*cam;

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/21 20:46:16 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:36:28 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ static void	setup_render_window(t_global *global)
 		finish(global, ERR_WIN);
 	render(global);
 	mlx_put_image_to_window(global->vars.mlx_conn, global->vars.mlx_win,
-			global->img.img, MARGIN / 2, MARGIN / 2);
+		global->img.img, MARGIN / 2, MARGIN / 2);
 	info_str = ft_strjoin(global->scene.file_path, suffix);
 	if (!info_str)
 		finish(global, ERR_MEM);
 	mlx_string_put(global->vars.mlx_conn, global->vars.mlx_win, WIN_W * .26,
-			WIN_H * .98, MAGENTA, info_str);
+		WIN_H * .98, MAGENTA, info_str);
 	free(info_str);
 }
 

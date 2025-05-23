@@ -6,12 +6,20 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:29:26 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/22 21:24:27 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:38:59 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
+/**
+ * Creates a new window and initializes the image buffer
+ * Sets up the MLX window with the specified dimensions and title
+ * Also allocates memory for the image that will be rendered
+ * 
+ * @param global Structure containing MLX connection and image data
+ * @return Pointer to the created window
+ */
 void	*new_window(t_global *global)
 {
 	void	*win;

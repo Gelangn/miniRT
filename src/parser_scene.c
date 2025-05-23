@@ -6,13 +6,21 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:23:44 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:45:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-// Function to parse ambient light
+/**
+ * Parses ambient lighting information from a scene file line
+ * Extracts intensity and color values for the global ambient illumination
+ * Ensures ambient lighting is defined only once in the scene
+ * 
+ * @param global Structure containing scene data and parsing state
+ * @param line String containing ambient light definition 
+ * 				(format: "A intensity R,G,B")
+ */
 void	parse_ambient(t_global *global, char *line)
 {
 	char	**tokens;
@@ -32,7 +40,14 @@ void	parse_ambient(t_global *global, char *line)
 	dbl_free(tokens);
 }
 
-// Function to parse camera
+/**
+ * Parses camera definition from a scene file line
+ * Sets up camera position, orientation vector, and field of view
+ * Validates that camera is only defined once per scene
+ * 
+ * @param global Structure containing scene data and parsing state
+ * @param line String containing camera definition (format: "C pos ori fov")
+ */
 void	parse_cam(t_global *global, char *line)
 {
 	char	**tokens;
@@ -54,7 +69,14 @@ void	parse_cam(t_global *global, char *line)
 	dbl_free(tokens);
 }
 
-// Function to parse light
+/**
+ * Parses light source information from a scene file line
+ * Extracts position and brightness intensity for the scene's light source
+ * Ensures light source is defined only once in the scene
+ * 
+ * @param global Structure containing scene data and parsing state
+ * @param line String containing light definition (format: "L pos intensity")
+ */
 void	parse_light(t_global *global, char *line)
 {
 	char	**tokens;

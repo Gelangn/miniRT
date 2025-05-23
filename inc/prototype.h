@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 16:03:23 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:20:53 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void		render_single_pixel(t_global *global, int index);
 void		trace_all_rays(t_global *global);
 
 /* Ray tracing core */
+void		cal_ray_for_pixel(t_global *global, int px_x, int px_y, int idx);
 t_intersec	find_closest_isec(t_global *global);
 t_vector	get_ray_direction(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec isec);

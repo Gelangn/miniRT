@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/21 20:51:55 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:16:02 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ void	render(t_global *global)
 		global->isecs = NULL;
 		finish(global, ERR_IMG);
 	}
-	print_info(global);
 	trace_all_rays(global);
 	render_all_pixels(global);
+	print_info(global);
 	free(global->isecs);
 	global->isecs = NULL;
 }

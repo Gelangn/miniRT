@@ -1,5 +1,92 @@
 # Optimized Ray Tracer (miniRT)
 
+## Compilación y Ejecución
+
+### Requisitos del Sistema
+- **Linux**: X11, Xext libraries
+- **macOS**: OpenGL, AppKit frameworks
+- **Compilador**: gcc con soporte para C99
+- **Make**: GNU Make o compatible
+
+### Comandos de Compilación
+
+```bash
+# Compilación normal
+make
+
+# Compilación con AddressSanitizer (para debugging)
+make sanitize
+
+# Compilación en modo debug
+make debug
+
+# Limpiar archivos objeto
+make clean
+
+# Limpiar completamente (archivos objeto + ejecutable)
+make fclean
+
+# Recompilar desde cero
+make re
+```
+
+### Ejecución
+
+```bash
+# Ejecutar con archivo de escena
+./miniRT scenes/example.rt
+
+# Ejemplo con escena básica
+./miniRT scenes/sphere.rt
+```
+
+### Formato de Archivos de Escena (.rt)
+
+Los archivos de escena deben seguir este formato:
+
+```
+A 0.2 255,255,255                    # Luz ambiente: intensidad R,G,B
+C -50,0,20 0,0,1 70                  # Cámara: posición orientación FOV
+L -40,0,30 0.7 255,255,255           # Luz: posición intensidad R,G,B
+
+sp 0,0,20 20 255,0,0                 # Esfera: centro radio R,G,B
+pl 0,0,0 0,1,0 255,255,255           # Plano: punto normal R,G,B
+cy 50,0,20.6 0,0,1.0 14.2 21.42 10,0,255  # Cilindro: centro eje diámetro altura R,G,B
+```
+
+### Controles Interactivos
+
+- **Flechas**: Mover cámara (adelante/atrás/izquierda/derecha/arriba/abajo)
+- **Espacio/B**: Mover adelante/atrás
+- **WASD**: Rotar cámara (pitch/yaw)
+- **Q/E**: Rotar cámara (roll)
+- **+/-**: Zoom (ajustar campo de visión)
+- **Ratón + clic izq**: Mirar alrededor
+- **Scroll del ratón**: Zoom
+- **P**: Capturar pantalla (guarda como BMP)
+- **ESC**: Salir del programa
+
+### Resolución de Problemas
+
+#### Error de librerías en Linux:
+```bash
+sudo apt-get install libx11-dev libxext-dev
+```
+
+#### Error de compilación MLX:
+```bash
+# Limpiar y recompilar
+make fclean
+make
+```
+
+#### Problemas de permisos:
+```bash
+chmod +x miniRT
+```
+
+# Optimized Ray Tracer (miniRT)
+
 This diagram reflects the actual execution flow after code optimization and cleanup:
 
 ## 1. Initialization

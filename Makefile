@@ -31,38 +31,37 @@ endif
 DEPS = $(LIB)/libft.a $(LIB_MLX)/libmlx.a
 
 # Archivos fuente
-SRC_FILES = camera_controls.c \
-		colisions.c \
-		color.c \
-		events_handle.c \
-		events_mouse.c \
-		events_rotation.c \
-		events_screenshot.c \
-		events_utils.c \
-		freeing.c \
-		init_scene.c \
-		matrix_operations.c \
-		matrix.c \
-		minirt.c \
-		parser_objects.c \
-		parser_scene.c \
-		parser_scene_utils.c \
-		raytracer_color.c \
-		raytracer_core.c \
-		raytracer_cylinder_caps.c \
-		raytracer_cylinder.c \
-		raytracer_intersecs.c \
-		raytracer_lighting.c \
-		raytracer_normals.c \
-		raytracer_objects.c \
-		raytracer_render.c \
-		render.c \
-		save.c \
-		scene_reader.c \
-		shadows.c \
-		signal_handlers.c \
-		utils.c \
-		window.c \
+SRC_FILES = 	camera_controls.c \
+				color.c \
+				events_handle.c \
+				events_mouse.c \
+				events_rotation.c \
+				events_screenshot.c \
+				events_utils.c \
+				freeing.c \
+				init_scene.c \
+				matrix_operations.c \
+				matrix.c \
+				minirt.c \
+				parser_objects.c \
+				parser_scene.c \
+				parser_scene_utils.c \
+				raytracer_color.c \
+				raytracer_core.c \
+				raytracer_cylinder_caps.c \
+				raytracer_cylinder.c \
+				raytracer_intersecs.c \
+				raytracer_lighting.c \
+				raytracer_normals.c \
+				raytracer_objects.c \
+				raytracer_render.c \
+				render.c \
+				save.c \
+				scene_reader.c \
+				shadows.c \
+				signal_handlers.c \
+				utils.c \
+				window.c
 
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(OBJ_FILES))

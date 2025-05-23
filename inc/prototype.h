@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 16:20:53 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:23:17 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,7 @@ t_intersec	col_cy(t_global *global, int cy_id);
 /* Cylinder intersection helpers */
 t_intersec	cal_lateral_isec(t_global *global, int cy_id);
 t_intersec	cal_cap_isec(t_global *global, int cy_id, int cap_sign);
-t_vector	get_cap_center(t_cylinder *cyl, int cap_sign);
-t_vector	get_cap_normal(t_cylinder *cyl, int cap_sign);
 void		init_lateral_isec_vars(t_global *global, int cy_id);
-void		get_isec_points(t_global *global, float a, float b, float discr);
 t_intersec	check_lateral_hits(t_global *global, int cy_id);
 t_intersec	process_lateral_hit(t_global *global, int cy_id, float t);
 

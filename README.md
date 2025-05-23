@@ -1,11 +1,12 @@
 # Optimized Ray Tracer (miniRT)
 
-This diagram reflects the execution flow with all implemented optimizations:
+This diagram reflects the actual execution flow after code optimization and cleanup:
 
 ## 1. Initialization
 - **main** → Entry point, verifies arguments
   - **check_file_extension** → Validates that it's an .rt file
   - **init** → Initializes MLX and global structure
+    - **total_pixels** → Calculates and stores (WIN_W - MARGIN) * (WIN_H - MARGIN)
   - **init_scene** → Prepares memory for objects (spheres, planes, cylinders)
 
 ## 2. Scene Parsing
@@ -19,96 +20,109 @@ This diagram reflects the execution flow with all implemented optimizations:
 ## 3. Ray Tracing Process
 - **render** → Coordinates the rendering process
   - **precal_camera_axis** → Calculates camera's orthonormal basis vectors
-  - **precal_rays** → Pre-calculates all rays directions for efficiency
+  - **precal_rays** → Pre-calculates all ray directions for efficiency
+    - **cal_ray_for_pixel** → Calculates ray data for each pixel
+    - **get_ray_direction** → Computes world-space ray direction (with FOV caching)
   - **trace_all_rays** → For each screen pixel:
-    - **find_closest_intersec** → Finds intersections using global structure
-      - **check_obj_intersecs** → Tests intersections with all object types
-        - **col_sp** → Calculates intersection with a sphere
-        - **col_pl** → Calculates intersection with a plane
-        - **col_cy** → Calculates intersection with a cylinder
+    - **find_closest_isec** → Finds intersections using optimized structure
+      - **check_obj_isecs** → Tests intersections with all object types (unified function)
+        - **col_sp** → Calculates intersection with spheres
+        - **col_pl** → Calculates intersection with planes
+        - **col_cy** → Calculates intersection with cylinders
   - **render_all_pixels** → Colors pixels according to intersections
+    - **render_single_pixel** → Processes individual pixel
     - **cal_lighting** → Calculates color with illumination
       - **get_surface_normal** → Obtains normal at intersection point
       - **cal_shadow** → Checks if point is in shadow
       - **cal_ambient/diffuse/specular** → Light components
+      - **clamp_color** → Ensures RGB values stay within [0-255] range
+  - **print_info** → Displays camera and scene statistics (centralized output)
 
 ## 4. Output and Visualization
-- **mlx_put_image_to_window** → Displays initial image in window
+- **new_window** → Creates MLX window and image buffer
+- **pixel_put** → Places individual pixels with boundary checking
+- **mlx_put_image_to_window** → Displays rendered image
 - **set_hooks** → Sets up event handlers
-  - **handle_keypress** → Handles keys for movement and saving image
-    - **handle_movement_keys** → Camera translation (arrow keys)
+  - **handle_keypress** → Handles keyboard input
+    - **handle_movement_keys** → Camera translation (arrow keys, space/B)
     - **handle_rotation_keys** → Camera rotation (WASD, QE)
+      - **apply_standard_rotation** → Pitch/yaw rotation
+      - **apply_roll_rotation** → Roll rotation
     - **handle_zoom_keys** → Adjusts FOV (+/-)
     - **handle_screenshot** → Saves screenshot (P key)
   - **handle_mouse_move** → Camera rotation with mouse
+  - **mouse_press_hook/mouse_release_hook** → Mouse button handling
+  - **handle_mouse_scroll** → FOV adjustment with scroll wheel
   - **window_close_handler** → Proper window closing
 
-## 5. Event Handling and Finalization
+## 5. Color Operations
+- **color_scale** → Multiplies RGB components by a factor
+- **color_add** → Combines two colors component-wise
+- **get_object_color** → Retrieves base color from intersected object
+- **save_ray_state/restore_ray_state** → Ray state preservation for shadows
+- **rgb_to_int** → Converts RGB color to integer format
+
+## 6. Event Handling and Finalization
 - **mlx_loop** → Starts main event loop
 - **finish** → Cleans resources and exits program
   - **free_global** → Frees all allocated memory
     - **free_scene** → Frees scene objects
     - **mlx_destroy_image/window/display** → Cleans MLX resources
 
-## 6. Mathematical Formulas Used
-
-### Ray Equation
-```
-Ray(t) = Origin + t * Direction
-```
-
-### Ray-Sphere Intersection
-```
-(Direction·Direction)t² + 2(Origin-Center·Direction)t + (Origin-Center)·(Origin-Center) - radius² = 0
-```
-
-### Ray-Plane Intersection
-```
-t = ((PlanePoint - RayOrigin)·PlaneNormal) / (RayDirection·PlaneNormal)
-```
-
-### Ray-Cylinder Intersection
-For the lateral surface:
-```
-a = |Direction_perpendicular|²
-b = 2(Direction_perpendicular·OriginToCenter_perpendicular)
-c = |OriginToCenter_perpendicular|² - radius²
-discriminant = b² - 4ac
-```
-
-### Vector Rotation (Rodrigues Formula)
-```
-v_rot = v*cos(θ) + (k×v)*sin(θ) + k(k·v)(1-cos(θ))
-```
-Where:
-- v is the vector to rotate
-- k is the normalized axis of rotation
-- θ is the angle of rotation
-
-### Lighting Calculation
-- **Ambient**: `Color * AmbientIntensity`
-- **Diffuse**: `Color * LightIntensity * max(0, Normal·LightDirection)`
-- **Specular**: `White * LightIntensity * max(0, ViewDirection·ReflectionDirection)^shininess`
-
 ## 7. Camera Controls
 
-- **Arrow keys**: Move camera position (forward/backward/left/right)
-- **Space/B**: Move camera position up/down
+- **Arrow keys**: Move camera position (forward/backward/left/right/up/down)
+- **Space/B**: Move camera position forward/backward
 - **WASD**: Rotate camera (pitch/yaw)
 - **Q/E**: Roll camera (rotation around viewing direction)
 - **+/-**: Zoom in/out (adjusts field of view)
-- **Mouse drag**: Look around
-- **P**: Take screenshot
+- **Mouse drag**: Look around (with left button pressed)
+- **Mouse scroll**: Zoom in/out
+- **P**: Take screenshot (saves as BMP)
 - **ESC**: Exit program
 
-## 8. Advanced Technical Features
+## 8. Code Optimizations Implemented
 
-- **Orthonormal basis vectors**: Camera uses three perpendicular unit vectors (right_axis, up_axis, forward_axis) for precise orientation
-- **Ray precomputation**: All ray directions are calculated once for efficiency
+- **Unified intersection testing**: Single `check_obj_isecs` function handles all object types
+- **Ray precomputation**: All ray directions calculated once in `precal_rays`
+- **Centralized pixel counting**: `total_pixels` stored in global structure
+- **Memory management**: Proper allocation/deallocation in render cycle
+- **Static variables**: Cached calculations in `get_ray_direction` for performance
+- **Modular architecture**: Separated concerns into focused modules
+- **Dead code elimination**: Removed unused functions and redundant implementations
+- **Orthonormal basis vectors**: Camera uses three perpendicular unit vectors for precise orientation
 - **Roll angle preservation**: Camera maintains roll orientation between renders
-- **Dynamic resolution**: Supports different window sizes (1024x768 recommended)
-- **Robust intersection testing**: Handles edge cases for all geometric primitives
-- **BMP screenshot capability**: Saves renders as bitmap images
+
+## 9. Project Structure
+
+### Source Files (src/)
+- **Core**: `minirt.c`, `init_scene.c`, `render.c`
+- **Ray Tracing**: `raytracer_core.c`, `raytracer_render.c`, `raytracer_intersecs.c`
+- **Objects**: `raytracer_objects.c`, `raytracer_cylinder.c`, `raytracer_cylinder_caps.c`
+- **Graphics**: `raytracer_color.c`, `raytracer_lighting.c`, `raytracer_normals.c`
+- **Parsing**: `scene_reader.c`, `parser_scene.c`, `parser_objects.c`, `parser_scene_utils.c`
+- **Events**: `events_handle.c`, `events_mouse.c`, `events_rotation.c`, `events_utils.c`
+- **Utilities**: `utils.c`, `color.c`, `matrix.c`, `matrix_operations.c`
+- **System**: `window.c`, `camera_controls.c`, `freeing.c`, `signal_handlers.c`
+- **Export**: `save.c`, `events_screenshot.c`
+- **Effects**: `shadows.c`
+
+### Headers (inc/)
+- **minirt.h**: Main definitions and constants
+- **struct.h**: All data structures
+- **prototype.h**: Function prototypes
+
+## 10. Technical Features
+
+- **Dynamic memory management**: Efficient allocation/deallocation
+- **Cross-platform compatibility**: Supports Linux, macOS, FreeBSD
+- **Interactive camera**: Full 6DOF movement and rotation
+- **Real-time rendering**: Optimized for smooth interaction
+- **Screenshot capability**: BMP export functionality
+- **Robust error handling**: Comprehensive validation and cleanup
+- **Mathematical precision**: Proper floating-point comparisons with epsilon
+- **Modular design**: Clean separation of responsibilities
+- **Centralized information display**: All debug info in `print_info` function
 
 # Mathematical Expressions Used in miniRT
 

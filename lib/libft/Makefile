@@ -92,23 +92,24 @@ all: $(NAME)
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
-	@echo "\033[H\033[J"
+#	@echo "\033[H\033[J"
 	@echo "$(RED)*** Compilando libft ***$(DEFAULT)"
 	@gcc $(CFLAGS) -c $(SRC)
 	@ar rcs $@ $^
 
 # Regla para construir el archivo estático con bonus
 bonus:
-	@echo "\033[H\033[J"
+#	@echo "\033[H\033[J"
 	@echo "$(RED)*** Compilando BONUS libft ***$(DEFAULT)"
 	@gcc $(CFLAGS) -c $(BONUS_SRC)
 	@ar rcs $(NAME) $(BONUS_OBJ)
 
 # Regla para limpiar archivos objeto
 clean:
-	@echo "\033[H\033[J"
+#	@echo "\033[H\033[J"
 	@echo "$(RED)*** Limpiando LIBFT ***$(DEFAULT)"
 	@rm -f $(OBJ) $(BONUS_OBJ)
+#	@echo "\033[H\033[J"
 	@echo "$(RED)*** LIBFT Limpiada ***$(DEFAULT)"
 
 # Regla para limpiar archivos objeto y el archivo estático

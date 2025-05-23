@@ -108,12 +108,12 @@ obj_dir:
 # Regla de compilación
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c 
 	@$(CC) $(CFLAGS) -o $@ -c $<
-	@echo "\033[H\033[J"
+#	@echo "\033[H\033[J"
 	@echo "$(GREEN)*** Compilación de $< completada ***$(DEFAULT)"
 
 # Regla para construir el archivo estático
 $(NAME): $(OBJ)
-	@echo "\033[H\033[J"
+#	@echo "\033[H\033[J"
 	@echo "$(YELLOW)\n*** Creando ejecutable ***$(DEFAULT)"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(DEPS) $(FFLAGS)
 	@echo "$(GREEN)*** Compilación completada ***$(DEFAULT)"
@@ -121,16 +121,16 @@ $(NAME): $(OBJ)
 libs:
 	@echo "\033[H\033[J"
 	@echo "$(GREY)*** Compilación de las librerías ***$(DEFAULT)"
-	@echo "\033[H\033[J"
-	@echo "$(BLUE)*** PASO 1 - Comienzo compilación libft ***$(DEFAULT)"
-	@make -C $(LIB) all
-	@echo "\033[H\033[J"
-	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS libft ***$(DEFAULT)"
-	@make -C $(LIB) bonus
+#	@echo "\033[H\033[J"
+	@echo "$(BLUE)*** PASO 1 - Comienzo compilación LIBFT ***$(DEFAULT)"
+	@make --no-print-directory -C $(LIB) all >/dev/null
+#	@echo "\033[H\033[J"
+	@echo "$(BLUE)*** PASO 2 - Comienzo compilación BONUS LIBFT ***$(DEFAULT)"
+	@make --no-print-directory -C $(LIB) bonus >/dev/null
 	@echo "$(GREEN)*** Compilación libft completada ***$(DEFAULT)"
-	@echo "\033[H\033[J"
-	@echo "$(BLUE)*** PASO 3 - Comienzo compilación mlx ***$(DEFAULT)"
-	@make -C $(LIB_MLX)
+#	@echo "\033[H\033[J"
+	@echo "$(BLUE)*** PASO 3 - Comienzo compilación MLX ***$(DEFAULT)"
+	@make --no-print-directory -C $(LIB_MLX) 2>/dev/null >/dev/null
 	@echo "$(GREEN)*** Compilación de las librerías completada ***$(DEFAULT)"
 
 # Regla para compilar en modo DEBUG
@@ -167,6 +167,7 @@ sanitize:
 
 # Regla para limpiar archivos objeto
 clean:
+	@echo "\033[H\033[J"
 	@make -C $(LIB) clean
 	@make -C $(LIB_MLX) clean
 	@rm -rf $(OBJ_DIR)

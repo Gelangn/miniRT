@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracer_normals.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:54:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:33:41 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:47:22 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,23 @@ t_vector	get_pl_normal(t_global *global, int pl_id)
 
 t_vector	get_cy_normal(t_global *global, t_intersec isec)
 {
-	t_cylinder	cyl;
-	t_vector	axis;
-	float		hit_h;
-	t_vector	ctr_h;
+    t_cylinder	cyl;
+    t_vector	axis;
+    float		hit_h;
+    t_vector	ctr_h;
 
-	cyl = global->scene.cyls[isec.obj_index];
-	axis = norm(cyl.orientation);
-	hit_h = dot(subtract(isec.point, cyl.base), axis);
-	if (comp_floats(hit_h, 0))
-		return (multiply(axis, -1));
-	else if (comp_floats(hit_h, cyl.height))
-		return (axis);
-	else
-	{
-		ctr_h = add(cyl.base, multiply(axis, hit_h));
-		return (norm(subtract(isec.point, ctr_h)));
-	}
+    cyl = global->scene.cyls[isec.obj_index];
+    axis = norm(cyl.axis);  // Changed from cyl.orientation to cyl.axis
+    hit_h = dot(subtract(isec.point, cyl.base), axis);
+    if (comp_floats(hit_h, 0))
+        return (multiply(axis, -1));
+    else if (comp_floats(hit_h, cyl.height))
+        return (axis);
+    else
+    {
+        ctr_h = add(cyl.base, multiply(axis, hit_h));
+        return (norm(subtract(isec.point, ctr_h)));
+    }
 }
 
 t_vector	get_surface_normal(t_global *global, t_intersec isec)

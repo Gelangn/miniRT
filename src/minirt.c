@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 16:36:28 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/18 19:29:00 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static t_global	*initialize_global(t_global *global, int argc, char **argv)
 	init_scene(global);
 	global->scene.file_path = argv[1];
 	printf("Opening file: %s\n", global->scene.file_path);
+	printf("Hello\n");
 	read_scene(global);
 	return (global);
 }

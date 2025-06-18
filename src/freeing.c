@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 23:49:08 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/18 19:22:15 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ void	dbl_free(char **ptr)
 	while (*temp)
 	{
 		free(*temp);
+		*temp = NULL;
 		temp++;
 	}
 	free(ptr);
+	ptr = NULL;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 23:38:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:39:51 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define POINT 1
 
 # define DSCR 1.0f      // Distance from the camera to the screen
-# define EPSILON 0.0001 // Epsilon for floating point comparison
+# define EPSILON 0.001f // Epsilon for floating point comparison
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0
@@ -105,5 +105,9 @@
 # define ERR_IMG "\nError: Image not initialized correctly\n"
 # define ERR_MLX "\nError initializing MLX\n"
 # define ERR_SAVE "\nError saving BMP\n"
+
+# define MAX_RAY_DEPTH 8
+# define MIN_CONTRIBUTION 0.01f
+# define AIR_REFRACTIVE_INDEX 1.0f
 
 #endif

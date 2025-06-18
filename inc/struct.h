@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/21 20:45:28 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:46:55 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,25 +96,34 @@ typedef struct s_intersec
 
 typedef struct s_sphere
 {
-	float			radius;
-	t_vector		center;
-	t_color			color;
+    t_vector		center;
+    float			radius;
+    t_color			color;
+    float			transparency;
+    float			reflectivity;
+    float			refractive_index;
 }					t_sphere;
 
 typedef struct s_plane
 {
-	t_vector		point;
-	t_vector		normal;
-	t_color			color;
+    t_vector		point;
+    t_vector		normal;
+    t_color			color;
+    float			transparency;
+    float			reflectivity;
+    float			refractive_index;
 }					t_plane;
 
 typedef struct s_cylinder
 {
-	t_vector		base;
-	t_vector		orientation;
-	float			radius;
-	float			height;
-	t_color			color;
+    t_vector		base;
+    t_vector		axis;
+    float			radius;
+    float			height;
+    t_color			color;
+    float			transparency;
+    float			reflectivity;
+    float			refractive_index;
 }					t_cylinder;
 
 typedef struct s_cyl_lat
@@ -167,18 +176,27 @@ typedef struct s_scene
 
 typedef struct s_ray_state
 {
-	t_vector		origin;
-	t_vector		dir;
-	t_intersec		isec;
+    t_vector		origin;
+    t_vector		dir;
+    t_intersec		isec;
 }					t_ray_state;
+
+typedef struct s_ray_result
+{
+    t_vector		origin;
+    t_vector		direction;
+    float			contribution;  // How much this ray contributes to final color
+    int				depth;
+    int				is_inside;     // For refraction calculations (inside object or not)
+}					t_ray_result;
 
 typedef struct s_active_ray
 {
-	t_vector		origin;
-	t_vector		dir;
-	t_intersec		hit;
-	t_color			obj_color;
-	t_vector		normal;
+    t_vector		origin;
+    t_vector		dir;
+    t_intersec		hit;
+    t_color			obj_color;
+    t_vector		normal;
 }					t_active_ray;
 
 typedef struct s_light_calc

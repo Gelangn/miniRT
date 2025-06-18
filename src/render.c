@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 16:40:20 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:41:02 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,29 @@ void	pixel_put(t_img *img, int px_x, int px_y, int color)
  */
 void	render_single_pixel(t_global *global, int index)
 {
-	int			x;
-	int			y;
-	t_intersec	isec;
-	int			color;
-	t_color		lit_color;
+    int			x;
+    int			y;
+    t_intersec	isec;
+    int			color;
+    t_color		lit_color;
 
-	x = global->points[index].scrn_x;
-	y = global->points[index].scrn_y;
-	isec = global->isecs[index];
-	if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H)
-		return ;
-	if (isec.obj_type >= 0 && isec.obj_index >= 0)
-	{
-		global->c_ray.dir.x = global->points[index].point_x;
-		global->c_ray.dir.y = global->points[index].point_y;
-		global->c_ray.dir.z = global->points[index].point_z;
-		global->c_ray.hit = isec;
-		lit_color = cal_lighting(global);
-		color = rgb_to_int(lit_color);
-	}
-	else
-		color = DARK_GREY;
-	pixel_put(&global->img, x, y, color);
+    x = global->points[index].scrn_x;
+    y = global->points[index].scrn_y;
+    isec = global->isecs[index];
+    if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H)
+        return ;
+    if (isec.obj_type >= 0 && isec.obj_index >= 0)
+    {
+        global->c_ray.dir.x = global->points[index].point_x;
+        global->c_ray.dir.y = global->points[index].point_y;
+        global->c_ray.dir.z = global->points[index].point_z;
+        global->c_ray.hit = isec;
+        lit_color = cal_lighting_advanced(global);  // Use advanced lighting
+        color = rgb_to_int(lit_color);
+    }
+    else
+        color = DARK_GREY;
+    pixel_put(&global->img, x, y, color);
 }
 
 /**

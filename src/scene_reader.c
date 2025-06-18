@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene_reader.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 22:09:34 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/18 20:01:31 by bde-mada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,20 @@ void	read_scene(t_global *global)
 	char	*line_ptr;
 	int		fd;
 
+	int i = write(1, "Hello2", 6);
+	printf("i: %d\n", i);
 	count_objects(global);
 	allocate_objects(global);
 	fd = open(global->scene.file_path, O_RDONLY);
 	if (fd == -1)
 		finish(global, ERR_OPEN);
 	line_ptr = get_next_line(fd);
+	printf("line_ptr: %s\n", line_ptr);
 	if (!line_ptr)
 		finish(global, ERR_READ);
-	while (line_ptr)
+ 	while (line_ptr)
 	{
+		write(1, line_ptr, ft_strlen(line_ptr));
 		parse_line(global, line_ptr);
 		free(line_ptr);
 		line_ptr = get_next_line(fd);

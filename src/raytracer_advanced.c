@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/19 17:54:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 01:01:56 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,102 +36,85 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 			/*if (transparency > 0.01f || reflectivity > 0.01f)
 				level_color = cal_lighting_advanced(global);
 			else */
-				level_color = cal_lighting(global);
+			printf("Processing ray at point (%.1f,%.1f,%.1f)\n", 
+       global->c_ray.hit.point.x, global->c_ray.hit.point.y, 
+       global->c_ray.hit.point.z);
+			level_color = cal_lighting(global);
 			level_color = color_scale(level_color, rays[i].contribution);
 			final_color = color_add(final_color, level_color);
+			printf("Ray contribution: %.3f, Color: (%d,%d,%d)\n", 
+       rays[i].contribution, level_color.r, level_color.g, level_color.b);
 		}
 	}
 	return (final_color);
 }
 
-static int	generate_secondary_rays(t_global *global,
-									t_ray_result *current_rays,
-									int current_count,
-									t_ray_result *next_rays)
+/**
+ * Generates secondary rays for reflection and refraction
+ */
+int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 {
-	int			i;
-	int			next_count;
-	t_vector	reflect_dir;
-	t_vector	refract_dir;
-	float		transparency;
-	float		reflectivity;
-	float		fresnel;
-	float		n1;
-	float		n2;
+    t_vector    normal;
+    t_vector    reflect_dir;
+    t_vector    refract_dir;
+    float       transparency;
+    float       reflectivity;
+    float       n1, n2;
+    float       fresnel;
+    int         inside;
+    
+    transparency = get_object_transparency(global, global->c_ray.hit);
+    reflectivity = get_object_reflectivity(global, global->c_ray.hit);
+    
+    if (transparency < MIN_CONTRIBUTION && reflectivity < MIN_CONTRIBUTION)
+        return 0;
+    
+    normal = get_surface_normal(global, global->c_ray.hit);
+    inside = is_inside_object(global, global->c_ray.hit, global->c_ray.origin);
 
-	// Initialize all variables to prevent uninitialized value usage
-	next_count = 0;
-	reflect_dir = (t_vector){0, 0, 0};
-	refract_dir = (t_vector){0, 0, 0};
-	transparency = 0.0f;
-	reflectivity = 0.0f;
-	fresnel = 0.0f;
-	n1 = 0.0f;
-	n2 = 0.0f;
-	// Initialize next_rays array
-	ft_memset(next_rays, 0, sizeof(t_ray_result) * MAX_RAY_DEPTH * 2);
-	i = -1;
-	while (++i < current_count && next_count < MAX_RAY_DEPTH * 2)
-	{
-		// Initialize ray for this iteration
-		global->c_ray.origin = current_rays[i].origin;
-		global->c_ray.dir = current_rays[i].direction;
-		global->c_ray.hit = find_closest_isec(global);
-		if (global->c_ray.hit.obj_type < 0
-			|| current_rays[i].contribution < MIN_CONTRIBUTION)
-			continue ;
-		transparency = get_object_transparency(global, global->c_ray.hit);
-		reflectivity = get_object_reflectivity(global, global->c_ray.hit);
-		if (reflectivity > 0.01f && next_count < MAX_RAY_DEPTH * 2 - 1)
-		{
-			global->c_ray.normal = get_surface_normal(global,
-														global->c_ray.hit);
-			reflect_dir = reflect_ray(global->c_ray.dir, global->c_ray.normal);
-			// Fully initialize reflection ray
-			next_rays[next_count].origin = add(global->c_ray.hit.point,
-												multiply(global->c_ray.normal,
-														EPSILON));
-			next_rays[next_count].direction = reflect_dir;
-			next_rays[next_count].contribution = current_rays[i].contribution
-				* reflectivity;
-			next_rays[next_count].depth = current_rays[i].depth + 1;
-			next_rays[next_count].is_inside = current_rays[i].is_inside;
-			next_count++;
-		}
-		if (transparency > 0.01f && next_count < MAX_RAY_DEPTH * 2 - 1)
-		{
-			n1 = current_rays[i].is_inside ? get_object_refractive_index(global,
-																			global->c_ray.hit)
-											: AIR_REFRACTIVE_INDEX;
-			n2 = current_rays[i].is_inside ? AIR_REFRACTIVE_INDEX : get_object_refractive_index(global,
-					global->c_ray.hit);
-			global->c_ray.normal = get_surface_normal(global,
-														global->c_ray.hit);
-			if (current_rays[i].is_inside)
-				global->c_ray.normal = multiply(global->c_ray.normal, -1.0f);
-			refract_dir = refract_ray(global->c_ray.dir, global->c_ray.normal,
-					n1, n2);
-			if (mag(refract_dir) > 0.1f)
-			{
-				fresnel = fresnel_reflectance(global->c_ray.dir,
-												global->c_ray.normal,
-												n1,
-												n2);
-				// Fully initialize refraction ray
-				next_rays[next_count].origin = add(global->c_ray.hit.point,
-													multiply(refract_dir,
-															EPSILON));
-				next_rays[next_count].direction = refract_dir;
-				next_rays[next_count].contribution = current_rays[i].contribution
-					*
-					transparency * (1.0f - fresnel);
-				next_rays[next_count].depth = current_rays[i].depth + 1;
-				next_rays[next_count].is_inside = !current_rays[i].is_inside;
-				next_count++;
-			}
-		}
-	}
-	return (next_count);
+    // Set refractive indices based on whether ray is entering or exiting
+    if (inside) {
+        n1 = get_object_refractive_index(global, global->c_ray.hit);
+        n2 = AIR_REFRACTIVE_INDEX;
+    } else {
+        n1 = AIR_REFRACTIVE_INDEX;
+        n2 = get_object_refractive_index(global, global->c_ray.hit);
+    }
+    
+    // Calculate Fresnel effect for more realistic reflections
+    fresnel = schlick(-dot(normal, global->c_ray.dir), n1, n2);
+    
+	printf("\n--- RAY INFO ---\n");
+	printf("Transparency: %.3f, Reflectivity: %.3f\n", transparency, reflectivity);
+	printf("Inside object: %s\n", inside ? "YES" : "NO");
+	printf("Refractive indices: n1=%.2f, n2=%.2f\n", n1, n2);
+	printf("Fresnel coefficient: %.3f\n", fresnel);
+	
+    // Adjust reflectivity using Fresnel (more reflection at grazing angles)
+    reflectivity = reflectivity + (1.0f - reflectivity) * fresnel;
+    
+    // Add reflection ray
+    if (reflectivity > MIN_CONTRIBUTION) {
+        reflect_dir = reflect_ray(global->c_ray.dir, normal);
+        rays[*count].origin = add(global->c_ray.hit.point, 
+                                multiply(reflect_dir, EPSILON));
+        rays[*count].direction = reflect_dir;
+        rays[*count].contribution = reflectivity;
+        (*count)++;
+    }
+    
+    // Add refraction ray
+    if (transparency > MIN_CONTRIBUTION) {
+        refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
+        rays[*count].origin = add(global->c_ray.hit.point, 
+                                multiply(refract_dir, EPSILON));
+        rays[*count].direction = refract_dir;
+        rays[*count].contribution = transparency * (1.0f - fresnel);
+        (*count)++;
+		printf("REFRACTION ray created: contrib=%.3f, dir=(%.2f,%.2f,%.2f)\n", 
+			rays[*count-1].contribution, refract_dir.x, refract_dir.y, refract_dir.z);
+    }
+	return (*count);
 }
 
 /**
@@ -140,58 +123,133 @@ static int	generate_secondary_rays(t_global *global,
  * Uses proper memory management with finish() for error handling
  */
 t_color	trace_ray_iterative(t_global *global, t_vector origin,
-		t_vector direction, int max_depth)
+        t_vector direction, int max_depth)
 {
-	t_ray_result current_level[MAX_RAY_DEPTH * 2];
-	t_ray_result next_level[MAX_RAY_DEPTH * 2];
-	t_color accumulated_color;
-	t_color level_contribution;
-	int current_count;
-	int next_count;
-	int depth;
+    t_ray_result current_level[MAX_RAY_DEPTH * 2];
+    t_ray_result next_level[MAX_RAY_DEPTH * 2];
+    t_color accumulated_color;
+    t_color level_contribution;
+    int current_count;
+    int next_count;
+    int depth;
+    
+    // AGREGAR: variables para manejar la transparencia
+    t_color surface_color = {0, 0, 0};
+    float transparency = 0.0f;
+    int found_transparency = 0;
 
-	// Initialize all arrays completely
-	ft_memset(current_level, 0, sizeof(current_level));
-	ft_memset(next_level, 0, sizeof(next_level));
+    static int debug_x = -1;
+    static int debug_y = -1;
+    int debug_this_ray = (global->c_ray.hit.point.x == debug_x && global->c_ray.hit.point.y == debug_y);
 
-	// Initialize primary ray with all fields
-	current_level[0].origin = origin;
-	current_level[0].direction = direction;
-	current_level[0].contribution = 1.0f;
-	current_level[0].depth = 0;
-	current_level[0].is_inside = 0;
-	current_count = 1;
+    // Initialize all arrays completely
+    ft_memset(current_level, 0, sizeof(current_level));
+    ft_memset(next_level, 0, sizeof(next_level));
 
-	accumulated_color = (t_color){0, 0, 0};
-	depth = -1;
-	while (++depth < max_depth && current_count > 0)
-	{
-		level_contribution = process_ray_level(global, current_level,
-				current_count);
-		accumulated_color = color_add(accumulated_color, level_contribution);
+    // Initialize primary ray with all fields
+    current_level[0].origin = origin;
+    current_level[0].direction = direction;
+    current_level[0].contribution = 1.0f;
+    current_level[0].depth = 0;
+    current_level[0].is_inside = 0;
+    current_count = 1;
 
-		// Only generate secondary rays if we have more depth to go
-		if (depth < max_depth - 1)
-		{
-			next_count = generate_secondary_rays(global, current_level,
-					current_count, next_level);
-			if (next_count <= 0 || next_count > MAX_RAY_DEPTH * 2)
-				break ;
+    accumulated_color = (t_color){0, 0, 0};
+    depth = -1;
+    while (++depth < max_depth && current_count > 0)
+    {
+        level_contribution = process_ray_level(global, current_level,
+                current_count);
+        
+        // MODIFICAR: manejo especial para transparencia
+        if (depth == 0)
+        {
+            // Guardamos el color de superficie
+            surface_color = level_contribution;
+            accumulated_color = level_contribution;
+            
+            // Verificamos si hay transparencia
+            if (global->c_ray.hit.obj_type >= 0)
+            {
+                transparency = get_object_transparency(global, global->c_ray.hit);
+                if (transparency > 0.1f)
+                    found_transparency = 1;
+            }
+        }
+        else if (found_transparency && depth == 1)
+        {
+            // Mezcla para transparencia en primer nivel de refracción
+            // Color final = Color superficie * (1-transparencia) + Color refractado * transparencia
+            accumulated_color.r = (int)(surface_color.r * (1.0f - transparency) + 
+                            level_contribution.r * transparency);
+            accumulated_color.g = (int)(surface_color.g * (1.0f - transparency) + 
+                            level_contribution.g * transparency);
+            accumulated_color.b = (int)(surface_color.b * (1.0f - transparency) + 
+                            level_contribution.b * transparency);
+        }
+        else
+        {
+            // Para reflejos y otros efectos, seguimos usando la lógica actual
+            // Pero con un peso reducido para no saturar
+            float blend_factor = 0.3f;
+            accumulated_color.r = (int)(accumulated_color.r * (1.0f - blend_factor) + 
+                            level_contribution.r * blend_factor);
+            accumulated_color.g = (int)(accumulated_color.g * (1.0f - blend_factor) + 
+                            level_contribution.g * blend_factor);
+            accumulated_color.b = (int)(accumulated_color.b * (1.0f - blend_factor) + 
+                            level_contribution.b * blend_factor);
+        }
 
-			// Safely copy rays for next iteration
-			ft_memcpy(current_level, next_level, sizeof(t_ray_result)
-					* next_count);
-			current_count = next_count;
-		}
-		else
-			break ;
-	}
+        printf("Depth %d: %d rays, Accumulated color: (%d,%d,%d)\n", 
+            depth, current_count, accumulated_color.r, 
+            accumulated_color.g, accumulated_color.b);
+            
+        // Only generate secondary rays if we have more depth to go
+        if (depth < max_depth - 1)
+        {
+            int i = 0;
+            next_count = 0; // CORREGIDO: Inicializar antes del bucle
+            while (i < current_count)
+            {
+                // Guarda el estado actual
+                t_ray_state saved_state = save_ray_state(global);
+                
+                // Configura el rayo actual
+                global->c_ray.origin = current_level[i].origin;
+                global->c_ray.dir = current_level[i].direction;
+                global->c_ray.hit = find_closest_isec(global);
+                
+                // Solo genera rayos secundarios si hay una intersección
+                if (global->c_ray.hit.obj_type >= 0)
+                {
+                    generate_secondary_rays(global, next_level, &next_count);
+                    if(debug_this_ray)
+                        printf("Secondary rays for next level: %d\n", next_count);
+                }
+                
+                // Restaura el estado antes de procesar el siguiente rayo
+                restore_ray_state(global, saved_state);
+                i++;
+            }
+            if (next_count <= 0 || next_count > MAX_RAY_DEPTH * 2)
+                break ;
 
-	// If no color accumulated, return basic lighting
-	if (accumulated_color.r < 1 && accumulated_color.g < 1
-		&& accumulated_color.b < 1)
-		return (cal_lighting(global));
+            // Safely copy rays for next iteration
+            ft_memcpy(current_level, next_level, sizeof(t_ray_result)
+                    * next_count);
+            current_count = next_count;
+        }
+        else
+            break ;
+    }
 
-	clamp_color(&accumulated_color);
-	return (accumulated_color);
+    // If no color accumulated, return basic lighting
+    if (accumulated_color.r < 1 && accumulated_color.g < 1
+        && accumulated_color.b < 1)
+        return (cal_lighting(global));
+
+    clamp_color(&accumulated_color);
+    printf("FINAL COLOR: (%d,%d,%d)\n\n", 
+       accumulated_color.r, accumulated_color.g, accumulated_color.b);
+    return (accumulated_color);
 }

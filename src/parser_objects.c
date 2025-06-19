@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 13:39:01 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 22:28:14 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,31 @@ void	parse_sphere(t_global *global, char *line)
 	{
 		sphere->transparency = parse_float_token(global, &tokens[4]);
 		sphere->reflectivity = parse_float_token(global, &tokens[5]);
-		sphere->refractive_index = parse_float_token(global, &tokens[6]);
+		sphere->refractive_idx = parse_float_token(global, &tokens[6]);
 	}
 	else
 	{
 		// Default values for backward compatibility
 		sphere->transparency = 0.0f;
 		sphere->reflectivity = 0.0f;
-		sphere->refractive_index = 1.5f;
+		sphere->refractive_idx = 1.5f;
 	}
 	if (sphere->radius <= 0)
 	{
 		dbl_free(tokens);
 		finish(global, "Error: Invalid sphere radius");
 	}
+	// Ahora asigna las propiedades al material
+	//get_colors(global, line, &global->scene.spheres[global->scene.num_sp].material.color);
+	//get_float(global, line, &global->scene.spheres[global->scene.num_sp].material.transparency);
+	//get_float(global, line, &global->scene.spheres[global->scene.num_sp].material.reflectivity);
+	//get_float(global, line, &global->scene.spheres[global->scene.num_sp].material.refractive_idx);
+	
+	// Valores predeterminados para propiedades opcionales
+	//global->scene.spheres[global->scene.num_sp].material.diffuse = 0.7f;
+	//global->scene.spheres[global->scene.num_sp].material.specular = 0.2f;
+	//global->scene.spheres[global->scene.num_sp].material.shininess = 200.0f;
+	
 	global->scene.num_sp++;
 	dbl_free(tokens);
 }
@@ -103,7 +114,7 @@ void	parse_plane(t_global *global, char *line)
 	// Initialize new material properties with default values
 	plane.transparency = 0.0f;
 	plane.reflectivity = 0.0f;
-	plane.refractive_index = 1.5f;
+	plane.refractive_idx = 1.5f;
 	scene->planes[scene->num_pl++] = plane;
 	tokens -= 3;
 	dbl_free(tokens);
@@ -137,7 +148,7 @@ void	parse_cylinder(t_global *global, char *line)
 	// Initialize new material properties with default values
 	cyl.transparency = 0.0f;     // Default: opaque
 	cyl.reflectivity = 0.0f;     // Default: no reflection
-	cyl.refractive_index = 1.5f; // Default: glass-like
+	cyl.refractive_idx = 1.5f; // Default: glass-like
 	scene->cyls[scene->num_cy++] = cyl;
 	tokens -= 5;
 	dbl_free(tokens);

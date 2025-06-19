@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracer_normals.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:54:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 18:47:22 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/19 23:12:24 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,34 @@ t_vector	get_cy_normal(t_global *global, t_intersec isec)
     }
 }
 
-t_vector	get_surface_normal(t_global *global, t_intersec isec)
+/**
+ * Calculates appropriate surface normal for current ray intersection
+ * Handles cases where ray is inside a transparent object
+ */
+t_vector get_surface_normal(t_global *global, t_intersec isec)
 {
-	int	obj_type;
-	int	obj_index;
-
-	obj_type = isec.obj_type;
-	obj_index = isec.obj_index;
-	if (obj_type < 0 || obj_index < 0 || (obj_type == 0
-			&& obj_index >= global->scene.num_sp) || (obj_type == 1
-			&& obj_index >= global->scene.num_pl) || (obj_type == 2
-			&& obj_index >= global->scene.num_cy))
-		return ((t_vector){0, 1, 0});
-	if (obj_type == 0)
-		return (get_sp_normal(global, obj_index, isec.point));
-	else if (obj_type == 1)
-		return (get_pl_normal(global, obj_index));
-	else
-		return (get_cy_normal(global, isec));
+    t_vector normal;
+    int inside;
+    
+    isec = global->c_ray.hit;
+    
+    // Determinar si el rayo está dentro del objeto
+    inside = is_inside_object(global, isec, global->c_ray.origin);
+    
+    // Calcular la normal normalmente
+    if (isec.obj_type == 0)
+        normal = get_sp_normal(global, isec.obj_index, isec.point);
+    else if (isec.obj_type == 1)
+        normal = get_pl_normal(global, isec.obj_index);
+    else if (isec.obj_type == 2)
+        normal = get_cy_normal(global, isec);
+    else
+        normal = (t_vector){0, 1, 0};
+    
+    // Si estamos dentro, invertir la normal
+    if (inside)
+        normal = multiply(normal, -1.0f);
+    
+    return (normal);
 }
+

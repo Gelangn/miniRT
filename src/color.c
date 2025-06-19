@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:13:10 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 17:26:02 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 22:18:57 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,19 @@ t_color	color_add(t_color c1, t_color c2)
  * @param global Structure containing scene data and current ray intersection
  * @return The RGB color of the intersected object
  */
-t_color	get_object_color(t_global *global)
+t_color get_object_color(t_global *global)
 {
-	t_intersec	isec;
-
-	isec = global->c_ray.hit;
-	if (isec.obj_type == 0)
-		return (global->scene.spheres[isec.obj_index].color);
-	else if (isec.obj_type == 1)
-		return (global->scene.planes[isec.obj_index].color);
-	else
-		return (global->scene.cyls[isec.obj_index].color);
+    if (!is_valid_isec(global))
+        return ((t_color){0, 0, 0});
+    
+    if (global->c_ray.hit.obj_type == 0)
+        return (global->scene.spheres[global->c_ray.hit.obj_index].color);
+    else if (global->c_ray.hit.obj_type == 1)
+        return (global->scene.planes[global->c_ray.hit.obj_index].color);
+    else if (global->c_ray.hit.obj_type == 2)
+        return (global->scene.cyls[global->c_ray.hit.obj_index].color);
+    
+    return ((t_color){0, 0, 0});
 }
 
 /**

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 13:13:54 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 22:58:09 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,5 +163,13 @@ t_color		trace_ray_iterative(t_global *global, t_vector origin,
 /* Signal handling */
 void		init_signal_handlers(t_global *global);
 void		handle_signal(int signum);
+
+/* Object inside/outside testing */
+int			is_inside_object(t_global *global, t_intersec isec,
+				t_vector origin);
+int			is_inside_sphere(t_sphere *sphere, t_vector point);
+
+/* Refraction and reflection functions */
+float schlick(float cos_angle, float n1, float n2);
 
 #endif

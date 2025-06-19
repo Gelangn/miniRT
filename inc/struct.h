@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 18:46:55 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/19 22:29:13 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,16 @@ typedef struct s_vector
 	float			z;
 }					t_vector;
 
+/**
+ * Material properties for rendered objects
+ */
+typedef struct s_material
+{
+    t_vector    color;
+    float       transparency;
+    float       reflectivity;
+    float       refractive_idx;
+}   t_material;
 typedef struct s_ambient
 {
 	float			intensity;
@@ -94,37 +104,39 @@ typedef struct s_intersec
 	int				obj_type;
 }					t_intersec;
 
-typedef struct s_sphere
-{
-    t_vector		center;
-    float			radius;
-    t_color			color;
-    float			transparency;
-    float			reflectivity;
-    float			refractive_index;
-}					t_sphere;
+typedef struct s_sphere {
+    t_vector center;
+    float radius;
+    t_color color;                // Mantener para compatibilidad
+    float transparency;           // Mantener para compatibilidad
+    float reflectivity;           // Mantener para compatibilidad 
+    float refractive_idx;       // Mantener para compatibilidad
+	// Añadir t_material material; más tarde
+} t_sphere;
 
 typedef struct s_plane
 {
-    t_vector		point;
-    t_vector		normal;
-    t_color			color;
-    float			transparency;
-    float			reflectivity;
-    float			refractive_index;
-}					t_plane;
+    t_vector    point;
+    t_vector    normal;
+    //t_material  material;
+	t_color color;                // Mantener para compatibilidad
+    float transparency;           // Mantener para compatibilidad
+    float reflectivity;           // Mantener para compatibilidad 
+    float refractive_idx;       // Mantener para compatibilidad
+}   t_plane;
 
 typedef struct s_cylinder
 {
-    t_vector		base;
-    t_vector		axis;
-    float			radius;
-    float			height;
-    t_color			color;
-    float			transparency;
-    float			reflectivity;
-    float			refractive_index;
-}					t_cylinder;
+    t_vector    base;
+    t_vector    axis;
+    float       radius;
+    float       height;
+    //t_material  material;
+	t_color color;                // Mantener para compatibilidad
+    float transparency;           // Mantener para compatibilidad
+    float reflectivity;           // Mantener para compatibilidad 
+    float refractive_idx;       // Mantener para compatibilidad
+}   t_cylinder;
 
 typedef struct s_cyl_lat
 {
@@ -206,6 +218,7 @@ typedef struct s_light_calc
 	t_color			obj_color;
 	t_vector		normal;
 }					t_light_calc;
+
 
 // global struct to store all the structs
 typedef struct s_global

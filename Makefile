@@ -52,12 +52,14 @@ SRC_FILES = 	camera_controls.c \
 				raytracer_core.c \
 				raytracer_cylinder_caps.c \
 				raytracer_cylinder.c \
+				raytracer_inside_test.c \
 				raytracer_intersecs.c \
 				raytracer_lighting.c \
 				raytracer_normals.c \
 				raytracer_objects.c \
 				raytracer_properties.c \
 				raytracer_reflection.c \
+				raytracer_refractor.c \
 				raytracer_render.c \
 				render.c \
 				save.c \

@@ -6,12 +6,23 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:54:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:33:41 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:54:02 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
+/**
+ * Calculates the surface normal vector for a sphere at a given point
+
+	* The normal is computed as the normalized vector from sphere center
+	to the point
+ * 
+ * @param global Structure containing scene data including spheres array
+ * @param sp_id Index of the sphere in the spheres array
+ * @param point Point on the sphere surface where normal is calculated
+ * @return Normalized vector representing the surface normal at the given point
+ */
 t_vector	get_sp_normal(t_global *global, int sp_id, t_vector point)
 {
 	t_sphere	sphere;
@@ -20,6 +31,15 @@ t_vector	get_sp_normal(t_global *global, int sp_id, t_vector point)
 	return (norm(subtract(point, sphere.center)));
 }
 
+/**
+ * Returns the surface normal vector for a plane
+ * Performs bounds checking and returns the plane's normalized normal vector
+ * 
+ * @param global Structure containing scene data including planes array
+ * @param pl_id Index of the plane in the planes array
+ * @return Normalized normal vector of the plane,
+	or default (0,1,0) if invalid index
+ */
 t_vector	get_pl_normal(t_global *global, int pl_id)
 {
 	if (pl_id < 0 || pl_id >= global->scene.num_pl)
@@ -27,6 +47,18 @@ t_vector	get_pl_normal(t_global *global, int pl_id)
 	return (norm(global->scene.planes[pl_id].normal));
 }
 
+/**
+ * Calculates the surface normal vector for a cylinder at the intersection point
+ * Determines if the intersection is on the top cap, bottom cap,
+	or lateral surface
+ * Returns appropriate normal vector based on the intersection location
+ * 
+ * @param global Structure containing scene data including cylinders array
+ * @param isec Intersection data containing point and cylinder index
+
+	* @return Normalized vector representing the surface normal at
+	intersection point
+ */
 t_vector	get_cy_normal(t_global *global, t_intersec isec)
 {
 	t_cylinder	cyl;
@@ -48,6 +80,15 @@ t_vector	get_cy_normal(t_global *global, t_intersec isec)
 	}
 }
 
+/**
+ * Determines and returns the appropriate surface normal for any object type
+ * Dispatches to specific normal calculation functions based on object type
+ * Performs validation checks for object type and index bounds
+ * 
+ * @param global Structure containing all scene data
+ * @param isec Intersection data containing object type, index, and point
+ * @return Normalized surface normal vector for the intersected object
+ */
 t_vector	get_surface_normal(t_global *global, t_intersec isec)
 {
 	int	obj_type;

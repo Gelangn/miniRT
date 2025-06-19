@@ -76,26 +76,26 @@ OBJ_FILES = $(SRC_FILES:.c=.o)
 OS := $(shell uname)
 ifeq ($(OS),Windows_NT)
 #	@echo "Compilando en Windows NT"
-	CFLAGS = -Wall  -Wextra -Imlx
+	CFLAGS = -Wall -Werror -Wextra -Imlx
 	FFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 else ifeq ($(OS),Darwin)
 #	@echo "Compilando en Darwin"
-	CFLAGS = -Wall -Wextra  -Imlx
+	CFLAGS = -Wall -Wextra -Werror -Imlx
 	FFLAGS = -Llib/mlx -lmlx -framework OpenGL -framework AppKit
 else ifeq ($(OS),Linux)
 #	@echo "Compilando en Linux"
-	CFLAGS = -Wall -Wextra  -I./inc -I./lib/minilibx-linux -O0 -g0
+	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O0 -g0
 	# Flags normales (sin sanitize)
 	FFLAGS = -L./lib/minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 	# Flags con sanitize
 	SANITIZE_FLAGS = -g3 -O3 -fsanitize=address
 else ifeq ($(OS),MacOS)
 #	@echo "Compilando en MacOS"
-	CFLAGS = -Wall -Wextra  -Imlx
+	CFLAGS = -Wall -Wextra -Werror -Imlx
 	FFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 else
 #	@echo "Compilando en otro sistema operativo"
-	CFLAGS = -Wall -Wextra  -Imlx
+	CFLAGS = -Wall -Wextra -Werror -Imlx
 	FFLAGS = -Lmlx -lmlx -lX11 -lXext -lm
 endif
 

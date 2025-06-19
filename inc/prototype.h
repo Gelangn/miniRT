@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prototype.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 18:58:43 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:13:54 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,17 +144,21 @@ t_vector	norm(t_vector a);
 t_vector	cross(t_vector a, t_vector b);
 t_vector	reflect(t_vector a, t_vector b);
 
-/* Reflection and Refraction */
-t_vector	reflect_ray(t_vector incident, t_vector normal);
-t_vector	refract_ray(t_vector incident, t_vector normal, float n1, float n2);
-float		fresnel_reflectance(t_vector incident, t_vector normal, float n1, float n2);
+/* Material properties */
 float		get_object_transparency(t_global *global, t_intersec isec);
 float		get_object_reflectivity(t_global *global, t_intersec isec);
 float		get_object_refractive_index(t_global *global, t_intersec isec);
 
-/* Advanced Ray Tracing */
-t_color		trace_ray_iterative(t_global *global, t_vector origin, t_vector direction, int max_depth);
+/* Reflection and refraction */
+t_vector	reflect_ray(t_vector incident, t_vector normal);
+t_vector	refract_ray(t_vector incident, t_vector normal, float n1, float n2);
+float		fresnel_reflectance(t_vector incident, t_vector normal, float n1,
+				float n2);
+
+/* Advanced lighting */
 t_color		cal_lighting_advanced(t_global *global);
+t_color		trace_ray_iterative(t_global *global, t_vector origin,
+				t_vector direction, int max_depth);
 
 /* Signal handling */
 void		init_signal_handlers(t_global *global);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 18:39:51 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:55:02 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@
 # define MARGIN 50 // Margin for the screen
 
 # define PI 3.14159265358979323846f
-# define MAX_PLANES 5
+# define MAX_PLANES 10
 # define MAX_SPHERES 100
-# define MAX_CYLINDERS 15
+# define MAX_CYLINDERS 150
 # define VECTOR 0 // 0 for vector, 1 for point
 # define POINT 1
 
@@ -54,19 +54,21 @@
 # define ESC_KEY 65307
 
 # define DEFAULT_COLOR MAGENTA
-# define GROUND_COLOR GREY
+# define BACKGROUND_COLOR GREY
 
+/* Colors */
+# define BLACK 0x000000
 # define WHITE 0xFFFFFF
 # define RED 0xFF0000
 # define GREEN 0x00FF00
 # define BLUE 0x0000FF
+# define DARK_GREY 0x202020
+# define GREY 0x808080
+
 # define YELLOW 0xFFFF00
 # define CYAN 0x00FFFF
 # define MAGENTA 0xFF00FF
-# define BLACK 0x000000
-# define GREY 0x454545
 # define LIGHT_GREY 0xAAAAAA
-# define DARK_GREY 0x111111
 # define BROWN 0x8B4513
 # define ORANGE 0xFFA500
 # define PINK 0xFFC0CB
@@ -106,8 +108,10 @@
 # define ERR_MLX "\nError initializing MLX\n"
 # define ERR_SAVE "\nError saving BMP\n"
 
-# define MAX_RAY_DEPTH 8
+/* Advanced ray tracing constants */
+# define MAX_RAY_DEPTH 3
 # define MIN_CONTRIBUTION 0.01f
+# define EPSILON 0.001f
 # define AIR_REFRACTIVE_INDEX 1.0f
 
 #endif

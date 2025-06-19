@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_objects.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 19:59:30 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:39:01 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,59 +43,42 @@ void	parse_color(t_global *global, char *str, t_color *color)
 // Function to parse a sphere
 void	parse_sphere(t_global *global, char *line)
 {
-	t_sphere	sphere;
 	char		**tokens;
-	t_scene		*scene;
+	t_sphere	*sphere;
 
-	scene = &global->scene;
-	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
-		finish(global, ERR_SPHERE);
-	write(1, "Parsing sphere\n", 15);
-	tokens++;
-	parse_vector(global, *tokens, &sphere.center);
-	write(1, "Parsed center\n", 14);
-	tokens++;
-	sphere.radius = parse_float_token(global, tokens) / 2;
-	write(1, "Parsed radius\n", 15);
-	tokens++;
-	parse_color(global, *tokens, &sphere.color);
-	write(1, "Parsed color\n", 14);
-	tokens++;
-	
-	// Parse optional transparency (default 0.0 = opaque)
-	if (*tokens && is_valid_float(*tokens))
+		finish(global, ERR_MEM);
+	sphere = &global->scene.spheres[global->scene.num_sp];
+	// Parse sphere parameters with error checking
+	if (!tokens[1] || !tokens[2] || !tokens[3])
 	{
-		sphere.transparency = parse_float_token(global, tokens);
-		sphere.transparency = fmax(0.0f, fmin(1.0f, sphere.transparency)); // Clamp 0-1
-		tokens++;
+		dbl_free(tokens);
+		finish(global, "Error: Invalid sphere format");
+	}
+	parse_vector(global, tokens[1], &sphere->center);
+	sphere->radius = parse_float_token(global, &tokens[2]) / 2.0f;
+	parse_color(global, tokens[3], &sphere->color);
+	// Parse optional material properties
+	if (tokens[4] && tokens[5] && tokens[6])
+	{
+		sphere->transparency = parse_float_token(global, &tokens[4]);
+		sphere->reflectivity = parse_float_token(global, &tokens[5]);
+		sphere->refractive_index = parse_float_token(global, &tokens[6]);
 	}
 	else
-		sphere.transparency = 0.0f;
-	
-	// Parse optional reflectivity (default 0.0 = no reflection)
-	if (*tokens && is_valid_float(*tokens))
 	{
-		sphere.reflectivity = parse_float_token(global, tokens);
-		sphere.reflectivity = fmax(0.0f, fmin(1.0f, sphere.reflectivity)); // Clamp 0-1
-		tokens++;
+		// Default values for backward compatibility
+		sphere->transparency = 0.0f;
+		sphere->reflectivity = 0.0f;
+		sphere->refractive_index = 1.5f;
 	}
-	else
-		sphere.reflectivity = 0.0f;
-	
-	// Parse optional refractive index (default 1.5 = glass)
-	if (*tokens && is_valid_float(*tokens))
+	if (sphere->radius <= 0)
 	{
-		sphere.refractive_index = parse_float_token(global, tokens);
-		sphere.refractive_index = fmax(1.0f, sphere.refractive_index); // Must be >= 1.0
-		tokens++;
+		dbl_free(tokens);
+		finish(global, "Error: Invalid sphere radius");
 	}
-	else
-		sphere.refractive_index = 1.5f;
-	
-	scene->spheres[scene->num_sp++] = sphere;
-	tokens -= 3;
+	global->scene.num_sp++;
 	dbl_free(tokens);
 }
 
@@ -117,13 +100,11 @@ void	parse_plane(t_global *global, char *line)
 	parse_vector(global, *tokens, &plane.normal);
 	tokens++;
 	parse_color(global, *tokens, &plane.color);
-    
-    // Initialize new material properties with default values
-    plane.transparency = 0.0f;
-    plane.reflectivity = 0.0f;
-    plane.refractive_index = 1.5f;
-    
-    scene->planes[scene->num_pl++] = plane;
+	// Initialize new material properties with default values
+	plane.transparency = 0.0f;
+	plane.reflectivity = 0.0f;
+	plane.refractive_index = 1.5f;
+	scene->planes[scene->num_pl++] = plane;
 	tokens -= 3;
 	dbl_free(tokens);
 }
@@ -153,12 +134,10 @@ void	parse_cylinder(t_global *global, char *line)
 	tokens++;
 	parse_color(global, *tokens, &cyl.color);
 	cyl.base = subtract(center, multiply(cyl.axis, cyl.height / 2));
-    
-    // Initialize new material properties with default values
-    cyl.transparency = 0.0f;      // Default: opaque
-    cyl.reflectivity = 0.0f;      // Default: no reflection
-    cyl.refractive_index = 1.5f;  // Default: glass-like
-    
+	// Initialize new material properties with default values
+	cyl.transparency = 0.0f;     // Default: opaque
+	cyl.reflectivity = 0.0f;     // Default: no reflection
+	cyl.refractive_index = 1.5f; // Default: glass-like
 	scene->cyls[scene->num_cy++] = cyl;
 	tokens -= 5;
 	dbl_free(tokens);

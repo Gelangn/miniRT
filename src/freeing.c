@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 19:22:15 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:27:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,27 @@ void	free_global(t_global *global)
 	}
 }
 
+/**
+ * Safely frees a double pointer array and sets it to NULL
+ * Prevents double free errors by checking validity before freeing
+ * 
+ * @param ptr Double pointer to the array to be freed
+ */
 void	dbl_free(char **ptr)
 {
-	char	**temp;
+	int	i;
 
 	if (!ptr)
 		return ;
-	temp = ptr;
-	while (*temp)
+	i = 0;
+	while (ptr[i])
 	{
-		free(*temp);
-		*temp = NULL;
-		temp++;
+		if (ptr[i])
+		{
+			free(ptr[i]);
+			ptr[i] = NULL;
+		}
+		i++;
 	}
 	free(ptr);
 	ptr = NULL;

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 13:53:34 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 14:03:51 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,47 +150,60 @@ t_color	cal_lighting_advanced(t_global *global)
 {
 	t_color	basic_color;
 	t_color	final_color;
-	t_color	reflect_color;
 	t_color	trans_color;
 	float	transparency;
 	float	reflectivity;
 
 	if (!is_valid_isec(global))
 		return ((t_color){5, 5, 5});
+	
 	// Get material properties
 	transparency = get_object_transparency(global, global->c_ray.hit);
 	reflectivity = get_object_reflectivity(global, global->c_ray.hit);
+	
 	// Get basic lighting first
 	basic_color = cal_lighting(global);
-	// For very transparent objects, make them almost invisible
+	
+	// SIMPLE transparency test - just make object darker based on transparency
 	if (transparency > 0.7f)
 	{
-		final_color = color_scale(basic_color, 0.1f); // Very faint
+		// Very transparent - almost see-through
+		final_color.r = basic_color.r * 0.1f;
+		final_color.g = basic_color.g * 0.1f;
+		final_color.b = basic_color.b * 0.1f;
+		
+		// Add background color
+		trans_color = calculate_transparency(global, transparency);
+		final_color.r += trans_color.r * 0.9f;
+		final_color.g += trans_color.g * 0.9f;
+		final_color.b += trans_color.b * 0.9f;
 	}
 	else if (transparency > 0.5f)
 	{
-		final_color = color_scale(basic_color, 0.3f); // Semi-transparent
+		// Semi-transparent
+		final_color.r = basic_color.r * 0.3f;
+		final_color.g = basic_color.g * 0.3f;
+		final_color.b = basic_color.b * 0.3f;
+		
+		trans_color = calculate_transparency(global, transparency);
+		final_color.r += trans_color.r * 0.7f;
+		final_color.g += trans_color.g * 0.7f;
+		final_color.b += trans_color.b * 0.7f;
 	}
 	else
 	{
 		final_color = basic_color;
 	}
-	// Add transparency if transparent
-	if (transparency > 0.01f)
-	{
-		trans_color = calculate_transparency(global, transparency);
-		// Strong transparency effect
-		final_color = color_add(color_scale(final_color, 1.0f - transparency),
-								color_scale(trans_color, transparency * 1.5f));
-	}
+	
 	// Add reflection if reflective
 	if (reflectivity > 0.01f)
 	{
-		reflect_color = calculate_reflection(global, reflectivity);
-		final_color = color_add(color_scale(final_color, 1.0f - reflectivity
-					* 0.8f),
-								color_scale(reflect_color, reflectivity));
+		t_color reflect_color = calculate_reflection(global, reflectivity);
+		final_color.r = final_color.r * (1.0f - reflectivity) + reflect_color.r * reflectivity;
+		final_color.g = final_color.g * (1.0f - reflectivity) + reflect_color.g * reflectivity;
+		final_color.b = final_color.b * (1.0f - reflectivity) + reflect_color.b * reflectivity;
 	}
+	
 	clamp_color(&final_color);
 	return (final_color);
 }

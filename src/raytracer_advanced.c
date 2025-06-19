@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/19 13:06:35 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 14:32:53 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 	t_color	final_color;
 	t_color	level_color;
 	int		i;
+	float	transparency;
+	float	reflectivity;
 
 	final_color = (t_color){0, 0, 0};
 	i = -1;
@@ -28,7 +30,13 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 		global->c_ray.hit = find_closest_isec(global);
 		if (global->c_ray.hit.obj_type >= 0)
 		{
-			level_color = cal_lighting(global);
+			// Use advanced lighting if object has transparency or reflectivity
+			transparency = get_object_transparency(global, global->c_ray.hit);
+			reflectivity = get_object_reflectivity(global, global->c_ray.hit);
+			if (transparency > 0.01f || reflectivity > 0.01f)
+				level_color = cal_lighting_advanced(global);
+			else
+				level_color = cal_lighting(global);
 			level_color = color_scale(level_color, rays[i].contribution);
 			final_color = color_add(final_color, level_color);
 		}

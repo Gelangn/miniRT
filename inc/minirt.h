@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 14:05:20 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 17:52:32 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@
 # define ESC_KEY 65307
 
 # define DEFAULT_COLOR MAGENTA
-# define BACKGROUND_COLOR GREY
+# define BACKGROUND_COLOR BLACK
 
 /* Colors - mantener solo estas definiciones */
 # define BLACK 0x000000
@@ -109,7 +109,7 @@
 # define ERR_SAVE "\nError saving BMP\n"
 
 /* Advanced ray tracing constants */
-# define MAX_RAY_DEPTH 3
+# define MAX_RAY_DEPTH 4
 # define MIN_CONTRIBUTION 0.01f
 # define EPSILON 0.001f
 # define AIR_REFRACTIVE_INDEX 1.0f

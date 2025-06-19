@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 13:39:02 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/19 17:33:57 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ void	render_single_pixel(t_global *global, int index)
 		reflectivity = get_object_reflectivity(global, isec);
 		// Use advanced lighting if object has special materials, otherwise basic
 		if (transparency > 0.01f || reflectivity > 0.01f)
-			lit_color = cal_lighting_advanced(global);
+			lit_color = trace_ray_iterative(global, global->scene.cam.pos, 
+                           global->c_ray.dir, MAX_RAY_DEPTH);
 		else
 			lit_color = cal_lighting(global);
 		color = rgb_to_int(lit_color);

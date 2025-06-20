@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/20 12:49:15 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:21:05 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,19 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
     fresnel = schlick(-dot(normal, global->c_ray.dir), n1, n2);
     
 	printf("\n--- RAY INFO ---\n");
-	printf("Transparency: %.3f, Reflectivity: %.3f\n", transparency, reflectivity);
-	printf("Inside object: %s\n", inside ? "YES" : "NO");
-	printf("Refractive indices: n1=%.2f, n2=%.2f\n", n1, n2);
-	printf("Fresnel coefficient: %.3f\n", fresnel);
-	
+	printf("Objeto golpeado: tipo=%d\n", global->c_ray.hit.obj_type);
+	printf("Transparencia: %.2f\n", transparency);
+	printf("¿Dentro del objeto? %s\n", inside ? "SÍ" : "NO");
+	printf("Normal: (%.2f, %.2f, %.2f)\n", normal.x, normal.y, normal.z);
+
+    // Si el objeto es un cilindro, añadir esto:
+    if (global->c_ray.hit.obj_type == 2) {
+        printf("DEBUG CILINDRO: Punto de golpe: (%.2f, %.2f, %.2f)\n",
+           global->c_ray.hit.point.x, global->c_ray.hit.point.y, global->c_ray.hit.point.z);
+        // Verificar si está en la superficie o en las tapas:
+        // [Código para determinar si golpea superficie o tapas]
+    }
+    
     // Adjust reflectivity using Fresnel (more reflection at grazing angles)
     reflectivity = reflectivity + (1.0f - reflectivity) * fresnel;
     
@@ -183,19 +191,17 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
         }
         else if (found_transparency && depth == 1)
         {
-            // Aumentar artificialmente el brillo de los objetos tras el cristal
-            level_contribution.r = level_contribution.r * 1.5f;  // Aumentar de 1.3f a 1.5f
-            level_contribution.g = level_contribution.g * 1.5f;
-            level_contribution.b = level_contribution.b * 1.5f;
+            // Aumentar brillo de objetos vistos a través de transparencia
+            level_contribution.r = (int)(level_contribution.r * 1.3f);
+            level_contribution.g = (int)(level_contribution.g * 1.3f);
+            level_contribution.b = (int)(level_contribution.b * 1.3f);
             
-            // Añadir un componente de brillo al propio cristal
-            float glass_brightness = 30.0f;  // Brillo base del cristal
-            
-            accumulated_color.r = (int)((surface_color.r + glass_brightness) * (1.0f - transparency) + 
+            // Mezclar con la mejora
+            accumulated_color.r = (int)(surface_color.r * (1.0f - transparency) + 
                     level_contribution.r * transparency);
-            accumulated_color.g = (int)((surface_color.g + glass_brightness) * (1.0f - transparency) + 
+            accumulated_color.g = (int)(surface_color.g * (1.0f - transparency) + 
                     level_contribution.g * transparency);
-            accumulated_color.b = (int)((surface_color.b + glass_brightness) * (1.0f - transparency) + 
+            accumulated_color.b = (int)(surface_color.b * (1.0f - transparency) + 
                     level_contribution.b * transparency);
         }
         else

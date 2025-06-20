@@ -6,27 +6,36 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:54:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 23:12:24 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:40:34 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-t_vector	get_sp_normal(t_global *global, int sp_id, t_vector point)
+/**
+ * Calcula la normal para una esfera
+ */
+t_vector	get_sp_normal(t_global *global, t_intersec isec)
 {
-	t_sphere	sphere;
+    t_sphere	sphere;
 
-	sphere = global->scene.spheres[sp_id];
-	return (norm(subtract(point, sphere.center)));
+    sphere = global->scene.spheres[isec.obj_index];
+    return (norm(subtract(isec.point, sphere.center)));
 }
 
-t_vector	get_pl_normal(t_global *global, int pl_id)
+/**
+ * Calcula la normal para un plano
+ */
+t_vector	get_pl_normal(t_global *global, t_intersec isec)
 {
-	if (pl_id < 0 || pl_id >= global->scene.num_pl)
-		return ((t_vector){0, 1, 0});
-	return (norm(global->scene.planes[pl_id].normal));
+    if (isec.obj_index < 0 || isec.obj_index >= global->scene.num_pl)
+        return ((t_vector){0, 1, 0});
+    return (norm(global->scene.planes[isec.obj_index].normal));
 }
 
+/**
+ * Calcula la normal para un cilindro
+ */
 t_vector	get_cy_normal(t_global *global, t_intersec isec)
 {
     t_cylinder	cyl;
@@ -35,7 +44,7 @@ t_vector	get_cy_normal(t_global *global, t_intersec isec)
     t_vector	ctr_h;
 
     cyl = global->scene.cyls[isec.obj_index];
-    axis = norm(cyl.axis);  // Changed from cyl.orientation to cyl.axis
+    axis = norm(cyl.axis);
     hit_h = dot(subtract(isec.point, cyl.base), axis);
     if (comp_floats(hit_h, 0))
         return (multiply(axis, -1));
@@ -62,11 +71,11 @@ t_vector get_surface_normal(t_global *global, t_intersec isec)
     // Determinar si el rayo está dentro del objeto
     inside = is_inside_object(global, isec, global->c_ray.origin);
     
-    // Calcular la normal normalmente
+    // Calcular la normal según el tipo de objeto
     if (isec.obj_type == 0)
-        normal = get_sp_normal(global, isec.obj_index, isec.point);
+        normal = get_sp_normal(global, isec);
     else if (isec.obj_type == 1)
-        normal = get_pl_normal(global, isec.obj_index);
+        normal = get_pl_normal(global, isec);
     else if (isec.obj_type == 2)
         normal = get_cy_normal(global, isec);
     else

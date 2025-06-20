@@ -70,67 +70,112 @@ static t_color	process_level_rays(t_global *global, t_ray_result *rays,
 }
 
 /**
+ * Prepares material properties for ray calculations
+ */
+static void	prepare_material_data(t_global *global, float *transp,
+                float *reflct, float *fresnel, float *n1, float *n2)
+{
+    t_vector	normal;
+    float		cos_angle;
+    int			inside;
+
+    *transp = get_object_transp(global, global->c_ray.hit);
+    *reflct = get_object_reflct(global, global->c_ray.hit);
+    normal = get_surface_normal(global, global->c_ray.hit);
+    
+    inside = is_inside_object(global, global->c_ray.hit, global->c_ray.origin);
+    if (inside)
+    {
+        *n1 = get_object_refractive_index(global, global->c_ray.hit);
+        *n2 = AIR_REFRACTIVE_INDEX;
+    }
+    else
+    {
+        *n1 = AIR_REFRACTIVE_INDEX;
+        *n2 = get_object_refractive_index(global, global->c_ray.hit);
+    }
+    
+    cos_angle = -dot(normal, global->c_ray.dir);
+    *fresnel = schlick(cos_angle, *n1, *n2);
+}
+
+/**
+ * Adds reflection ray to ray array
+ */
+static int	add_reflection_ray(t_global *global, float reflectivity,
+                t_ray_result *next, int count)
+{
+    t_vector	normal;
+    t_vector	reflect_dir;
+    
+    if (reflectivity < 0.02f)
+        return (count);
+        
+    normal = get_surface_normal(global, global->c_ray.hit);
+    reflect_dir = reflect_ray(global->c_ray.dir, normal);
+    next[count].origin = add(global->c_ray.hit.point,
+                    multiply(reflect_dir, EPSILON));
+    next[count].direction = reflect_dir;
+    next[count].contribution = reflectivity;
+    return (count + 1);
+}
+
+/**
+ * Adds refraction ray to ray array with adjusted contribution
+ */
+static int	add_refraction_ray(t_global *global, float transparency,
+                float fresnel, float n1, float n2, t_ray_result *next, int count)
+{
+    t_vector	normal;
+    t_vector	refract_dir;
+    float		edge_factor;
+    
+    if (transparency < 0.05f)
+        return (count);
+    
+    normal = get_surface_normal(global, global->c_ray.hit);
+    refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
+    next[count].origin = add(global->c_ray.hit.point,
+                    multiply(refract_dir, EPSILON));
+    next[count].direction = refract_dir;
+    
+    // Factor de borde menos agresivo para cilindros
+    edge_factor = 1.0f - fresnel;
+    if (global->c_ray.hit.obj_type == 2)  // Si es un cilindro (valor correcto)
+        edge_factor = fmax(edge_factor, 0.4f);  // Mantener más transparencia
+    else if (edge_factor < 0.3f)
+        edge_factor *= 0.8f;  // Menos agresivo que antes
+        
+    next[count].contribution = transparency * edge_factor;
+    return (count + 1);
+}
+
+/**
  * Gets reflection and refraction properties for materials
  */
 int	generate_secondary_rays(t_global *global, t_ray_result *next)
 {
     float		transparency;
     float		reflectivity;
-    float       fresnel;
-    t_vector	normal;
-    t_vector	reflect_dir;
-    t_vector    refract_dir;
-    float       n1;
-    float       n2;
+    float		fresnel;
+    float		n1;
+    float		n2;
     int			count;
-    int         inside;
-
+    
     count = 0;
-    transparency = get_object_transp(global, global->c_ray.hit);
-    reflectivity = get_object_reflct(global, global->c_ray.hit);
+    prepare_material_data(global, &transparency, &reflectivity, 
+            &fresnel, &n1, &n2);
     
-    if (transparency < 0.01f && reflectivity < 0.01f)
+    if (transparency < 0.05f && reflectivity < 0.02f)
         return (0);
-        
-    normal = get_surface_normal(global, global->c_ray.hit);
     
-    // Calcular índices de refracción según si estamos dentro o fuera del objeto
-    inside = is_inside_object(global, global->c_ray.hit, global->c_ray.origin);
-    if (inside)
-    {
-        n1 = get_object_refractive_index(global, global->c_ray.hit);
-        n2 = AIR_REFRACTIVE_INDEX;
-    }
-    else
-    {
-        n1 = AIR_REFRACTIVE_INDEX;
-        n2 = get_object_refractive_index(global, global->c_ray.hit);
-    }
+    // Para objetos muy reflectivos, aumentar la reflectividad en los bordes
+    if (reflectivity >= 0.5f)
+        reflectivity = reflectivity + ((1.0f - reflectivity) * fresnel);
     
-    // Calcular factor de Fresnel para mezclar reflexión/refracción
-    fresnel = schlick(-dot(normal, global->c_ray.dir), n1, n2);
-    
-    // Añadir rayo de reflexión
-    if (reflectivity >= 0.01f)
-    {
-        reflect_dir = reflect_ray(global->c_ray.dir, normal);
-        next[count].origin = add(global->c_ray.hit.point, 
-                           multiply(reflect_dir, EPSILON));
-        next[count].direction = reflect_dir;
-        next[count].contribution = reflectivity;
-        count++;
-    }
-    
-    // Añadir rayo de refracción para transparencia
-    if (transparency >= 0.01f)
-    {
-        refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
-        next[count].origin = add(global->c_ray.hit.point, 
-                           multiply(refract_dir, EPSILON));
-        next[count].direction = refract_dir;
-        next[count].contribution = transparency * (1.0f - fresnel);
-        count++;
-    }
+    count = add_reflection_ray(global, reflectivity, next, count);
+    count = add_refraction_ray(global, transparency, fresnel, n1, n2, 
+            next, count);
     
     return (count);
 }

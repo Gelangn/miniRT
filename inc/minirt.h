@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 17:24:18 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 18:21:50 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@
 # define ERR_SAVE "\nError saving BMP\n"
 
 /* Advanced ray tracing constants */
-# define MAX_RAY_DEPTH 4
+# define MAX_RAY_DEPTH 5
 # define MIN_CONTRIBUTION 0.01f
 # define EPSILON 0.001f
 # define AIR_REFRACTIVE_INDEX 1.0f

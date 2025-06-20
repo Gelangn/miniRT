@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 17:33:57 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:42:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	render_single_pixel(t_global *global, int index)
 	t_intersec	isec;
 	int			color;
 	t_color		lit_color;
-	float		transparency;
-	float		reflectivity;
+	float		transp;
+	float		reflct;
 
 	x = global->points[index].scrn_x;
 	y = global->points[index].scrn_y;
@@ -62,10 +62,10 @@ void	render_single_pixel(t_global *global, int index)
 		global->c_ray.dir.z = global->points[index].point_z;
 		global->c_ray.hit = isec;
 		// Get material properties
-		transparency = get_object_transparency(global, isec);
-		reflectivity = get_object_reflectivity(global, isec);
+		transp = get_object_transp(global, isec);
+		reflct = get_object_reflct(global, isec);
 		// Use advanced lighting if object has special materials, otherwise basic
-		if (transparency > 0.01f || reflectivity > 0.01f)
+		if (transp > 0.01f || reflct > 0.01f)
 			lit_color = trace_ray_iterative(global, global->scene.cam.pos, 
                            global->c_ray.dir, MAX_RAY_DEPTH);
 		else

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 15:50:39 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:40:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,15 @@ void	parse_sphere(t_global *global, char *line)
 	// Parse optional material properties usando índice 4, 5, 6
 	if (tokens[4] && tokens[5] && tokens[6])
 	{
-		sphere->transparency = parse_float_token(global, &tokens[4]);
-		sphere->reflectivity = parse_float_token(global, &tokens[5]);
+		sphere->transp = parse_float_token(global, &tokens[4]);
+		sphere->reflct = parse_float_token(global, &tokens[5]);
 		sphere->refractive_idx = parse_float_token(global, &tokens[6]);
 	}
 	else
 	{
 		// Default values for backward compatibility
-		sphere->transparency = 0.0f;
-		sphere->reflectivity = 0.0f;
+		sphere->transp = 0.0f;
+		sphere->reflct = 0.0f;
 		sphere->refractive_idx = 1.5f;
 	}
 	
@@ -112,9 +112,9 @@ void	parse_plane(t_global *global, char *line)
 	// Parse optional material properties
 	if (tokens && *tokens && *(tokens+1) && *(tokens+2))
 	{
-		plane.transparency = parse_float_token(global, tokens);
+		plane.transp = parse_float_token(global, tokens);
 		tokens++;
-		plane.reflectivity = parse_float_token(global, tokens);
+		plane.reflct = parse_float_token(global, tokens);
 		tokens++;
 		plane.refractive_idx = parse_float_token(global, tokens);
 		tokens++;
@@ -122,8 +122,8 @@ void	parse_plane(t_global *global, char *line)
 	else
 	{
 		// Default values
-		plane.transparency = 0.0f;
-		plane.reflectivity = 0.0f;
+		plane.transp = 0.0f;
+		plane.reflct = 0.0f;
 		plane.refractive_idx = 1.5f;
 	}
 	scene->planes[scene->num_pl++] = plane;
@@ -163,21 +163,21 @@ void	parse_cylinder(t_global *global, char *line)
 	// Parse optional material properties
 	if (tokens && *tokens && *(tokens+1) && *(tokens+2))
 	{
-		cyl.transparency = parse_float_token(global, tokens);
+		cyl.transp = parse_float_token(global, tokens);
 		tokens++;
-		cyl.reflectivity = parse_float_token(global, tokens);
+		cyl.reflct = parse_float_token(global, tokens);
 		tokens++;
 		cyl.refractive_idx = parse_float_token(global, tokens);
 		tokens++;
 		
 		printf("CILINDRO: Leyendo propiedades opcionales: transp=%.2f, refl=%.2f, idx=%.2f\n",
-			cyl.transparency, cyl.reflectivity, cyl.refractive_idx);
+			cyl.transp, cyl.reflct, cyl.refractive_idx);
 	}
 	else
 	{
 		// Default values
-		cyl.transparency = 0.0f;
-		cyl.reflectivity = 0.0f;
+		cyl.transp = 0.0f;
+		cyl.reflct = 0.0f;
 		cyl.refractive_idx = 1.5f;
 	}
 	cyl.base = subtract(center, multiply(cyl.axis, cyl.height / 2));

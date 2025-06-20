@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:29:26 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 14:35:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:37:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ void	*new_window(t_global *global)
 				i = 0;
 				while (i < global->scene.num_sp && global->scene.spheres)
 				{
-					printf("Sphere %d: pos(%.1f,%.1f,%.1f) transparency=%.2f\n",
+					printf("Sphere %d: pos(%.1f,%.1f,%.1f) transp=%.2f\n",
 						i,
 						global->scene.spheres[i].center.x,
 						global->scene.spheres[i].center.y,
 						global->scene.spheres[i].center.z,
-						global->scene.spheres[i].transparency);
-						if (global->scene.spheres[i].transparency > 0.001)
+						global->scene.spheres[i].transp);
+						if (global->scene.spheres[i].transp > 0.001)
 						valid_spheres++;
 						i++;
 					}
@@ -67,11 +67,11 @@ void	*new_window(t_global *global)
 						i = 0;
 						while (i < global->scene.num_pl && global->scene.planes)
 						{
-							if (global->scene.planes[i].transparency > 0.001)
+							if (global->scene.planes[i].transp > 0.001)
 							{
-								printf("Transparent plane %d: transparency=%.2f\n",
+								printf("Transparent plane %d: transp=%.2f\n",
 									i,
-									global->scene.planes[i].transparency);
+									global->scene.planes[i].transp);
 								}
 								i++;
 							}

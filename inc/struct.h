@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 22:29:13 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:39:46 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ typedef struct s_vector
 typedef struct s_material
 {
     t_vector    color;
-    float       transparency;
-    float       reflectivity;
+    float       transp;
+    float       reflct;
     float       refractive_idx;
 }   t_material;
 typedef struct s_ambient
@@ -108,8 +108,8 @@ typedef struct s_sphere {
     t_vector center;
     float radius;
     t_color color;                // Mantener para compatibilidad
-    float transparency;           // Mantener para compatibilidad
-    float reflectivity;           // Mantener para compatibilidad 
+    float transp;           // Mantener para compatibilidad
+    float reflct;           // Mantener para compatibilidad 
     float refractive_idx;       // Mantener para compatibilidad
 	// Añadir t_material material; más tarde
 } t_sphere;
@@ -120,8 +120,8 @@ typedef struct s_plane
     t_vector    normal;
     //t_material  material;
 	t_color color;                // Mantener para compatibilidad
-    float transparency;           // Mantener para compatibilidad
-    float reflectivity;           // Mantener para compatibilidad 
+    float transp;           // Mantener para compatibilidad
+    float reflct;           // Mantener para compatibilidad 
     float refractive_idx;       // Mantener para compatibilidad
 }   t_plane;
 
@@ -133,8 +133,8 @@ typedef struct s_cylinder
     float       height;
     //t_material  material;
 	t_color color;                // Mantener para compatibilidad
-    float transparency;           // Mantener para compatibilidad
-    float reflectivity;           // Mantener para compatibilidad 
+    float transp;           // Mantener para compatibilidad
+    float reflct;           // Mantener para compatibilidad 
     float refractive_idx;       // Mantener para compatibilidad
 }   t_cylinder;
 

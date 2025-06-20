@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 14:03:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:42:43 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_color	cal_lighting(t_global *global)
 /**
  * Calculates reflection contribution by casting a reflection ray
  */
-static t_color	calculate_reflection(t_global *global, float reflectivity)
+static t_color	cal_reflection(t_global *global, float reflct)
 {
 	t_vector	normal;
 	t_vector	reflect_dir;
@@ -86,7 +86,7 @@ static t_color	calculate_reflection(t_global *global, float reflectivity)
 	{
 		global->c_ray.hit = reflect_hit;
 		reflect_color = cal_lighting(global);
-		reflect_color = color_scale(reflect_color, reflectivity);
+		reflect_color = color_scale(reflect_color, reflct);
 	}
 	else
 		reflect_color = (t_color){20, 20, 20}; // Sky color
@@ -100,7 +100,7 @@ static t_color	calculate_reflection(t_global *global, float reflectivity)
 /**
  * Calculates transparency contribution by casting a transmission ray
  */
-static t_color	calculate_transparency(t_global *global, float transparency)
+static t_color	cal_transp(t_global *global, float transp)
 {
 	t_vector	transmission_dir;
 	t_vector	ray_origin;
@@ -126,7 +126,7 @@ static t_color	calculate_transparency(t_global *global, float transparency)
 	{
 		global->c_ray.hit = trans_hit;
 		trans_color = cal_lighting(global);
-		trans_color = color_scale(trans_color, transparency);
+		trans_color = color_scale(trans_color, transp);
 	}
 	else
 	{
@@ -151,21 +151,21 @@ t_color	cal_lighting_advanced(t_global *global)
 	t_color	basic_color;
 	t_color	final_color;
 	t_color	trans_color;
-	float	transparency;
-	float	reflectivity;
+	float	transp;
+	float	reflct;
 
 	if (!is_valid_isec(global))
 		return ((t_color){5, 5, 5});
 	
 	// Get material properties
-	transparency = get_object_transparency(global, global->c_ray.hit);
-	reflectivity = get_object_reflectivity(global, global->c_ray.hit);
+	transp = get_object_transp(global, global->c_ray.hit);
+	reflct = get_object_reflct(global, global->c_ray.hit);
 	
 	// Get basic lighting first
 	basic_color = cal_lighting(global);
 	
-	// SIMPLE transparency test - just make object darker based on transparency
-	if (transparency > 0.7f)
+	// SIMPLE transp test - just make object darker based on transp
+	if (transp > 0.7f)
 	{
 		// Very transparent - almost see-through
 		final_color.r = basic_color.r * 0.1f;
@@ -173,19 +173,19 @@ t_color	cal_lighting_advanced(t_global *global)
 		final_color.b = basic_color.b * 0.1f;
 		
 		// Add background color
-		trans_color = calculate_transparency(global, transparency);
+		trans_color = cal_transp(global, transp);
 		final_color.r += trans_color.r * 0.9f;
 		final_color.g += trans_color.g * 0.9f;
 		final_color.b += trans_color.b * 0.9f;
 	}
-	else if (transparency > 0.5f)
+	else if (transp > 0.5f)
 	{
 		// Semi-transparent
 		final_color.r = basic_color.r * 0.3f;
 		final_color.g = basic_color.g * 0.3f;
 		final_color.b = basic_color.b * 0.3f;
 		
-		trans_color = calculate_transparency(global, transparency);
+		trans_color = cal_transp(global, transp);
 		final_color.r += trans_color.r * 0.7f;
 		final_color.g += trans_color.g * 0.7f;
 		final_color.b += trans_color.b * 0.7f;
@@ -196,12 +196,12 @@ t_color	cal_lighting_advanced(t_global *global)
 	}
 	
 	// Add reflection if reflective
-	if (reflectivity > 0.01f)
+	if (reflct > 0.01f)
 	{
-		t_color reflect_color = calculate_reflection(global, reflectivity);
-		final_color.r = final_color.r * (1.0f - reflectivity) + reflect_color.r * reflectivity;
-		final_color.g = final_color.g * (1.0f - reflectivity) + reflect_color.g * reflectivity;
-		final_color.b = final_color.b * (1.0f - reflectivity) + reflect_color.b * reflectivity;
+		t_color reflect_color = cal_reflection(global, reflct);
+		final_color.r = final_color.r * (1.0f - reflct) + reflect_color.r * reflct;
+		final_color.g = final_color.g * (1.0f - reflct) + reflect_color.g * reflct;
+		final_color.b = final_color.b * (1.0f - reflct) + reflect_color.b * reflct;
 	}
 	
 	clamp_color(&final_color);

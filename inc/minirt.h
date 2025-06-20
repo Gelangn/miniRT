@@ -112,5 +112,6 @@
 # define MIN_CONTRIBUTION 0.01f
 # define EPSILON 0.001f
 # define AIR_REFRACTIVE_INDEX 1.0f
+# define MAX_RAYS_PER_LEVEL 100
 
 #endif

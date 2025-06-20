@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/20 13:21:05 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:13:23 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,21 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 	printf("¿Dentro del objeto? %s\n", inside ? "SÍ" : "NO");
 	printf("Normal: (%.2f, %.2f, %.2f)\n", normal.x, normal.y, normal.z);
 
-    // Si el objeto es un cilindro, añadir esto:
+    // Si el objeto es un cilindro
     if (global->c_ray.hit.obj_type == 2) {
-        printf("DEBUG CILINDRO: Punto de golpe: (%.2f, %.2f, %.2f)\n",
-           global->c_ray.hit.point.x, global->c_ray.hit.point.y, global->c_ray.hit.point.z);
-        // Verificar si está en la superficie o en las tapas:
-        // [Código para determinar si golpea superficie o tapas]
+        printf("CILINDRO: Punto=(%.2f,%.2f,%.2f), Inside=%d\n",
+            global->c_ray.hit.point.x, 
+            global->c_ray.hit.point.y,
+            global->c_ray.hit.point.z,
+            inside);
+            
+        // Para depurar is_inside_cylinder directamente
+        t_cylinder *cyl = &global->scene.cyls[global->c_ray.hit.obj_index];
+        int test_inside = is_inside_cylinder(cyl, global->c_ray.origin);
+        printf("Test Inside directo: %d\n", test_inside);
+        
+        printf("CILINDRO: Normal=(%.2f,%.2f,%.2f)\n", 
+            normal.x, normal.y, normal.z);
     }
     
     // Adjust reflectivity using Fresnel (more reflection at grazing angles)
@@ -126,6 +135,15 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 		printf("REFRACTION ray created: contrib=%.3f, dir=(%.2f,%.2f,%.2f)\n", 
 			rays[*count-1].contribution, refract_dir.x, refract_dir.y, refract_dir.z);
     }
+	
+	// Después de calcular refract_dir
+	if (global->c_ray.hit.obj_type == 2) {
+		printf("CILINDRO: ¿Se generó rayo refractado? %s\n", 
+			(fresnel < 1.0f) ? "SÍ" : "NO");
+		printf("CILINDRO: Dirección refracción=(%.2f,%.2f,%.2f), Fresnel=%.3f\n",
+			refract_dir.x, refract_dir.y, refract_dir.z, fresnel);
+	}
+	
 	return (*count);
 }
 
@@ -137,6 +155,64 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 t_color	trace_ray_iterative(t_global *global, t_vector origin,
         t_vector direction, int max_depth)
 {
+    // NUEVO: Código específico para cilindros con transparencia
+    // Lanzar un rayo inicial y verificar si golpea un cilindro
+    t_active_ray saved_ray = global->c_ray;
+    global->c_ray.origin = origin;
+    global->c_ray.dir = direction;
+    t_intersec hit = find_closest_isec(global);
+    
+    // Si es un cilindro
+    if (hit.obj_type == 2 && hit.obj_index >= 0 && 
+        hit.obj_index < global->scene.num_cy) 
+    {
+        // Verificar si es transparente
+        float transparency = global->scene.cyls[hit.obj_index].transparency;
+        if (transparency > 0.1f) 
+        {
+            // Calcular color del cilindro
+            global->c_ray.hit = hit;
+            t_color cyl_color = cal_lighting(global);
+            
+            // Buscar lo que hay detrás
+            t_vector through_point = add(hit.point, multiply(direction, 0.1f));
+            global->c_ray.origin = through_point;
+            t_intersec behind_hit = find_closest_isec(global);
+            
+            // Si hay algo detrás, mezclar colores
+            if (behind_hit.obj_type >= 0) 
+            {
+                global->c_ray.hit = behind_hit;
+                t_color behind_color = cal_lighting(global);
+                
+                // Restaurar rayo original
+                global->c_ray = saved_ray;
+                
+                // Crear color mezclado
+                t_color mixed;
+                mixed.r = (int)(cyl_color.r * (1.0f - transparency) + 
+                               behind_color.r * transparency);
+                mixed.g = (int)(cyl_color.g * (1.0f - transparency) + 
+                               behind_color.g * transparency);
+                mixed.b = (int)(cyl_color.b * (1.0f - transparency) + 
+                               behind_color.b * transparency);
+                
+                // Asegurar valores en rango
+                if (mixed.r > 255) mixed.r = 255;
+                if (mixed.g > 255) mixed.g = 255;
+                if (mixed.b > 255) mixed.b = 255;
+                
+                return mixed;
+            }
+            
+            // Restaurar estado original si no hay nada detrás
+            global->c_ray = saved_ray;
+        }
+    }
+    
+    // Restaurar rayo y continuar con el código existente
+    global->c_ray = saved_ray;
+
     t_ray_result current_level[MAX_RAY_DEPTH * 2];
     t_ray_result next_level[MAX_RAY_DEPTH * 2];
     t_color accumulated_color;
@@ -144,6 +220,62 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
     int current_count;
     int next_count;
     int depth;
+	global->c_ray.origin = origin;
+    global->c_ray.dir = direction;
+
+	printf("DEBUG: trace_ray_iterative iniciado\n");
+    
+    if (hit.obj_type == 2) { // Es un cilindro
+        float transparency = 0.0f;
+        
+        // Verificar si es transparente
+        if (hit.obj_index >= 0 && hit.obj_index < global->scene.num_cy) {
+            transparency = global->scene.cyls[hit.obj_index].transparency;
+            printf("CILINDRO transparencia: %.3f\n", transparency);
+        }
+        
+        if (transparency > 0.3f) {
+            printf("APLICANDO TRANSPARENCIA FORZADA EN CILINDRO\n");
+            
+            // 1. Calcular el color del cilindro
+            global->c_ray.hit = hit;
+            t_color cylinder_color = cal_lighting(global);
+            
+            // 2. Calcular punto justo después del cilindro para un nuevo rayo
+            t_vector through_point = add(hit.point, multiply(direction, 0.01f));
+            
+            // 3. Lanzar un nuevo rayo desde ese punto
+            t_vector saved_origin = global->c_ray.origin;
+            global->c_ray.origin = through_point;
+            
+            t_intersec next_hit = find_closest_isec(global);
+            
+            // 4. Si golpea algo, mezclar los colores
+            if (next_hit.obj_type >= 0) {
+                global->c_ray.hit = next_hit;
+                t_color behind_color = cal_lighting(global);
+                
+                // Restaurar origen
+                global->c_ray.origin = saved_origin;
+                
+                // Mezclar colores directamente
+                t_color final;
+                final.r = (int)(cylinder_color.r * (1.0f - transparency) + 
+                                behind_color.r * transparency);
+                final.g = (int)(cylinder_color.g * (1.0f - transparency) + 
+                                behind_color.g * transparency);
+                final.b = (int)(cylinder_color.b * (1.0f - transparency) + 
+                                behind_color.b * transparency);
+                
+                // Asegurar que los valores estén en el rango correcto
+                clamp_color(&final);
+                return final;
+            }
+            
+            // Restaurar en caso de no golpear nada
+            global->c_ray.origin = saved_origin;
+        }
+    }
     
     // AGREGAR: variables para manejar la transparencia
     t_color surface_color = {0, 0, 0};

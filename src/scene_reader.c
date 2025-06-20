@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 13:38:58 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:51:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,24 @@
 /* Helper function to process each line according to its type */
 void	parse_line(t_global *global, char *line)
 {
-	if (line[0] == 'A')
+	// Ignorar líneas vacías
+	if (!line || !*line)
+		return ;
+		
+	// Omitir espacios iniciales
+	while (*line && (*line == ' ' || *line == '\t'))
+		line++;
+	
+	// Ignorar comentarios o líneas vacías después de eliminar espacios
+	if (!*line || *line == '#')
+		return ;
+		
+	// Ahora analizar el comando
+	if (*line == 'A')
 		parse_ambient(global, line);
-	else if (line[0] == 'C')
+	else if (*line == 'C')
 		parse_cam(global, line);
-	else if (line[0] == 'L')
+	else if (*line == 'L')
 		parse_light(global, line);
 	else if (ft_strncmp(line, "sp", 2) == 0)
 		parse_sphere(global, line);
@@ -27,6 +40,11 @@ void	parse_line(t_global *global, char *line)
 		parse_plane(global, line);
 	else if (ft_strncmp(line, "cy", 2) == 0)
 		parse_cylinder(global, line);
+	else
+	{
+		printf("Error: Línea no reconocida: '%s'\n", line);
+		finish(global, ERR_PARSE);
+	}
 }
 
 /* Function to read and parse the scene file */
@@ -41,13 +59,18 @@ void	read_scene(t_global *global)
 	if (fd == -1)
 		finish(global, ERR_OPEN);
 	line_ptr = get_next_line(fd);
-	printf("line_ptr: %s\n", line_ptr);
+	printf("line_ptr:\n %s\n", line_ptr);
 	if (!line_ptr)
 		finish(global, ERR_READ);
- 	while (line_ptr)
+	while (line_ptr)
 	{
+		// Mostrar cada línea leída
 		write(1, line_ptr, ft_strlen(line_ptr));
-		parse_line(global, line_ptr);
+		
+		// Procesamos la línea solo si no es un comentario o vacía
+		if (*line_ptr && *line_ptr != '#' && *line_ptr != '\n')
+			parse_line(global, line_ptr);
+			
 		free(line_ptr);
 		line_ptr = get_next_line(fd);
 	}
@@ -59,6 +82,7 @@ void	count_objects(t_global *global)
 {
 	char	*line_ptr;
 	int		fd;
+	char	*trimmed_line;
 
 	fd = open(global->scene.file_path, O_RDONLY);
 	if (fd == -1)
@@ -66,12 +90,18 @@ void	count_objects(t_global *global)
 	line_ptr = get_next_line(fd);
 	while (line_ptr)
 	{
-		if (ft_strncmp(line_ptr, "sp", 2) == 0)
-			global->scene.num_sp++;
-		else if (ft_strncmp(line_ptr, "pl", 2) == 0)
-			global->scene.num_pl++;
-		else if (ft_strncmp(line_ptr, "cy", 2) == 0)
-			global->scene.num_cy++;
+		trimmed_line = line_ptr;
+		while (*trimmed_line && (*trimmed_line == ' ' || *trimmed_line == '\t'))
+			trimmed_line++;
+		if (*trimmed_line && *trimmed_line != '#')
+		{
+			if (ft_strncmp(trimmed_line, "sp", 2) == 0)
+				global->scene.num_sp++;
+			else if (ft_strncmp(trimmed_line, "pl", 2) == 0)
+				global->scene.num_pl++;
+			else if (ft_strncmp(trimmed_line, "cy", 2) == 0)
+				global->scene.num_cy++;
+		}
 		free(line_ptr);
 		line_ptr = get_next_line(fd);
 	}

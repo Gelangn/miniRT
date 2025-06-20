@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:30:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 23:19:00 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:59:34 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_vector	reflect_ray(t_vector incident, t_vector normal)
 {
 	float		dot_product;
 	t_vector	reflection;
+
+	printf("DEBUG: refract_ray llamada\n");
 
 	dot_product = dot(incident, normal);
 	reflection = subtract(incident, multiply(normal, 2.0f * dot_product));

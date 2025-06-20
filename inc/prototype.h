@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 22:58:09 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:49:03 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,13 @@ int			is_inside_object(t_global *global, t_intersec isec,
 int			is_inside_sphere(t_sphere *sphere, t_vector point);
 
 /* Refraction and reflection functions */
-float schlick(float cos_angle, float n1, float n2);
+float		schlick(float cos_angle, float n1, float n2);
+
+/* Prototipos para funciones de test de interior */
+int			is_inside_sphere(t_sphere *sphere, t_vector point);
+int			is_inside_cylinder(t_cylinder *cyl, t_vector point);
+int			is_inside_object(t_global *global, t_intersec isec,
+				t_vector origin);
+
 
 #endif

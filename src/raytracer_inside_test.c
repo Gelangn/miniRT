@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:00:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 13:42:06 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:23:28 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ int is_inside_object(t_global *global, t_intersec isec, t_vector origin)
     }
     // Cilindros
     else if (isec.obj_type == 2) {
-        return is_inside_cylinder(&global->scene.cyls[isec.obj_index], origin);
-    }
+		printf("is_inside cylinder\n");
+		return is_inside_cylinder(&global->scene.cyls[isec.obj_index], origin);
+	}
     
     return (0); // Para planos siempre falso (no tienen "dentro")
 }

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:30:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 22:31:01 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:37:28 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,32 @@
  */
 float	get_object_transparency(t_global *global, t_intersec isec)
 {
-	if (isec.obj_type < 0 || isec.obj_index < 0)
-		return (0.0f);
 	
-	if (isec.obj_type == 0)  // Sphere
+	// Esferas
+    if (isec.obj_type == 0)
+    {
+		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_sp)
 		return (global->scene.spheres[isec.obj_index].transparency);
-	else if (isec.obj_type == 1)  // Plane
+    }
+    // Planos 
+    else if (isec.obj_type == 1)
+    {
+		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_pl)
 		return (global->scene.planes[isec.obj_index].transparency);
-	else if (isec.obj_type == 2)  // Cylinder
-		return (global->scene.cyls[isec.obj_index].transparency);
-	
+    }
+    // Cilindros - SOLUCIÓN DIRECTA
+    else if (isec.obj_type == 2)
+    {
+		printf("Object type: %d, index: %d\n", isec.obj_type, isec.obj_index);
+        
+		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_cy) {
+            float transp = global->scene.cyls[isec.obj_index].transparency;
+            printf("CILINDRO TRANSPARENCIA: %.2f\n", transp);
+            return transp;
+        }
+		else
+			printf("CILINDRO - indice fuera de rango\n");
+	}
 	return (0.0f);
 }
 

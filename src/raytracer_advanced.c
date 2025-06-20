@@ -76,9 +76,14 @@ int	generate_secondary_rays(t_global *global, t_ray_result *next)
 {
     float		transparency;
     float		reflectivity;
+    float       fresnel;
     t_vector	normal;
     t_vector	reflect_dir;
+    t_vector    refract_dir;
+    float       n1;
+    float       n2;
     int			count;
+    int         inside;
 
     count = 0;
     transparency = get_object_transp(global, global->c_ray.hit);
@@ -89,6 +94,23 @@ int	generate_secondary_rays(t_global *global, t_ray_result *next)
         
     normal = get_surface_normal(global, global->c_ray.hit);
     
+    // Calcular índices de refracción según si estamos dentro o fuera del objeto
+    inside = is_inside_object(global, global->c_ray.hit, global->c_ray.origin);
+    if (inside)
+    {
+        n1 = get_object_refractive_index(global, global->c_ray.hit);
+        n2 = AIR_REFRACTIVE_INDEX;
+    }
+    else
+    {
+        n1 = AIR_REFRACTIVE_INDEX;
+        n2 = get_object_refractive_index(global, global->c_ray.hit);
+    }
+    
+    // Calcular factor de Fresnel para mezclar reflexión/refracción
+    fresnel = schlick(-dot(normal, global->c_ray.dir), n1, n2);
+    
+    // Añadir rayo de reflexión
     if (reflectivity >= 0.01f)
     {
         reflect_dir = reflect_ray(global->c_ray.dir, normal);
@@ -96,6 +118,17 @@ int	generate_secondary_rays(t_global *global, t_ray_result *next)
                            multiply(reflect_dir, EPSILON));
         next[count].direction = reflect_dir;
         next[count].contribution = reflectivity;
+        count++;
+    }
+    
+    // Añadir rayo de refracción para transparencia
+    if (transparency >= 0.01f)
+    {
+        refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
+        next[count].origin = add(global->c_ray.hit.point, 
+                           multiply(refract_dir, EPSILON));
+        next[count].direction = refract_dir;
+        next[count].contribution = transparency * (1.0f - fresnel);
         count++;
     }
     

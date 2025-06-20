@@ -1,0 +1,24 @@
+// test_transparency.rt
+A 0.3 255,255,255
+C 0,0,0 0,0,1 60
+L 5,10,0 0.8 255,255,255
+
+# Gran esfera transparente (bola de cristal) - aumentar reflectividad de 0.05 a 0.1
+sp 0,0,10 3 255,255,255 0.95 0.1 1.5
+
+# Esfera pequeña azul detrás (debería verse aumentada y posiblemente invertida)
+sp 0,0,15 1 0,0,255 0 0 0
+
+# Cono verde a un lado (para verificar distorsión e inversión)
+cy -3,0,13 0,1,0 0.5 3 0,255,0 0 0 0
+
+# Patrón de cuadrícula en el fondo para visualizar distorsión
+pl 0,0,20 0,0,-1 128,128,128 0 0 0
+
+# Esferas pequeñas formando un patrón para ver distorsión
+sp -2,-1,18 0.3 255,0,0 0 0 0
+sp 0,-1,18 0.3 0,255,0 0 0 0 
+sp 2,-1,18 0.3 0,0,255 0 0 0
+sp -2,1,18 0.3 255,255,0 0 0 0
+sp 0,1,18 0.3 255,0,255 0 0 0
+sp 2,1,18 0.3 0,255,255 0 0 0

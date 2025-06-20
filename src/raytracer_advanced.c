@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/20 01:01:56 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 12:49:15 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 	t_color	final_color;
 	t_color	level_color;
 	int		i;
-	//float	transparency;
-	//float	reflectivity;
 
 	final_color = (t_color){0, 0, 0};
 	i = -1;
@@ -30,16 +28,22 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 		global->c_ray.hit = find_closest_isec(global);
 		if (global->c_ray.hit.obj_type >= 0)
 		{
-			// Use advanced lighting if object has transparency or reflectivity
-			//transparency = get_object_transparency(global, global->c_ray.hit);
-			//reflectivity = get_object_reflectivity(global, global->c_ray.hit);
-			/*if (transparency > 0.01f || reflectivity > 0.01f)
-				level_color = cal_lighting_advanced(global);
-			else */
-			printf("Processing ray at point (%.1f,%.1f,%.1f)\n", 
-       global->c_ray.hit.point.x, global->c_ray.hit.point.y, 
-       global->c_ray.hit.point.z);
 			level_color = cal_lighting(global);
+			
+			// Añadir brillo adicional en los bordes de objetos transparentes
+			if (get_object_transparency(global, global->c_ray.hit) > 0.5f)
+			{
+				// Calcular factor de borde (más brillante en ángulos tangenciales)
+				float edge_factor = 1.0f - fabs(dot(global->c_ray.dir, 
+										 get_surface_normal(global, global->c_ray.hit)));
+				edge_factor = edge_factor * edge_factor * 50.0f;  // Intensificar efecto
+				
+				// Añadir brillo de borde
+				level_color.r = fmin(255, level_color.r + edge_factor);
+				level_color.g = fmin(255, level_color.g + edge_factor);
+				level_color.b = fmin(255, level_color.b + edge_factor);
+			}
+			
 			level_color = color_scale(level_color, rays[i].contribution);
 			final_color = color_add(final_color, level_color);
 			printf("Ray contribution: %.3f, Color: (%d,%d,%d)\n", 
@@ -140,7 +144,8 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
     static int debug_x = -1;
     static int debug_y = -1;
-    int debug_this_ray = (global->c_ray.hit.point.x == debug_x && global->c_ray.hit.point.y == debug_y);
+    int debug_this_ray = (global->c_ray.hit.point.x == debug_x &&
+		global->c_ray.hit.point.y == debug_y);
 
     // Initialize all arrays completely
     ft_memset(current_level, 0, sizeof(current_level));
@@ -178,14 +183,20 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
         }
         else if (found_transparency && depth == 1)
         {
-            // Mezcla para transparencia en primer nivel de refracción
-            // Color final = Color superficie * (1-transparencia) + Color refractado * transparencia
-            accumulated_color.r = (int)(surface_color.r * (1.0f - transparency) + 
-                            level_contribution.r * transparency);
-            accumulated_color.g = (int)(surface_color.g * (1.0f - transparency) + 
-                            level_contribution.g * transparency);
-            accumulated_color.b = (int)(surface_color.b * (1.0f - transparency) + 
-                            level_contribution.b * transparency);
+            // Aumentar artificialmente el brillo de los objetos tras el cristal
+            level_contribution.r = level_contribution.r * 1.5f;  // Aumentar de 1.3f a 1.5f
+            level_contribution.g = level_contribution.g * 1.5f;
+            level_contribution.b = level_contribution.b * 1.5f;
+            
+            // Añadir un componente de brillo al propio cristal
+            float glass_brightness = 30.0f;  // Brillo base del cristal
+            
+            accumulated_color.r = (int)((surface_color.r + glass_brightness) * (1.0f - transparency) + 
+                    level_contribution.r * transparency);
+            accumulated_color.g = (int)((surface_color.g + glass_brightness) * (1.0f - transparency) + 
+                    level_contribution.g * transparency);
+            accumulated_color.b = (int)((surface_color.b + glass_brightness) * (1.0f - transparency) + 
+                    level_contribution.b * transparency);
         }
         else
         {

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/20 14:13:23 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:11:32 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,30 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
  */
 int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 {
-    t_vector    normal;
-    t_vector    reflect_dir;
-    t_vector    refract_dir;
-    float       transparency;
-    float       reflectivity;
-    float       n1, n2;
-    float       fresnel;
-    int         inside;
+    float transparency, reflectivity, fresnel;
+    t_vector normal, reflect_dir, refract_dir;
+    float n1, n2;
     
+    *count = 0;
+    
+    // Obtener propiedades del material
     transparency = get_object_transparency(global, global->c_ray.hit);
     reflectivity = get_object_reflectivity(global, global->c_ray.hit);
     
-    if (transparency < MIN_CONTRIBUTION && reflectivity < MIN_CONTRIBUTION)
+    printf("OBJETO: tipo=%d, transp=%.3f, refl=%.3f\n", 
+           global->c_ray.hit.obj_type, transparency, reflectivity);
+    
+    // Verificar si hay suficiente contribución para seguir
+    // Eliminamos la referencia a global->c_ray.contribution
+    if (transparency < MIN_CONTRIBUTION && reflectivity < MIN_CONTRIBUTION) {
+        printf("DEBUG: Contribución insuficiente, saltando rayos secundarios\n");
         return 0;
+    }
     
     normal = get_surface_normal(global, global->c_ray.hit);
-    inside = is_inside_object(global, global->c_ray.hit, global->c_ray.origin);
-
+    
     // Set refractive indices based on whether ray is entering or exiting
+    int inside = is_inside_object(global, global->c_ray.hit, global->c_ray.origin);
     if (inside) {
         n1 = get_object_refractive_index(global, global->c_ray.hit);
         n2 = AIR_REFRACTIVE_INDEX;
@@ -88,11 +93,11 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
     // Calculate Fresnel effect for more realistic reflections
     fresnel = schlick(-dot(normal, global->c_ray.dir), n1, n2);
     
-	printf("\n--- RAY INFO ---\n");
-	printf("Objeto golpeado: tipo=%d\n", global->c_ray.hit.obj_type);
-	printf("Transparencia: %.2f\n", transparency);
-	printf("¿Dentro del objeto? %s\n", inside ? "SÍ" : "NO");
-	printf("Normal: (%.2f, %.2f, %.2f)\n", normal.x, normal.y, normal.z);
+    printf("\n--- RAY INFO ---\n");
+    printf("Objeto golpeado: tipo=%d\n", global->c_ray.hit.obj_type);
+    printf("Transparencia: %.2f\n", transparency);
+    printf("¿Dentro del objeto? %s\n", inside ? "SÍ" : "NO");
+    printf("Normal: (%.2f, %.2f, %.2f)\n", normal.x, normal.y, normal.z);
 
     // Si el objeto es un cilindro
     if (global->c_ray.hit.obj_type == 2) {
@@ -111,40 +116,32 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
             normal.x, normal.y, normal.z);
     }
     
-    // Adjust reflectivity using Fresnel (more reflection at grazing angles)
-    reflectivity = reflectivity + (1.0f - reflectivity) * fresnel;
-    
-    // Add reflection ray
-    if (reflectivity > MIN_CONTRIBUTION) {
+    // Add reflection ray - solo si hay reflectividad significativa
+    if (reflectivity >= 0.01f) {
         reflect_dir = reflect_ray(global->c_ray.dir, normal);
         rays[*count].origin = add(global->c_ray.hit.point, 
-                                multiply(reflect_dir, EPSILON));
+                               multiply(reflect_dir, EPSILON));
         rays[*count].direction = reflect_dir;
-        rays[*count].contribution = reflectivity;
+        rays[*count].contribution = reflectivity; // Solo el valor de reflectivity
+        printf("DEBUG: Rayo reflectivo generado (refl=%.2f, contrib=%.3f)\n", 
+               reflectivity, rays[*count].contribution);
+        (*count)++;
+    }
+
+    // Add refraction ray - solo si hay transparencia significativa
+    if (transparency >= 0.01f) {
+        printf("DEBUG: refract_ray llamada para transp=%.2f\n", transparency);
+        refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
+        rays[*count].origin = add(global->c_ray.hit.point, 
+                               multiply(refract_dir, EPSILON));
+        rays[*count].direction = refract_dir;
+        rays[*count].contribution = transparency * (1.0f - fresnel); // Sin multiplicar por contribution
+        printf("DEBUG: Rayo refractivo generado (transp=%.2f, contrib=%.3f)\n", 
+               transparency, rays[*count].contribution);
         (*count)++;
     }
     
-    // Add refraction ray
-    if (transparency > MIN_CONTRIBUTION) {
-        refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
-        rays[*count].origin = add(global->c_ray.hit.point, 
-                                multiply(refract_dir, EPSILON));
-        rays[*count].direction = refract_dir;
-        rays[*count].contribution = transparency * (1.0f - fresnel);
-        (*count)++;
-		printf("REFRACTION ray created: contrib=%.3f, dir=(%.2f,%.2f,%.2f)\n", 
-			rays[*count-1].contribution, refract_dir.x, refract_dir.y, refract_dir.z);
-    }
-	
-	// Después de calcular refract_dir
-	if (global->c_ray.hit.obj_type == 2) {
-		printf("CILINDRO: ¿Se generó rayo refractado? %s\n", 
-			(fresnel < 1.0f) ? "SÍ" : "NO");
-		printf("CILINDRO: Dirección refracción=(%.2f,%.2f,%.2f), Fresnel=%.3f\n",
-			refract_dir.x, refract_dir.y, refract_dir.z, fresnel);
-	}
-	
-	return (*count);
+    return *count;
 }
 
 /**
@@ -324,23 +321,24 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
         else if (found_transparency && depth == 1)
         {
             // Aumentar brillo de objetos vistos a través de transparencia
-            level_contribution.r = (int)(level_contribution.r * 1.3f);
-            level_contribution.g = (int)(level_contribution.g * 1.3f);
-            level_contribution.b = (int)(level_contribution.b * 1.3f);
-            
+            level_contribution.r = (int)(level_contribution.r * 1.5f);
+            level_contribution.g = (int)(level_contribution.g * 1.5f);
+            level_contribution.b = (int)(level_contribution.b * 1.5f);
+            // Añadir un componente de brillo adicional para efecto de cristal
+    		float glass_brightness = 20.0f;
             // Mezclar con la mejora
             accumulated_color.r = (int)(surface_color.r * (1.0f - transparency) + 
-                    level_contribution.r * transparency);
+                    (level_contribution.r + glass_brightness) * transparency);
             accumulated_color.g = (int)(surface_color.g * (1.0f - transparency) + 
-                    level_contribution.g * transparency);
+                    (level_contribution.g + glass_brightness) * transparency);
             accumulated_color.b = (int)(surface_color.b * (1.0f - transparency) + 
-                    level_contribution.b * transparency);
+                    (level_contribution.b + glass_brightness) * transparency);
         }
         else
         {
             // Para reflejos y otros efectos, seguimos usando la lógica actual
             // Pero con un peso reducido para no saturar
-            float blend_factor = 0.3f;
+            float blend_factor = 0.2f;
             accumulated_color.r = (int)(accumulated_color.r * (1.0f - blend_factor) + 
                             level_contribution.r * blend_factor);
             accumulated_color.g = (int)(accumulated_color.g * (1.0f - blend_factor) + 

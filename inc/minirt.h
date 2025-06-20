@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 16:00:23 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:24:18 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@
 # define ESC_KEY 65307
 
 # define DEFAULT_COLOR MAGENTA
-# define BACKGROUND_COLOR LIGHT_GREY
+# define BACKGROUND_COLOR DARK_GREY
 
 /* Colors - mantener solo estas definiciones */
 # define BLACK 0x000000

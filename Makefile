@@ -59,7 +59,6 @@ SRC_FILES = 	camera_controls.c \
 				save.c \
 				scene_reader.c \
 				shadows.c \
-				signal_handlers.c \
 				utils.c \
 				window.c
 

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 11:54:23 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:04:59 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	prepare_lighting_data(t_global *global)
 	global->c_ray.obj_color = get_object_color(global);
 	global->c_ray.normal = get_surface_normal(global, global->c_ray.hit);
 	global->c_light.dir = norm(subtract(global->scene.light.pos,
-										global->c_ray.hit.point));
+				global->c_ray.hit.point));
 	global->c_light.distance = mag(subtract(global->scene.light.pos,
-											global->c_ray.hit.point));
+				global->c_ray.hit.point));
 }
 
 /**

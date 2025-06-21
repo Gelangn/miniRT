@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/20 18:12:47 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 12:44:13 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,36 +255,41 @@ static int	has_significant_contrib(t_ray_result *rays, int count)
 t_color	trace_ray_iterative(t_global *global, t_vector origin, 
         t_vector direction, int max_depth)
 {
-    t_ray_result	current[MAX_RAYS];
-    t_ray_result	next[MAX_RAYS];
-    t_color			accum_color;
-    int				curr_count;
-    int				next_count;
-    int				depth;
+    t_ray_result    current_level[MAX_RAY_DEPTH * 2];
+    t_ray_result    next_level[MAX_RAY_DEPTH * 2];
+    t_color         accum_color;
+    int             curr_count;
+    int             next_count;
+    int             depth;
     int             real_max_depth;
 
+    // Inicializar arrays completamente a cero
+    ft_memset(current_level, 0, sizeof(current_level));
+    ft_memset(next_level, 0, sizeof(next_level));
+    
     real_max_depth = max_depth;
     if (real_max_depth > MAX_RAY_DEPTH)
         real_max_depth = MAX_RAY_DEPTH;
         
-    init_ray_data(current, origin, direction);
+    // Inicializar solo el primer rayo después del memset
+    init_ray_data(current_level, origin, direction);
     accum_color = (t_color){0, 0, 0};
     curr_count = 1;
     depth = 0;
     
     while (depth < real_max_depth && curr_count > 0)
     {
-        process_level_rays(global, current, curr_count, &accum_color);
+        process_level_rays(global, current_level, curr_count, &accum_color);
         
         if (depth >= real_max_depth - 1)
             break;
             
-        next_count = prepare_next_level(global, current, curr_count, next);
+        next_count = prepare_next_level(global, current_level, curr_count, next_level);
         
-        if (next_count == 0 || !has_significant_contrib(next, next_count))
+        if (next_count == 0 || !has_significant_contrib(next_level, next_count))
             break;
             
-        copy_next_to_current(current, next, next_count);
+        copy_next_to_current(current_level, next_level, next_count);
         curr_count = next_count;
         depth++;
     }

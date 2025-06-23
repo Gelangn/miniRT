@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/21 14:33:55 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:57:27 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,10 @@ void	print_info(t_global *global)
 		global->scene.cam.right_axis.x,
 		global->scene.cam.right_axis.y,
 		global->scene.cam.right_axis.z);
+	printf("Camera forward axis: (%.2f, %.2f, %.2f)\n",
+		global->scene.cam.forward_axis.x,
+		global->scene.cam.forward_axis.y,
+		global->scene.cam.forward_axis.z);
 	printf("Field of view: %.1f°\n", (float)global->scene.cam.fov);
 	printf("Total calculated rays: %d\n", global->total_pixels);
 	printf("Scene objects: %d spheres, %d planes, %d cylinders\n",

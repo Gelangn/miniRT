@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:13:10 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/21 14:20:20 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:13:35 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,10 @@ t_color	get_object_color(t_global *global)
  */
 t_ray_state	save_ray_state(t_global *global)
 {
-	t_ray_state	state;
-
-	state.origin = global->c_ray.origin;
-	state.dir = global->c_ray.dir;
-	state.isec = global->c_ray.hit;
-	return (state);
+	global->state.origin = global->c_ray.origin;
+	global->state.dir = global->c_ray.dir;
+	global->state.isec = global->c_ray.hit;
+	return (global->state);
 }
 
 /**
@@ -97,9 +95,9 @@ t_ray_state	save_ray_state(t_global *global)
  * @param global Structure to restore ray information to
  * @param state Previously saved ray state to restore
  */
-void	restore_ray_state(t_global *global, t_ray_state state)
+void	restore_ray_state(t_global *global)
 {
-	global->c_ray.origin = state.origin;
-	global->c_ray.dir = state.dir;
-	global->c_ray.hit = state.isec;
+	global->c_ray.origin = global->state.origin;
+	global->c_ray.dir = global->state.dir;
+	global->c_ray.hit = global->state.isec;
 }

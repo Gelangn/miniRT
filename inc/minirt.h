@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/21 14:25:29 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 10:26:04 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@
 # include <sys/stat.h>
 # include <unistd.h>
 
-# define WIN_W 840 // Screen width 1024 840
-# define WIN_H 630 // Screen height 768 630
-# define MARGIN 50 // Margin for the screen
+# define WIN_W 1024 // Screen width 1024 840
+# define WIN_H 768  // Screen height 768 630
+# define MARGIN 50  // Margin for the screen
 
 # define PI 3.14159265358979323846f
 # define MAX_PLANES 10
@@ -55,7 +55,7 @@
 # define ESC_KEY 65307
 
 # define DEFAULT_COLOR MAGENTA
-# define BACKGROUND_COLOR DARK_GREY
+# define BACKGROUND_COLOR BLACK
 
 /* Colors - mantener solo estas definiciones */
 # define BLACK 0x000000

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/21 14:42:56 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:16:45 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,6 @@ t_color	cal_lighting(t_global *global)
 	return (apply_lighting(global, shadow_factor));
 }
 
-void	backup_ray_state(t_global *global, t_ray_backup *backup)
-{
-	backup->hit = global->c_ray.hit;
-	backup->origin = global->c_ray.origin;
-	backup->dir = global->c_ray.dir;
-}
-
-void	restore_ray_state(t_global *global, t_ray_backup *backup)
-{
-	global->c_ray.hit = backup->hit;
-	global->c_ray.origin = backup->origin;
-	global->c_ray.dir = backup->dir;
-}
-
 t_vector	setup_reflection_ray(t_global *global)
 {
 	t_vector	normal;
@@ -109,11 +95,10 @@ t_color	apply_reflection_to_color(t_color final, t_color reflect, float reflct)
 
 t_color	cal_reflection(t_global *global, float reflct)
 {
-	t_ray_backup	backup;
 	t_intersec		reflect_hit;
 	t_color			reflect_color;
 
-	backup_ray_state(global, &backup);
+	save_ray_state(global);
 	setup_reflection_ray(global);
 	reflect_hit = find_closest_isec(global);
 	if (reflect_hit.obj_type >= 0)
@@ -124,17 +109,16 @@ t_color	cal_reflection(t_global *global, float reflct)
 	}
 	else
 		reflect_color = (t_color){20, 20, 20};
-	restore_ray_state(global, &backup);
+	restore_ray_state(global);
 	return (reflect_color);
 }
 
 t_color	cal_transp(t_global *global, float transp)
 {
-	t_ray_backup	backup;
 	t_intersec		trans_hit;
 	t_color			trans_color;
 
-	backup_ray_state(global, &backup);
+	save_ray_state(global);
 	setup_transmission_ray(global);
 	trans_hit = find_closest_isec(global);
 	if (trans_hit.obj_type >= 0)
@@ -149,7 +133,7 @@ t_color	cal_transp(t_global *global, float transp)
 		trans_color.g = (BACKGROUND_COLOR >> 8) & 0xFF;
 		trans_color.b = BACKGROUND_COLOR & 0xFF;
 	}
-	restore_ray_state(global, &backup);
+	restore_ray_state(global);
 	return (trans_color);
 }
 

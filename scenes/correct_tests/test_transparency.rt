@@ -8,7 +8,7 @@ sp 0,0,10 3 255,255,255 0.95 0.1 1.5
 # Esfera pequeña azul detrás (debería verse aumentada y posiblemente invertida)
 sp 0,0,15 1 0,0,255 0 0 0
 
-# Cono verde a un lado (para verificar distorsión e inversión)
+# Cilindro verde a un lado (para verificar distorsión e inversión)
 cy -3,0,13 0,1,0 0.5 3 0,255,0 0 0 0
 
 # Patrón de cuadrícula en el fondo para visualizar distorsión

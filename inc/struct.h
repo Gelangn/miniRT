@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/21 14:42:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:18:19 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ typedef struct s_vector
  */
 typedef struct s_material
 {
-    t_vector    color;
-    float       transp;
-    float       reflct;
-    float       refractive_idx;
-}   t_material;
+	t_vector		color;
+	float			transp;
+	float			reflct;
+	float			refractive_idx;
+}					t_material;
 typedef struct s_ambient
 {
 	float			intensity;
@@ -104,39 +104,40 @@ typedef struct s_intersec
 	int				obj_type;
 }					t_intersec;
 
-typedef struct s_sphere {
-    t_vector center;
-    float radius;
-    t_color color;                // Mantener para compatibilidad
-    float transp;           // Mantener para compatibilidad
-    float reflct;           // Mantener para compatibilidad 
-    float refractive_idx;       // Mantener para compatibilidad
-	// Añadir t_material material; más tarde
-} t_sphere;
+typedef struct s_sphere
+{
+	t_vector		center;
+	float			radius;
+	t_color color;        // Mantener para compatibilidad
+	float transp;         // Mantener para compatibilidad
+	float reflct;         // Mantener para compatibilidad
+	float refractive_idx; // Mantener para compatibilidad
+							// Añadir t_material material; más tarde
+}					t_sphere;
 
 typedef struct s_plane
 {
-    t_vector    point;
-    t_vector    normal;
-    //t_material  material;
-	t_color color;                // Mantener para compatibilidad
-    float transp;           // Mantener para compatibilidad
-    float reflct;           // Mantener para compatibilidad 
-    float refractive_idx;       // Mantener para compatibilidad
-}   t_plane;
+	t_vector		point;
+	t_vector		normal;
+	//t_material  material;
+	t_color color;        // Mantener para compatibilidad
+	float transp;         // Mantener para compatibilidad
+	float reflct;         // Mantener para compatibilidad
+	float refractive_idx; // Mantener para compatibilidad
+}					t_plane;
 
 typedef struct s_cylinder
 {
-    t_vector    base;
-    t_vector    axis;
-    float       radius;
-    float       height;
-    //t_material  material;
-	t_color color;                // Mantener para compatibilidad
-    float transp;           // Mantener para compatibilidad
-    float reflct;           // Mantener para compatibilidad 
-    float refractive_idx;       // Mantener para compatibilidad
-}   t_cylinder;
+	t_vector		base;
+	t_vector		axis;
+	float			radius;
+	float			height;
+	//t_material  material;
+	t_color color;        // Mantener para compatibilidad
+	float transp;         // Mantener para compatibilidad
+	float reflct;         // Mantener para compatibilidad
+	float refractive_idx; // Mantener para compatibilidad
+}					t_cylinder;
 
 typedef struct s_cyl_lat
 {
@@ -188,27 +189,27 @@ typedef struct s_scene
 
 typedef struct s_ray_state
 {
-    t_vector		origin;
-    t_vector		dir;
-    t_intersec		isec;
+	t_vector		origin;
+	t_vector		dir;
+	t_intersec		isec;
 }					t_ray_state;
 
 typedef struct s_ray_result
 {
-    t_vector		origin;
-    t_vector		direction;
-    float			contribution;  // How much this ray contributes to final color
-    int				depth;
-    int				is_inside;     // For refraction calculations (inside object or not)
+	t_vector		origin;
+	t_vector		direction;
+	float contribution; // How much this ray contributes to final color
+	int				depth;
+	int is_inside; // For refraction calculations (inside object or not)
 }					t_ray_result;
 
 typedef struct s_active_ray
 {
-    t_vector		origin;
-    t_vector		dir;
-    t_intersec		hit;
-    t_color			obj_color;
-    t_vector		normal;
+	t_vector		origin;
+	t_vector		dir;
+	t_intersec		hit;
+	t_color			obj_color;
+	t_vector		normal;
 }					t_active_ray;
 
 typedef struct s_light_calc
@@ -219,13 +220,6 @@ typedef struct s_light_calc
 	t_vector		normal;
 }					t_light_calc;
 
-typedef struct s_ray_backup
-{
-	t_intersec		hit;
-	t_vector		origin;
-	t_vector		dir;
-}					t_ray_backup;
-
 typedef struct s_color_mix
 {
 	t_color			basic;
@@ -234,7 +228,6 @@ typedef struct s_color_mix
 	float			transp;
 	float			reflct;
 }					t_color_mix;
-
 
 // global struct to store all the structs
 typedef struct s_global
@@ -248,6 +241,7 @@ typedef struct s_global
 	int				last_mouse_x;
 	int				last_mouse_y;
 	int				total_pixels;
+	t_ray_state		state;
 
 	// Variables for the current ray
 	t_active_ray	c_ray;

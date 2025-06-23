@@ -6,11 +6,11 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/21 14:24:22 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 10:40:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./inc/minirt.h"
+#include "minirt.h"
 
 #define MAX_RAYS 100
 

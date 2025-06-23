@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/21 14:42:37 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:17:16 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ t_color		cal_lighting(t_global *global);
 
 /* Shadow ray utilities */
 t_ray_state	save_ray_state(t_global *global);
-void		restore_ray_state(t_global *global, t_ray_state state);
+void		restore_ray_state(t_global *global);
 
 /* Vector/Matrix operations */
 t_vector	add(t_vector a, t_vector b);
@@ -163,28 +163,18 @@ t_color		trace_ray_iterative(t_global *global, t_vector origin,
 t_color		cal_reflection(t_global *global, float reflct);
 t_color		cal_transp(t_global *global, float transp);
 t_color		mix_colors_by_transp(t_color basic, t_color trans, float transp);
-void		backup_ray_state(t_global *global, t_ray_backup *backup);
-void		restore_ray_state(t_global *global, t_ray_backup *backup);
 t_vector	setup_reflection_ray(t_global *global);
 t_vector	setup_transmission_ray(t_global *global);
-t_color		apply_reflection_to_color(t_color final, t_color reflect, float reflct);
-
-/* Signal handling */
-void		init_signal_handlers(t_global *global);
-void		handle_signal(int signum);
+t_color		apply_reflection_to_color(t_color final, t_color reflect,
+				float reflct);
 
 /* Object inside/outside testing */
 int			is_inside_object(t_global *global, t_intersec isec,
 				t_vector origin);
 int			is_inside_sphere(t_sphere *sphere, t_vector point);
+int			is_inside_cylinder(t_cylinder *cyl, t_vector point);
 
 /* Refraction and reflection functions */
 float		schlick(float cos_angle, float n1, float n2);
-
-/* Prototipos para funciones de test de interior */
-int			is_inside_sphere(t_sphere *sphere, t_vector point);
-int			is_inside_cylinder(t_cylinder *cyl, t_vector point);
-int			is_inside_object(t_global *global, t_intersec isec,
-				t_vector origin);
 
 #endif

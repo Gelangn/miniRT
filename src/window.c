@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:29:26 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/21 14:26:26 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:15:48 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 void	*new_window(t_global *global)
 {
 	void	*win;
-	int		i;
-	int		valid_spheres;
 
 	printf("\nCreating window\n");
 	win = mlx_new_window(global->vars.mlx_conn, WIN_W, WIN_H, "miniRT");

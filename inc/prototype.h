@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 17:39:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:42:37 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void		render(t_global *global);
 void		render_all_pixels(t_global *global);
 void		render_single_pixel(t_global *global, int index);
 void		trace_all_rays(t_global *global);
+int			get_pixel_color(t_global *global, int index);
 
 /* Ray tracing core */
 void		cal_ray_for_pixel(t_global *global, int px_x, int px_y, int idx);
@@ -159,6 +160,14 @@ float		fresnel_reflectance(t_vector incident, t_vector normal, float n1,
 t_color		cal_lighting_advanced(t_global *global);
 t_color		trace_ray_iterative(t_global *global, t_vector origin,
 				t_vector direction, int max_depth);
+t_color		cal_reflection(t_global *global, float reflct);
+t_color		cal_transp(t_global *global, float transp);
+t_color		mix_colors_by_transp(t_color basic, t_color trans, float transp);
+void		backup_ray_state(t_global *global, t_ray_backup *backup);
+void		restore_ray_state(t_global *global, t_ray_backup *backup);
+t_vector	setup_reflection_ray(t_global *global);
+t_vector	setup_transmission_ray(t_global *global);
+t_color		apply_reflection_to_color(t_color final, t_color reflect, float reflct);
 
 /* Signal handling */
 void		init_signal_handlers(t_global *global);
@@ -177,6 +186,5 @@ int			is_inside_sphere(t_sphere *sphere, t_vector point);
 int			is_inside_cylinder(t_cylinder *cyl, t_vector point);
 int			is_inside_object(t_global *global, t_intersec isec,
 				t_vector origin);
-
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 18:21:50 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:25:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <X11/keysym.h>
 # include <errno.h>
 # include <fcntl.h>
+# include <float.h>
 # include <linux/limits.h>
 # include <math.h>
 # include <stddef.h>

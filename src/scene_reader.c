@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 14:51:29 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:27:34 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,12 @@
 /* Helper function to process each line according to its type */
 void	parse_line(t_global *global, char *line)
 {
-	// Ignorar líneas vacías
 	if (!line || !*line)
 		return ;
-		
-	// Omitir espacios iniciales
 	while (*line && (*line == ' ' || *line == '\t'))
 		line++;
-	
-	// Ignorar comentarios o líneas vacías después de eliminar espacios
 	if (!*line || *line == '#')
 		return ;
-		
-	// Ahora analizar el comando
 	if (*line == 'A')
 		parse_ambient(global, line);
 	else if (*line == 'C')
@@ -64,13 +57,9 @@ void	read_scene(t_global *global)
 		finish(global, ERR_READ);
 	while (line_ptr)
 	{
-		// Mostrar cada línea leída
 		write(1, line_ptr, ft_strlen(line_ptr));
-		
-		// Procesamos la línea solo si no es un comentario o vacía
 		if (*line_ptr && *line_ptr != '#' && *line_ptr != '\n')
 			parse_line(global, line_ptr);
-			
 		free(line_ptr);
 		line_ptr = get_next_line(fd);
 	}

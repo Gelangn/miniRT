@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:30:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 18:39:21 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:36:58 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,25 @@
  */
 float	get_object_transp(t_global *global, t_intersec isec)
 {
-	
-	// Esferas
-    if (isec.obj_type == 0)
-    {
+	float	transp;
+
+	if (isec.obj_type == 0)
+	{
 		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_sp)
-		return (global->scene.spheres[isec.obj_index].transp);
-    }
-    // Planos 
-    else if (isec.obj_type == 1)
-    {
+			return (global->scene.spheres[isec.obj_index].transp);
+	}
+	else if (isec.obj_type == 1)
+	{
 		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_pl)
-		return (global->scene.planes[isec.obj_index].transp);
-    }
-    // Cilindros
-    else if (isec.obj_type == 2)
-    { 
-		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_cy) {
-            float transp = global->scene.cyls[isec.obj_index].transp;
-            return transp;
-        }
+			return (global->scene.planes[isec.obj_index].transp);
+	}
+	else if (isec.obj_type == 2)
+	{
+		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_cy)
+		{
+			transp = global->scene.cyls[isec.obj_index].transp;
+			return (transp);
+		}
 	}
 	return (0.0f);
 }

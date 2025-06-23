@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_scene.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:39:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 18:47:38 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:24:06 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,21 @@ t_intersec	init_isec(void)
 
 void	init_lateral_isec_vars(t_global *global, int cy_id)
 {
-    t_cylinder	*cyl;
+	t_cylinder	*cyl;
 
-    cyl = &global->scene.cyls[cy_id];
-    global->current_cyl_vars.axis = norm(cyl->axis);  // Make sure this uses axis
-    global->current_cyl_vars.oc = subtract(global->c_ray.origin, cyl->base);
-    global->current_cyl_vars.dir_dot_axis = dot(global->c_ray.dir,
-            global->current_cyl_vars.axis);
-    global->current_cyl_vars.oc_dot_axis = dot(global->current_cyl_vars.oc,
-            global->current_cyl_vars.axis);
-    global->current_cyl_vars.dir_perp = subtract(global->c_ray.dir,
-            multiply(global->current_cyl_vars.axis,
-                global->current_cyl_vars.dir_dot_axis));
-    global->current_cyl_vars.oc_perp = subtract(global->current_cyl_vars.oc,
-            multiply(global->current_cyl_vars.axis,
-                global->current_cyl_vars.oc_dot_axis));
+	cyl = &global->scene.cyls[cy_id];
+	global->current_cyl_vars.axis = norm(cyl->axis); // Make sure this uses axis
+	global->current_cyl_vars.oc = subtract(global->c_ray.origin, cyl->base);
+	global->current_cyl_vars.dir_dot_axis = dot(global->c_ray.dir,
+												global->current_cyl_vars.axis);
+	global->current_cyl_vars.oc_dot_axis = dot(global->current_cyl_vars.oc,
+												global->current_cyl_vars.axis);
+	global->current_cyl_vars.dir_perp = subtract(global->c_ray.dir,
+													multiply(global->current_cyl_vars.axis,
+															global->current_cyl_vars.dir_dot_axis));
+	global->current_cyl_vars.oc_perp = subtract(global->current_cyl_vars.oc,
+												multiply(global->current_cyl_vars.axis,
+															global->current_cyl_vars.oc_dot_axis));
 }
 
 void	check_scene(t_global *global, t_scene *scene)

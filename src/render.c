@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 17:42:11 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:33:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,37 @@ void	pixel_put(t_img *img, int px_x, int px_y, int color)
 }
 
 /**
+ * Calcula el color de un pixel basado en los datos de intersección
+ * 
+ * @param global Estructura con datos de la escena
+ * @param index Índice del pixel en el array de puntos
+ * @return Color RGB como entero
+ */
+int	get_pixel_color(t_global *global, int index)
+{
+	t_intersec	isec;
+	t_color		lit_color;
+	float		transp;
+	float		reflct;
+
+	isec = global->isecs[index];
+	if (isec.obj_type < 0 || isec.obj_index < 0)
+		return (BACKGROUND_COLOR);
+	global->c_ray.dir.x = global->points[index].point_x;
+	global->c_ray.dir.y = global->points[index].point_y;
+	global->c_ray.dir.z = global->points[index].point_z;
+	global->c_ray.hit = isec;
+	transp = get_object_transp(global, isec);
+	reflct = get_object_reflct(global, isec);
+	if (transp > 0.01f || reflct > 0.01f)
+		lit_color = trace_ray_iterative(global, global->scene.cam.pos,
+				global->c_ray.dir, MAX_RAY_DEPTH);
+	else
+		lit_color = cal_lighting(global);
+	return (rgb_to_int(lit_color));
+}
+
+/**
  * Renders a single pixel based on ray tracing results
  * Calculates lighting and colors for intersections
  * Uses background color for rays that don't hit any object
@@ -42,38 +73,15 @@ void	pixel_put(t_img *img, int px_x, int px_y, int color)
  */
 void	render_single_pixel(t_global *global, int index)
 {
-	int			x;
-	int			y;
-	t_intersec	isec;
-	int			color;
-	t_color		lit_color;
-	float		transp;
-	float		reflct;
+	int	x;
+	int	y;
+	int	color;
 
 	x = global->points[index].scrn_x;
 	y = global->points[index].scrn_y;
-	isec = global->isecs[index];
 	if (x < 0 || x >= WIN_W || y < 0 || y >= WIN_H)
 		return ;
-	if (isec.obj_type >= 0 && isec.obj_index >= 0)
-	{
-		global->c_ray.dir.x = global->points[index].point_x;
-		global->c_ray.dir.y = global->points[index].point_y;
-		global->c_ray.dir.z = global->points[index].point_z;
-		global->c_ray.hit = isec;
-		// Get material properties
-		transp = get_object_transp(global, isec);
-		reflct = get_object_reflct(global, isec);
-		// Use advanced lighting if object has special materials, otherwise basic
-		if (transp > 0.01f || reflct > 0.01f)
-			lit_color = trace_ray_iterative(global, global->scene.cam.pos, 
-                           global->c_ray.dir, MAX_RAY_DEPTH);
-		else
-			lit_color = cal_lighting(global);
-		color = rgb_to_int(lit_color);
-	}
-	else
-		color = BACKGROUND_COLOR;
+	color = get_pixel_color(global, index);
 	pixel_put(&global->img, x, y, color);
 }
 
@@ -93,9 +101,9 @@ void	render_all_pixels(t_global *global)
 	if (center_idx < global->total_pixels)
 	{
 		printf("Central ray: type=%d, index=%d, distance=%f\n\n",
-				global->isecs[center_idx].obj_type,
-				global->isecs[center_idx].obj_index,
-				global->isecs[center_idx].dist);
+			global->isecs[center_idx].obj_type,
+			global->isecs[center_idx].obj_index,
+			global->isecs[center_idx].dist);
 	}
 	i = -1;
 	while (++i < global->total_pixels)
@@ -112,21 +120,21 @@ void	render_all_pixels(t_global *global)
 void	print_info(t_global *global)
 {
 	printf("Camera position: (%.2f, %.2f, %.2f)\n", global->scene.cam.pos.x,
-			global->scene.cam.pos.y, global->scene.cam.pos.z);
+		global->scene.cam.pos.y, global->scene.cam.pos.z);
 	printf("Camera orientation: (%.2f, %.2f, %.2f)\n", global->scene.cam.dir.x,
-			global->scene.cam.dir.y, global->scene.cam.dir.z);
+		global->scene.cam.dir.y, global->scene.cam.dir.z);
 	printf("Camera up axis: (%.2f, %.2f, %.2f)\n", global->scene.cam.up_axis.x,
-			global->scene.cam.up_axis.y, global->scene.cam.up_axis.z);
+		global->scene.cam.up_axis.y, global->scene.cam.up_axis.z);
 	printf("Camera right axis: (%.2f, %.2f, %.2f)\n",
-			global->scene.cam.right_axis.x,
-			global->scene.cam.right_axis.y,
-			global->scene.cam.right_axis.z);
+		global->scene.cam.right_axis.x,
+		global->scene.cam.right_axis.y,
+		global->scene.cam.right_axis.z);
 	printf("Field of view: %.1f°\n", (float)global->scene.cam.fov);
 	printf("Total calculated rays: %d\n", global->total_pixels);
 	printf("Scene objects: %d spheres, %d planes, %d cylinders\n",
-			global->scene.num_sp,
-			global->scene.num_pl,
-			global->scene.num_cy);
+		global->scene.num_sp,
+		global->scene.num_pl,
+		global->scene.num_cy);
 }
 
 /**

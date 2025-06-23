@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 17:39:46 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:42:33 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,22 @@ typedef struct s_light_calc
 	t_color			obj_color;
 	t_vector		normal;
 }					t_light_calc;
+
+typedef struct s_ray_backup
+{
+	t_intersec		hit;
+	t_vector		origin;
+	t_vector		dir;
+}					t_ray_backup;
+
+typedef struct s_color_mix
+{
+	t_color			basic;
+	t_color			trans;
+	t_color			reflect;
+	float			transp;
+	float			reflct;
+}					t_color_mix;
 
 
 // global struct to store all the structs

@@ -5,7 +5,7 @@ C 0,0,0             0,0,1                    60
 L 15,-5,-15                     0.5
 
 # Glass spheres (transparent) - más grandes
-sp -9.5,0,30    8    250,148,114    0.9    0.1    1.5
+sp -9.5,0,30    8    250,148,114    0.99    0.1    1.5
 sp +9.5,0,30    8    255,179,122    0.95    0.1    1.3
 
 # Mirror sphere (reflective)
@@ -20,19 +20,19 @@ sp 0,0,42       2    255,0,255      0.0    0.0    1.0
 sp 0,-5,25      4    255,0,0        0.0    0.0    1.0
 
 # Blue floor plane (abajo en Y positiva)
-pl 0,15,0       0,-1,0           100,150,255    0.0    0.1    1.0
+pl 0,15,0       0,-1,0           100,150,255    0.0    0.0    1.0
 
 # Back wall (pared de fondo)
-pl 0,0,50       0,0,-1           180,180,180    0.0    0.3    1.0
+pl 0,0,50       0,0,-1           180,180,180    0.0    0.0    1.0
 
 # Left wall (pared izquierda - espejo)
 pl -25,0,25     1,0,0            220,220,220    0.0    0.8    1.0
 
 # Right wall (pared derecha - normal)
-pl 25,0,25      -1,0,0           240,240,240    0.0    0.05   1.0
+pl 25,0,25      -1,0,0           240,240,240    0.0    0.0   1.0
 
 # Ceiling plane (techo en Y negativa - opcional)
-pl 0,-15,0      0,1,0            200,200,200    0.0    0.02   1.0
+pl 0,-15,0      0,1,0            200,200,200    0.0    0.0   1.0
 
 # Green wall (pared trasera - verde)
-pl 0,0,-20      0,0,1            0,255,0        0.0    0.1    1.0
+pl 0,0,-20      0,0,1            0,255,0        0.0    0.0    1.0

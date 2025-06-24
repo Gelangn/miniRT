@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 12:27:29 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/25 01:06:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,4 @@ void	dbl_free(char **ptr)
 		i++;
 	}
 	free(ptr);
-	ptr = NULL;
 }

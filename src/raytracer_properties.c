@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:30:00 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/20 14:37:28 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/25 01:04:24 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ float	get_object_transparency(t_global *global, t_intersec isec)
     // Cilindros - SOLUCIÓN DIRECTA
     else if (isec.obj_type == 2)
     {
-		printf("Object type: %d, index: %d\n", isec.obj_type, isec.obj_index);
+		//printf("Object type: %d, index: %d\n", isec.obj_type, isec.obj_index);
         
 		if (isec.obj_index >= 0 && isec.obj_index < global->scene.num_cy) {
             float transp = global->scene.cyls[isec.obj_index].transparency;
-            printf("CILINDRO TRANSPARENCIA: %.2f\n", transp);
+            //printf("CILINDRO TRANSPARENCIA: %.2f\n", transp);
             return transp;
         }
 		else

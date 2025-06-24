@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/20 14:13:23 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/25 01:05:10 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,11 +231,11 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
         // Verificar si es transparente
         if (hit.obj_index >= 0 && hit.obj_index < global->scene.num_cy) {
             transparency = global->scene.cyls[hit.obj_index].transparency;
-            printf("CILINDRO transparencia: %.3f\n", transparency);
+            //printf("CILINDRO transparencia: %.3f\n", transparency);
         }
         
         if (transparency > 0.3f) {
-            printf("APLICANDO TRANSPARENCIA FORZADA EN CILINDRO\n");
+            //printf("APLICANDO TRANSPARENCIA FORZADA EN CILINDRO\n");
             
             // 1. Calcular el color del cilindro
             global->c_ray.hit = hit;

@@ -86,7 +86,7 @@ else ifeq ($(OS),Darwin)
 	FFLAGS = -Llib/mlx -lmlx -framework OpenGL -framework AppKit
 else ifeq ($(OS),Linux)
 #	@echo "Compilando en Linux"
-	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O0 -g0
+	CFLAGS = -Wall -Wextra -Werror -I./inc -I./lib/minilibx-linux -O3 -g3
 	# Flags normales (sin sanitize)
 	FFLAGS = -L./lib/minilibx-linux -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 	# Flags con sanitize

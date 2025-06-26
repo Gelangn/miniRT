@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:15:32 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/25 01:06:29 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:28:26 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 void	finish(t_global *global, const char *message)
 {
 	if (errno == 0)
+	{
+		ft_putendl_fd("Error: ", 2);
 		ft_putendl_fd((char *)message, 2);
+	}
 	else
 		perror(message);
 	if (global)

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 13:35:48 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:28:42 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,7 @@ void	init(t_global *global)
 	global->img.img = NULL;
 	global->img.addr = NULL;
 	global->scene = (t_scene){0};
-	printf("Initializing MLX\n");
-	global->vars.mlx_conn = mlx_init();
-	if (!global->vars.mlx_conn)
-		finish(global, ERR_MLX);
 	global->total_pixels = (WIN_W - MARGIN) * (WIN_H - MARGIN);
-	printf("Initialized MLX OK\n");
 }
 
 // Function to check the file extension
@@ -57,6 +52,11 @@ static void	setup_render_window(t_global *global)
 	char	*suffix;
 
 	suffix = " By anavas-g & bde-mada";
+	printf("Initializing MLX\n");
+	global->vars.mlx_conn = mlx_init();
+	if (!global->vars.mlx_conn)
+		finish(global, ERR_MLX);
+	printf("Initialized MLX OK\n");
 	global->vars.mlx_win = new_window(global);
 	if (!global->vars.mlx_win)
 		finish(global, ERR_WIN);

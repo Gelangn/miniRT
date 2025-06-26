@@ -6,12 +6,13 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 13:27:30 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:36:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+// Prepares lighting data such as object color, normal, and light direction
 void	prepare_lighting_data(t_global *global)
 {
 	global->c_ray.obj_color = get_object_color(global);
@@ -22,6 +23,16 @@ void	prepare_lighting_data(t_global *global)
 											global->c_ray.hit.point));
 }
 
+// Scales color components based on shadow factor
+static t_color	scale_color_by_shadow(t_color color, float shadow_factor)
+{
+	color.r = (int)(color.r * (1.0f - shadow_factor));
+	color.g = (int)(color.g * (1.0f - shadow_factor));
+	color.b = (int)(color.b * (1.0f - shadow_factor));
+	return (color);
+}
+
+// Applies lighting effects including ambient, diffuse, and specular
 t_color	apply_lighting(t_global *global, float shadow_factor)
 {
 	t_color	result_color;
@@ -29,50 +40,33 @@ t_color	apply_lighting(t_global *global, float shadow_factor)
 	t_color	specular;
 
 	result_color = cal_ambient(global);
-	if (!comp_floats(shadow_factor, 1.0f)) // Gradiente de sombra
+	if (!comp_floats(shadow_factor, 1.0f))
 	{
-		diffuse = cal_diffuse(global);
-		specular = cal_specular(global);
-		// Ajustar intensidad según el factor de sombra para cada componente
-		diffuse.r = (int)(diffuse.r * (1.0f - shadow_factor));
-		diffuse.g = (int)(diffuse.g * (1.0f - shadow_factor));
-		diffuse.b = (int)(diffuse.b * (1.0f - shadow_factor));
-		specular.r = (int)(specular.r * (1.0f - shadow_factor));
-		specular.g = (int)(specular.g * (1.0f - shadow_factor));
-		specular.b = (int)(specular.b * (1.0f - shadow_factor));
-		result_color.r = result_color.r + diffuse.r + specular.r;
-		result_color.g = result_color.g + diffuse.g + specular.g;
-		result_color.b = result_color.b + diffuse.b + specular.b;
+		diffuse = scale_color_by_shadow(cal_diffuse(global), shadow_factor);
+		specular = scale_color_by_shadow(cal_specular(global), shadow_factor);
+		result_color.r += diffuse.r + specular.r;
+		result_color.g += diffuse.g + specular.g;
+		result_color.b += diffuse.b + specular.b;
 	}
-	else if (comp_floats(shadow_factor, 1.0f)) // Sombra completa
-	{
-		// No añadir componentes difusas ni especulares
+	else if (comp_floats(shadow_factor, 1.0f))
 		result_color = cal_ambient(global);
-	}
 	clamp_color(&result_color);
 	return (result_color);
 }
 
+// Calculates lighting for the current ray intersection
 t_color	cal_lighting(t_global *global)
 {
 	float	shadow_factor;
-	t_color	default_color;
 
 	if (!is_valid_isec(global))
-	{
-		default_color.r = 5;
-		default_color.g = 5;
-		default_color.b = 5;
-		return (default_color);
-	}
+		return ((t_color){5, 5, 5});
 	prepare_lighting_data(global);
-	shadow_factor = cal_shadow(global); // Ahora retorna un float entre 0 y 1
+	shadow_factor = cal_shadow(global);
 	return (apply_lighting(global, shadow_factor));
 }
 
-/**
- * Calculates reflection contribution by casting a reflection ray
- */
+// Calculates reflection contribution by casting a reflection ray
 static t_color	calculate_reflection(t_global *global, float reflectivity)
 {
 	t_vector	normal;
@@ -82,37 +76,28 @@ static t_color	calculate_reflection(t_global *global, float reflectivity)
 	t_vector	old_origin;
 	t_vector	old_dir;
 	t_intersec	reflect_hit;
-	t_color		reflect_color;
 
 	normal = get_surface_normal(global, global->c_ray.hit);
 	reflect_dir = reflect_ray(global->c_ray.dir, normal);
 	ray_origin = add(global->c_ray.hit.point, multiply(normal, EPSILON));
-	// Save current ray state
 	old_hit = global->c_ray.hit;
 	old_origin = global->c_ray.origin;
 	old_dir = global->c_ray.dir;
-	// Cast reflection ray
 	global->c_ray.origin = ray_origin;
 	global->c_ray.dir = reflect_dir;
 	reflect_hit = find_closest_isec(global);
 	if (reflect_hit.obj_type >= 0)
 	{
 		global->c_ray.hit = reflect_hit;
-		reflect_color = cal_lighting(global);
-		reflect_color = color_scale(reflect_color, reflectivity);
+		return (color_scale(cal_lighting(global), reflectivity));
 	}
-	else
-		reflect_color = (t_color){20, 20, 20}; // Sky color
-	// Restore original ray state
 	global->c_ray.hit = old_hit;
 	global->c_ray.origin = old_origin;
 	global->c_ray.dir = old_dir;
-	return (reflect_color);
+	return ((t_color){20, 20, 20});
 }
 
-/**
- * Calculates transparency contribution by casting a transmission ray
- */
+// Calculates transparency contribution by casting a transmission ray
 static t_color	calculate_transparency(t_global *global, float transparency)
 {
 	t_vector	transmission_dir;
@@ -121,44 +106,31 @@ static t_color	calculate_transparency(t_global *global, float transparency)
 	t_vector	old_origin;
 	t_vector	old_dir;
 	t_intersec	trans_hit;
-	t_color		trans_color;
 
-	// For simple transparency, just continue the ray in the same direction
 	transmission_dir = global->c_ray.dir;
 	ray_origin = add(global->c_ray.hit.point, multiply(transmission_dir,
 				EPSILON));
-	// Save current ray state
 	old_hit = global->c_ray.hit;
 	old_origin = global->c_ray.origin;
 	old_dir = global->c_ray.dir;
-	// Cast transmission ray
 	global->c_ray.origin = ray_origin;
 	global->c_ray.dir = transmission_dir;
 	trans_hit = find_closest_isec(global);
 	if (trans_hit.obj_type >= 0)
 	{
 		global->c_ray.hit = trans_hit;
-		trans_color = cal_lighting(global);
-		trans_color = color_scale(trans_color, transparency);
+		return (color_scale(cal_lighting(global), transparency));
 	}
-	else
-	{
-		// Convert BACKGROUND_COLOR to t_color structure
-		trans_color.r = (BACKGROUND_COLOR >> 16) & 0xFF;
-		trans_color.g = (BACKGROUND_COLOR >> 8) & 0xFF;
-		trans_color.b = BACKGROUND_COLOR & 0xFF;
-	}
-	// Restore original ray state
 	global->c_ray.hit = old_hit;
 	global->c_ray.origin = old_origin;
 	global->c_ray.dir = old_dir;
-	return (trans_color);
+	return ((t_color){
+		(BACKGROUND_COLOR >> 16) & 0xFF,
+		(BACKGROUND_COLOR >> 8) & 0xFF,
+		BACKGROUND_COLOR & 0xFF});
 }
 
-/**
- * Advanced lighting calculation that includes reflection and refraction
- * Uses real ray tracing for transparency and reflection effects
- */
+// Calculates advanced lighting including reflection and refraction
 t_color	cal_lighting_advanced(t_global *global)
 {
 	t_color	basic_color;
@@ -170,19 +142,12 @@ t_color	cal_lighting_advanced(t_global *global)
 
 	if (!is_valid_isec(global))
 		return ((t_color){5, 5, 5});
-	// Get material properties
 	transparency = get_object_transparency(global, global->c_ray.hit);
 	reflectivity = get_object_reflectivity(global, global->c_ray.hit);
-	// Get basic lighting first
 	basic_color = cal_lighting(global);
-	// SIMPLE transparency test - just make object darker based on transparency
 	if (transparency > 0.7f)
 	{
-		// Very transparent - almost see-through
-		final_color.r = basic_color.r * 0.1f;
-		final_color.g = basic_color.g * 0.1f;
-		final_color.b = basic_color.b * 0.1f;
-		// Add background color
+		final_color = color_scale(basic_color, 0.1f);
 		trans_color = calculate_transparency(global, transparency);
 		final_color.r += trans_color.r * 0.9f;
 		final_color.g += trans_color.g * 0.9f;
@@ -190,20 +155,14 @@ t_color	cal_lighting_advanced(t_global *global)
 	}
 	else if (transparency > 0.5f)
 	{
-		// Semi-transparent
-		final_color.r = basic_color.r * 0.3f;
-		final_color.g = basic_color.g * 0.3f;
-		final_color.b = basic_color.b * 0.3f;
+		final_color = color_scale(basic_color, 0.3f);
 		trans_color = calculate_transparency(global, transparency);
 		final_color.r += trans_color.r * 0.7f;
 		final_color.g += trans_color.g * 0.7f;
 		final_color.b += trans_color.b * 0.7f;
 	}
 	else
-	{
 		final_color = basic_color;
-	}
-	// Add reflection if reflective
 	if (reflectivity > 0.01f)
 	{
 		reflect_color = calculate_reflection(global, reflectivity);

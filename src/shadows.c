@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:09 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 13:27:29 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:31:52 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,9 @@ float	cal_shadow(t_global *global)
 			&& shadow_isec.obj_index == global->c_ray.hit.obj_index))
 	{
 		transparency = get_object_transparency(global, shadow_isec);
-		// Si el objeto es opaco, retornar sombra completa
 		if (transparency < 0.01f)
 			return (1.0f);
-		// Retornar gradiente de sombra basado en la transparencia
 		return (1.0f - transparency);
 	}
-	return (0.0f); // Sin sombra
+	return (0.0f);
 }

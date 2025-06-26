@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/26 11:34:59 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:45:14 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 			
 			level_color = color_scale(level_color, rays[i].contribution);
 			final_color = color_add(final_color, level_color);
-			printf("Ray contribution: %.3f, Color: (%d,%d,%d)\n", 
-       rays[i].contribution, level_color.r, level_color.g, level_color.b);
+			/* printf("Ray contribution: %.3f, Color: (%d,%d,%d)\n",
+				rays[i].contribution, level_color.r, level_color.g, level_color.b); */
 		}
 	}
 	return (final_color);
@@ -84,12 +84,12 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
     fresnel = schlick(-dot(normal, global->c_ray.dir), n1, n2);
     
 	printf("\n--- RAY INFO ---\n");
-	printf("Objeto golpeado: tipo=%d\n", global->c_ray.hit.obj_type);
-	printf("Transparencia: %.2f\n", transparency);
-	printf("¿Dentro del objeto? %s\n", inside ? "SÍ" : "NO");
+	printf("Hit object: type=%d (0=Sp 1=Pl 2=Cyl)\n", global->c_ray.hit.obj_type);
+	printf("Transparency: %.2f\n", transparency);
+	printf("¿Inside object? %s\n", inside ? "YES" : "NO");
 	printf("Normal: (%.2f, %.2f, %.2f)\n", normal.x, normal.y, normal.z);
 
-    // Si el objeto es un cilindro
+   /*  // Si el objeto es un cilindro
     if (global->c_ray.hit.obj_type == 2) {
         printf("CILINDRO: Punto=(%.2f,%.2f,%.2f), Inside=%d\n",
             global->c_ray.hit.point.x, 
@@ -104,7 +104,7 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
         
         printf("CILINDRO: Normal=(%.2f,%.2f,%.2f)\n", 
             normal.x, normal.y, normal.z);
-    }
+    } */
     
     // Adjust reflectivity using Fresnel (more reflection at grazing angles)
     reflectivity = reflectivity + (1.0f - reflectivity) * fresnel;
@@ -131,13 +131,13 @@ int generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 			rays[*count-1].contribution, refract_dir.x, refract_dir.y, refract_dir.z);
     }
 	
-	// Después de calcular refract_dir
+	/* // Después de calcular refract_dir
 	if (global->c_ray.hit.obj_type == 2) {
 		printf("CILINDRO: ¿Se generó rayo refractado? %s\n", 
 			(fresnel < 1.0f) ? "SÍ" : "NO");
 		printf("CILINDRO: Dirección refracción=(%.2f,%.2f,%.2f), Fresnel=%.3f\n",
 			refract_dir.x, refract_dir.y, refract_dir.z, fresnel);
-	}
+	} */
 	
 	return (*count);
 }

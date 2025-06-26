@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/19 14:03:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:27:30 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,32 @@ void	prepare_lighting_data(t_global *global)
 											global->c_ray.hit.point));
 }
 
-t_color	apply_lighting(t_global *global, int in_shadow)
+t_color	apply_lighting(t_global *global, float shadow_factor)
 {
 	t_color	result_color;
 	t_color	diffuse;
 	t_color	specular;
 
 	result_color = cal_ambient(global);
-	if (!in_shadow)
+	if (!comp_floats(shadow_factor, 1.0f)) // Gradiente de sombra
 	{
 		diffuse = cal_diffuse(global);
 		specular = cal_specular(global);
-		result_color = color_add(result_color, diffuse);
-		result_color = color_add(result_color, specular);
+		// Ajustar intensidad según el factor de sombra para cada componente
+		diffuse.r = (int)(diffuse.r * (1.0f - shadow_factor));
+		diffuse.g = (int)(diffuse.g * (1.0f - shadow_factor));
+		diffuse.b = (int)(diffuse.b * (1.0f - shadow_factor));
+		specular.r = (int)(specular.r * (1.0f - shadow_factor));
+		specular.g = (int)(specular.g * (1.0f - shadow_factor));
+		specular.b = (int)(specular.b * (1.0f - shadow_factor));
+		result_color.r = result_color.r + diffuse.r + specular.r;
+		result_color.g = result_color.g + diffuse.g + specular.g;
+		result_color.b = result_color.b + diffuse.b + specular.b;
+	}
+	else if (comp_floats(shadow_factor, 1.0f)) // Sombra completa
+	{
+		// No añadir componentes difusas ni especulares
+		result_color = cal_ambient(global);
 	}
 	clamp_color(&result_color);
 	return (result_color);
@@ -53,7 +66,7 @@ t_color	cal_lighting(t_global *global)
 		return (default_color);
 	}
 	prepare_lighting_data(global);
-	shadow_factor = cal_shadow(global);
+	shadow_factor = cal_shadow(global); // Ahora retorna un float entre 0 y 1
 	return (apply_lighting(global, shadow_factor));
 }
 
@@ -153,17 +166,15 @@ t_color	cal_lighting_advanced(t_global *global)
 	t_color	trans_color;
 	float	transparency;
 	float	reflectivity;
+	t_color	reflect_color;
 
 	if (!is_valid_isec(global))
 		return ((t_color){5, 5, 5});
-	
 	// Get material properties
 	transparency = get_object_transparency(global, global->c_ray.hit);
 	reflectivity = get_object_reflectivity(global, global->c_ray.hit);
-	
 	// Get basic lighting first
 	basic_color = cal_lighting(global);
-	
 	// SIMPLE transparency test - just make object darker based on transparency
 	if (transparency > 0.7f)
 	{
@@ -171,7 +182,6 @@ t_color	cal_lighting_advanced(t_global *global)
 		final_color.r = basic_color.r * 0.1f;
 		final_color.g = basic_color.g * 0.1f;
 		final_color.b = basic_color.b * 0.1f;
-		
 		// Add background color
 		trans_color = calculate_transparency(global, transparency);
 		final_color.r += trans_color.r * 0.9f;
@@ -184,7 +194,6 @@ t_color	cal_lighting_advanced(t_global *global)
 		final_color.r = basic_color.r * 0.3f;
 		final_color.g = basic_color.g * 0.3f;
 		final_color.b = basic_color.b * 0.3f;
-		
 		trans_color = calculate_transparency(global, transparency);
 		final_color.r += trans_color.r * 0.7f;
 		final_color.g += trans_color.g * 0.7f;
@@ -194,16 +203,17 @@ t_color	cal_lighting_advanced(t_global *global)
 	{
 		final_color = basic_color;
 	}
-	
 	// Add reflection if reflective
 	if (reflectivity > 0.01f)
 	{
-		t_color reflect_color = calculate_reflection(global, reflectivity);
-		final_color.r = final_color.r * (1.0f - reflectivity) + reflect_color.r * reflectivity;
-		final_color.g = final_color.g * (1.0f - reflectivity) + reflect_color.g * reflectivity;
-		final_color.b = final_color.b * (1.0f - reflectivity) + reflect_color.b * reflectivity;
+		reflect_color = calculate_reflection(global, reflectivity);
+		final_color.r = final_color.r * (1.0f - reflectivity) + reflect_color.r
+			* reflectivity;
+		final_color.g = final_color.g * (1.0f - reflectivity) + reflect_color.g
+			* reflectivity;
+		final_color.b = final_color.b * (1.0f - reflectivity) + reflect_color.b
+			* reflectivity;
 	}
-	
 	clamp_color(&final_color);
 	return (final_color);
 }

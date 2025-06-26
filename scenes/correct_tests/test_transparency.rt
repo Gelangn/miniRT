@@ -3,7 +3,7 @@ C 0,0,0 0,0,1 60
 L 5,10,0 0.8 255,255,255
 
 # Gran esfera transparente (bola de cristal) - aumentar reflectividad de 0.05 a 0.1
-sp 0,0,10 3 255,255,255 0.95 0.1 1.5
+sp 0,0,10 3 255,255,255 0.8 0.1 1.5
 
 # Esfera pequeña azul detrás (debería verse aumentada y posiblemente invertida)
 sp 0,0,15 1 0,0,255 0 0 0

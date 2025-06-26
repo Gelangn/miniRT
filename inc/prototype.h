@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 13:21:12 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:22:01 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,14 @@ int			rgb_to_int(t_color color);
 t_color		color_scale(t_color color, float factor);
 t_color		color_add(t_color c1, t_color c2);
 void		clamp_color(t_color *color);
+t_color	get_object_color(t_global *global); // Declaración de get_object_color
 
 /* Lighting and shading */
-t_color		get_object_color(t_global *global);
 int			is_valid_isec(t_global *global);
 void		prepare_lighting_data(t_global *global);
 float		cal_shadow(t_global *global);
 t_color		cal_ambient(t_global *global);
-t_color		cal_diffuse(t_global *global);
+t_color	cal_diffuse(t_global *global); // Declaración de cal_diffuse
 t_color		cal_specular(t_global *global);
 t_color		apply_lighting(t_global *global, float shadow_factor);
 t_color		cal_lighting(t_global *global);

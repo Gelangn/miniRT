@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 13:47:26 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:49:34 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@
 # define ERR_SAVE "Saving BMP"
 
 # define MAX_RAY_DEPTH 4		// Maximum depth for ray tracing
-# define MIN_CONTRIBUTION 0.01f	// Minimum contribution for reflection/refraction
+# define MIN_CONTRIBUTION 0.01f	// Minimum contribution reflection/refraction
 # define AIR_REFRACTIVE_INDEX 1.0f	// Refractive index of air
 
 #endif

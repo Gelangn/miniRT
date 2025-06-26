@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 11:28:57 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:14:14 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,58 +56,38 @@ void	parse_color(t_global *global, char *str, t_color *color)
 // Function to parse a sphere
 void	parse_sphere(t_global *global, char *line)
 {
-	char        **tokens;
-	char        **tokens_start;  // Guardar puntero original
-	t_sphere    *sphere;
+	t_sphere	sphere;
+	char		**tokens;
+	char		**tokens_start;
 
 	tokens = ft_split(line, ' ');
-	tokens_start = tokens;  // Guardar puntero original
+	tokens_start = tokens;
 	if (!tokens)
-		finish(global, ERR_MEM);
-	sphere = &global->scene.spheres[global->scene.num_sp];
-	
-	// Parse sphere parameters with error checking
-	if (!tokens[1] || !tokens[2] || !tokens[3])
-	{
-		dbl_free(tokens_start);  // Usar puntero original
-		finish(global, "Error: Invalid sphere format");
-	}
-	parse_vector(global, tokens[1], &sphere->center);
-	sphere->radius = parse_float_token(global, &tokens[2]) / 2.0f;
-	parse_color(global, tokens[3], &sphere->color);
-	
-	// Parse optional material properties usando índice 4, 5, 6
-	if (tokens[4] && tokens[5] && tokens[6])
-	{
-		sphere->transparency = parse_float_token(global, &tokens[4]);
-		sphere->reflectivity = parse_float_token(global, &tokens[5]);
-		sphere->refractive_idx = parse_float_token(global, &tokens[6]);
-	}
-	else
-	{
-		// Default values for backward compatibility
-		sphere->transparency = 0.0f;
-		sphere->reflectivity = 0.0f;
-		sphere->refractive_idx = 1.5f;
-	}
-	
-	if (sphere->radius <= 0)
-	{
-		dbl_free(tokens_start);  // Usar puntero original
-		finish(global, "Error: Invalid sphere radius");
-	}
-	global->scene.num_sp++;
-	dbl_free(tokens_start);  // Usar puntero original
+		finish(global, ERR_SPHERE);
+	tokens++;
+	parse_vector(global, *tokens, &sphere.center);
+	tokens++;
+	sphere.radius = parse_float_token(global, tokens);
+	tokens++;
+	parse_color(global, *tokens, &sphere.material.color);
+	tokens++;
+	sphere.material.transparency = parse_float_token(global, tokens);
+	tokens++;
+	sphere.material.reflectivity = parse_float_token(global, tokens);
+	tokens++;
+	sphere.material.refractive_idx = parse_float_token(global, tokens);
+	global->scene.spheres[global->scene.num_sp++] = sphere;
+	dbl_free(tokens_start);
 }
 
 // Function to parse a plane
 void	parse_plane(t_global *global, char *line)
 {
-	t_plane plane;
-	char    **tokens;
-	char    **tokens_start; // Guardar puntero original
-	t_scene *scene;
+	t_plane	plane;
+	char	**tokens;
+	t_scene	*scene;
 
+	char **tokens_start; // Guardar puntero original
 	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
@@ -119,28 +99,29 @@ void	parse_plane(t_global *global, char *line)
 	tokens++;
 	parse_vector(global, *tokens, &plane.normal);
 	tokens++;
-	parse_color(global, *tokens, &plane.color);
-
+	parse_color(global, *tokens, &plane.material.color); // Usar material.color
 	tokens++;
 	// Parse optional material properties
-	if (tokens && *tokens && *(tokens+1) && *(tokens+2))
+	if (tokens && *tokens && *(tokens + 1) && *(tokens + 2))
 	{
-		plane.transparency = parse_float_token(global, tokens);
+		plane.material.transparency = parse_float_token(global, tokens);
+			// Usar material.transparency
 		tokens++;
-		plane.reflectivity = parse_float_token(global, tokens);
+		plane.material.reflectivity = parse_float_token(global, tokens);
+			// Usar material.reflectivity
 		tokens++;
-		plane.refractive_idx = parse_float_token(global, tokens);
+		plane.material.refractive_idx = parse_float_token(global, tokens);
+			// Usar material.refractive_idx
 		tokens++;
 	}
 	else
 	{
 		// Default values
-		plane.transparency = 0.0f;
-		plane.reflectivity = 0.0f;
-		plane.refractive_idx = 1.5f;
+		plane.material.transparency = 0.0f;
+		plane.material.reflectivity = 0.0f;
+		plane.material.refractive_idx = 1.5f;
 	}
 	scene->planes[scene->num_pl++] = plane;
-	
 	// Usar siempre el puntero original para liberar
 	dbl_free(tokens_start);
 }
@@ -150,10 +131,10 @@ void	parse_cylinder(t_global *global, char *line)
 {
 	t_cylinder	cyl;
 	char		**tokens;
-	char		**tokens_start; // Guardar puntero original
 	t_scene		*scene;
 	t_vector	center;
 
+	char **tokens_start; // Guardar puntero original
 	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
@@ -170,32 +151,35 @@ void	parse_cylinder(t_global *global, char *line)
 	tokens++;
 	cyl.height = parse_float_token(global, tokens);
 	tokens++;
-	parse_color(global, *tokens, &cyl.color);
-	
+	parse_color(global, *tokens, &cyl.material.color); // Usar material.color
 	tokens++;
 	// Parse optional material properties
-	if (tokens && *tokens && *(tokens+1) && *(tokens+2))
+	if (tokens && *tokens && *(tokens + 1) && *(tokens + 2))
 	{
-		cyl.transparency = parse_float_token(global, tokens);
+		cyl.material.transparency = parse_float_token(global, tokens);
+			// Usar material.transparency
 		tokens++;
-		cyl.reflectivity = parse_float_token(global, tokens);
+		cyl.material.reflectivity = parse_float_token(global, tokens);
+			// Usar material.reflectivity
 		tokens++;
-		cyl.refractive_idx = parse_float_token(global, tokens);
+		cyl.material.refractive_idx = parse_float_token(global, tokens);
+			// Usar material.refractive_idx
 		tokens++;
-		
-		printf("CILINDRO: Leyendo propiedades opcionales: transp=%.2f, refl=%.2f, idx=%.2f\n",
-			cyl.transparency, cyl.reflectivity, cyl.refractive_idx);
+		printf("CILINDRO: Leyendo propiedades opcionales: transp=%.2f, \
+				refl=%.2f, idx=%.2f\n",
+				cyl.material.transparency,
+				cyl.material.reflectivity,
+				cyl.material.refractive_idx);
 	}
 	else
 	{
 		// Default values
-		cyl.transparency = 0.0f;
-		cyl.reflectivity = 0.0f;
-		cyl.refractive_idx = 1.5f;
+		cyl.material.transparency = 0.0f;
+		cyl.material.reflectivity = 0.0f;
+		cyl.material.refractive_idx = 1.5f;
 	}
 	cyl.base = subtract(center, multiply(cyl.axis, cyl.height / 2));
 	scene->cyls[scene->num_cy++] = cyl;
-	
 	// Usar siempre el puntero original para liberar
 	dbl_free(tokens_start);
 }

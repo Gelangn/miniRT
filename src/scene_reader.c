@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 22:09:34 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:46:24 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,26 @@
 /* Helper function to process each line according to its type */
 void	parse_line(t_global *global, char *line)
 {
-	if (line[0] == 'A')
+	if (line[0] == 'A' && (line[1] == ' ' || line[1] == '\t'))
 		parse_ambient(global, line);
-	else if (line[0] == 'C')
+	else if (line[0] == 'C' && (line[1] == ' ' || line[1] == '\t'))
 		parse_cam(global, line);
-	else if (line[0] == 'L')
+	else if (line[0] == 'L' && (line[1] == ' ' || line[1] == '\t'))
 		parse_light(global, line);
-	else if (ft_strncmp(line, "sp", 2) == 0)
+	else if (ft_strncmp(line, "sp", 2) == 0 && (line[2] == ' '
+				|| line[2] == '\t'))
 		parse_sphere(global, line);
-	else if (ft_strncmp(line, "pl", 2) == 0)
+	else if (ft_strncmp(line, "pl", 2) == 0 && (line[2] == ' '
+				|| line[2] == '\t'))
 		parse_plane(global, line);
-	else if (ft_strncmp(line, "cy", 2) == 0)
+	else if (ft_strncmp(line, "cy", 2) == 0 && (line[2] == ' '
+				|| line[2] == '\t'))
 		parse_cylinder(global, line);
+	else
+	{
+		free(line);
+		finish(global, ERR_PARSE " - Invalid line format");
+	}
 }
 
 /* Function to read and parse the scene file */
@@ -45,6 +53,12 @@ void	read_scene(t_global *global)
 		finish(global, ERR_READ);
 	while (line_ptr)
 	{
+		if (line_ptr[0] == '\n' || line_ptr[0] == '\0' || line_ptr[0] == '#')
+		{
+			free(line_ptr);
+			line_ptr = get_next_line(fd);
+			continue ;
+		}
 		parse_line(global, line_ptr);
 		free(line_ptr);
 		line_ptr = get_next_line(fd);

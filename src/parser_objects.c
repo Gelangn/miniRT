@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/04/22 19:40:35 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:39:36 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ void	parse_vector(t_global *global, char *str, t_vector *vector)
 	char	**tokens;
 
 	tokens = ft_split(str, ',');
-	if (!tokens)
+	if (!tokens || !tokens[0] || !tokens[1] || !tokens[2])
+	{
+		dbl_free(tokens);
+		free(str);
 		finish(global, ERR_PARSE);
+	}
 	vector->x = ft_atof(tokens[0]);
 	vector->y = ft_atof(tokens[1]);
 	vector->z = ft_atof(tokens[2]);
@@ -32,11 +36,20 @@ void	parse_color(t_global *global, char *str, t_color *color)
 	char	**tokens;
 
 	tokens = ft_split(str, ',');
-	if (!tokens)
+	if (!tokens || !tokens[0] || !tokens[1] || !tokens[2])
+	{
+		dbl_free(tokens);
 		finish(global, ERR_PARSE);
+	}
 	color->r = ft_atoi(tokens[0]);
 	color->g = ft_atoi(tokens[1]);
 	color->b = ft_atoi(tokens[2]);
+	if (color->r < 0 || color->r > 255 || color->g < 0 || color->g > 255
+		|| color->b < 0 || color->b > 255)
+	{
+		dbl_free(tokens);
+		finish(global, ERR_COLOR);
+	}
 	dbl_free(tokens);
 }
 

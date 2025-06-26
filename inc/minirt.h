@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/01 23:38:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:55:29 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,35 +75,35 @@
 
 # define ARGS "Usage: ./miniRT <file.rt>\n"
 # define ERR_ARGS \
-	"\nIncorrect number of arguments, expected 1 Usage: \
- ./miniRT <file.rt>\n "
-# define ERR_OPEN "\nError opening the file\n"
-# define ERR_READ "\nError reading the file\n"
-# define ERR_SPLIT "\nError splitting the line\n"
-# define ERR_LINE "\nError: nº of elements is different for each line\n"
-# define ERR_EMPTY "\nError: the file is empty or wrongly formatted\n"
-# define ERR_MEM "\nCache error\n"
-# define ERR_SCENE "\nScene Error\n"
-# define ERR_MALLOC "\nMalloc error\n"
-# define ERR_INVALID_EXT "\nError extension .rt\n"
-# define ERR_AMBIENT "\nError ambient light\n"
-# define ERR_CAMERA "\nError camera\n"
-# define ERR_LIGHT "\nError light\n"
-# define ERR_SPHERE "\nError sphere\n"
-# define ERR_PLANE "\nError plane\n"
-# define ERR_CYLINDER "\nError cylinder\n"
-# define ERR_RESOLUTION "\nError resolution\n"
-# define ERR_COLOR "\nError color\n"
-# define ERR_FLOAT "\nError float\n"
-# define ERR_VECTOR "\nError vector\n"
-# define ERR_NORMAL "\nError normal\n"
-# define ERR_ORIENTATION "\nError orientation\n"
-# define ERR_FOV "\nError FOV\n"
-# define ERR_POSITION "\nError position\n"
-# define ERR_PARSE "\nError parsing\n"
-# define ERR_WIN "\nError creating window\n"
-# define ERR_IMG "\nError: Image not initialized correctly\n"
-# define ERR_MLX "\nError initializing MLX\n"
-# define ERR_SAVE "\nError saving BMP\n"
+	"Incorrect number of arguments, expected 1 Usage: \
+ ./miniRT <file.rt>"
+# define ERR_OPEN "Opening the file"
+# define ERR_READ "Reading the file"
+# define ERR_SPLIT "Splitting the line"
+# define ERR_LINE "# of elements is different for each line"
+# define ERR_EMPTY "The file is empty or wrongly formatted"
+# define ERR_MEM "Cache error"
+# define ERR_SCENE "Scene Error"
+# define ERR_MALLOC "Malloc error"
+# define ERR_INVALID_EXT "Extension .rt"
+# define ERR_AMBIENT "Ambient light"
+# define ERR_CAMERA "Camera"
+# define ERR_LIGHT "Light"
+# define ERR_SPHERE "Sphere"
+# define ERR_PLANE "Plane"
+# define ERR_CYLINDER "Cylinder"
+# define ERR_RESOLUTION "Resolution"
+# define ERR_COLOR "Color"
+# define ERR_FLOAT "Float"
+# define ERR_VECTOR "Vector"
+# define ERR_NORMAL "Normal"
+# define ERR_ORIENTATION "Orientation"
+# define ERR_FOV "FOV"
+# define ERR_POSITION "Position"
+# define ERR_PARSE "Parsing"
+# define ERR_WIN "Creating window"
+# define ERR_IMG "Image not initialized correctly"
+# define ERR_MLX "Initializing MLX"
+# define ERR_SAVE "Saving BMP"
 
 #endif

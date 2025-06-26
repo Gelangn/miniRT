@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 17:23:17 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:55:54 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,9 +142,5 @@ float		mag(t_vector a);
 t_vector	norm(t_vector a);
 t_vector	cross(t_vector a, t_vector b);
 t_vector	reflect(t_vector a, t_vector b);
-
-/* Signal handling */
-void		init_signal_handlers(t_global *global);
-void		handle_signal(int signum);
 
 #endif

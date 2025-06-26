@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/23 16:45:55 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:41:37 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ void	parse_ambient(t_global *global, char *line)
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens || scene->ambient.init)
+	{
+		dbl_free(tokens);
+		free(line);
 		finish(global, ERR_AMBIENT);
+	}
 	tokens++;
 	scene->ambient.intensity = parse_float_token(global, tokens);
 	tokens++;
@@ -57,7 +61,11 @@ void	parse_cam(t_global *global, char *line)
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens || scene->cam.init)
+	{
+		dbl_free(tokens);
+		free(line);
 		finish(global, ERR_CAMERA);
+	}
 	tokens++;
 	parse_vector(global, *tokens, &scene->cam.pos);
 	tokens++;

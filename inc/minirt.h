@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 11:27:44 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:37:26 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,9 @@
 # define ERR_IMG "Image not initialized correctly"
 # define ERR_MLX "Initializing MLX"
 # define ERR_SAVE "Saving BMP"
+
+# define MAX_RAY_DEPTH 5 // Profundidad máxima de rayos en el trazado
+# define MIN_CONTRIBUTION 0.01f // Mínima contribución para rayos secundarios
+# define AIR_REFRACTIVE_INDEX 1.0f // Índice de refracción del aire
 
 #endif

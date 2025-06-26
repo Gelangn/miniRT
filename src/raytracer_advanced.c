@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/25 01:05:10 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:34:59 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,11 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 		if (global->c_ray.hit.obj_type >= 0)
 		{
 			level_color = cal_lighting(global);
-			
-			// Añadir brillo adicional en los bordes de objetos transparentes
 			if (get_object_transparency(global, global->c_ray.hit) > 0.5f)
 			{
-				// Calcular factor de borde (más brillante en ángulos tangenciales)
 				float edge_factor = 1.0f - fabs(dot(global->c_ray.dir, 
 										 get_surface_normal(global, global->c_ray.hit)));
-				edge_factor = edge_factor * edge_factor * 50.0f;  // Intensificar efecto
-				
-				// Añadir brillo de borde
+				edge_factor = edge_factor * edge_factor * 50.0f;
 				level_color.r = fmin(255, level_color.r + edge_factor);
 				level_color.g = fmin(255, level_color.g + edge_factor);
 				level_color.b = fmin(255, level_color.b + edge_factor);

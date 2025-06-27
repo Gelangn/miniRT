@@ -44,6 +44,7 @@ SRC_FILES = 	camera_controls.c \
 				matrix.c \
 				minirt.c \
 				parser_objects.c \
+				parser_objects_utils.c \
 				parser_scene.c \
 				parser_scene_utils.c \
 				parser_utils.c \

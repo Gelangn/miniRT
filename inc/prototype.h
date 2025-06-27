@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 12:51:47 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:28:17 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 /***** PROTOTYPES *****/
 /* Initialization */
-void		init(t_global *global);
 void		init_scene(t_global *global);
 t_intersec	init_isec(void);
 
@@ -54,7 +53,6 @@ void		apply_roll_rotation(t_global *global, int keysym,
 
 /* Scene handling */
 void		count_objects(t_global *global);
-void		allocate_objects(t_global *global);
 void		read_scene(t_global *global);
 void		check_scene(t_global *global, t_scene *scene);
 void		free_scene(t_scene *scene);
@@ -62,8 +60,8 @@ void		parse_ambient(t_global *global, char *line);
 void		parse_cam(t_global *global, char *line);
 void		parse_light(t_global *global, char *line);
 void		parse_sp(t_global *global, char *line);
-void		parse_plane(t_global *global, char *line);
-void		parse_cylinder(t_global *global, char *line);
+void		parse_pl(t_global *global, char *line);
+void		parse_cyl(t_global *global, char *line);
 
 /* Utilities */
 char		*get_next_line(int fd);
@@ -76,8 +74,8 @@ int			is_greater_than(float a, float b);
 void		replace_tabs_with_spaces(char *str);
 float		parse_float_token(t_global *global, char **tokens);
 int			parse_int_token(t_global *global, char **tokens);
-void		parse_color(t_global *global, char *token, t_color *color);
-void		parse_vector(t_global *global, char *token, t_vector *vector);
+void		parse_color(char *token, t_color *color);
+void		parse_vector(char *token, t_vector *vector);
 int			is_valid_float(char *str);
 
 /* BMP functions */

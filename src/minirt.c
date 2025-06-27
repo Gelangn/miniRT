@@ -6,13 +6,13 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:20:25 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 11:28:42 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:49:47 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-void	init(t_global *global)
+static void	init(t_global *global)
 {
 	global->img.img = NULL;
 	global->img.addr = NULL;
@@ -20,8 +20,8 @@ void	init(t_global *global)
 	global->total_pixels = (WIN_W - MARGIN) * (WIN_H - MARGIN);
 }
 
-// Function to check the file extension
-void	check_file_extension(t_global *global, const char *filename)
+/* Function to check the file extension */
+static void	check_file_extension(t_global *global, const char *filename)
 {
 	const char	*ext;
 

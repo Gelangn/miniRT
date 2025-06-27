@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 12:10:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:47:51 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	parse_ln(t_global *global, char *ln)
 	else if (ft_strncmp(ln, "sp", 2) == 0 && (ln[2] == ' ' || ln[2] == '\t'))
 		parse_sp(global, ln);
 	else if (ft_strncmp(ln, "pl", 2) == 0 && (ln[2] == ' ' || ln[2] == '\t'))
-		parse_plane(global, ln);
+		parse_pl(global, ln);
 	else if (ft_strncmp(ln, "cy", 2) == 0 && (ln[2] == ' ' || ln[2] == '\t'))
-		parse_cylinder(global, ln);
+		parse_cyl(global, ln);
 	else
 	{
 		free(ln);
@@ -40,34 +40,29 @@ void	parse_ln(t_global *global, char *ln)
 	}
 }
 
-/* Function to read and parse the scene file */
-void	read_scene(t_global *global)
+static void	allocate_objects(t_global *global)
 {
-	char	*ln_ptr;
-	int		fd;
+	t_scene	*scene;
 
-	count_objects(global);
-	allocate_objects(global);
-	fd = open(global->scene.file_path, O_RDONLY);
-	if (fd == -1)
-		finish(global, ERR_OPEN);
-	ln_ptr = get_next_line(fd);
-	if (!ln_ptr)
-		finish(global, ERR_READ);
-	while (ln_ptr)
-	{
-		if (ln_ptr[0] == '\n' || ln_ptr[0] == '\0' || ln_ptr[0] == '#')
-		{
-			free(ln_ptr);
-			ln_ptr = get_next_line(fd);
-			continue ;
-		}
-		parse_ln(global, ln_ptr);
-		free(ln_ptr);
-		ln_ptr = get_next_line(fd);
-	}
-	check_scene(global, &global->scene);
-	close(fd);
+	scene = &global->scene;
+	if (scene->num_sp > MAX_SPHERES || scene->num_pl > MAX_PLANES
+		|| scene->num_cy > MAX_CYLINDERS)
+		finish(global, ERR_SCENE);
+	scene->spheres = NULL;
+	scene->planes = NULL;
+	scene->cyls = NULL;
+	if (scene->num_sp > 0)
+		scene->spheres = malloc(sizeof(t_sphere) * scene->num_sp);
+	if (scene->num_pl > 0)
+		scene->planes = malloc(sizeof(t_plane) * scene->num_pl);
+	if (scene->num_cy > 0)
+		scene->cyls = malloc(sizeof(t_cylinder) * scene->num_cy);
+	if ((scene->num_sp > 0 && !scene->spheres) || (scene->num_pl > 0
+			&& !scene->planes) || (scene->num_cy > 0 && !scene->cyls))
+		finish(global, ERR_MEM);
+	scene->num_sp = 0;
+	scene->num_pl = 0;
+	scene->num_cy = 0;
 }
 
 void	count_objects(t_global *global)
@@ -98,27 +93,32 @@ void	count_objects(t_global *global)
 	close(fd);
 }
 
-void	allocate_objects(t_global *global)
+/* Function to read and parse the scene file */
+void	read_scene(t_global *global)
 {
-	t_scene	*scene;
+	char	*ln_ptr;
+	int		fd;
 
-	scene = &global->scene;
-	if (scene->num_sp > MAX_SPHERES || scene->num_pl > MAX_PLANES
-		|| scene->num_cy > MAX_CYLINDERS)
-		finish(global, ERR_SCENE);
-	scene->spheres = NULL;
-	scene->planes = NULL;
-	scene->cyls = NULL;
-	if (scene->num_sp > 0)
-		scene->spheres = malloc(sizeof(t_sphere) * scene->num_sp);
-	if (scene->num_pl > 0)
-		scene->planes = malloc(sizeof(t_plane) * scene->num_pl);
-	if (scene->num_cy > 0)
-		scene->cyls = malloc(sizeof(t_cylinder) * scene->num_cy);
-	if ((scene->num_sp > 0 && !scene->spheres) || (scene->num_pl > 0
-			&& !scene->planes) || (scene->num_cy > 0 && !scene->cyls))
-		finish(global, ERR_MEM);
-	scene->num_sp = 0;
-	scene->num_pl = 0;
-	scene->num_cy = 0;
+	count_objects(global);
+	allocate_objects(global);
+	fd = open(global->scene.file_path, O_RDONLY);
+	if (fd == -1)
+		finish(global, ERR_OPEN);
+	ln_ptr = get_next_line(fd);
+	if (!ln_ptr)
+		finish(global, ERR_READ);
+	while (ln_ptr)
+	{
+		if (ln_ptr[0] == '\n' || ln_ptr[0] == '\0' || ln_ptr[0] == '#')
+		{
+			free(ln_ptr);
+			ln_ptr = get_next_line(fd);
+			continue ;
+		}
+		parse_ln(global, ln_ptr);
+		free(ln_ptr);
+		ln_ptr = get_next_line(fd);
+	}
+	check_scene(global, &global->scene);
+	close(fd);
 }

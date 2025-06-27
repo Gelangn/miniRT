@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 12:08:58 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:27:13 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	parse_ambient(t_global *global, char *ln)
 	tokens++;
 	scene->ambient.intens = parse_float_token(global, tokens);
 	tokens++;
-	parse_color(global, *tokens, &scene->ambient.color);
+	parse_color(*tokens, &scene->ambient.color);
 	scene->ambient.init = 1;
 	tokens -= 2;
 	dbl_free(tokens);
@@ -67,9 +67,9 @@ void	parse_cam(t_global *global, char *ln)
 		finish(global, ERR_CAMERA);
 	}
 	tokens++;
-	parse_vector(global, *tokens, &scene->cam.pos);
+	parse_vector(*tokens, &scene->cam.pos);
 	tokens++;
-	parse_vector(global, *tokens, &scene->cam.dir);
+	parse_vector(*tokens, &scene->cam.dir);
 	tokens++;
 	scene->cam.fov = parse_int_token(global, tokens);
 	scene->cam.init = 1;
@@ -96,7 +96,7 @@ void	parse_light(t_global *global, char *ln)
 	if (!tokens || scene->light.init)
 		finish(global, ERR_LIGHT);
 	tokens++;
-	parse_vector(global, *tokens, &scene->light.pos);
+	parse_vector(*tokens, &scene->light.pos);
 	tokens++;
 	scene->light.intens = parse_float_token(global, tokens);
 	scene->light.init = 1;

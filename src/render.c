@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:25:38 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:40:57 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:02:35 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	render_single_pixel(t_global *global, int index)
 		if (trans > 0.01f || refl > 0.01f)
 			lit_color = trace_ray_iterative(global, global->scene.cam.pos,
 					global->c_ray.dir, MAX_RAY_DEPTH);
-		lit_color = cal_lighting(global);
+		else
+			lit_color = cal_lighting(global);
 		color = rgb_to_int(lit_color);
 	}
 	else

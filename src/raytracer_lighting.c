@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 13:43:49 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:40:46 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_color	cal_lighting(t_global *global)
 
 // Sets up reflection ray state
 static void	setup_reflection_ray_state(t_global *global, t_vector *reflect_dir,
-	t_vector *ray_origin, t_vector *normal)
+		t_vector *ray_origin, t_vector *normal)
 {
 	*normal = get_surface_normal(global, global->c_ray.hit);
 	*reflect_dir = reflect_ray(global->c_ray.dir, *normal);
@@ -77,7 +77,7 @@ static void	setup_reflection_ray_state(t_global *global, t_vector *reflect_dir,
 
 // Restores reflection ray state
 static void	restore_reflection_ray_state(t_global *global, t_intersec old_hit,
-	t_vector old_origin, t_vector old_dir)
+		t_vector old_origin, t_vector old_dir)
 {
 	global->c_ray.hit = old_hit;
 	global->c_ray.origin = old_origin;
@@ -85,41 +85,46 @@ static void	restore_reflection_ray_state(t_global *global, t_intersec old_hit,
 }
 
 // Calculates reflection contribution by casting a reflection ray
-static t_color	calculate_reflection(t_global *global, float reflectivity)
+static t_color	cal_reflection(t_global *global, float refl)
 {
 	t_vector	reflect_dir;
 	t_vector	ray_origin;
 	t_vector	normal;
 	t_intersec	old_hit;
 	t_vector	old_origin;
+	t_intersec	reflect_hit;
 
 	setup_reflection_ray_state(global, &reflect_dir, &ray_origin, &normal);
 	old_hit = global->c_ray.hit;
 	old_origin = global->c_ray.origin;
 	global->c_ray.origin = ray_origin;
 	global->c_ray.dir = reflect_dir;
-	t_intersec reflect_hit = find_closest_isec(global);
+	reflect_hit = find_closest_isec(global);
 	if (reflect_hit.obj_type >= 0)
 	{
 		global->c_ray.hit = reflect_hit;
-		restore_reflection_ray_state(global, old_hit, old_origin, global->c_ray.dir);
-		return (color_scale(cal_lighting(global), reflectivity));
+		restore_reflection_ray_state(global, old_hit, old_origin,
+				global->c_ray.dir);
+		return (color_scale(cal_lighting(global), refl));
 	}
-	restore_reflection_ray_state(global, old_hit, old_origin, global->c_ray.dir);
+	restore_reflection_ray_state(global, old_hit, old_origin,
+			global->c_ray.dir);
 	return ((t_color){20, 20, 20});
 }
 
 // Sets up transmission ray state
-static void	setup_transmission_ray_state(t_global *global, t_vector *transmission_dir,
-	t_vector *ray_origin)
+static void	setup_transmission_ray_state(t_global *global,
+											t_vector *transmission_dir,
+											t_vector *ray_origin)
 {
 	*transmission_dir = global->c_ray.dir;
-	*ray_origin = add(global->c_ray.hit.point, multiply(*transmission_dir, EPSILON));
+	*ray_origin = add(global->c_ray.hit.point, multiply(*transmission_dir,
+				EPSILON));
 }
 
 // Restores transmission ray state
 static void	restore_transmission_ray_state(t_global *global, t_intersec old_hit,
-	t_vector old_origin, t_vector old_dir)
+		t_vector old_origin, t_vector old_dir)
 {
 	global->c_ray.hit = old_hit;
 	global->c_ray.origin = old_origin;
@@ -127,26 +132,29 @@ static void	restore_transmission_ray_state(t_global *global, t_intersec old_hit,
 }
 
 // Calculates transparency contribution by casting a transmission ray
-static t_color	calculate_transparency(t_global *global, float transparency)
+static t_color	cal_trans(t_global *global, float trans)
 {
 	t_vector	transmission_dir;
 	t_vector	ray_origin;
 	t_intersec	old_hit;
 	t_vector	old_origin;
+	t_intersec	trans_hit;
 
 	setup_transmission_ray_state(global, &transmission_dir, &ray_origin);
 	old_hit = global->c_ray.hit;
 	old_origin = global->c_ray.origin;
 	global->c_ray.origin = ray_origin;
 	global->c_ray.dir = transmission_dir;
-	t_intersec trans_hit = find_closest_isec(global);
+	trans_hit = find_closest_isec(global);
 	if (trans_hit.obj_type >= 0)
 	{
 		global->c_ray.hit = trans_hit;
-		restore_transmission_ray_state(global, old_hit, old_origin, global->c_ray.dir);
-		return (color_scale(cal_lighting(global), transparency));
+		restore_transmission_ray_state(global, old_hit, old_origin,
+				global->c_ray.dir);
+		return (color_scale(cal_lighting(global), trans));
 	}
-	restore_transmission_ray_state(global, old_hit, old_origin, global->c_ray.dir);
+	restore_transmission_ray_state(global, old_hit, old_origin,
+			global->c_ray.dir);
 	return ((t_color){
 		(BACKGROUND_COLOR >> 16) & 0xFF,
 		(BACKGROUND_COLOR >> 8) & 0xFF,
@@ -154,24 +162,23 @@ static t_color	calculate_transparency(t_global *global, float transparency)
 }
 
 // Handles transparency blending for advanced lighting
-static t_color	handle_transparency(t_global *global, t_color basic_color,
-	float transparency)
+static t_color	handle_trans(t_global *global, t_color basic_color, float trans)
 {
 	t_color	trans_color;
 	t_color	final_color;
 
-	if (transparency > 0.7f)
+	if (trans > 0.7f)
 	{
 		final_color = color_scale(basic_color, 0.1f);
-		trans_color = calculate_transparency(global, transparency);
+		trans_color = cal_trans(global, trans);
 		final_color.r += trans_color.r * 0.9f;
 		final_color.g += trans_color.g * 0.9f;
 		final_color.b += trans_color.b * 0.9f;
 	}
-	else if (transparency > 0.5f)
+	else if (trans > 0.5f)
 	{
 		final_color = color_scale(basic_color, 0.3f);
-		trans_color = calculate_transparency(global, transparency);
+		trans_color = cal_trans(global, trans);
 		final_color.r += trans_color.r * 0.7f;
 		final_color.g += trans_color.g * 0.7f;
 		final_color.b += trans_color.b * 0.7f;
@@ -187,24 +194,21 @@ t_color	cal_lighting_advanced(t_global *global)
 	t_color	basic_color;
 	t_color	final_color;
 	t_color	reflect_color;
-	float	transparency;
-	float	reflectivity;
+	float	trans;
+	float	refl;
 
 	if (!is_valid_isec(global))
 		return ((t_color){5, 5, 5});
-	transparency = get_object_transparency(global, global->c_ray.hit);
-	reflectivity = get_object_reflectivity(global, global->c_ray.hit);
+	trans = get_object_trans(global, global->c_ray.hit);
+	refl = get_object_refl(global, global->c_ray.hit);
 	basic_color = cal_lighting(global);
-	final_color = handle_transparency(global, basic_color, transparency);
-	if (reflectivity > 0.01f)
+	final_color = handle_trans(global, basic_color, trans);
+	if (refl > 0.01f)
 	{
-		reflect_color = calculate_reflection(global, reflectivity);
-		final_color.r = final_color.r * (1.0f - reflectivity) + reflect_color.r
-			* reflectivity;
-		final_color.g = final_color.g * (1.0f - reflectivity) + reflect_color.g
-			* reflectivity;
-		final_color.b = final_color.b * (1.0f - reflectivity) + reflect_color.b
-			* reflectivity;
+		reflect_color = cal_reflection(global, refl);
+		final_color.r = final_color.r * (1.0f - refl) + reflect_color.r * refl;
+		final_color.g = final_color.g * (1.0f - refl) + reflect_color.g * refl;
+		final_color.b = final_color.b * (1.0f - refl) + reflect_color.b * refl;
 	}
 	clamp_color(&final_color);
 	return (final_color);

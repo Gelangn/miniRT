@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:57:09 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 13:31:52 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:29:37 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ float	cal_shadow(t_global *global)
 	t_vector	shadow_origin;
 	t_ray_state	state;
 	t_intersec	shadow_isec;
-	float		transparency;
+	float		trans;
 
 	shadow_origin = add(global->c_ray.hit.point, multiply(global->c_ray.normal,
 				0.005f));
@@ -30,10 +30,10 @@ float	cal_shadow(t_global *global)
 		&& !(shadow_isec.obj_type == global->c_ray.hit.obj_type
 			&& shadow_isec.obj_index == global->c_ray.hit.obj_index))
 	{
-		transparency = get_object_transparency(global, shadow_isec);
-		if (transparency < 0.01f)
+		trans = get_object_trans(global, shadow_isec);
+		if (trans < 0.01f)
 			return (1.0f);
-		return (1.0f - transparency);
+		return (1.0f - trans);
 	}
 	return (0.0f);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracer_core.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 18:36:43 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:25:27 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 	direction.x = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
 	direction.y = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
 	direction = add(add(multiply(global->scene.cam.right_axis, direction.x),
-				multiply(global->scene.cam.up_axis, direction.y)),
-			global->scene.cam.forward_axis);
+						multiply(global->scene.cam.up_axis, direction.y)),
+					global->scene.cam.fw_axis);
 	return (norm(direction));
 }

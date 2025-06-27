@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scene_parser_utils.c                               :+:      :+:    :+:   */
+/*   parser_scene_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 21:59:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/05 22:01:14 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:54:55 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	replace_tabs_with_spaces(char *str)
 float	parse_float_token(t_global *global, char **tokens)
 {
 	if (!*tokens)
+	{
+		printf("Invalid float token: \n");
 		finish(global, ERR_PARSE);
+	}
 	return (ft_atof(*tokens));
 }
 
@@ -35,6 +38,9 @@ float	parse_float_token(t_global *global, char **tokens)
 int	parse_int_token(t_global *global, char **tokens)
 {
 	if (!*tokens)
+	{
+		printf("Invalid int token: \n");
 		finish(global, ERR_PARSE);
+	}
 	return (ft_atoi(*tokens));
 }

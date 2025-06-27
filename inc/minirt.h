@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:39 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 13:49:34 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:38:11 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@
 # include <sys/stat.h>
 # include <unistd.h>
 
-# define WIN_W 840		// Screen width 1024 840
-# define WIN_H 630		// Screen height 768 630
-# define MARGIN 50		// Margin for the screen
+# define WIN_W 840 // Screen width 1024 840
+# define WIN_H 630 // Screen height 768 630
+# define MARGIN 50 // Margin for the screen
 
 # define PI 3.14159265358979323846f
 # define MAX_PLANES 10
 # define MAX_SPHERES 100
 # define MAX_CYLINDERS 150
-# define VECTOR 0		// 0 for vector, 1 for point
+# define VECTOR 0 // 0 for vector, 1 for point
 # define POINT 1
 
-# define DSCR 1.0f		// Distance from the camera to the screen
-# define EPSILON 0.001f	// Epsilon for floating point comparison
+# define DSCR 1.0f      // Distance from the camera to the screen
+# define EPSILON 0.001f // Epsilon for floating point comparison
 
 # define MLX_ERROR 1
 # define MLX_SUCCESS 0
@@ -106,8 +106,8 @@
 # define ERR_MLX "Initializing MLX"
 # define ERR_SAVE "Saving BMP"
 
-# define MAX_RAY_DEPTH 4		// Maximum depth for ray tracing
-# define MIN_CONTRIBUTION 0.01f	// Minimum contribution reflection/refraction
-# define AIR_REFRACTIVE_INDEX 1.0f	// Refractive index of air
+# define MAX_RAY_DEPTH 4        // Maximum depth for ray tracing
+# define MIN_CONTRIBUTION 0.01f // Minimum contribution reflection/refraction
+# define AIR_REFR_IDX 1.0f      // Refractive index of air
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/26 14:28:12 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:39:32 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 		if (global->c_ray.hit.obj_type >= 0)
 		{
 			level_color = cal_lighting(global);
-			if (get_object_transparency(global, global->c_ray.hit) > 0.5f)
+			if (get_object_trans(global, global->c_ray.hit) > 0.5f)
 			{
 				edge_factor = 1.0f - fabs(dot(global->c_ray.dir,
 							get_surface_normal(global, global->c_ray.hit)));
@@ -57,34 +57,34 @@ int	generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 	t_vector	normal;
 	t_vector	reflect_dir;
 	t_vector	refract_dir;
-	float		transparency;
-	float		reflectivity;
+	float		trans;
+	float		refl;
 	float		fresnel;
 	int			inside;
 
 	float n1, n2;
-	transparency = get_object_transparency(global, global->c_ray.hit);
-	reflectivity = get_object_reflectivity(global, global->c_ray.hit);
-	if (transparency < MIN_CONTRIBUTION && reflectivity < MIN_CONTRIBUTION)
+	trans = get_object_trans(global, global->c_ray.hit);
+	refl = get_object_refl(global, global->c_ray.hit);
+	if (trans < MIN_CONTRIBUTION && refl < MIN_CONTRIBUTION)
 		return (0);
 	normal = get_surface_normal(global, global->c_ray.hit);
 	inside = is_inside_object(global, global->c_ray.hit, global->c_ray.origin);
 	// Set refractive indices based on whether ray is entering or exiting
 	if (inside)
 	{
-		n1 = get_object_refractive_index(global, global->c_ray.hit);
-		n2 = AIR_REFRACTIVE_INDEX;
+		n1 = get_object_refr_idx(global, global->c_ray.hit);
+		n2 = AIR_REFR_IDX;
 	}
 	else
 	{
-		n1 = AIR_REFRACTIVE_INDEX;
-		n2 = get_object_refractive_index(global, global->c_ray.hit);
+		n1 = AIR_REFR_IDX;
+		n2 = get_object_refr_idx(global, global->c_ray.hit);
 	}
 	fresnel = schlick(-dot(normal, global->c_ray.dir), n1, n2);
 	printf("\n--- RAY INFO ---\n");
 	printf("Hit object: type=%d (0=Sp 1=Pl 2=Cyl)\n",
 			global->c_ray.hit.obj_type);
-	printf("Transparency: %.2f\n", transparency);
+	printf("Transparency: %.2f\n", trans);
 	printf("¿Inside object? %s\n", inside ? "YES" : "NO");
 	printf("Normal: (%.2f, %.2f, %.2f)\n", normal.x, normal.y, normal.z);
 	/*  // Si el objeto es un cilindro
@@ -104,25 +104,25 @@ int	generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
             normal.x, normal.y, normal.z);
     } */
 	// Adjust reflectivity using Fresnel (more reflection at grazing angles)
-	reflectivity = reflectivity + (1.0f - reflectivity) * fresnel;
+	refl = refl + (1.0f - refl) * fresnel;
 	// Add reflection ray
-	if (reflectivity > MIN_CONTRIBUTION)
+	if (refl > MIN_CONTRIBUTION)
 	{
 		reflect_dir = reflect_ray(global->c_ray.dir, normal);
 		rays[*count].origin = add(global->c_ray.hit.point,
 									multiply(reflect_dir, EPSILON));
 		rays[*count].direction = reflect_dir;
-		rays[*count].contribution = reflectivity;
+		rays[*count].contribution = refl;
 		(*count)++;
 	}
 	// Add refraction ray
-	if (transparency > MIN_CONTRIBUTION)
+	if (trans > MIN_CONTRIBUTION)
 	{
 		refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
 		rays[*count].origin = add(global->c_ray.hit.point,
 									multiply(refract_dir, EPSILON));
 		rays[*count].direction = refract_dir;
-		rays[*count].contribution = transparency * (1.0f - fresnel);
+		rays[*count].contribution = trans * (1.0f - fresnel);
 		(*count)++;
 		printf("REFRACTION ray created: contrib=%.3f, dir=(%.2f,%.2f,%.2f)\n",
 				rays[*count - 1].contribution,
@@ -161,9 +161,9 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 		hit.obj_index < global->scene.num_cy)
 	{
 		// Verificar si es transparente
-		float transparency = global->scene.cyls[hit.obj_index].material.transparency;
-			// Corrección aquí
-		if (transparency > 0.1f)
+		float trans = global->scene.cyls[hit.obj_index].material.trans;
+		// Corrección aquí
+		if (trans > 0.1f)
 		{
 			// Calcular color del cilindro
 			global->c_ray.hit = hit;
@@ -185,12 +185,12 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
 				// Crear color mezclado
 				t_color mixed;
-				mixed.r = (int)(cyl_color.r * (1.0f - transparency) +
-								behind_color.r * transparency);
-				mixed.g = (int)(cyl_color.g * (1.0f - transparency) +
-								behind_color.g * transparency);
-				mixed.b = (int)(cyl_color.b * (1.0f - transparency) +
-								behind_color.b * transparency);
+				mixed.r = (int)(cyl_color.r * (1.0f - trans) +
+								behind_color.r * trans);
+				mixed.g = (int)(cyl_color.g * (1.0f - trans) +
+								behind_color.g * trans);
+				mixed.b = (int)(cyl_color.b * (1.0f - trans) +
+								behind_color.b * trans);
 
 				// Asegurar valores en rango
 				if (mixed.r > 255)
@@ -225,16 +225,16 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
 	if (hit.obj_type == 2)
 	{ // Es un cilindro
-		float transparency = 0.0f;
+		float trans = 0.0f;
 
 		// Verificar si es transparente
 		if (hit.obj_index >= 0 && hit.obj_index < global->scene.num_cy)
 		{
-			transparency = global->scene.cyls[hit.obj_index].material.transparency;
-			//printf("CILINDRO transparencia: %.3f\n", transparency);
+			trans = global->scene.cyls[hit.obj_index].material.trans;
+			//printf("CILINDRO transparencia: %.3f\n", trans);
 		}
 
-		if (transparency > 0.3f)
+		if (trans > 0.3f)
 		{
 			//printf("APLICANDO TRANSPARENCIA FORZADA EN CILINDRO\n");
 
@@ -262,12 +262,12 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
 				// Mezclar colores directamente
 				t_color final;
-				final.r = (int)(cylinder_color.r * (1.0f - transparency) +
-								behind_color.r * transparency);
-				final.g = (int)(cylinder_color.g * (1.0f - transparency) +
-								behind_color.g * transparency);
-				final.b = (int)(cylinder_color.b * (1.0f - transparency) +
-								behind_color.b * transparency);
+				final.r = (int)(cylinder_color.r * (1.0f - trans) +
+								behind_color.r * trans);
+				final.g = (int)(cylinder_color.g * (1.0f - trans) +
+								behind_color.g * trans);
+				final.b = (int)(cylinder_color.b * (1.0f - trans) +
+								behind_color.b * trans);
 
 				// Asegurar que los valores estén en el rango correcto
 				clamp_color(&final);
@@ -281,8 +281,8 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
 	// AGREGAR: variables para manejar la transparencia
 	t_color surface_color = {0, 0, 0};
-	float transparency = 0.0f;
-	int found_transparency = 0;
+	float trans = 0.0f;
+	int found_trans = 0;
 
 	static int debug_x = -1;
 	static int debug_y = -1;
@@ -318,13 +318,13 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 			// Verificamos si hay transparencia
 			if (global->c_ray.hit.obj_type >= 0)
 			{
-				transparency = get_object_transparency(global,
-														global->c_ray.hit);
-				if (transparency > 0.1f)
-					found_transparency = 1;
+				trans = get_object_trans(global,
+											global->c_ray.hit);
+				if (trans > 0.1f)
+					found_trans = 1;
 			}
 		}
-		else if (found_transparency && depth == 1)
+		else if (found_trans && depth == 1)
 		{
 			// Aumentar brillo de objetos vistos a través de transparencia
 			level_contribution.r = (int)(level_contribution.r * 1.3f);
@@ -332,15 +332,12 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 			level_contribution.b = (int)(level_contribution.b * 1.3f);
 
 			// Mezclar con la mejora
-			accumulated_color.r = (int)(surface_color.r * (1.0f - transparency)
-					+
-										level_contribution.r * transparency);
-			accumulated_color.g = (int)(surface_color.g * (1.0f - transparency)
-					+
-										level_contribution.g * transparency);
-			accumulated_color.b = (int)(surface_color.b * (1.0f - transparency)
-					+
-										level_contribution.b * transparency);
+			accumulated_color.r = (int)(surface_color.r * (1.0f - trans) +
+										level_contribution.r * trans);
+			accumulated_color.g = (int)(surface_color.g * (1.0f - trans) +
+										level_contribution.g * trans);
+			accumulated_color.b = (int)(surface_color.b * (1.0f - trans) +
+										level_contribution.b * trans);
 		}
 		else
 		{

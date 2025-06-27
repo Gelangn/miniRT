@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 14:10:51 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:41:38 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ typedef struct s_vector
 typedef struct s_material
 {
 	t_color			color;
-	float			transparency;
-	float			reflectivity;
-	float			refractive_idx;
+	float			trans;
+	float			refl;
+	float			refr_idx;
 }					t_material;
 typedef struct s_ambient
 {
-	float			intensity;
+	float			intens;
 	t_color			color;
 	int				init;
 }					t_ambient;
@@ -80,18 +80,18 @@ typedef struct s_camera
 {
 	int				fov;
 	double			dist_scrn;
-	t_vector		pos;// Camera position in the world
-	t_vector		dir;// Direction vector (where cam is looking)
-	t_vector		right_axis;	// Camera right axis
-	t_vector		up_axis;// Camera up axis
-	t_vector		forward_axis;// Camera forward axis
-	float			roll_angle;// New: Accumulated roll angle
+	t_vector pos;        // Camera position in the world
+	t_vector dir;        // Direction vector (where cam is looking)
+	t_vector right_axis; // Camera right axis
+	t_vector up_axis;    // Camera up axis
+	t_vector fw_axis;    // Camera forward axis
+	float roll_angle;    // New: Accumulated roll angle
 	int				init;
 }					t_camera;
 
 typedef struct s_light
 {
-	float			intensity;
+	float			intens;
 	t_vector		pos;
 	int				init;
 }					t_light;
@@ -108,15 +108,15 @@ typedef struct s_sphere
 {
 	t_vector		center;
 	float			radius;
-	t_material		material; // Reemplaza las propiedades redundantes
-}	t_sphere;
+	t_material		material;
+}					t_sphere;
 
 typedef struct s_plane
 {
 	t_vector		point;
 	t_vector		normal;
-	t_material		material; // Reemplaza las propiedades redundantes
-}	t_plane;
+	t_material		material;
+}					t_plane;
 
 typedef struct s_cylinder
 {
@@ -124,8 +124,8 @@ typedef struct s_cylinder
 	t_vector		axis;
 	float			radius;
 	float			height;
-	t_material		material; // Reemplaza las propiedades redundantes
-}	t_cylinder;
+	t_material		material;
+}					t_cylinder;
 
 typedef struct s_cyl_lat
 {
@@ -186,9 +186,9 @@ typedef struct s_ray_result
 {
 	t_vector		origin;
 	t_vector		direction;
-	float			contribution;// How much this ray contributes to final color
+	float contribution; // How much this ray contributes to final color
 	int				depth;
-	int				is_inside;// For refraction cals (inside object or not)
+	int is_inside; // For refraction cals (inside object or not)
 }					t_ray_result;
 
 typedef struct s_active_ray

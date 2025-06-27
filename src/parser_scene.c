@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 10:41:37 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:41:57 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	parse_ambient(t_global *global, char *line)
 		finish(global, ERR_AMBIENT);
 	}
 	tokens++;
-	scene->ambient.intensity = parse_float_token(global, tokens);
+	scene->ambient.intens = parse_float_token(global, tokens);
 	tokens++;
 	parse_color(global, *tokens, &scene->ambient.color);
 	scene->ambient.init = 1;
@@ -98,7 +98,7 @@ void	parse_light(t_global *global, char *line)
 	tokens++;
 	parse_vector(global, *tokens, &scene->light.pos);
 	tokens++;
-	scene->light.intensity = parse_float_token(global, tokens);
+	scene->light.intens = parse_float_token(global, tokens);
 	scene->light.init = 1;
 	tokens -= 2;
 	dbl_free(tokens);

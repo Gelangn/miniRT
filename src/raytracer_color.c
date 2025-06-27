@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracer_color.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-mada <bde-mada@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:06:30 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/18 18:36:23 by bde-mada         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:42:20 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ t_color	cal_ambient(t_global *global)
 {
 	t_color	result;
 
-	result.r = global->c_ray.obj_color.r * global->scene.ambient.intensity;
-	result.g = global->c_ray.obj_color.g * global->scene.ambient.intensity;
-	result.b = global->c_ray.obj_color.b * global->scene.ambient.intensity;
+	result.r = global->c_ray.obj_color.r * global->scene.ambient.intens;
+	result.g = global->c_ray.obj_color.g * global->scene.ambient.intens;
+	result.b = global->c_ray.obj_color.b * global->scene.ambient.intens;
 	return (result);
 }
 
@@ -41,11 +41,11 @@ t_color	cal_ambient(t_global *global)
 t_color	cal_diffuse(t_global *global)
 {
 	float	diff;
-	float	light_intensity;
+	float	light_intens;
 
-	light_intensity = global->scene.light.intensity * 1.2f;
+	light_intens = global->scene.light.intens * 1.2f;
 	diff = fmax(0.0f, dot(global->c_ray.normal, global->c_light.dir));
-	return (color_scale(global->c_ray.obj_color, light_intensity * diff));
+	return (color_scale(global->c_ray.obj_color, light_intens * diff));
 }
 
 /**
@@ -62,18 +62,18 @@ t_color	cal_specular(t_global *global)
 	t_vector	reflect_dir;
 	float		spec;
 	t_color		white;
-	float		light_intensity;
+	float		light_intens;
 
-	light_intensity = global->scene.light.intensity;
+	light_intens = global->scene.light.intens;
 	view_dir = norm(multiply(global->c_ray.dir, -1.0f));
 	reflect_dir = subtract(multiply(global->c_ray.normal, 2.0f
 				* dot(global->c_ray.normal, global->c_light.dir)),
-			global->c_light.dir);
+							global->c_light.dir);
 	spec = pow(fmax(0.0f, dot(view_dir, reflect_dir)), 200);
 	white.r = 255;
 	white.g = 255;
 	white.b = 255;
-	return (color_scale(white, spec * light_intensity * 0.5f));
+	return (color_scale(white, spec * light_intens * 0.5f));
 }
 
 /**

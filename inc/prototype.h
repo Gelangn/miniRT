@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 14:22:01 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:37:26 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,9 @@ t_vector	cross(t_vector a, t_vector b);
 t_vector	reflect(t_vector a, t_vector b);
 
 /* Material properties */
-float		get_object_transparency(t_global *global, t_intersec isec);
-float		get_object_reflectivity(t_global *global, t_intersec isec);
-float		get_object_refractive_index(t_global *global, t_intersec isec);
+float		get_object_trans(t_global *global, t_intersec isec);
+float		get_object_refl(t_global *global, t_intersec isec);
+float		get_object_refr_idx(t_global *global, t_intersec isec);
 
 /* Reflection and refraction */
 t_vector	reflect_ray(t_vector incident, t_vector normal);

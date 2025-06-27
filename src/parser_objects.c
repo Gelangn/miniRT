@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/26 14:14:14 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 10:52:39 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ void	parse_sphere(t_global *global, char *line)
 	tokens++;
 	parse_color(global, *tokens, &sphere.material.color);
 	tokens++;
-	sphere.material.transparency = parse_float_token(global, tokens);
+	sphere.material.trans = parse_float_token(global, tokens);
 	tokens++;
-	sphere.material.reflectivity = parse_float_token(global, tokens);
+	sphere.material.refl = parse_float_token(global, tokens);
 	tokens++;
-	sphere.material.refractive_idx = parse_float_token(global, tokens);
+	sphere.material.refr_idx = parse_float_token(global, tokens);
 	global->scene.spheres[global->scene.num_sp++] = sphere;
 	dbl_free(tokens_start);
 }
@@ -87,11 +87,11 @@ void	parse_plane(t_global *global, char *line)
 	char	**tokens;
 	t_scene	*scene;
 
-	char **tokens_start; // Guardar puntero original
+	char **tokens_start;
 	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
-	tokens_start = tokens; // Guardar puntero al inicio
+	tokens_start = tokens;
 	if (!tokens)
 		finish(global, ERR_PLANE);
 	tokens++;
@@ -99,30 +99,24 @@ void	parse_plane(t_global *global, char *line)
 	tokens++;
 	parse_vector(global, *tokens, &plane.normal);
 	tokens++;
-	parse_color(global, *tokens, &plane.material.color); // Usar material.color
+	parse_color(global, *tokens, &plane.material.color);
 	tokens++;
-	// Parse optional material properties
 	if (tokens && *tokens && *(tokens + 1) && *(tokens + 2))
 	{
-		plane.material.transparency = parse_float_token(global, tokens);
-			// Usar material.transparency
+		plane.material.trans = parse_float_token(global, tokens);
 		tokens++;
-		plane.material.reflectivity = parse_float_token(global, tokens);
-			// Usar material.reflectivity
+		plane.material.refl = parse_float_token(global, tokens);
 		tokens++;
-		plane.material.refractive_idx = parse_float_token(global, tokens);
-			// Usar material.refractive_idx
+		plane.material.refr_idx = parse_float_token(global, tokens);
 		tokens++;
 	}
 	else
 	{
-		// Default values
-		plane.material.transparency = 0.0f;
-		plane.material.reflectivity = 0.0f;
-		plane.material.refractive_idx = 1.5f;
+		plane.material.trans = 0.0f;
+		plane.material.refl = 0.0f;
+		plane.material.refr_idx = 1.5f;
 	}
 	scene->planes[scene->num_pl++] = plane;
-	// Usar siempre el puntero original para liberar
 	dbl_free(tokens_start);
 }
 
@@ -134,11 +128,11 @@ void	parse_cylinder(t_global *global, char *line)
 	t_scene		*scene;
 	t_vector	center;
 
-	char **tokens_start; // Guardar puntero original
+	char **tokens_start;
 	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
-	tokens_start = tokens; // Guardar puntero al inicio
+	tokens_start = tokens;
 	if (!tokens)
 		finish(global, ERR_CYLINDER);
 	tokens++;
@@ -151,35 +145,29 @@ void	parse_cylinder(t_global *global, char *line)
 	tokens++;
 	cyl.height = parse_float_token(global, tokens);
 	tokens++;
-	parse_color(global, *tokens, &cyl.material.color); // Usar material.color
+	parse_color(global, *tokens, &cyl.material.color);
 	tokens++;
-	// Parse optional material properties
 	if (tokens && *tokens && *(tokens + 1) && *(tokens + 2))
 	{
-		cyl.material.transparency = parse_float_token(global, tokens);
-			// Usar material.transparency
+		cyl.material.trans = parse_float_token(global, tokens);
 		tokens++;
-		cyl.material.reflectivity = parse_float_token(global, tokens);
-			// Usar material.reflectivity
+		cyl.material.refl = parse_float_token(global, tokens);
 		tokens++;
-		cyl.material.refractive_idx = parse_float_token(global, tokens);
-			// Usar material.refractive_idx
+		cyl.material.refr_idx = parse_float_token(global, tokens);
 		tokens++;
 		printf("CILINDRO: Leyendo propiedades opcionales: transp=%.2f, \
 				refl=%.2f, idx=%.2f\n",
-				cyl.material.transparency,
-				cyl.material.reflectivity,
-				cyl.material.refractive_idx);
+				cyl.material.trans,
+				cyl.material.refl,
+				cyl.material.refr_idx);
 	}
 	else
 	{
-		// Default values
-		cyl.material.transparency = 0.0f;
-		cyl.material.reflectivity = 0.0f;
-		cyl.material.refractive_idx = 1.5f;
+		cyl.material.trans = 0.0f;
+		cyl.material.refl = 0.0f;
+		cyl.material.refr_idx = 1.5f;
 	}
 	cyl.base = subtract(center, multiply(cyl.axis, cyl.height / 2));
 	scene->cyls[scene->num_cy++] = cyl;
-	// Usar siempre el puntero original para liberar
 	dbl_free(tokens_start);
 }

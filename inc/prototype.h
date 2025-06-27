@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:59 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:37:26 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:51:47 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void		handle_screenshot(t_global *global);
 void		update_display(t_global *global);
 
 /* Camera controls */
-void		move_camera(t_global *global, t_vector direction, float distance);
+void		move_camera(t_global *global, t_vector dir, float distance);
 void		rotate_camera(t_global *global, t_vector axis, float angle);
 void		precal_camera_axis(t_global *global);
 void		precal_rays(t_global *global);
@@ -61,7 +61,7 @@ void		free_scene(t_scene *scene);
 void		parse_ambient(t_global *global, char *line);
 void		parse_cam(t_global *global, char *line);
 void		parse_light(t_global *global, char *line);
-void		parse_sphere(t_global *global, char *line);
+void		parse_sp(t_global *global, char *line);
 void		parse_plane(t_global *global, char *line);
 void		parse_cylinder(t_global *global, char *line);
 
@@ -95,7 +95,7 @@ void		trace_all_rays(t_global *global);
 /* Ray tracing core */
 void		cal_ray_for_pixel(t_global *global, int px_x, int px_y, int idx);
 t_intersec	find_closest_isec(t_global *global);
-t_vector	get_ray_direction(t_global *global, int pixel_x, int pixel_y);
+t_vector	get_ray_dir(t_global *global, int pixel_x, int pixel_y);
 t_vector	get_surface_normal(t_global *global, t_intersec isec);
 void		check_obj_isecs(t_global *global, t_intersec *closest_isec,
 				int obj_type);
@@ -157,8 +157,8 @@ float		fresnel_reflectance(t_vector incident, t_vector normal, float n1,
 
 /* Advanced lighting */
 t_color		cal_lighting_advanced(t_global *global);
-t_color		trace_ray_iterative(t_global *global, t_vector origin,
-				t_vector direction, int max_depth);
+t_color		trace_ray_iterative(t_global *global, t_vector origin, t_vector dir,
+				int max_depth);
 
 /* Signal handling */
 void		init_signal_handlers(t_global *global);

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:40:37 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:40:46 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:50:44 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_color	cal_lighting(t_global *global)
 }
 
 // Sets up reflection ray state
-static void	setup_reflection_ray_state(t_global *global, t_vector *reflect_dir,
+static void	setup_reflect_ray_state(t_global *global, t_vector *reflect_dir,
 		t_vector *ray_origin, t_vector *normal)
 {
 	*normal = get_surface_normal(global, global->c_ray.hit);
@@ -76,7 +76,7 @@ static void	setup_reflection_ray_state(t_global *global, t_vector *reflect_dir,
 }
 
 // Restores reflection ray state
-static void	restore_reflection_ray_state(t_global *global, t_intersec old_hit,
+static void	restore_reflect_ray_state(t_global *global, t_intersec old_hit,
 		t_vector old_origin, t_vector old_dir)
 {
 	global->c_ray.hit = old_hit;
@@ -85,7 +85,7 @@ static void	restore_reflection_ray_state(t_global *global, t_intersec old_hit,
 }
 
 // Calculates reflection contribution by casting a reflection ray
-static t_color	cal_reflection(t_global *global, float refl)
+static t_color	cal_reflect(t_global *global, float refl)
 {
 	t_vector	reflect_dir;
 	t_vector	ray_origin;
@@ -94,7 +94,7 @@ static t_color	cal_reflection(t_global *global, float refl)
 	t_vector	old_origin;
 	t_intersec	reflect_hit;
 
-	setup_reflection_ray_state(global, &reflect_dir, &ray_origin, &normal);
+	setup_reflect_ray_state(global, &reflect_dir, &ray_origin, &normal);
 	old_hit = global->c_ray.hit;
 	old_origin = global->c_ray.origin;
 	global->c_ray.origin = ray_origin;
@@ -103,12 +103,11 @@ static t_color	cal_reflection(t_global *global, float refl)
 	if (reflect_hit.obj_type >= 0)
 	{
 		global->c_ray.hit = reflect_hit;
-		restore_reflection_ray_state(global, old_hit, old_origin,
+		restore_reflect_ray_state(global, old_hit, old_origin,
 				global->c_ray.dir);
 		return (color_scale(cal_lighting(global), refl));
 	}
-	restore_reflection_ray_state(global, old_hit, old_origin,
-			global->c_ray.dir);
+	restore_reflect_ray_state(global, old_hit, old_origin, global->c_ray.dir);
 	return ((t_color){20, 20, 20});
 }
 
@@ -205,7 +204,7 @@ t_color	cal_lighting_advanced(t_global *global)
 	final_color = handle_trans(global, basic_color, trans);
 	if (refl > 0.01f)
 	{
-		reflect_color = cal_reflection(global, refl);
+		reflect_color = cal_reflect(global, refl);
 		final_color.r = final_color.r * (1.0f - refl) + reflect_color.r * refl;
 		final_color.g = final_color.g * (1.0f - refl) + reflect_color.g * refl;
 		final_color.b = final_color.b * (1.0f - refl) + reflect_color.b * refl;

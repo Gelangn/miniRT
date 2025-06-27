@@ -6,54 +6,44 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 11:43:26 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:10:51 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
-/* Helper function to process each line according to its type */
-void	parse_line(t_global *global, char *line)
+/* Helper function to process each ln according to its type */
+void	parse_ln(t_global *global, char *ln)
 {
-	// Ignorar líneas vacías
-	if (!line || !*line)
+	if (!ln || !*ln)
 		return ;
-		
-	// Omitir espacios iniciales
-	while (*line && (*line == ' ' || *line == '\t'))
-		line++;
-	
-	// Ignorar comentarios o líneas vacías después de eliminar espacios
-	if (!*line || *line == '#')
+	while (*ln && (*ln == ' ' || *ln == '\t'))
+		ln++;
+	if (!*ln || *ln == '#')
 		return ;
-		
-	// Ahora analizar el comando
-	if (*line == 'A' && (line[1] == ' ' || line[1] == '\t'))
-		parse_ambient(global, line);
-	else if (*line == 'C' && (line[1] == ' ' || line[1] == '\t'))
-		parse_cam(global, line);
-	else if (*line == 'L' && (line[1] == ' ' || line[1] == '\t'))
-		parse_light(global, line);
-	else if (ft_strncmp(line, "sp", 2) == 0 && (line[2] == ' '
-				|| line[2] == '\t'))
-		parse_sphere(global, line);
-	else if (ft_strncmp(line, "pl", 2) == 0 && (line[2] == ' '
-				|| line[2] == '\t'))
-		parse_plane(global, line);
-	else if (ft_strncmp(line, "cy", 2) == 0 && (line[2] == ' '
-				|| line[2] == '\t'))
-		parse_cylinder(global, line);
+	if (*ln == 'A' && (ln[1] == ' ' || ln[1] == '\t'))
+		parse_ambient(global, ln);
+	else if (*ln == 'C' && (ln[1] == ' ' || ln[1] == '\t'))
+		parse_cam(global, ln);
+	else if (*ln == 'L' && (ln[1] == ' ' || ln[1] == '\t'))
+		parse_light(global, ln);
+	else if (ft_strncmp(ln, "sp", 2) == 0 && (ln[2] == ' ' || ln[2] == '\t'))
+		parse_sp(global, ln);
+	else if (ft_strncmp(ln, "pl", 2) == 0 && (ln[2] == ' ' || ln[2] == '\t'))
+		parse_plane(global, ln);
+	else if (ft_strncmp(ln, "cy", 2) == 0 && (ln[2] == ' ' || ln[2] == '\t'))
+		parse_cylinder(global, ln);
 	else
 	{
-		free(line);
-		finish(global, ERR_PARSE " - Invalid line format");
+		free(ln);
+		finish(global, ERR_PARSE " - Invalid ln format");
 	}
 }
 
 /* Function to read and parse the scene file */
 void	read_scene(t_global *global)
 {
-	char	*line_ptr;
+	char	*ln_ptr;
 	int		fd;
 
 	count_objects(global);
@@ -61,20 +51,20 @@ void	read_scene(t_global *global)
 	fd = open(global->scene.file_path, O_RDONLY);
 	if (fd == -1)
 		finish(global, ERR_OPEN);
-	line_ptr = get_next_line(fd);
-	if (!line_ptr)
+	ln_ptr = get_next_line(fd);
+	if (!ln_ptr)
 		finish(global, ERR_READ);
-	while (line_ptr)
+	while (ln_ptr)
 	{
-		if (line_ptr[0] == '\n' || line_ptr[0] == '\0' || line_ptr[0] == '#')
+		if (ln_ptr[0] == '\n' || ln_ptr[0] == '\0' || ln_ptr[0] == '#')
 		{
-			free(line_ptr);
-			line_ptr = get_next_line(fd);
+			free(ln_ptr);
+			ln_ptr = get_next_line(fd);
 			continue ;
 		}
-		parse_line(global, line_ptr);
-		free(line_ptr);
-		line_ptr = get_next_line(fd);
+		parse_ln(global, ln_ptr);
+		free(ln_ptr);
+		ln_ptr = get_next_line(fd);
 	}
 	check_scene(global, &global->scene);
 	close(fd);
@@ -82,30 +72,28 @@ void	read_scene(t_global *global)
 
 void	count_objects(t_global *global)
 {
-	char	*line_ptr;
+	char	*ln_ptr;
 	int		fd;
-	char	*trimmed_line;
 
 	fd = open(global->scene.file_path, O_RDONLY);
 	if (fd == -1)
 		finish(global, ERR_OPEN);
-	line_ptr = get_next_line(fd);
-	while (line_ptr)
+	ln_ptr = get_next_line(fd);
+	while (ln_ptr)
 	{
-		trimmed_line = line_ptr;
-		while (*trimmed_line && (*trimmed_line == ' ' || *trimmed_line == '\t'))
-			trimmed_line++;
-		if (*trimmed_line && *trimmed_line != '#')
+		while (*ln_ptr && (*ln_ptr == ' ' || *ln_ptr == '\t'))
+			ln_ptr++;
+		if (*ln_ptr && *ln_ptr != '#')
 		{
-			if (ft_strncmp(trimmed_line, "sp", 2) == 0)
+			if (ft_strncmp(ln_ptr, "sp", 2) == 0)
 				global->scene.num_sp++;
-			else if (ft_strncmp(trimmed_line, "pl", 2) == 0)
+			else if (ft_strncmp(ln_ptr, "pl", 2) == 0)
 				global->scene.num_pl++;
-			else if (ft_strncmp(trimmed_line, "cy", 2) == 0)
+			else if (ft_strncmp(ln_ptr, "cy", 2) == 0)
 				global->scene.num_cy++;
 		}
-		free(line_ptr);
-		line_ptr = get_next_line(fd);
+		free(ln_ptr);
+		ln_ptr = get_next_line(fd);
 	}
 	close(fd);
 }

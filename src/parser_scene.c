@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:41:57 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:08:58 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,21 @@
  * Ensures ambient lighting is defined only once in the scene
  * 
  * @param global Structure containing scene data and parsing state
- * @param line String containing ambient light definition 
+ * @param ln String containing ambient light definition 
  * 				(format: "A intensity R,G,B")
  */
-void	parse_ambient(t_global *global, char *line)
+void	parse_ambient(t_global *global, char *ln)
 {
 	char	**tokens;
 	t_scene	*scene;
 
 	scene = &global->scene;
-	replace_tabs_with_spaces(line);
-	tokens = ft_split(line, ' ');
+	replace_tabs_with_spaces(ln);
+	tokens = ft_split(ln, ' ');
 	if (!tokens || scene->ambient.init)
 	{
 		dbl_free(tokens);
-		free(line);
+		free(ln);
 		finish(global, ERR_AMBIENT);
 	}
 	tokens++;
@@ -45,25 +45,25 @@ void	parse_ambient(t_global *global, char *line)
 }
 
 /**
- * Parses camera definition from a scene file line
+ * Parses camera definition from a scene file ln
  * Sets up camera position, orientation vector, and field of view
  * Validates that camera is only defined once per scene
  * 
  * @param global Structure containing scene data and parsing state
- * @param line String containing camera definition (format: "C pos ori fov")
+ * @param ln String containing camera definition (format: "C pos ori fov")
  */
-void	parse_cam(t_global *global, char *line)
+void	parse_cam(t_global *global, char *ln)
 {
 	char	**tokens;
 	t_scene	*scene;
 
 	scene = &global->scene;
-	replace_tabs_with_spaces(line);
-	tokens = ft_split(line, ' ');
+	replace_tabs_with_spaces(ln);
+	tokens = ft_split(ln, ' ');
 	if (!tokens || scene->cam.init)
 	{
 		dbl_free(tokens);
-		free(line);
+		free(ln);
 		finish(global, ERR_CAMERA);
 	}
 	tokens++;
@@ -78,21 +78,21 @@ void	parse_cam(t_global *global, char *line)
 }
 
 /**
- * Parses light source information from a scene file line
+ * Parses light source information from a scene file ln
  * Extracts position and brightness intensity for the scene's light source
  * Ensures light source is defined only once in the scene
  * 
  * @param global Structure containing scene data and parsing state
- * @param line String containing light definition (format: "L pos intensity")
+ * @param ln String containing light definition (format: "L pos intensity")
  */
-void	parse_light(t_global *global, char *line)
+void	parse_light(t_global *global, char *ln)
 {
 	char	**tokens;
 	t_scene	*scene;
 
 	scene = &global->scene;
-	replace_tabs_with_spaces(line);
-	tokens = ft_split(line, ' ');
+	replace_tabs_with_spaces(ln);
+	tokens = ft_split(ln, ' ');
 	if (!tokens || scene->light.init)
 		finish(global, ERR_LIGHT);
 	tokens++;

@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 11:42:33 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:09:26 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ void	parse_color(t_global *global, char *str, t_color *color)
 }
 
 // Function to parse a sphere
-void	parse_sphere(t_global *global, char *line)
+void	parse_sp(t_global *global, char *ln)
 {
 	t_sphere	sphere;
 	char		**tokens;
 	char		**tokens_start;
 
-	replace_tabs_with_spaces(line);
-	tokens = ft_split(line, ' ');
+	replace_tabs_with_spaces(ln);
+	tokens = ft_split(ln, ' ');
 	tokens_start = tokens;
 	if (!tokens)
 		finish(global, ERR_SPHERE);
@@ -82,9 +82,9 @@ void	parse_sphere(t_global *global, char *line)
 		tokens++;
 		printf("ESFERA: Leyendo propiedades opcionales: transp=%.2f, \
 				refl=%.2f, idx=%.2f\n",
-			   sphere.material.trans,
-			   sphere.material.refl,
-			   sphere.material.refr_idx);
+				sphere.material.trans,
+				sphere.material.refl,
+				sphere.material.refr_idx);
 	}
 	else
 	{
@@ -97,15 +97,14 @@ void	parse_sphere(t_global *global, char *line)
 }
 
 // Function to parse a plane
-void	parse_plane(t_global *global, char *line)
+void	parse_plane(t_global *global, char *ln)
 {
 	t_plane	plane;
 	char	**tokens;
 	char	**tokens_start;
 
-	
-	replace_tabs_with_spaces(line);
-	tokens = ft_split(line, ' ');
+	replace_tabs_with_spaces(ln);
+	tokens = ft_split(ln, ' ');
 	tokens_start = tokens;
 	if (!tokens)
 		finish(global, ERR_PLANE);
@@ -126,9 +125,9 @@ void	parse_plane(t_global *global, char *line)
 		tokens++;
 		printf("PLANO: Leyendo propiedades opcionales: transp=%.2f, \
 				refl=%.2f, idx=%.2f\n",
-			   plane.material.trans,
-			   plane.material.refl,
-			   plane.material.refr_idx);
+				plane.material.trans,
+				plane.material.refl,
+				plane.material.refr_idx);
 	}
 	else
 	{
@@ -141,15 +140,15 @@ void	parse_plane(t_global *global, char *line)
 }
 
 // Function to parse a cylinder
-void	parse_cylinder(t_global *global, char *line)
+void	parse_cylinder(t_global *global, char *ln)
 {
 	t_cylinder	cyl;
 	t_vector	center;
 	char		**tokens;
 	char		**tokens_start;
 
-	replace_tabs_with_spaces(line);
-	tokens = ft_split(line, ' ');
+	replace_tabs_with_spaces(ln);
+	tokens = ft_split(ln, ' ');
 	tokens_start = tokens;
 	if (!tokens)
 		finish(global, ERR_CYLINDER);

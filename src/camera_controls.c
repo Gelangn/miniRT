@@ -6,18 +6,18 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:30:02 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/05/07 20:32:35 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:52:02 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minirt.h"
 
 /* Move the camera in a specific direction */
-void	move_camera(t_global *global, t_vector direction, float distance)
+void	move_camera(t_global *global, t_vector dir, float distance)
 {
 	t_vector	movement;
 
-	movement = multiply(direction, distance);
+	movement = multiply(dir, distance);
 	global->scene.cam.pos = add(global->scene.cam.pos, movement);
 }
 

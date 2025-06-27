@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:33 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:41:38 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:51:52 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,8 @@ typedef struct s_ray_state
 typedef struct s_ray_result
 {
 	t_vector		origin;
-	t_vector		direction;
-	float contribution; // How much this ray contributes to final color
+	t_vector		dir;
+	float contrib; // How much this ray contributes to final color
 	int				depth;
 	int is_inside; // For refraction cals (inside object or not)
 }					t_ray_result;

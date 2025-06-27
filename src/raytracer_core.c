@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:55:40 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:25:27 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:53:22 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ void	cal_ray_for_pixel(t_global *global, int px_x, int px_y, int idx)
 
 	global->points[idx].scrn_x = px_x;
 	global->points[idx].scrn_y = px_y;
-	dir = get_ray_direction(global, px_x, px_y);
+	dir = get_ray_dir(global, px_x, px_y);
 	global->points[idx].point_x = dir.x;
 	global->points[idx].point_y = dir.y;
 	global->points[idx].point_z = dir.z;
 }
 
 /**
- * Calculates ray direction based on pixel coordinates and camera settings
+ * Calculates ray dir based on pixel coordinates and camera settings
  * Transforms screen coordinates to world space direction vector
  * Uses camera's field of view and orientation to determine accurate ray paths
  * Includes caching optimization for repeated FOV values
@@ -98,13 +98,13 @@ void	cal_ray_for_pixel(t_global *global, int px_x, int px_y, int idx)
  * @param px_y Y-coordinate of the pixel in screen space
  * @return Normalized vector representing the ray direction in world space
  */
-t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
+t_vector	get_ray_dir(t_global *global, int px_x, int px_y)
 {
 	static float	aspect_ratio;
 	static float	scrn_w;
 	static float	scrn_h;
 	static float	last_fov;
-	t_vector		direction;
+	t_vector		dir;
 
 	if (last_fov != global->scene.cam.fov)
 	{
@@ -113,10 +113,10 @@ t_vector	get_ray_direction(t_global *global, int px_x, int px_y)
 		scrn_h = scrn_w / aspect_ratio;
 		last_fov = global->scene.cam.fov;
 	}
-	direction.x = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
-	direction.y = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
-	direction = add(add(multiply(global->scene.cam.right_axis, direction.x),
-						multiply(global->scene.cam.up_axis, direction.y)),
-					global->scene.cam.fw_axis);
-	return (norm(direction));
+	dir.x = (2 * ((px_x + 0.5) / (WIN_W - MARGIN)) - 1) * scrn_w / 2;
+	dir.y = (2 * ((px_y + 0.5) / (WIN_H - MARGIN)) - 1) * scrn_h / 2;
+	dir = add(add(multiply(global->scene.cam.right_axis, dir.x),
+					multiply(global->scene.cam.up_axis, dir.y)),
+				global->scene.cam.fw_axis);
+	return (norm(dir));
 }

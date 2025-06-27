@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:36:23 by bde-mada          #+#    #+#             */
-/*   Updated: 2025/06/27 10:39:32 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:52:41 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 	while (++i < level_count)
 	{
 		global->c_ray.origin = rays[i].origin;
-		global->c_ray.dir = rays[i].direction;
+		global->c_ray.dir = rays[i].dir;
 		global->c_ray.hit = find_closest_isec(global);
 		if (global->c_ray.hit.obj_type >= 0)
 		{
@@ -39,10 +39,10 @@ static t_color	process_ray_level(t_global *global, t_ray_result *rays,
 				level_color.g = fmin(255, level_color.g + edge_factor);
 				level_color.b = fmin(255, level_color.b + edge_factor);
 			}
-			level_color = color_scale(level_color, rays[i].contribution);
+			level_color = color_scale(level_color, rays[i].contrib);
 			final_color = color_add(final_color, level_color);
 			/* printf("Ray contribution: %.3f, Color: (%d,%d,%d)\n",
-				rays[i].contribution, level_color.r, level_color.g,
+				rays[i].contrib, level_color.r, level_color.g,
 					level_color.b); */
 		}
 	}
@@ -84,6 +84,8 @@ int	generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 	printf("\n--- RAY INFO ---\n");
 	printf("Hit object: type=%d (0=Sp 1=Pl 2=Cyl)\n",
 			global->c_ray.hit.obj_type);
+	/* if(global->c_ray.hit.obj_type == 0)
+		sleep(10); */
 	printf("Transparency: %.2f\n", trans);
 	printf("¿Inside object? %s\n", inside ? "YES" : "NO");
 	printf("Normal: (%.2f, %.2f, %.2f)\n", normal.x, normal.y, normal.z);
@@ -111,8 +113,8 @@ int	generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 		reflect_dir = reflect_ray(global->c_ray.dir, normal);
 		rays[*count].origin = add(global->c_ray.hit.point,
 									multiply(reflect_dir, EPSILON));
-		rays[*count].direction = reflect_dir;
-		rays[*count].contribution = refl;
+		rays[*count].dir = reflect_dir;
+		rays[*count].contrib = refl;
 		(*count)++;
 	}
 	// Add refraction ray
@@ -121,11 +123,11 @@ int	generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
 		refract_dir = refract_ray(global->c_ray.dir, normal, n1, n2);
 		rays[*count].origin = add(global->c_ray.hit.point,
 									multiply(refract_dir, EPSILON));
-		rays[*count].direction = refract_dir;
-		rays[*count].contribution = trans * (1.0f - fresnel);
+		rays[*count].dir = refract_dir;
+		rays[*count].contrib = trans * (1.0f - fresnel);
 		(*count)++;
 		printf("REFRACTION ray created: contrib=%.3f, dir=(%.2f,%.2f,%.2f)\n",
-				rays[*count - 1].contribution,
+				rays[*count - 1].contrib,
 				refract_dir.x,
 				refract_dir.y,
 				refract_dir.z);
@@ -146,14 +148,14 @@ int	generate_secondary_rays(t_global *global, t_ray_result *rays, int *count)
  * Processes multiple ray levels without deep recursion
  * Uses proper memory management with finish() for error handling
  */
-t_color	trace_ray_iterative(t_global *global, t_vector origin,
-		t_vector direction, int max_depth)
+t_color	trace_ray_iterative(t_global *global, t_vector origin, t_vector dir,
+		int max_depth)
 {
 	// NUEVO: Código específico para cilindros con transparencia
 	// Lanzar un rayo inicial y verificar si golpea un cilindro
 	t_active_ray saved_ray = global->c_ray;
 	global->c_ray.origin = origin;
-	global->c_ray.dir = direction;
+	global->c_ray.dir = dir;
 	t_intersec hit = find_closest_isec(global);
 
 	// Si es un cilindro
@@ -170,7 +172,7 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 			t_color cyl_color = cal_lighting(global);
 
 			// Buscar lo que hay detrás
-			t_vector through_point = add(hit.point, multiply(direction, 0.1f));
+			t_vector through_point = add(hit.point, multiply(dir, 0.1f));
 			global->c_ray.origin = through_point;
 			t_intersec behind_hit = find_closest_isec(global);
 
@@ -213,13 +215,13 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
 	t_ray_result current_level[MAX_RAY_DEPTH * 2];
 	t_ray_result next_level[MAX_RAY_DEPTH * 2];
-	t_color accumulated_color;
-	t_color level_contribution;
+	t_color acc_color;
+	t_color lvl_contrib;
 	int current_count;
 	int next_count;
 	int depth;
 	global->c_ray.origin = origin;
-	global->c_ray.dir = direction;
+	global->c_ray.dir = dir;
 
 	printf("DEBUG: trace_ray_iterative iniciado\n");
 
@@ -243,7 +245,7 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 			t_color cylinder_color = cal_lighting(global);
 
 			// 2. Calcular punto justo después del cilindro para un nuevo rayo
-			t_vector through_point = add(hit.point, multiply(direction, 0.01f));
+			t_vector through_point = add(hit.point, multiply(dir, 0.01f));
 
 			// 3. Lanzar un nuevo rayo desde ese punto
 			t_vector saved_origin = global->c_ray.origin;
@@ -295,31 +297,29 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
 	// Initialize primary ray with all fields
 	current_level[0].origin = origin;
-	current_level[0].direction = direction;
-	current_level[0].contribution = 1.0f;
+	current_level[0].dir = dir;
+	current_level[0].contrib = 1.0f;
 	current_level[0].depth = 0;
 	current_level[0].is_inside = 0;
 	current_count = 1;
 
-	accumulated_color = (t_color){0, 0, 0};
+	acc_color = (t_color){0, 0, 0};
 	depth = -1;
 	while (++depth < max_depth && current_count > 0)
 	{
-		level_contribution = process_ray_level(global, current_level,
-				current_count);
+		lvl_contrib = process_ray_level(global, current_level, current_count);
 
 		// MODIFICAR: manejo especial para transparencia
 		if (depth == 0)
 		{
 			// Guardamos el color de superficie
-			surface_color = level_contribution;
-			accumulated_color = level_contribution;
+			surface_color = lvl_contrib;
+			acc_color = lvl_contrib;
 
 			// Verificamos si hay transparencia
 			if (global->c_ray.hit.obj_type >= 0)
 			{
-				trans = get_object_trans(global,
-											global->c_ray.hit);
+				trans = get_object_trans(global, global->c_ray.hit);
 				if (trans > 0.1f)
 					found_trans = 1;
 			}
@@ -327,40 +327,44 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 		else if (found_trans && depth == 1)
 		{
 			// Aumentar brillo de objetos vistos a través de transparencia
-			level_contribution.r = (int)(level_contribution.r * 1.3f);
-			level_contribution.g = (int)(level_contribution.g * 1.3f);
-			level_contribution.b = (int)(level_contribution.b * 1.3f);
+			lvl_contrib.r = (int)(lvl_contrib.r * 1.3f);
+			lvl_contrib.g = (int)(lvl_contrib.g * 1.3f);
+			lvl_contrib.b = (int)(lvl_contrib.b * 1.3f);
 
 			// Mezclar con la mejora
-			accumulated_color.r = (int)(surface_color.r * (1.0f - trans) +
-										level_contribution.r * trans);
-			accumulated_color.g = (int)(surface_color.g * (1.0f - trans) +
-										level_contribution.g * trans);
-			accumulated_color.b = (int)(surface_color.b * (1.0f - trans) +
-										level_contribution.b * trans);
+			acc_color.r = (int)(surface_color.r * (1.0f - trans) +
+								lvl_contrib.r * trans);
+			acc_color.g = (int)(surface_color.g * (1.0f - trans) +
+								lvl_contrib.g * trans);
+			acc_color.b = (int)(surface_color.b * (1.0f - trans) +
+								lvl_contrib.b * trans);
+			printf("Surface color: (%d, %d, %d)\n", surface_color.r,
+					surface_color.g, surface_color.b);
+			printf("Level contribution: (%d, %d, %d)\n", lvl_contrib.r,
+					lvl_contrib.g, lvl_contrib.b);
+			printf("Transparency: %.2f\n", trans);
+			printf("Accumulated color: (%d, %d, %d)\n", acc_color.r,
+					acc_color.g, acc_color.b);
 		}
 		else
 		{
 			// Para reflejos y otros efectos, seguimos usando la lógica actual
 			// Pero con un peso reducido para no saturar
 			float blend_factor = 0.3f;
-			accumulated_color.r = (int)(accumulated_color.r * (1.0f
-						- blend_factor) +
-										level_contribution.r * blend_factor);
-			accumulated_color.g = (int)(accumulated_color.g * (1.0f
-						- blend_factor) +
-										level_contribution.g * blend_factor);
-			accumulated_color.b = (int)(accumulated_color.b * (1.0f
-						- blend_factor) +
-										level_contribution.b * blend_factor);
+			acc_color.r = (int)(acc_color.r * (1.0f - blend_factor) +
+								lvl_contrib.r * blend_factor);
+			acc_color.g = (int)(acc_color.g * (1.0f - blend_factor) +
+								lvl_contrib.g * blend_factor);
+			acc_color.b = (int)(acc_color.b * (1.0f - blend_factor) +
+								lvl_contrib.b * blend_factor);
 		}
 
 		printf("Depth %d: %d rays, Accumulated color: (%d,%d,%d)\n",
 				depth,
 				current_count,
-				accumulated_color.r,
-				accumulated_color.g,
-				accumulated_color.b);
+				acc_color.r,
+				acc_color.g,
+				acc_color.b);
 
 		// Only generate secondary rays if we have more depth to go
 		if (depth < max_depth - 1)
@@ -374,7 +378,7 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 
 				// Configura el rayo actual
 				global->c_ray.origin = current_level[i].origin;
-				global->c_ray.dir = current_level[i].direction;
+				global->c_ray.dir = current_level[i].dir;
 				global->c_ray.hit = find_closest_isec(global);
 
 				// Solo genera rayos secundarios si hay una intersección
@@ -403,14 +407,13 @@ t_color	trace_ray_iterative(t_global *global, t_vector origin,
 	}
 
 	// If no color accumulated, return basic lighting
-	if (accumulated_color.r < 1 && accumulated_color.g < 1
-		&& accumulated_color.b < 1)
+	if (acc_color.r < 1 && acc_color.g < 1 && acc_color.b < 1)
 		return (cal_lighting(global));
 
-	clamp_color(&accumulated_color);
+	clamp_color(&acc_color);
 	printf("FINAL COLOR: (%d,%d,%d)\n\n",
-			accumulated_color.r,
-			accumulated_color.g,
-			accumulated_color.b);
-	return (accumulated_color);
+			acc_color.r,
+			acc_color.g,
+			acc_color.b);
+	return (acc_color);
 }

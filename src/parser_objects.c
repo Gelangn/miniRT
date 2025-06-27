@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:12:48 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:52:39 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 11:42:33 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	parse_sphere(t_global *global, char *line)
 	char		**tokens;
 	char		**tokens_start;
 
+	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	tokens_start = tokens;
 	if (!tokens)
@@ -71,11 +72,26 @@ void	parse_sphere(t_global *global, char *line)
 	tokens++;
 	parse_color(global, *tokens, &sphere.material.color);
 	tokens++;
-	sphere.material.trans = parse_float_token(global, tokens);
-	tokens++;
-	sphere.material.refl = parse_float_token(global, tokens);
-	tokens++;
-	sphere.material.refr_idx = parse_float_token(global, tokens);
+	if (tokens && *tokens && *(tokens + 1) && *(tokens + 2))
+	{
+		sphere.material.trans = parse_float_token(global, tokens);
+		tokens++;
+		sphere.material.refl = parse_float_token(global, tokens);
+		tokens++;
+		sphere.material.refr_idx = parse_float_token(global, tokens);
+		tokens++;
+		printf("ESFERA: Leyendo propiedades opcionales: transp=%.2f, \
+				refl=%.2f, idx=%.2f\n",
+			   sphere.material.trans,
+			   sphere.material.refl,
+			   sphere.material.refr_idx);
+	}
+	else
+	{
+		sphere.material.trans = 0.0f;
+		sphere.material.refl = 0.0f;
+		sphere.material.refr_idx = 1.5f;
+	}
 	global->scene.spheres[global->scene.num_sp++] = sphere;
 	dbl_free(tokens_start);
 }
@@ -85,10 +101,9 @@ void	parse_plane(t_global *global, char *line)
 {
 	t_plane	plane;
 	char	**tokens;
-	t_scene	*scene;
+	char	**tokens_start;
 
-	char **tokens_start;
-	scene = &global->scene;
+	
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	tokens_start = tokens;
@@ -109,6 +124,11 @@ void	parse_plane(t_global *global, char *line)
 		tokens++;
 		plane.material.refr_idx = parse_float_token(global, tokens);
 		tokens++;
+		printf("PLANO: Leyendo propiedades opcionales: transp=%.2f, \
+				refl=%.2f, idx=%.2f\n",
+			   plane.material.trans,
+			   plane.material.refl,
+			   plane.material.refr_idx);
 	}
 	else
 	{
@@ -116,7 +136,7 @@ void	parse_plane(t_global *global, char *line)
 		plane.material.refl = 0.0f;
 		plane.material.refr_idx = 1.5f;
 	}
-	scene->planes[scene->num_pl++] = plane;
+	global->scene.planes[global->scene.num_pl++] = plane;
 	dbl_free(tokens_start);
 }
 
@@ -124,12 +144,10 @@ void	parse_plane(t_global *global, char *line)
 void	parse_cylinder(t_global *global, char *line)
 {
 	t_cylinder	cyl;
-	char		**tokens;
-	t_scene		*scene;
 	t_vector	center;
+	char		**tokens;
+	char		**tokens_start;
 
-	char **tokens_start;
-	scene = &global->scene;
 	replace_tabs_with_spaces(line);
 	tokens = ft_split(line, ' ');
 	tokens_start = tokens;
@@ -168,6 +186,6 @@ void	parse_cylinder(t_global *global, char *line)
 		cyl.material.refr_idx = 1.5f;
 	}
 	cyl.base = subtract(center, multiply(cyl.axis, cyl.height / 2));
-	scene->cyls[scene->num_cy++] = cyl;
+	global->scene.cyls[global->scene.num_cy++] = cyl;
 	dbl_free(tokens_start);
 }

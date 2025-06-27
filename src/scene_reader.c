@@ -6,7 +6,7 @@
 /*   By: anavas-g <anavas-g@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:26:44 by anavas-g          #+#    #+#             */
-/*   Updated: 2025/06/27 10:48:19 by anavas-g         ###   ########.fr       */
+/*   Updated: 2025/06/27 11:43:26 by anavas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	read_scene(t_global *global)
 	if (fd == -1)
 		finish(global, ERR_OPEN);
 	line_ptr = get_next_line(fd);
-	printf("line_ptr:\n %s\n", line_ptr);
 	if (!line_ptr)
 		finish(global, ERR_READ);
 	while (line_ptr)
